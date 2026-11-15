@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo · SoviCare Brand Hub</title>
+<meta name="description" content="The SoviCare symbol and wordmark for Brand Edition 02: construction, the Pastel colour change, lockup proportions, clear space, minimum sizes, colour versions, misuse and files.">
+<link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<style>
+  /* logo.html — tokens only */
+  .f-teal { fill: var(--color-brand-deep-teal); }
+  .f-blue { fill: var(--color-brand-blue); }
+  .f-green { fill: var(--color-brand-green); }
+  .f-yellow { fill: var(--color-brand-yellow); }
+  .f-coral { fill: var(--color-brand-coral); }
+  .f-wash-blue { fill: var(--color-surface-wash-blue); }
+  .f-ink { fill: var(--color-brand-deep-teal); font-family: var(--font-family-serif); }
+  .f-note { fill: var(--color-text-secondary); font-family: var(--font-family-sans); }
+  .s-guide { fill: none; stroke: var(--color-text-secondary); stroke-dasharray: 1 1; }
+  .s-measure { fill: none; stroke: var(--color-brand-deep-teal); }
+  .s-outline { fill: none; stroke: var(--color-brand-deep-teal); }
+  .f-yellow-zone { fill: var(--color-surface-wash-yellow); }
+
+  /* Lockup: every dimension is a ratio of the wordmark size (Figma header: symbol 28×37, wordmark 22, gap 10) */
+  .lockup { display: inline-flex; align-items: center; gap: calc(10 / 22 * 1em); color: var(--color-brand-deep-teal); line-height: 1; }
+  .lockup img { width: calc(28 / 22 * 1em); height: calc(37.24 / 22 * 1em); flex: none; display: block; }
+  .lockup b { font-family: var(--font-family-serif); font-weight: 400; line-height: 1; white-space: nowrap; }
+  .lockup--dark { color: var(--color-text-on-dark); }
+  .lockup--xl { font-size: var(--type-desktop-h2-size); }
+  .lockup--lg { font-size: var(--type-desktop-section-size); }
+
+  .hero-mark { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-10); align-items: center; }
+  .hero-mark img { width: calc(var(--space-24) * 2); height: auto; display: block; }
+  .ba { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .ba figure, .cv figure, .dt figure, .mins figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .ba .stage, .cv .stage, .dt .stage { display: grid; place-items: center; min-height: calc(var(--space-24) * 2); border-radius: var(--radius-small); padding: var(--space-6); overflow: hidden; }
+  .ba .stage svg, .ba .stage img { width: calc(var(--space-24) + var(--space-6)); height: auto; display: block; }
+  figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+
+  .bg-paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); }
+  .bg-mist { background: var(--color-surface-mist); }
+  .bg-teal { background: var(--color-brand-deep-teal); }
+  .bg-yellow { background: var(--color-brand-yellow); }
+  .bg-blue { background: var(--color-brand-blue); }
+  .bg-green { background: var(--color-brand-green); }
+  .bg-wash-blue { background: var(--color-surface-wash-blue); }
+  .bg-clay { background: var(--color-brand-clay); }
+
+  .diagram { display: block; width: 100%; height: auto; }
+  .diagram-wrap { max-width: calc(var(--space-24) * 7); }
+  .clear-wrap { max-width: calc(var(--space-24) * 3); }
+
+  .mins .row { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: flex-end; }
+  .mins .s16 { width: var(--space-4); height: auto; display: block; }
+  .mins .s24 { width: var(--space-6); height: auto; display: block; }
+  .mins .s32 { width: var(--space-8); height: auto; display: block; }
+  .lockup--min { font-size: var(--type-desktop-card-size); }
+
+  .verdict { display: flex; gap: var(--space-2); align-items: flex-start; }
+  .verdict svg { flex: none; width: var(--space-5); height: var(--space-5); }
+  .ic-ok { color: var(--color-brand-green); }
+  .ic-no { color: var(--color-brand-coral); }
+
+  .dt .stage { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); border-left: var(--space-1) solid var(--color-brand-coral); }
+  .dt .stage .sym { width: calc(var(--space-12) + var(--space-4)); height: auto; display: block; }
+  .x-stretch { transform: scaleX(1.6); }
+  .x-rotate { transform: rotate(20deg); }
+  .x-flip { transform: scaleX(-1); }
+  .x-effect { filter: drop-shadow(0 var(--space-2) var(--space-2) var(--color-brand-teal-deep)); }
+  .x-font b { font-family: var(--font-family-sans); font-weight: 700; letter-spacing: -0.02em; }
+  .dt .lockup { font-size: var(--type-desktop-card-serif-size); }
+
+  .files td img { width: var(--space-6); height: auto; display: block; }
+  .files .chip-bg { display: inline-grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: var(--radius-xs); }
+
+  @media (max-width: 767px) {
+    .hero-mark { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+    .hero-mark img { width: calc(var(--space-24) * 1.25); }
+    .ba { grid-template-columns: minmax(0, 1fr); }
+    .lockup--xl { font-size: var(--type-mobile-section-size); }
+    .lockup--lg { font-size: var(--type-mobile-card-serif-size); }
+  }
+</style>
+</head>
+<body>
+<div class="archive-banner"><span>Archived · SoviCare Brand Edition 02 (08.10.2026). Superseded by unifiedmeds Brand Edition 03 (15.11.2026).</span><a href="../../index.html">Go to the current hub</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <span class="hub-edition">Brand Edition 02 · 08.10.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html">Overview</a>
+      <a href="rulebook.html">Rulebook &amp; decisions</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html">Brand &amp; imagery</a>
+      <a href="logo.html" aria-current="page">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html">Foundations</a>
+      <a href="components.html">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="../index.html">Archive · Edition 01</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">Brand</span>
+        <h1>The symbol and the wordmark.</h1>
+        <p class="lead">How the SoviCare logo is built, where it may sit, how small it may go and how not to use it. Edition 02 moves the symbol to the Pastel Blue and Green.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#symbol">Symbol</a>
+          <a href="#wordmark">Wordmark &amp; lockup</a>
+          <a href="#space">Clear space &amp; sizes</a>
+          <a href="#versions">Colour versions</a>
+          <a href="#misuse">Misuse</a>
+          <a href="#files">Files</a>
+        </nav>
+        <div class="rule">
+          <b>Authority.</b>
+          <p>1. Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2673-209">h7D0eRszARBaWdJT1NWrpZ (SoviCare - Website)</a> wins on every visual value. 2. <a href="brand-rules.md">brand-rules.md</a> wins on compliance and wording. 3. The hub explains and mirrors both. If the hub and Figma disagree, the hub is wrong. The Round-1 logo exploration of Edition 01 is rejected and archived (<a href="../index.html">Archive</a>).</p>
+        </div>
+      </header>
+
+      <!-- 1 · Symbol -->
+      <section class="sec" id="symbol" aria-labelledby="symbol-h">
+        <div class="sec-head">
+          <span class="eyebrow">01 · Symbol</span>
+          <h2 id="symbol-h">Four pieces make one S.</h2>
+          <p>The symbol is assembled from four Quadrant Kit pieces, each in its own brand colour. The arrangement is fixed.</p>
+        </div>
+
+        <div class="specimen hero-mark">
+          <img src="assets/brand/symbol.svg" width="192" height="255" alt="SoviCare symbol: four quadrant pieces forming an S">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">Piece</th><th scope="col">Position</th><th scope="col">Colour</th></tr></thead>
+              <tbody>
+                <tr><td>Half circle</td><td>Upper left, flat edge right</td><td>Deep Teal #264653 (<code>--color-brand-deep-teal</code>)</td></tr>
+                <tr><td>Quarter</td><td>Upper right</td><td>Blue #6E8B97 (<code>--color-brand-blue</code>)</td></tr>
+                <tr><td>Half circle</td><td>Lower right, flat edge left</td><td>Green #6A8670 (<code>--color-brand-green</code>)</td></tr>
+                <tr><td>Quarter</td><td>Lower left</td><td>Yellow #FFBE0B (<code>--color-brand-yellow</code>)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="prose">
+          <p>The pieces come from the <a href="brand.html#kit">Quadrant Kit</a>, but the symbol is not a composition to vary. Always these four pieces, in these positions, in these colours. Modularity belongs to the kit, not to the logo.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Edition 02 colour change</h3>
+          <div class="ba">
+            <figure>
+              <div class="stage bg-paper">
+                <svg viewBox="0 0 27.9999 37.2399" role="img" aria-label="Edition 01 symbol, retired: Blue #219EBC and Green #2A9D8F">
+                  <path d="M13.163 22.2741C11.4397 22.2741 9.78697 21.4875 8.56839 20.0875C7.34981 18.6874 6.66522 16.7886 6.66522 14.8086C6.66522 12.8286 7.34981 10.9297 8.56839 9.52969C9.78697 8.12964 11.4397 7.3431 13.163 7.3431V14.8086L13.163 22.2741Z" fill="#264653"/>
+                  <path d="M21.6087 14.6862C20.7694 14.6862 19.9383 14.4963 19.1628 14.1272C18.3874 13.7582 17.6828 13.2173 17.0894 12.5355C16.4959 11.8536 16.0251 11.0441 15.7039 10.1532C15.3827 9.26227 15.2174 8.30741 15.2174 7.3431L21.6087 7.3431L21.6087 14.6862Z" fill="#219EBC"/>
+                  <path d="M15.2174 15.3855C16.8721 15.3855 18.4591 16.1408 19.6291 17.4851C20.7992 18.8294 21.4565 20.6527 21.4565 22.5538C21.4565 24.4549 20.7992 26.2782 19.6291 27.6225C18.4591 28.9668 16.8721 29.7221 15.2174 29.7221L15.2174 22.5538V15.3855Z" fill="#2A9D8F"/>
+                  <path d="M6.3913 22.5538C7.23062 22.5538 8.06172 22.7437 8.83715 23.1128C9.61258 23.4818 10.3172 24.0227 10.9106 24.7045C11.5041 25.3864 11.9749 26.1959 12.2961 27.0868C12.6173 27.9777 12.7826 28.9326 12.7826 29.8969L6.3913 29.8969V22.5538Z" fill="#FFBE0B"/>
+                </svg>
+              </div>
+              <figcaption class="cap"><b>Edition 01 — retired</b>Blue piece #219EBC and Green piece #2A9D8F: the bright Edition 01 palette, no longer in the tokens. Drawn here only for comparison.</figcaption>
+            </figure>
+            <figure>
+              <div class="stage bg-paper"><img src="assets/brand/symbol.svg" width="120" height="160" alt="Edition 02 symbol in the Pastel palette"></div>
+              <figcaption class="cap"><b>Edition 02 — current</b>Blue #219EBC → Pastel Blue #6E8B97 (<code>--color-brand-blue</code>). Green #2A9D8F → Pastel Green #6A8670 (<code>--color-brand-green</code>). Deep Teal and Yellow are unchanged. Decision of 08.10.2026: the symbol follows the Figma palette.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 · Wordmark & lockup -->
+      <section class="sec" id="wordmark" aria-labelledby="wordmark-h">
+        <div class="sec-head">
+          <span class="eyebrow">02 · Wordmark &amp; lockup</span>
+          <h2 id="wordmark-h">The wordmark is SoviCare in DM Serif Display.</h2>
+          <p>One word, capital S and capital C, DM Serif Display Regular, no extra tracking, Deep Teal on light surfaces and Paper on Deep Teal.</p>
+        </div>
+
+        <div class="specimen">
+          <span class="lockup lockup--xl"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span>
+          <p class="cap">Lockup at the H2 size, 46px (<code>--type-desktop-h2-size</code>). All other dimensions follow from the wordmark size.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Proportions from the Figma header</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Measure</th><th scope="col">Figma header</th><th scope="col">Ratio to wordmark size</th></tr></thead>
+                <tbody>
+                  <tr><td>Wordmark size</td><td>22px</td><td>1 em</td></tr>
+                  <tr><td>Symbol frame width</td><td>28px</td><td>1.27 em (28 / 22)</td></tr>
+                  <tr><td>Symbol frame height</td><td>37px (37.24)</td><td>1.69 em (37.24 / 22)</td></tr>
+                  <tr><td>Gap, symbol frame to wordmark</td><td>10px</td><td>0.45 em (10 / 22)</td></tr>
+                  <tr><td>Alignment</td><td colspan="2">Symbol and wordmark centred on one horizontal axis.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Read from the header in <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2673-209">homepage desktop 2673-209</a>. The Figma header text still reads "Sovicare" and must change to "SoviCare".</p>
+          </div>
+          <div class="sub">
+            <h3>Construction</h3>
+            <div class="diagram-wrap">
+              <svg class="diagram" viewBox="-6 -14 146 66" role="img" aria-label="Lockup construction: symbol frame 28 by 37, a gap of 10, then the wordmark at 22">
+                <rect x="0" y="0" width="28" height="37.24" class="s-guide" vector-effect="non-scaling-stroke"/>
+                <g>
+                  <path d="M13.163 22.2741C11.4397 22.2741 9.78697 21.4875 8.56839 20.0875C7.34981 18.6874 6.66522 16.7886 6.66522 14.8086C6.66522 12.8286 7.34981 10.9297 8.56839 9.52969C9.78697 8.12964 11.4397 7.3431 13.163 7.3431V14.8086L13.163 22.2741Z" class="f-teal"/>
+                  <path d="M21.6087 14.6862C20.7694 14.6862 19.9383 14.4963 19.1628 14.1272C18.3874 13.7582 17.6828 13.2173 17.0894 12.5355C16.4959 11.8536 16.0251 11.0441 15.7039 10.1532C15.3827 9.26227 15.2174 8.30741 15.2174 7.3431L21.6087 7.3431L21.6087 14.6862Z" class="f-blue"/>
+                  <path d="M15.2174 15.3855C16.8721 15.3855 18.4591 16.1408 19.6291 17.4851C20.7992 18.8294 21.4565 20.6527 21.4565 22.5538C21.4565 24.4549 20.7992 26.2782 19.6291 27.6225C18.4591 28.9668 16.8721 29.7221 15.2174 29.7221L15.2174 22.5538V15.3855Z" class="f-green"/>
+                  <path d="M6.3913 22.5538C7.23062 22.5538 8.06172 22.7437 8.83715 23.1128C9.61258 23.4818 10.3172 24.0227 10.9106 24.7045C11.5041 25.3864 11.9749 26.1959 12.2961 27.0868C12.6173 27.9777 12.7826 28.9326 12.7826 29.8969L6.3913 29.8969V22.5538Z" class="f-yellow"/>
+                </g>
+                <text x="38" y="26.4" font-size="22" class="f-ink">SoviCare</text>
+                <line x1="28" y1="-6" x2="38" y2="-6" class="s-measure" vector-effect="non-scaling-stroke"/>
+                <line x1="28" y1="-8" x2="28" y2="-4" class="s-measure" vector-effect="non-scaling-stroke"/>
+                <line x1="38" y1="-8" x2="38" y2="-4" class="s-measure" vector-effect="non-scaling-stroke"/>
+                <text x="33" y="-9" font-size="4.5" text-anchor="middle" class="f-note">10</text>
+                <text x="14" y="44" font-size="4.5" text-anchor="middle" class="f-note">28 × 37</text>
+                <text x="38" y="38" font-size="4.5" class="f-note">wordmark 22, DM Serif Display</text>
+              </svg>
+            </div>
+            <p class="cap">The dashed box is the exported symbol frame (<a href="assets/brand/symbol.svg">symbol.svg</a>, 28 × 37.24). The gap is measured from the frame, not from the drawn pieces.</p>
+          </div>
+        </div>
+
+        <div class="rule">
+          <b>Set it, do not draw it. <span class="status status--proposed">To confirm</span></b>
+          <p>No outlined wordmark or lockup SVG exists yet, so the website and the hub set the wordmark as live text in DM Serif Display. Once the Figma wordmark reads "SoviCare", export it once as an outlined SVG lockup and use that file everywhere. Until then, never imitate the wordmark in another face or redraw letters (the Edition 01 custom "S●vıCare" is retired).</p>
+        </div>
+      </section>
+
+      <!-- 3 · Clear space & minimum sizes -->
+      <section class="sec" id="space" aria-labelledby="space-h">
+        <div class="sec-head">
+          <span class="eyebrow">03 · Clear space &amp; sizes</span>
+          <h2 id="space-h">Give the logo the width of its Yellow piece.</h2>
+          <p>Clear space is measured with the logo's own unit, so it scales with the logo.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Clear space</h3>
+            <div class="clear-wrap">
+              <svg class="diagram" viewBox="-2 -2 32 41.24" role="img" aria-label="Clear space: the width of the Yellow piece on all four sides of the drawn mark">
+                <rect x="0" y="0" width="28" height="37.24" class="f-yellow-zone"/>
+                <rect x="6.3913" y="7.3431" width="15.2174" height="22.5538" class="s-guide" vector-effect="non-scaling-stroke" style="fill: var(--color-surface-paper)"/>
+                <path d="M13.163 22.2741C11.4397 22.2741 9.78697 21.4875 8.56839 20.0875C7.34981 18.6874 6.66522 16.7886 6.66522 14.8086C6.66522 12.8286 7.34981 10.9297 8.56839 9.52969C9.78697 8.12964 11.4397 7.3431 13.163 7.3431V14.8086L13.163 22.2741Z" class="f-teal"/>
+                <path d="M21.6087 14.6862C20.7694 14.6862 19.9383 14.4963 19.1628 14.1272C18.3874 13.7582 17.6828 13.2173 17.0894 12.5355C16.4959 11.8536 16.0251 11.0441 15.7039 10.1532C15.3827 9.26227 15.2174 8.30741 15.2174 7.3431L21.6087 7.3431L21.6087 14.6862Z" class="f-blue"/>
+                <path d="M15.2174 15.3855C16.8721 15.3855 18.4591 16.1408 19.6291 17.4851C20.7992 18.8294 21.4565 20.6527 21.4565 22.5538C21.4565 24.4549 20.7992 26.2782 19.6291 27.6225C18.4591 28.9668 16.8721 29.7221 15.2174 29.7221L15.2174 22.5538V15.3855Z" class="f-green"/>
+                <path d="M6.3913 22.5538C7.23062 22.5538 8.06172 22.7437 8.83715 23.1128C9.61258 23.4818 10.3172 24.0227 10.9106 24.7045C11.5041 25.3864 11.9749 26.1959 12.2961 27.0868C12.6173 27.9777 12.7826 28.9326 12.7826 29.8969L6.3913 29.8969V22.5538Z" class="f-yellow"/>
+                <rect x="0" y="0" width="28" height="37.24" class="s-guide" vector-effect="non-scaling-stroke"/>
+                <line x1="6.3913" y1="33.5" x2="12.7826" y2="33.5" class="s-measure" vector-effect="non-scaling-stroke"/>
+                <line x1="0" y1="18.6" x2="6.3913" y2="18.6" class="s-measure" vector-effect="non-scaling-stroke"/>
+              </svg>
+            </div>
+            <div class="prose">
+              <p><b>Rule:</b> keep a clear zone the width of the Yellow piece on all four sides of the drawn mark. Nothing else, text or shape, enters it.</p>
+              <p>The Yellow piece is 6.39 of the frame's 28 units (about 23% of the symbol frame width; 6.4px at the 28px header size). The exported SVG frame already carries this zone: 6.39 units left and right, 7.34 top and bottom (shaded). So: never place anything inside the frame of <code>symbol.svg</code>, and keep the same unit around the whole lockup.</p>
+              <p>The symbol's mass sits low. When centring it optically in a tile or avatar, nudge it up 2% (<a href="brand-rules.md">brand-rules.md</a>).</p>
+            </div>
+          </div>
+          <div class="sub mins">
+            <h3>Minimum sizes <span class="status status--proposed">To confirm</span></h3>
+            <figure>
+              <div class="specimen">
+                <div class="row">
+                  <img class="s16" src="assets/brand/symbol.svg" width="16" height="21" alt="Symbol at 16px">
+                  <img class="s24" src="assets/brand/symbol.svg" width="24" height="32" alt="Symbol at 24px">
+                  <img class="s32" src="assets/brand/symbol.svg" width="32" height="43" alt="Symbol at 32px">
+                </div>
+              </div>
+              <figcaption class="cap"><b>Symbol: 16px wide minimum</b>Actual size: 16, 24 and 32px wide. 16px is the favicon. Edition 01 simplified the 16px favicon to the Deep Teal and Yellow pieces only; whether Edition 02 needs that version is open.</figcaption>
+            </figure>
+            <figure>
+              <div class="specimen">
+                <span class="lockup lockup--min" id="min-lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span>
+              </div>
+              <figcaption class="cap"><b>Lockup: 96px wide minimum</b><span id="min-lockup-note">Shown at about 96px wide.</span> Below 96px, use the symbol alone. Never put the wordmark in a favicon.</figcaption>
+            </figure>
+            <p class="cap">Both minimums come from Edition 01, not from Figma. They stay "To confirm" until Avi approves them, and need size tokens.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 · Colour versions -->
+      <section class="sec" id="versions" aria-labelledby="versions-h">
+        <div class="sec-head">
+          <span class="eyebrow">04 · Colour versions</span>
+          <h2 id="versions-h">Paper, Mist or Deep Teal, nothing else.</h2>
+          <p>The logo sits only on Paper, Mist or Deep Teal. Full colour is the default; the one-colour versions are for production that cannot carry four colours (one-ink print, emboss, etch).</p>
+        </div>
+
+        <div class="grid-3 cv">
+          <figure>
+            <div class="stage bg-paper"><span class="lockup lockup--lg"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Full colour on Paper</b>Paper #FEFCF6 (<code>--color-surface-paper</code>). symbol.svg, wordmark Deep Teal. The default, as in the Figma header.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage bg-mist"><span class="lockup lockup--lg"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Full colour on Mist</b>Mist #E8E7E1 (<code>--color-surface-mist</code>). symbol.svg, wordmark Deep Teal.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage bg-teal"><span class="lockup lockup--lg lockup--dark"><img src="assets/brand/symbol-on-dark.svg" alt=""><b>SoviCare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>On Deep Teal</b>Deep Teal #264653 (<code>--color-brand-deep-teal</code>). symbol-on-dark.svg: the Deep Teal piece turns Paper; Blue, Green and Yellow stay. Wordmark Paper. As in the Figma footer (<a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4253">2719-4253</a>).</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage bg-paper"><span class="lockup lockup--lg"><img src="assets/brand/symbol-mono-deep-teal.svg" alt=""><b>SoviCare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Mono Deep Teal</b>symbol-mono-deep-teal.svg on Paper or Mist. All four pieces Deep Teal.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage bg-teal"><span class="lockup lockup--lg lockup--dark"><img src="assets/brand/symbol-mono-paper.svg" alt=""><b>SoviCare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Mono Paper</b>symbol-mono-paper.svg on Deep Teal. All four pieces Paper.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="sub">
+          <h3>Forbidden backgrounds</h3>
+          <div class="grid-3 cv">
+            <figure>
+              <div class="stage bg-yellow"><img src="assets/brand/symbol.svg" width="56" height="74" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Not on Yellow</b>The Yellow piece disappears.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="stage bg-blue"><img src="assets/brand/symbol.svg" width="56" height="74" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Not on Blue</b>The Blue piece disappears.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="stage bg-green"><img src="assets/brand/symbol.svg" width="56" height="74" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Not on Green</b>The Green piece disappears.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="stage bg-wash-blue"><img src="assets/brand/symbol.svg" width="56" height="74" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Not on a wash</b>Wash Blue, Wash Green and Wash Yellow all weaken the pieces.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="stage bg-clay"><img src="assets/brand/symbol.svg" width="56" height="74" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Not on Clay</b>Edition 01 allowed Clay for posters. Edition 02 does not.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="stage bg-mist"><span class="cap">IMAGE · any photo</span></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Not on a photo</b>Place the logo on a Paper, Mist or Deep Teal area instead.</span></figcaption>
+            </figure>
+          </div>
+          <p class="cap">This replaces the Edition 01 "twelve approved states", which allowed Clay, Green, Blue and Yellow backgrounds. Decision of 08.10.2026.</p>
+        </div>
+      </section>
+
+      <!-- 5 · Misuse -->
+      <section class="sec" id="misuse" aria-labelledby="misuse-h">
+        <div class="sec-head">
+          <span class="eyebrow">05 · Misuse</span>
+          <h2 id="misuse-h">Use the files as they are.</h2>
+          <p>Every misuse below changes what the logo is. If a layout seems to need one of them, change the layout.</p>
+        </div>
+
+        <div class="grid-4 dt">
+          <figure>
+            <div class="stage">
+              <svg class="sym" viewBox="0 0 27.9999 37.2399" role="img" aria-label="Recoloured symbol">
+                <path d="M13.163 22.2741C11.4397 22.2741 9.78697 21.4875 8.56839 20.0875C7.34981 18.6874 6.66522 16.7886 6.66522 14.8086C6.66522 12.8286 7.34981 10.9297 8.56839 9.52969C9.78697 8.12964 11.4397 7.3431 13.163 7.3431V14.8086L13.163 22.2741Z" class="f-coral"/>
+                <path d="M21.6087 14.6862C20.7694 14.6862 19.9383 14.4963 19.1628 14.1272C18.3874 13.7582 17.6828 13.2173 17.0894 12.5355C16.4959 11.8536 16.0251 11.0441 15.7039 10.1532C15.3827 9.26227 15.2174 8.30741 15.2174 7.3431L21.6087 7.3431L21.6087 14.6862Z" class="f-yellow"/>
+                <path d="M15.2174 15.3855C16.8721 15.3855 18.4591 16.1408 19.6291 17.4851C20.7992 18.8294 21.4565 20.6527 21.4565 22.5538C21.4565 24.4549 20.7992 26.2782 19.6291 27.6225C18.4591 28.9668 16.8721 29.7221 15.2174 29.7221L15.2174 22.5538V15.3855Z" class="f-wash-blue"/>
+                <path d="M6.3913 22.5538C7.23062 22.5538 8.06172 22.7437 8.83715 23.1128C9.61258 23.4818 10.3172 24.0227 10.9106 24.7045C11.5041 25.3864 11.9749 26.1959 12.2961 27.0868C12.6173 27.9777 12.7826 28.9326 12.7826 29.8969L6.3913 29.8969V22.5538Z" class="f-teal"/>
+              </svg>
+            </div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't recolour</b>Only the five versions above exist.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage"><img class="sym x-stretch" src="assets/brand/symbol.svg" width="64" height="85" alt="Stretched symbol"></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't stretch</b>Scale width and height together.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage"><img class="sym x-rotate" src="assets/brand/symbol.svg" width="64" height="85" alt="Rotated symbol"></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't rotate</b>The symbol always stands upright.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage">
+              <svg class="sym" viewBox="0 0 27.9999 37.2399" role="img" aria-label="Outlined symbol">
+                <g class="s-outline" vector-effect="non-scaling-stroke">
+                  <path d="M13.163 22.2741C11.4397 22.2741 9.78697 21.4875 8.56839 20.0875C7.34981 18.6874 6.66522 16.7886 6.66522 14.8086C6.66522 12.8286 7.34981 10.9297 8.56839 9.52969C9.78697 8.12964 11.4397 7.3431 13.163 7.3431V14.8086L13.163 22.2741Z" vector-effect="non-scaling-stroke"/>
+                  <path d="M21.6087 14.6862C20.7694 14.6862 19.9383 14.4963 19.1628 14.1272C18.3874 13.7582 17.6828 13.2173 17.0894 12.5355C16.4959 11.8536 16.0251 11.0441 15.7039 10.1532C15.3827 9.26227 15.2174 8.30741 15.2174 7.3431L21.6087 7.3431L21.6087 14.6862Z" vector-effect="non-scaling-stroke"/>
+                  <path d="M15.2174 15.3855C16.8721 15.3855 18.4591 16.1408 19.6291 17.4851C20.7992 18.8294 21.4565 20.6527 21.4565 22.5538C21.4565 24.4549 20.7992 26.2782 19.6291 27.6225C18.4591 28.9668 16.8721 29.7221 15.2174 29.7221L15.2174 22.5538V15.3855Z" vector-effect="non-scaling-stroke"/>
+                  <path d="M6.3913 22.5538C7.23062 22.5538 8.06172 22.7437 8.83715 23.1128C9.61258 23.4818 10.3172 24.0227 10.9106 24.7045C11.5041 25.3864 11.9749 26.1959 12.2961 27.0868C12.6173 27.9777 12.7826 28.9326 12.7826 29.8969L6.3913 29.8969V22.5538Z" vector-effect="non-scaling-stroke"/>
+                </g>
+              </svg>
+            </div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't outline</b>The pieces are always solid.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage"><img class="sym x-effect" src="assets/brand/symbol.svg" width="64" height="85" alt="Symbol with a drop shadow"></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't add effects</b>No shadow, glow, gradient, bevel or transparency.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage"><img class="sym x-flip" src="assets/brand/symbol.svg" width="64" height="85" alt="Mirrored symbol"></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't mirror or rearrange</b>The four pieces keep their positions.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage"><span class="lockup x-font"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't type it in another font</b>The wordmark is DM Serif Display only.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="stage"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>Sovicare</b></span></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't write "Sovicare"</b>Nor SOVICARE. Always SoviCare.</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- 6 · Files -->
+      <section class="sec" id="files" aria-labelledby="files-h">
+        <div class="sec-head">
+          <span class="eyebrow">06 · Files</span>
+          <h2 id="files-h">Use the exported files, never a copy.</h2>
+          <p>Link or embed these SVG files. Do not paste the paths inline into pages or rebuild the mark with CSS.</p>
+        </div>
+
+        <div class="table-wrap files">
+          <table>
+            <thead><tr><th scope="col">Preview</th><th scope="col">File</th><th scope="col">Use on</th><th scope="col">Status</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip-bg bg-paper"><img src="assets/brand/symbol.svg" width="24" height="32" alt=""></span></td><td><a href="assets/brand/symbol.svg" download>symbol.svg</a></td><td>Full colour, on Paper or Mist. Also the favicon.</td><td><span class="status status--current">Current</span></td></tr>
+              <tr><td><span class="chip-bg bg-teal"><img src="assets/brand/symbol-on-dark.svg" width="24" height="32" alt=""></span></td><td><a href="assets/brand/symbol-on-dark.svg" download>symbol-on-dark.svg</a></td><td>Full colour, on Deep Teal.</td><td><span class="status status--current">Current</span></td></tr>
+              <tr><td><span class="chip-bg bg-paper"><img src="assets/brand/symbol-mono-deep-teal.svg" width="24" height="32" alt=""></span></td><td><a href="assets/brand/symbol-mono-deep-teal.svg" download>symbol-mono-deep-teal.svg</a></td><td>One colour, on Paper or Mist.</td><td><span class="status status--current">Current</span></td></tr>
+              <tr><td><span class="chip-bg bg-teal"><img src="assets/brand/symbol-mono-paper.svg" width="24" height="32" alt=""></span></td><td><a href="assets/brand/symbol-mono-paper.svg" download>symbol-mono-paper.svg</a></td><td>One colour, on Deep Teal.</td><td><span class="status status--current">Current</span></td></tr>
+              <tr><td>—</td><td>Lockup SVG (symbol + outlined "SoviCare"), light and dark</td><td>Headers, footers, documents</td><td><span class="status status--planned">Planned</span> after the Figma wordmark is corrected</td></tr>
+              <tr><td>—</td><td>Favicon PNG set and apple-touch-icon</td><td>Browsers and home screens</td><td><span class="status status--proposed">To confirm</span> sizes and the 16px version</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cap">All four SVG files share one 28 × 37.24 frame with the clear space built in, so they swap without layout changes. Pieces are named <code>teal</code>, <code>blue</code>, <code>green</code>, <code>yellow</code> inside each file.</p>
+      </section>
+
+      <footer class="page-foot cap">
+        <span>SoviCare Brand Hub · Brand Edition 02 · 08.10.2026</span>
+        <span>Values: <a href="tokens/tokens.json">tokens/tokens.json</a> → <a href="brand.css">brand.css</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+<script>
+  /* Minimum-size specimen: scale the lockup so it measures exactly --space-24 (96px) wide, then report the result. */
+  (function () {
+    var el = document.getElementById('min-lockup');
+    var note = document.getElementById('min-lockup-note');
+    if (!el || !note) return;
+    function fit() {
+      var target = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--space-24'));
+      el.style.fontSize = '';
+      var w = el.getBoundingClientRect().width;
+      var fs = parseFloat(getComputedStyle(el).fontSize);
+      if (!target || !w || !fs) return;
+      el.style.fontSize = (fs * target / w) + 'px';
+      var size = parseFloat(getComputedStyle(el).fontSize);
+      note.textContent = 'Shown at ' + Math.round(el.getBoundingClientRect().width) + 'px wide (wordmark ' + size.toFixed(1) + 'px).';
+    }
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); } else { window.addEventListener('load', fit); }
+  })();
+</script>
+</body>
+</html>

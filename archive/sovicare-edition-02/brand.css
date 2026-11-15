@@ -1,0 +1,291 @@
+/* SoviCare brand tokens — Brand Edition 02 (08.10.2026)
+   GENERATED from tokens/tokens.json by tools/build_tokens.py. Do not edit by hand.
+   Values: Figma h7D0eRszARBaWdJT1NWrpZ variables + Avi's decisions of 08.10.2026. */
+
+:root {
+  --color-brand-deep-teal: #264653;
+  --color-brand-teal-deep: #1C3742;
+  --color-brand-teal-light: #5F7075;
+  --color-brand-blue: #6E8B97;
+  --color-brand-blue-dark: #4E6873;
+  --color-brand-green: #6A8670;
+  --color-brand-yellow: #FFBE0B;
+  --color-brand-coral: #E76F51;
+  --color-brand-clay: #CFC6B8;
+  --color-surface-paper: #FEFCF6;
+  --color-surface-mist: #E8E7E1;
+  --color-surface-card: #FFFFFF;
+  --color-surface-wash-blue: #A8BEC7;
+  --color-surface-wash-green: #B6CDBB;
+  --color-surface-wash-yellow: #FCE7AE;
+  --color-surface-on-dark-field: rgba(254, 252, 246, 0.06);
+  --color-text-primary: var(--color-brand-deep-teal);
+  --color-text-strong: var(--color-brand-teal-deep);
+  --color-text-secondary: #55747F;
+  --color-text-secondary-on-mist: var(--color-brand-blue-dark);
+  --color-text-tertiary: #7E9AA6;
+  --color-text-on-dark: var(--color-surface-paper);
+  --color-text-on-dark-muted: var(--color-surface-wash-blue);
+  --color-text-link: var(--color-brand-deep-teal);
+  --color-line-soft: #EDEAE2;
+  --color-line-base: #E3DFD5;
+  --color-line-mid: #C4BDAE;
+  --color-line-field: #55747F;
+  --color-line-on-dark: #3E5C6B;
+  --color-focus-ring: var(--color-brand-deep-teal);
+  --color-focus-ring-on-dark: var(--color-surface-paper);
+  --font-family-serif: 'DM Serif Display', Georgia, serif;
+  --font-family-sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-hero-home-family: 'DM Serif Display', Georgia, serif;
+  --type-desktop-hero-home-size: 70px;
+  --type-desktop-hero-home-weight: 400;
+  --type-desktop-hero-home-line: 60px;
+  --type-desktop-hero-home-tracking: 0;
+  --type-desktop-hero-family: 'DM Serif Display', Georgia, serif;
+  --type-desktop-hero-size: 46px;
+  --type-desktop-hero-weight: 400;
+  --type-desktop-hero-line: 54px;
+  --type-desktop-hero-tracking: 0;
+  --type-desktop-h2-family: 'DM Serif Display', Georgia, serif;
+  --type-desktop-h2-size: 46px;
+  --type-desktop-h2-weight: 400;
+  --type-desktop-h2-line: 1.10;
+  --type-desktop-h2-tracking: 0;
+  --type-desktop-section-family: 'DM Serif Display', Georgia, serif;
+  --type-desktop-section-size: 36px;
+  --type-desktop-section-weight: 400;
+  --type-desktop-section-line: 40px;
+  --type-desktop-section-tracking: 0;
+  --type-desktop-h3-family: 'DM Serif Display', Georgia, serif;
+  --type-desktop-h3-size: 26px;
+  --type-desktop-h3-weight: 400;
+  --type-desktop-h3-line: 1.30;
+  --type-desktop-h3-tracking: 0;
+  --type-desktop-card-serif-family: 'DM Serif Display', Georgia, serif;
+  --type-desktop-card-serif-size: 24px;
+  --type-desktop-card-serif-weight: 400;
+  --type-desktop-card-serif-line: 30px;
+  --type-desktop-card-serif-tracking: 0;
+  --type-desktop-card-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-card-size: 17px;
+  --type-desktop-card-weight: 600;
+  --type-desktop-card-line: 24px;
+  --type-desktop-card-tracking: 0;
+  --type-desktop-lead-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-lead-size: 20px;
+  --type-desktop-lead-weight: 400;
+  --type-desktop-lead-line: 1.62;
+  --type-desktop-lead-tracking: 0;
+  --type-desktop-subhead-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-subhead-size: 18px;
+  --type-desktop-subhead-weight: 400;
+  --type-desktop-subhead-line: 28px;
+  --type-desktop-subhead-tracking: 0;
+  --type-desktop-body-long-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-body-long-size: 17px;
+  --type-desktop-body-long-weight: 400;
+  --type-desktop-body-long-line: 1.75;
+  --type-desktop-body-long-tracking: 0;
+  --type-desktop-body-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-body-size: 16px;
+  --type-desktop-body-weight: 400;
+  --type-desktop-body-line: 24px;
+  --type-desktop-body-tracking: 0;
+  --type-desktop-small-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-small-size: 15px;
+  --type-desktop-small-weight: 400;
+  --type-desktop-small-line: 1.62;
+  --type-desktop-small-tracking: 0;
+  --type-desktop-compact-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-compact-size: 14px;
+  --type-desktop-compact-weight: 400;
+  --type-desktop-compact-line: 21px;
+  --type-desktop-compact-tracking: 0;
+  --type-desktop-caption-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-caption-size: 13px;
+  --type-desktop-caption-weight: 400;
+  --type-desktop-caption-line: 1.5;
+  --type-desktop-caption-tracking: 0;
+  --type-desktop-fine-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-fine-size: 12px;
+  --type-desktop-fine-weight: 400;
+  --type-desktop-fine-line: 18px;
+  --type-desktop-fine-tracking: 0;
+  --type-desktop-label-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-label-size: 12px;
+  --type-desktop-label-weight: 600;
+  --type-desktop-label-line: 16px;
+  --type-desktop-label-tracking: 0.02em;
+  --type-desktop-nav-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-nav-size: 14px;
+  --type-desktop-nav-weight: 500;
+  --type-desktop-nav-line: 1.4;
+  --type-desktop-nav-tracking: 0;
+  --type-desktop-button-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-desktop-button-size: 15px;
+  --type-desktop-button-weight: 500;
+  --type-desktop-button-line: 20px;
+  --type-desktop-button-tracking: 0;
+  --type-mobile-hero-family: 'DM Serif Display', Georgia, serif;
+  --type-mobile-hero-size: 34px;
+  --type-mobile-hero-weight: 400;
+  --type-mobile-hero-line: 40px;
+  --type-mobile-hero-tracking: 0;
+  --type-mobile-section-family: 'DM Serif Display', Georgia, serif;
+  --type-mobile-section-size: 28px;
+  --type-mobile-section-weight: 400;
+  --type-mobile-section-line: 34px;
+  --type-mobile-section-tracking: 0;
+  --type-mobile-card-serif-family: 'DM Serif Display', Georgia, serif;
+  --type-mobile-card-serif-size: 21px;
+  --type-mobile-card-serif-weight: 400;
+  --type-mobile-card-serif-line: 27px;
+  --type-mobile-card-serif-tracking: 0;
+  --type-mobile-card-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-mobile-card-size: 16px;
+  --type-mobile-card-weight: 600;
+  --type-mobile-card-line: 22px;
+  --type-mobile-card-tracking: 0;
+  --type-mobile-subhead-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-mobile-subhead-size: 16px;
+  --type-mobile-subhead-weight: 400;
+  --type-mobile-subhead-line: 25px;
+  --type-mobile-subhead-tracking: 0;
+  --type-mobile-body-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-mobile-body-size: 15px;
+  --type-mobile-body-weight: 400;
+  --type-mobile-body-line: 23px;
+  --type-mobile-body-tracking: 0;
+  --type-mobile-compact-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-mobile-compact-size: 13px;
+  --type-mobile-compact-weight: 400;
+  --type-mobile-compact-line: 20px;
+  --type-mobile-compact-tracking: 0;
+  --type-mobile-label-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-mobile-label-size: 11px;
+  --type-mobile-label-weight: 600;
+  --type-mobile-label-line: 16px;
+  --type-mobile-label-tracking: 0.02em;
+  --type-mobile-button-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --type-mobile-button-size: 15px;
+  --type-mobile-button-weight: 500;
+  --type-mobile-button-line: 20px;
+  --type-mobile-button-tracking: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-18: 72px;
+  --space-24: 96px;
+  --layout-frame-desktop: 1440px;
+  --layout-frame-mobile: 390px;
+  --layout-content-max: 1240px;
+  --layout-margin-desktop: 100px;
+  --layout-margin-tablet: 40px;
+  --layout-margin-mobile: 20px;
+  --layout-header-inset: 56px;
+  --layout-section-y: 96px;
+  --layout-section-y-mobile: 56px;
+  --layout-columns: 12;
+  --layout-gutter: 20px;
+  --layout-breakpoint-mobile: 390px;
+  --layout-breakpoint-tablet: 768px;
+  --layout-breakpoint-laptop: 1024px;
+  --layout-breakpoint-desktop: 1440px;
+  --layout-measure: 68ch;
+  --radius-pill: 999px;
+  --radius-card: 16px;
+  --radius-small: 12px;
+  --radius-xs: 8px;
+  --radius-none: 0;
+  --size-control: 50px;
+  --size-control-exception-header: 44px;
+  --size-control-exception-mobile-bar: 48px;
+  --size-tap-min: 44px;
+  --size-header-desktop: 80px;
+  --size-header-mobile: 64px;
+  --size-icon: 24px;
+  --size-icon-stroke: 1.5px;
+  --size-focus-width: 2px;
+  --size-focus-offset: 3px;
+  --size-logo-symbol-width: 28px;
+  --size-logo-wordmark: 22px;
+  --size-logo-gap: 10px;
+  --size-logo-min-symbol: 16px;
+  --size-logo-min-lockup: 96px;
+  --size-header-scroll-threshold: 8px;
+  --size-footer-link-row-mobile: 36px;
+  --size-menu-thumb: 30px;
+  --size-button-border: 1.5px;
+  --shadow-overlay: 0 24px 60px rgba(38, 70, 83, 0.16), 0 2px 6px rgba(38, 70, 83, 0.06);
+  --motion-duration-fast: 150ms;
+  --motion-duration-open: 220ms;
+  --motion-duration-reveal: 320ms;
+  --motion-duration-wipe: 420ms;
+  --motion-duration-shape: 520ms;
+  --motion-duration-loader: 1400ms;
+  --motion-easing-ui: cubic-bezier(0, 0, 0.58, 1);
+  --motion-easing-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+  --motion-distance-rise: 12px;
+  --motion-distance-lift: 2px;
+  --motion-distance-dropdown: 6px;
+  --motion-stagger: 90ms;
+  --motion-close-delay: 150ms;
+  --motion-intent-delay: 100ms;
+  --motion-loader-delay: 400ms;
+  --motion-auto-advance: 320ms;
+}
+
+.t-hero-home { font-family: var(--type-desktop-hero-home-family); font-size: var(--type-desktop-hero-home-size); font-weight: var(--type-desktop-hero-home-weight); line-height: var(--type-desktop-hero-home-line); letter-spacing: var(--type-desktop-hero-home-tracking); }
+.t-hero { font-family: var(--type-desktop-hero-family); font-size: var(--type-desktop-hero-size); font-weight: var(--type-desktop-hero-weight); line-height: var(--type-desktop-hero-line); letter-spacing: var(--type-desktop-hero-tracking); }
+.t-h2 { font-family: var(--type-desktop-h2-family); font-size: var(--type-desktop-h2-size); font-weight: var(--type-desktop-h2-weight); line-height: var(--type-desktop-h2-line); letter-spacing: var(--type-desktop-h2-tracking); }
+.t-section { font-family: var(--type-desktop-section-family); font-size: var(--type-desktop-section-size); font-weight: var(--type-desktop-section-weight); line-height: var(--type-desktop-section-line); letter-spacing: var(--type-desktop-section-tracking); }
+.t-h3 { font-family: var(--type-desktop-h3-family); font-size: var(--type-desktop-h3-size); font-weight: var(--type-desktop-h3-weight); line-height: var(--type-desktop-h3-line); letter-spacing: var(--type-desktop-h3-tracking); }
+.t-card-serif { font-family: var(--type-desktop-card-serif-family); font-size: var(--type-desktop-card-serif-size); font-weight: var(--type-desktop-card-serif-weight); line-height: var(--type-desktop-card-serif-line); letter-spacing: var(--type-desktop-card-serif-tracking); }
+.t-card { font-family: var(--type-desktop-card-family); font-size: var(--type-desktop-card-size); font-weight: var(--type-desktop-card-weight); line-height: var(--type-desktop-card-line); letter-spacing: var(--type-desktop-card-tracking); }
+.t-lead { font-family: var(--type-desktop-lead-family); font-size: var(--type-desktop-lead-size); font-weight: var(--type-desktop-lead-weight); line-height: var(--type-desktop-lead-line); letter-spacing: var(--type-desktop-lead-tracking); }
+.t-subhead { font-family: var(--type-desktop-subhead-family); font-size: var(--type-desktop-subhead-size); font-weight: var(--type-desktop-subhead-weight); line-height: var(--type-desktop-subhead-line); letter-spacing: var(--type-desktop-subhead-tracking); }
+.t-body-long { font-family: var(--type-desktop-body-long-family); font-size: var(--type-desktop-body-long-size); font-weight: var(--type-desktop-body-long-weight); line-height: var(--type-desktop-body-long-line); letter-spacing: var(--type-desktop-body-long-tracking); }
+.t-body { font-family: var(--type-desktop-body-family); font-size: var(--type-desktop-body-size); font-weight: var(--type-desktop-body-weight); line-height: var(--type-desktop-body-line); letter-spacing: var(--type-desktop-body-tracking); }
+.t-small { font-family: var(--type-desktop-small-family); font-size: var(--type-desktop-small-size); font-weight: var(--type-desktop-small-weight); line-height: var(--type-desktop-small-line); letter-spacing: var(--type-desktop-small-tracking); }
+.t-compact { font-family: var(--type-desktop-compact-family); font-size: var(--type-desktop-compact-size); font-weight: var(--type-desktop-compact-weight); line-height: var(--type-desktop-compact-line); letter-spacing: var(--type-desktop-compact-tracking); }
+.t-caption { font-family: var(--type-desktop-caption-family); font-size: var(--type-desktop-caption-size); font-weight: var(--type-desktop-caption-weight); line-height: var(--type-desktop-caption-line); letter-spacing: var(--type-desktop-caption-tracking); }
+.t-fine { font-family: var(--type-desktop-fine-family); font-size: var(--type-desktop-fine-size); font-weight: var(--type-desktop-fine-weight); line-height: var(--type-desktop-fine-line); letter-spacing: var(--type-desktop-fine-tracking); }
+.t-label { font-family: var(--type-desktop-label-family); font-size: var(--type-desktop-label-size); font-weight: var(--type-desktop-label-weight); line-height: var(--type-desktop-label-line); letter-spacing: var(--type-desktop-label-tracking); }
+.t-nav { font-family: var(--type-desktop-nav-family); font-size: var(--type-desktop-nav-size); font-weight: var(--type-desktop-nav-weight); line-height: var(--type-desktop-nav-line); letter-spacing: var(--type-desktop-nav-tracking); }
+.t-button { font-family: var(--type-desktop-button-family); font-size: var(--type-desktop-button-size); font-weight: var(--type-desktop-button-weight); line-height: var(--type-desktop-button-line); letter-spacing: var(--type-desktop-button-tracking); }
+
+@media (max-width: 767px) {
+  .t-hero-home { font-family: var(--type-mobile-hero-family); font-size: var(--type-mobile-hero-size); font-weight: var(--type-mobile-hero-weight); line-height: var(--type-mobile-hero-line); letter-spacing: var(--type-mobile-hero-tracking); }
+  .t-hero { font-family: var(--type-mobile-hero-family); font-size: var(--type-mobile-hero-size); font-weight: var(--type-mobile-hero-weight); line-height: var(--type-mobile-hero-line); letter-spacing: var(--type-mobile-hero-tracking); }
+  .t-h2 { font-family: var(--type-mobile-section-family); font-size: var(--type-mobile-section-size); font-weight: var(--type-mobile-section-weight); line-height: var(--type-mobile-section-line); letter-spacing: var(--type-mobile-section-tracking); }
+  .t-section { font-family: var(--type-mobile-section-family); font-size: var(--type-mobile-section-size); font-weight: var(--type-mobile-section-weight); line-height: var(--type-mobile-section-line); letter-spacing: var(--type-mobile-section-tracking); }
+  .t-card-serif { font-family: var(--type-mobile-card-serif-family); font-size: var(--type-mobile-card-serif-size); font-weight: var(--type-mobile-card-serif-weight); line-height: var(--type-mobile-card-serif-line); letter-spacing: var(--type-mobile-card-serif-tracking); }
+  .t-card { font-family: var(--type-mobile-card-family); font-size: var(--type-mobile-card-size); font-weight: var(--type-mobile-card-weight); line-height: var(--type-mobile-card-line); letter-spacing: var(--type-mobile-card-tracking); }
+  .t-subhead { font-family: var(--type-mobile-subhead-family); font-size: var(--type-mobile-subhead-size); font-weight: var(--type-mobile-subhead-weight); line-height: var(--type-mobile-subhead-line); letter-spacing: var(--type-mobile-subhead-tracking); }
+  .t-body { font-family: var(--type-mobile-body-family); font-size: var(--type-mobile-body-size); font-weight: var(--type-mobile-body-weight); line-height: var(--type-mobile-body-line); letter-spacing: var(--type-mobile-body-tracking); }
+  .t-compact { font-family: var(--type-mobile-compact-family); font-size: var(--type-mobile-compact-size); font-weight: var(--type-mobile-compact-weight); line-height: var(--type-mobile-compact-line); letter-spacing: var(--type-mobile-compact-tracking); }
+  .t-label { font-family: var(--type-mobile-label-family); font-size: var(--type-mobile-label-size); font-weight: var(--type-mobile-label-weight); line-height: var(--type-mobile-label-line); letter-spacing: var(--type-mobile-label-tracking); }
+  .t-button { font-family: var(--type-mobile-button-family); font-size: var(--type-mobile-button-size); font-weight: var(--type-mobile-button-weight); line-height: var(--type-mobile-button-line); letter-spacing: var(--type-mobile-button-tracking); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0ms;
+    --motion-duration-open: 0ms;
+    --motion-duration-reveal: 0ms;
+    --motion-duration-wipe: 0ms;
+    --motion-duration-shape: 0ms;
+    --motion-distance-rise: 0px;
+    --motion-distance-lift: 0px;
+    --motion-distance-dropdown: 0px;
+    --motion-stagger: 0ms;
+  }
+}

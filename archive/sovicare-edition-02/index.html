@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overview · SoviCare Brand Hub</title>
+<meta name="description" content="SoviCare Brand Hub, Brand Edition 02: the rules, values, components and motion behind every SoviCare surface.">
+<link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<style>
+  .glance { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--space-4); }
+  .glance .specimen { align-content: start; }
+  .lockup { display: flex; align-items: center; gap: var(--space-3); }
+  .lockup img { width: var(--space-10); height: auto; }
+  .lockup b { font: 400 var(--type-desktop-section-size) / 1 var(--font-family-serif); color: var(--color-brand-deep-teal); }
+  .strip { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); height: var(--space-12); border-radius: var(--radius-small); overflow: hidden; }
+  .strip i { display: block; }
+  .authority { counter-reset: a; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .authority li { counter-increment: a; display: grid; grid-template-columns: var(--size-tap-min) minmax(0, 1fr); gap: var(--space-4); align-items: start; padding: var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .authority li::before { content: counter(a); display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: 50%; background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); font: 400 var(--type-desktop-card-serif-size) / 1 var(--font-family-serif); }
+  .authority b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  .authority span { color: var(--color-text-secondary); }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .cards a.card { display: grid; gap: var(--space-2); align-content: start; min-height: calc(var(--space-24) + var(--space-12)); }
+  .cards .card b { font: 400 var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); }
+  .cards .card span { color: var(--color-text-secondary); }
+  .cards a.card:hover span, .cards a.card:focus-visible span { color: var(--color-text-on-dark-muted); }
+  .cards .card .eyebrow { color: inherit; }
+  @media (max-width: 1023px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .glance { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 767px) { .cards { grid-template-columns: minmax(0, 1fr); } .lockup b { font-size: var(--type-mobile-section-size); } }
+</style>
+</head>
+<body>
+<div class="archive-banner"><span>Archived · SoviCare Brand Edition 02 (08.10.2026). Superseded by unifiedmeds Brand Edition 03 (15.11.2026).</span><a href="../../index.html">Go to the current hub</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <span class="hub-edition">Brand Edition 02 · 08.10.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="rulebook.html">Rulebook &amp; decisions</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html">Brand &amp; imagery</a>
+      <a href="logo.html">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html">Foundations</a>
+      <a href="components.html">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="../index.html">Archive · Edition 01</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">SoviCare Brand Hub · Brand Edition 02</span>
+        <h1>One brand, one source of truth.</h1>
+        <p class="lead">The rules, values, components and motion behind every SoviCare surface. Every value lives once, in the token file, and every page here reads from it.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#authority">How this hub works</a>
+          <a href="#start">Start here</a>
+          <a href="#glance">At a glance</a>
+          <a href="#edition">What changed</a>
+        </nav>
+      </header>
+
+      <section class="sec" id="authority" aria-labelledby="authority-h">
+        <div class="sec-head">
+          <h2 id="authority-h">How this hub works.</h2>
+          <p>Three sources, one order. When two sources disagree, the higher one wins and the lower one gets fixed.</p>
+        </div>
+        <ol class="authority">
+          <li><div><b>Figma wins on every visual value.</b><span>The live file “SoviCare - Website” (<code>h7D0eRszARBaWdJT1NWrpZ</code>) defines layout, colour, type, spacing, radius and components. Values in this edition were read on 08.10.2026.</span></div></li>
+          <li><div><b>brand-rules.md wins on compliance and wording.</b><span>The <a class="link" href="rulebook.html">rulebook</a> holds the brand rules, the decision log and the exceptions log.</span></div></li>
+          <li><div><b>The hub explains and mirrors both.</b><span>Values come from <a class="link" href="tokens/tokens.json">tokens/tokens.json</a>, generated into <a class="link" href="brand.css">brand.css</a>. If the hub and Figma disagree, the hub is wrong.</span></div></li>
+        </ol>
+      </section>
+
+      <section class="sec" id="start" aria-labelledby="start-h">
+        <div class="sec-head">
+          <h2 id="start-h">Start here.</h2>
+          <p>Each page covers one part of the brand. Designers start with Foundations; developers start with the handoff.</p>
+        </div>
+        <div class="cards">
+          <a class="card" href="rulebook.html"><span class="eyebrow">Start</span><b>Rulebook &amp; decisions</b><span>Every rule, the 08.10 decision log, exceptions and open items.</span></a>
+          <a class="card" href="brand.html"><span class="eyebrow">Brand</span><b>Brand &amp; imagery</b><span>Who we are, categories, tagline, Quadrant Kit and photography.</span></a>
+          <a class="card" href="logo.html"><span class="eyebrow">Brand</span><b>Logo</b><span>The symbol, the wordmark, colour versions and files.</span></a>
+          <a class="card" href="content.html"><span class="eyebrow">Brand</span><b>Voice, content &amp; compliance</b><span>How we write, required lines, what we never publish.</span></a>
+          <a class="card" href="foundations.html"><span class="eyebrow">System</span><b>Foundations</b><span>Colour, contrast, type, layout, radius, elevation and icons.</span></a>
+          <a class="card" href="components.html"><span class="eyebrow">System</span><b>Components</b><span>Buttons, fields, cards, chips, the main menu and the footer.</span></a>
+          <a class="card" href="motion.html"><span class="eyebrow">System</span><b>Motion</b><span>Principle, tokens, brand moves and the 24 motion cards.</span></a>
+          <a class="card" href="handoff.html"><span class="eyebrow">Build</span><b>Developer handoff</b><span>What to build from, page scope and the release checklist.</span></a>
+          <a class="card" href="changelog.html"><span class="eyebrow">Start</span><b>Changelog</b><span>What changed in each edition, and why.</span></a>
+        </div>
+      </section>
+
+      <section class="sec" id="glance" aria-labelledby="glance-h">
+        <div class="sec-head">
+          <h2 id="glance-h">The brand at a glance.</h2>
+          <p>A men’s health brand that launches with Sexual health. Masculine, on the gentle side.</p>
+        </div>
+        <div class="glance">
+          <div class="specimen">
+            <div class="lockup"><img src="assets/brand/symbol.svg" width="40" height="53" alt="SoviCare symbol"><b>SoviCare</b></div>
+            <div class="strip" aria-label="Core palette">
+              <i style="background: var(--color-brand-deep-teal)" title="Deep Teal"></i>
+              <i style="background: var(--color-brand-teal-deep)" title="Teal Deep"></i>
+              <i style="background: var(--color-brand-blue-dark)" title="Blue Dark"></i>
+              <i style="background: var(--color-brand-blue)" title="Blue"></i>
+              <i style="background: var(--color-brand-green)" title="Green"></i>
+              <i style="background: var(--color-brand-yellow)" title="Yellow"></i>
+              <i style="background: var(--color-surface-wash-blue)" title="Wash Blue"></i>
+              <i style="background: var(--color-surface-mist)" title="Mist"></i>
+              <i style="background: var(--color-surface-paper); box-shadow: inset 0 0 0 1px var(--color-line-base)" title="Paper"></i>
+            </div>
+            <p class="cap">Deep Teal · Teal Deep · Blue Dark · Blue · Green · Yellow · Wash Blue · Mist · Paper — see <a class="link" href="foundations.html">Foundations</a>.</p>
+          </div>
+          <div class="specimen specimen--mist">
+            <p class="t-hero">Feel more like yourself.</p>
+            <p class="t-body">DM Serif Display for editorial moments, Inter for everything else.</p>
+            <div class="specimen-row">
+              <a class="btn" href="components.html">Get started</a>
+              <a class="btn btn--outline" href="components.html">Explore treatments</a>
+            </div>
+            <p class="cap">Every button is 50px high; the label starts where the curve ends.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="edition" aria-labelledby="edition-h">
+        <div class="sec-head">
+          <h2 id="edition-h">What changed in Edition 02.</h2>
+          <p>Edition 02 rebuilds the hub from the current Figma file and the 29 decisions Avi approved on 08.10.2026.</p>
+        </div>
+        <div class="prose">
+          <ul>
+            <li>One token file replaces four competing sources of truth.</li>
+            <li>The Pastel palette from Figma replaces the Edition 01 colours. Contrast is fixed where Edition 01 failed WCAG AA.</li>
+            <li>The type scale, spacing, radius and motion now each have one definition.</li>
+            <li>Main menu v3 and Footer v2 are the only navigation patterns. Hair loss and Longevity are planned categories, not live ones.</li>
+            <li>Banned modules are removed from the build guide: press strip, clinical stats, reviews and ratings.</li>
+            <li>All 42 Edition 01 pages are kept in the <a class="link" href="../index.html">archive</a> with a banner. None were deleted.</li>
+          </ul>
+          <p><a class="link" href="changelog.html">Read the full changelog</a></p>
+        </div>
+      </section>
+
+      <footer class="page-foot cap">
+        <span>SoviCare Brand Hub · Brand Edition 02 · 08.10.2026</span>
+        <span>Values: <a href="tokens/tokens.json">tokens/tokens.json</a> → <a href="brand.css">brand.css</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+</body>
+</html>

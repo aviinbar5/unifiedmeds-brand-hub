@@ -1,0 +1,1415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Components · SoviCare Brand Hub</title>
+<meta name="description" content="SoviCare website components, live: buttons, links and focus, form fields, cards, chips, steps, accordion, header and main menu v3, Footer v2 compact and the overlay surface. Built on tokens; Figma wins on every visual value.">
+<link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<style>
+/* Components page — tokens only. 1px hairlines and the 1.5px button border are the only literal widths. */
+
+/* ---------- Shared helpers ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.on-dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
+.stack { display: grid; gap: var(--space-4); align-content: start; min-width: 0; }
+.kv { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: center; }
+td code, th code { white-space: nowrap; }
+.toolbar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+/* Disabled buttons never take a hover colour or lift (components.css only resets the rest colours). */
+.btn:disabled, .btn[aria-disabled="true"] {
+  --btn-bg-hover: var(--color-line-base);
+  --btn-fg-hover: var(--color-text-secondary);
+  --btn-border-hover: var(--color-line-base);
+}
+.btn:disabled:hover, .btn[aria-disabled="true"]:hover { transform: none; }
+/* Forced states for documentation (the same values the live :hover / :active use) */
+.btn.is-hover, .force-hover .btn:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--btn-bg-hover); color: var(--btn-fg-hover); border-color: var(--btn-border-hover);
+  transform: translateY(calc(var(--motion-distance-lift) * -1));
+}
+.btn.is-active { background: var(--btn-bg-hover); color: var(--btn-fg-hover); border-color: var(--btn-border-hover); transform: none; }
+.btn.is-focus { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.on-dark .btn.is-focus { outline-color: var(--color-focus-ring-on-dark); }
+
+/* ---------- Surfaces ---------- */
+.surfaces { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.surface { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border-radius: var(--radius-card); min-width: 0; }
+.surface .specimen-row { gap: var(--space-3); }
+.surface--paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
+.surface--dark { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.surface--dark .cap { color: var(--color-text-on-dark-muted); }
+.surface--wash-blue { background: var(--color-surface-wash-blue); }
+.surface--wash-yellow { background: var(--color-surface-wash-yellow); }
+.surface--blue { background: var(--color-brand-blue); color: var(--color-text-on-dark); }
+.surface--wash-blue .cap, .surface--wash-yellow .cap { color: var(--color-text-primary); }
+.surface-title { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+
+/* ---------- Button width diagram ---------- */
+.measures { display: flex; flex-wrap: wrap; gap: var(--space-10) var(--space-12); align-items: start; }
+.measure { display: inline-grid; gap: var(--space-2); }
+.measure .btn { position: relative; pointer-events: none; justify-self: start; }
+.measure .btn::before, .measure .btn::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 0;
+  border-left: 1px dashed var(--color-text-on-dark-muted);
+}
+.measure .btn::before { left: calc(var(--btn-h) / 2); }
+.measure .btn::after { right: calc(var(--btn-h) / 2); }
+.measure__label { outline: 1px dashed var(--color-text-on-dark-muted); outline-offset: 0; }
+.ruler { display: grid; grid-template-columns: calc(var(--size-control) / 2) minmax(0, 1fr) calc(var(--size-control) / 2); }
+.ruler span {
+  display: grid; justify-items: center; gap: var(--space-1);
+  font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans);
+  color: var(--color-text-secondary);
+}
+.ruler span::before { content: ''; justify-self: stretch; height: var(--space-2); border: 1px solid var(--color-line-field); border-top: 0; }
+.ruler span + span::before { border-left: 0; }
+.measure__out { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-primary); font-variant-numeric: tabular-nums; }
+.heights { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: end; }
+.heights figure { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
+.heights figure.wide { width: var(--layout-frame-mobile); max-width: 100%; justify-items: stretch; }
+.slot-loading {
+  display: inline-flex; align-items: center; height: var(--size-control); padding: 0 calc(var(--size-control) / 2);
+  border: 1px dashed var(--color-line-field); border-radius: var(--radius-pill);
+  font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / 1 var(--font-family-sans); color: var(--color-text-secondary);
+}
+.states { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: start; }
+.state { display: grid; gap: var(--space-3); justify-items: start; }
+
+/* ---------- Links ---------- */
+.on-dark .link { color: var(--color-text-on-dark); }
+.link--forced { text-decoration-thickness: 2px; }
+.focus-demo { display: inline-block; padding: var(--space-1) var(--space-2); border-radius: var(--radius-xs); outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.on-dark .focus-demo { outline-color: var(--color-focus-ring-on-dark); }
+
+/* ---------- Fields ---------- */
+.field__input { width: 100%; }
+.field__input::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.field__input:disabled { background: var(--color-surface-mist); border-color: var(--color-line-base); color: var(--color-text-secondary); cursor: not-allowed; }
+.field--disabled .field__label { color: var(--color-text-secondary); }
+.question { font: var(--type-desktop-h3-weight) var(--type-desktop-h3-size) / var(--type-desktop-h3-line) var(--type-desktop-h3-family); color: var(--color-text-strong); }
+.options { display: grid; gap: var(--space-3); border: 0; padding: 0; margin: 0; min-width: 0; }
+.options legend { padding: 0; margin-bottom: var(--space-4); }
+.option { font: var(--type-desktop-body-weight) var(--type-desktop-body-size) / var(--type-desktop-body-line) var(--font-family-sans); color: var(--color-text-primary); }
+.option:hover { border-color: var(--color-brand-deep-teal); }
+.option:has(input:checked) { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); }
+.option:has(:focus-visible) { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.option input:focus-visible { outline: none; }
+
+/* Checkbox and radio, drawn on tokens */
+.check {
+  -webkit-appearance: none; appearance: none; margin: 0; flex: none;
+  display: inline-grid; place-items: center;
+  width: var(--size-icon); height: var(--size-icon);
+  border: 1px solid var(--color-line-field); border-radius: var(--radius-none);
+  background: var(--color-surface-card); cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-ui), border-color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.check::after {
+  content: ''; width: 100%; height: 100%; background: var(--color-text-on-dark); opacity: 0;
+  clip-path: polygon(20% 52%, 31% 41%, 43% 53%, 69% 27%, 80% 38%, 43% 75%);
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.check:checked { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); }
+.check:checked::after { opacity: 1; }
+.check--radio { border-radius: 50%; }
+.check--radio::after { background: var(--color-brand-deep-teal); clip-path: circle(28% at 50% 50%); }
+.check--radio:checked { background: var(--color-surface-card); }
+.check:disabled { background: var(--color-surface-mist); border-color: var(--color-line-base); cursor: not-allowed; }
+.check-row { display: flex; gap: var(--space-3); align-items: center; min-height: var(--size-tap-min); cursor: pointer; }
+.check-row--disabled { color: var(--color-text-secondary); cursor: not-allowed; }
+.check-group { display: grid; gap: var(--space-1); border: 0; margin: 0; padding: 0; min-width: 0; }
+.check-group legend { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); padding: 0; margin-bottom: var(--space-2); }
+
+/* Progress: the quadrant mark, four quarters filling clockwise */
+.quad { display: grid; grid-template-columns: repeat(2, var(--space-5)); grid-template-rows: repeat(2, var(--space-5)); gap: var(--space-1); }
+.quad i { background: var(--color-line-base); transition: background-color var(--motion-duration-open) var(--motion-easing-ui); }
+.quad i:nth-child(1) { border-top-left-radius: 100%; }
+.quad i:nth-child(2) { border-top-right-radius: 100%; }
+.quad i:nth-child(3) { border-bottom-right-radius: 100%; }
+.quad i:nth-child(4) { border-bottom-left-radius: 100%; }
+.quad i.is-on { background: var(--color-brand-deep-teal); }
+.progress { display: flex; align-items: center; gap: var(--space-4); }
+.progress__text { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+
+/* ---------- Cards ---------- */
+.card { display: grid; gap: var(--space-2); align-content: start; }
+.card h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: inherit; }
+.card p { color: var(--color-text-secondary); transition: color var(--motion-duration-fast) var(--motion-easing-ui); }
+a.card:hover p { color: var(--color-text-on-dark-muted); }
+.card__go { font: var(--type-desktop-nav-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); text-decoration: underline; text-underline-offset: 3px; }
+.radii { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+.radii figure { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
+.radius-box { width: var(--space-24); height: var(--space-14); border: 1px solid var(--color-line-field); background: var(--color-surface-card); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip:hover { border-color: var(--color-brand-deep-teal); }
+.steps { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); }
+.step-tab {
+  display: inline-flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min);
+  margin: 0; padding: 0 var(--space-2) 0 0; border: 0; border-radius: var(--radius-pill); background: none;
+  color: var(--color-text-primary); cursor: pointer; text-align: left;
+  font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans);
+}
+.step-tab[aria-selected="true"] .step-num { background: var(--color-brand-yellow); border-color: var(--color-brand-yellow); color: var(--color-brand-teal-deep); }
+.step-panel { padding: var(--space-5) var(--space-6); border-radius: var(--radius-small); background: var(--color-surface-mist); color: var(--color-text-primary); }
+
+/* Accordion (FAQ) */
+.acc { border-top: 1px solid var(--color-line-base); }
+.acc__row { border-bottom: 1px solid var(--color-line-base); }
+.acc__btn {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  width: 100%; min-height: var(--space-14); padding: var(--space-3) 0; margin: 0;
+  border: 0; background: none; color: var(--color-text-strong); text-align: left; cursor: pointer;
+  font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans);
+}
+.pm { position: relative; flex: none; width: var(--size-icon); height: var(--size-icon); color: var(--color-brand-deep-teal); }
+.pm::before, .pm::after { content: ''; position: absolute; left: 50%; top: 50%; background: currentColor; border-radius: var(--radius-pill); transform: translate(-50%, -50%); }
+.pm::before { width: var(--space-4); height: var(--size-icon-stroke); }
+.pm::after { width: var(--size-icon-stroke); height: var(--space-4); transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
+.acc__btn[aria-expanded="true"] .pm::after { transform: translate(-50%, -50%) scaleY(0); }
+.acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui); }
+.acc__panel > div { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s linear var(--motion-duration-open); }
+.acc__row.is-open .acc__panel { grid-template-rows: 1fr; }
+.acc__row.is-open .acc__panel > div { visibility: visible; transition-delay: 0s; }
+.acc__panel p { padding: 0 var(--space-10) var(--space-5) 0; color: var(--color-text-primary); max-width: 68ch; }
+
+/* ---------- Header & main menu v3 specimen ---------- */
+.hdr-demo {
+  height: calc(var(--space-24) * 4); overflow: auto; overscroll-behavior: contain;
+  border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper);
+}
+.hdr-demo__inner { min-width: calc(var(--space-24) * 8); }
+.mh {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+  height: var(--size-header-desktop); padding: 0 var(--layout-header-inset);
+  background: var(--color-surface-paper);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mh.is-scrolled { border-bottom-color: var(--color-line-soft); }
+.logo-lockup { display: inline-flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min); color: var(--color-brand-deep-teal); text-decoration: none; border-radius: var(--radius-xs); }
+.logo-lockup span { font: 400 22px/1 var(--font-family-serif); white-space: nowrap; }
+.mh__list { display: flex; align-items: center; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.mh__item { position: relative; }
+.mh__link {
+  position: relative; display: flex; align-items: center; min-height: var(--size-tap-min);
+  margin: 0; padding: 0; border: 0; background: none; cursor: pointer; text-decoration: none;
+  border-radius: var(--radius-pill); color: var(--color-brand-deep-teal);
+}
+.mh__pill {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3); border-radius: var(--radius-pill);
+  font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--type-desktop-nav-family);
+  white-space: nowrap;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__link:hover .mh__pill, .mh__link[aria-expanded="true"] .mh__pill { background: var(--color-line-soft); }
+.mh__chev { color: var(--color-text-secondary); transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
+.mh__link[aria-expanded="true"] .mh__chev { transform: rotate(180deg); }
+.mh__ind {
+  position: absolute; left: 50%; bottom: 0; width: var(--space-6); height: calc(var(--space-1) / 2);
+  border-radius: var(--radius-pill); background: var(--color-brand-deep-teal);
+  transform: translateX(-50%); opacity: 0; transition: opacity var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__link[aria-expanded="true"] .mh__ind { opacity: 1; }
+.mh__dd {
+  --dd-gap: calc((var(--size-header-desktop) - var(--size-tap-min)) / 2 + var(--space-2));
+  position: absolute; top: calc(100% + var(--dd-gap)); left: 50%; z-index: 3;
+  width: max-content; padding: var(--space-1);
+  opacity: 0; transform: translate(-50%, var(--motion-distance-dropdown));
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-ui), transform var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__dd::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--dd-gap); }
+.mh__dd.is-open {
+  opacity: 1; transform: translate(-50%, 0);
+  transition: opacity var(--motion-duration-open) var(--motion-easing-ui), transform var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mh__dd ul { margin: 0; padding: 0; list-style: none; }
+.mrow {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+  min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs);
+  color: var(--color-brand-deep-teal); text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mrow:hover { background: var(--color-line-soft); }
+.mrow:focus-visible { outline: none; box-shadow: inset 0 0 0 var(--size-focus-width) var(--color-focus-ring); }
+.mrow__left { display: inline-flex; align-items: center; gap: var(--space-3); }
+.mrow__label { font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); white-space: nowrap; }
+.mrow__meta { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary); white-space: nowrap; }
+.mthumb { flex: none; display: block; border-radius: var(--radius-xs); object-fit: cover; object-position: center top; background: var(--color-surface-mist); color: var(--color-surface-mist); }
+.mdiv { height: 1px; margin: var(--space-1); background: var(--color-line-base); border: 0; }
+.mall {
+  display: inline-flex; align-items: center; min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs);
+  font: var(--type-desktop-nav-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans);
+}
+.mh__actions { display: flex; align-items: center; gap: var(--space-5); }
+.mh__signin {
+  display: inline-flex; align-items: center; min-height: var(--size-tap-min); border-radius: var(--radius-xs);
+  font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans);
+  color: var(--color-text-secondary); text-decoration: none;
+  transition: color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__signin:hover { color: var(--color-brand-deep-teal); }
+.page-fill { display: grid; gap: var(--space-4); padding: var(--space-10) var(--layout-header-inset) var(--space-24); }
+.page-fill i { display: block; height: var(--space-14); border-radius: var(--radius-small); background: var(--color-surface-mist); }
+.page-fill i:nth-child(odd) { height: var(--space-24); }
+.page-fill p { color: var(--color-text-secondary); }
+
+/* Mobile specimen */
+.mm {
+  position: relative; display: flex; flex-direction: column;
+  width: var(--layout-frame-mobile); max-width: 100%; height: calc(var(--space-24) * 7);
+  overflow: hidden; border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper);
+}
+.mm__head {
+  position: relative; z-index: 3; flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--size-header-mobile); padding: 0 var(--space-3) 0 var(--layout-margin-mobile);
+  background: var(--color-surface-paper); border-bottom: 1px solid transparent;
+  transition: border-color var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mm.is-open .mm__head { border-bottom-color: var(--color-line-soft); }
+.mm__toggle {
+  display: inline-grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min);
+  margin: 0; padding: 0; border: 0; border-radius: var(--radius-pill); background: none; color: var(--color-brand-deep-teal); cursor: pointer;
+}
+.mm__toggle .i-close, .mm__toggle[aria-expanded="true"] .i-menu { display: none; }
+.mm__toggle[aria-expanded="true"] .i-close { display: block; }
+.mm__page { flex: 1; overflow-y: auto; }
+.mm__page .page-fill { padding: var(--space-6) var(--layout-margin-mobile) var(--space-24); }
+.mm.is-open .mm__page { overflow: hidden; }
+.mm__panel {
+  position: absolute; z-index: 2; left: 0; right: 0; top: var(--size-header-mobile); bottom: 0;
+  display: flex; flex-direction: column; background: var(--color-surface-paper);
+  transform: translateY(-100%); transition: transform var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mm__panel[hidden] { display: none; }
+.mm__panel.is-open { transform: none; }
+.mm__nav { flex: 1; overflow-y: auto; padding: var(--space-2) var(--layout-margin-mobile) var(--space-6); }
+.mm__nav > ul { margin: 0; padding: 0; list-style: none; }
+.mm-row { border-bottom: 1px solid var(--color-line-soft); }
+.mm-row__head, .mm-row__link {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  height: var(--space-14); margin: 0; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; text-decoration: none;
+  font: var(--type-desktop-nav-weight) var(--type-mobile-subhead-size) / var(--type-mobile-subhead-line) var(--font-family-sans);
+  color: var(--color-brand-deep-teal); border-radius: var(--radius-xs);
+}
+.mm-row__head .mh__chev { transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+.mm-row__head[aria-expanded="true"] .mh__chev { transform: rotate(180deg); }
+.mm-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui); }
+.mm-sub > div { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s linear var(--motion-duration-open); }
+.mm-row.is-expanded .mm-sub { grid-template-rows: 1fr; }
+.mm-row.is-expanded .mm-sub > div { visibility: visible; transition-delay: 0s; }
+.mm-card { margin: 0 0 var(--space-3); padding: var(--space-1); list-style: none; background: var(--color-surface-card); border: 1px solid var(--color-line-soft); border-radius: var(--radius-small); }
+.mm-card .mrow, .mm-card .mall { min-height: var(--space-12); }
+.mm__bar {
+  flex: none; display: grid; justify-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--layout-margin-mobile) calc(var(--space-5) + env(safe-area-inset-bottom));
+  background: var(--color-surface-paper); border-top: 1px solid var(--color-line-soft);
+}
+.mm__note { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary); }
+
+/* ---------- Footer v2 compact specimen ---------- */
+.ftr { container-type: inline-size; border-radius: var(--radius-card); background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.ftr__in { padding: 0 var(--space-10); }
+.ftr__cta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); padding: var(--space-12) 0; }
+.ftr__copy { display: grid; gap: var(--space-2); }
+.ftr__title { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--type-desktop-section-family); color: var(--color-text-on-dark); }
+.ftr__sub { font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-on-dark-muted); }
+.ftr__action { display: flex; align-items: center; gap: var(--space-5); flex: none; }
+.ftr__note { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-on-dark-muted); }
+.ftr__rule { height: 1px; background: var(--color-line-on-dark); }
+.ftr__main { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-10); padding: var(--space-10) 0; }
+.ftr__brand { display: grid; gap: var(--space-5); flex: 1 1 0; min-width: 0; max-width: calc(var(--space-24) * 5); }
+.ftr .logo-lockup { color: var(--color-text-on-dark); justify-self: start; }
+.ftr__news { display: grid; gap: var(--space-3); }
+.ftr__newslabel { font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); }
+.ftr__newsrow { display: flex; gap: var(--space-2); }
+.ftr__field {
+  flex: 1; min-width: 0; height: var(--size-control); padding: 0 calc(var(--size-control) / 2);
+  border: 1px solid var(--color-line-on-dark); border-radius: var(--radius-pill);
+  background: var(--color-surface-on-dark-field); color: var(--color-text-on-dark);
+  font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans);
+}
+.ftr__field::placeholder { color: var(--color-text-on-dark-muted); opacity: 1; }
+.ftr__fine { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-on-dark-muted); }
+.ftr__fine a { color: inherit; }
+.ftr__status:empty { display: none; }
+.ftr__cols { display: flex; gap: var(--space-6); }
+.ftr__col { display: grid; gap: var(--space-4); align-content: start; min-width: calc(var(--space-24) * 1.5); }
+.ftr__colt { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-on-dark-muted); }
+.ftr__links { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.ftr__link {
+  font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans);
+  color: var(--color-surface-mist); text-decoration: none; border-radius: var(--radius-xs);
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+  transition: color var(--motion-duration-fast) var(--motion-easing-ui), background-size var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.ftr__link:hover { color: var(--color-text-on-dark); background-size: 100% 1px; }
+.ftr__legal { display: grid; gap: var(--space-3); padding: var(--space-5) 0; }
+.ftr__bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); }
+.ftr__barl { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-6); }
+.ftr__legallinks { display: flex; flex-wrap: wrap; gap: var(--space-5); margin: 0; padding: 0; list-style: none; }
+.ftr__legallinks .ftr__link { font-size: var(--type-desktop-fine-size); line-height: var(--type-desktop-fine-line); color: var(--color-text-on-dark-muted); }
+.ftr__social { display: flex; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.ftr__social li > span { display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: var(--radius-pill); color: var(--color-text-on-dark-muted); }
+@container (max-width: 1023px) {
+  .ftr__main { flex-direction: column; }
+  .ftr__brand { max-width: none; width: 100%; }
+  .ftr__cols { width: 100%; }
+  .ftr__col { flex: 1; min-width: 0; }
+}
+@container (max-width: 767px) {
+  .ftr__in { padding: 0 var(--layout-margin-mobile); }
+  .ftr__cta { flex-direction: column; align-items: stretch; gap: var(--space-5); padding: var(--space-8) 0; }
+  .ftr__title { font: var(--type-mobile-section-weight) var(--type-mobile-section-size) / var(--type-mobile-section-line) var(--type-mobile-section-family); }
+  .ftr__sub { font-size: var(--type-mobile-compact-size); line-height: var(--type-mobile-compact-line); }
+  .ftr__action { flex-direction: column; gap: var(--space-3); }
+  .ftr__action .btn { width: 100%; }
+  .ftr__main { gap: var(--space-5); padding: var(--space-8) 0 var(--space-6); }
+  .ftr__cols { gap: var(--space-3); }
+  .ftr__col { gap: var(--space-3); }
+  .ftr__colt { font-size: var(--type-mobile-label-size); line-height: var(--type-mobile-label-line); }
+  .ftr__links { gap: 0; }
+  /* E-01: 36px link rows on mobile (approved exception to the 44px tap target) */
+  .ftr__links li { display: flex; align-items: center; height: calc(var(--space-8) + var(--space-1)); }
+  .ftr__links .ftr__link { font-size: var(--type-mobile-compact-size); line-height: var(--type-mobile-compact-line); }
+  .ftr__newsrow { flex-wrap: wrap; }
+  .ftr__bar { flex-direction: column-reverse; align-items: flex-start; gap: var(--space-3); }
+  .ftr__barl { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+}
+.ftr-mobile { width: var(--layout-frame-mobile); max-width: 100%; }
+
+/* ---------- Overlay ---------- */
+.overlay-demo { display: grid; gap: var(--space-2); padding: var(--space-5); max-width: 100%; }
+.overlay-demo p { color: var(--color-text-secondary); }
+.dlg { width: min(100% - var(--space-10), calc(var(--space-24) * 5)); padding: var(--space-8); color: var(--color-text-primary); }
+.dlg[open] { animation: dlg-in var(--motion-duration-open) var(--motion-easing-ui); }
+.dlg::backdrop { background: transparent; }
+.dlg h3 { font: var(--type-desktop-h3-weight) var(--type-desktop-h3-size) / var(--type-desktop-h3-line) var(--type-desktop-h3-family); margin-bottom: var(--space-3); }
+.dlg form { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+@keyframes dlg-in { from { opacity: 0; transform: translateY(var(--motion-distance-dropdown)); } }
+
+@media (max-width: 767px) {
+  .surfaces { grid-template-columns: minmax(0, 1fr); }
+  .question { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--type-mobile-card-serif-family); }
+  .dlg { padding: var(--space-6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dlg[open] { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="archive-banner"><span>Archived · SoviCare Brand Edition 02 (08.10.2026). Superseded by unifiedmeds Brand Edition 03 (15.11.2026).</span><a href="../../index.html">Go to the current hub</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <span class="hub-edition">Brand Edition 02 · 08.10.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html">Overview</a>
+      <a href="rulebook.html">Rulebook &amp; decisions</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html">Brand &amp; imagery</a>
+      <a href="logo.html">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html">Foundations</a>
+      <a href="components.html" aria-current="page">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="../index.html">Archive · Edition 01</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">System</span>
+        <h1>Components.</h1>
+        <p class="lead">The interface parts of the SoviCare website, live and in every state. Every specimen is built from components.css and the tokens in tokens.json. Hover, tap and tab through them.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#buttons">Buttons</a>
+          <a href="#links">Links &amp; focus</a>
+          <a href="#fields">Form fields</a>
+          <a href="#cards">Cards, chips &amp; steps</a>
+          <a href="#header">Header &amp; main menu</a>
+          <a href="#footer">Footer</a>
+          <a href="#overlay">Overlay</a>
+          <a href="#changes">Changes from Figma</a>
+        </nav>
+      </header>
+
+      <div class="rule" id="authority">
+        <b>Authority.</b>
+        <p>1. Figma <code>h7D0eRszARBaWdJT1NWrpZ</code> (“SoviCare - Website”) wins on every visual value. 2. <code>brand-rules.md</code> wins on compliance and wording. 3. The hub explains and mirrors both. If the hub and Figma disagree, the hub is wrong. Values on this page were read on 08.10.2026. Every deliberate difference is listed in <a href="#changes">Changes from Figma</a> so Figma can be updated.</p>
+      </div>
+
+      <!-- =========================================================== 1 · BUTTONS -->
+      <section class="sec" id="buttons" aria-labelledby="buttons-h">
+        <div class="sec-head">
+          <h2 id="buttons-h">Buttons.</h2>
+          <p>Four types, one height, one motion. Source: Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2676-309">Buttons — Hover Rules 2676-309</a> (board <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4438">2719-4438</a>) and Avi’s button rule of 08.10.2026 (<a href="rulebook.html#r-40">R-40</a>).</p>
+        </div>
+
+        <div class="sub">
+          <h3>Width follows the curve.</h3>
+          <div class="prose">
+            <p>Side padding = radius = height ÷ 2. The label starts exactly where the left curve ends and ends exactly where the right curve begins. So <b>width = label width + one button height</b>. At 50px (<code>--size-control</code>) the side padding is 25px. The dashed lines mark where each curve ends; the dashed box is the label.</p>
+          </div>
+          <div class="specimen">
+            <div class="measures">
+              <div class="measure" data-measure>
+                <span class="btn" aria-hidden="true"><span class="measure__label">Get started</span></span>
+                <div class="ruler" aria-hidden="true"><span>25</span><span>label</span><span>25</span></div>
+                <p class="measure__out" data-measure-out>Label + 50 = width</p>
+              </div>
+              <div class="measure" data-measure>
+                <span class="btn" aria-hidden="true"><span class="measure__label">Explore treatments</span></span>
+                <div class="ruler" aria-hidden="true"><span>25</span><span>label</span><span>25</span></div>
+                <p class="measure__out" data-measure-out>Label + 50 = width</p>
+              </div>
+              <div class="measure" data-measure>
+                <span class="btn" aria-hidden="true"><span class="measure__label">Start your assessment</span></span>
+                <div class="ruler" aria-hidden="true"><span>25</span><span>label</span><span>25</span></div>
+                <p class="measure__out" data-measure-out>Label + 50 = width</p>
+              </div>
+            </div>
+            <p class="cap">Measured live in your browser. Label Inter Medium 15/20 (<code>--type-desktop-button-*</code>; mobile <code>--type-mobile-button-*</code>, same values). Labels never wrap. The 1.5px border is drawn inside the padding, as Figma draws strokes, so it never moves the label.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>One height, two logged exceptions.</h3>
+          <div class="specimen">
+            <div class="heights">
+              <figure><a class="btn" href="#buttons">Get started</a><figcaption class="cap">Every button · 50px · <code>--size-control</code></figcaption></figure>
+              <figure><a class="btn btn--header" href="#buttons">Get started</a><figcaption class="cap">E-02 header CTA · 44px · label 14</figcaption></figure>
+              <figure class="wide"><a class="btn btn--bar" href="#buttons">Get started</a><figcaption class="cap">E-03 mobile menu bottom bar · 48px, full width</figcaption></figure>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Exception</th><th>Where</th><th>Value</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td><a href="rulebook.html#e-02">E-02</a></td><td>Header CTA “Get started”</td><td>44px (<code>--size-control-exception-header</code>), label 14 (<code>--type-desktop-nav-size</code>), side padding 22</td><td>Figma menu v3 draws 43px; rounded up to the 44px tap target.</td></tr>
+                <tr><td><a href="rulebook.html#e-03">E-03</a></td><td>Mobile menu bottom bar</td><td>48px (<code>--size-control-exception-mobile-bar</code>), full width</td><td>Figma menu v3 mobile bar (archive copy 4046-911).</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">No other size exists: no “small” button, no 40px variant, no sticky-bar button below 50px.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Four types on their surfaces.</h3>
+          <div class="toolbar">
+            <button class="chip" type="button" aria-pressed="false" data-force-hover="#surfaces">Show every hover state</button>
+            <span class="cap">Or hover, tap and tab the buttons.</span>
+          </div>
+          <div class="surfaces" id="surfaces">
+            <div class="surface surface--paper">
+              <span class="surface-title">Standard surface · Paper, Mist, Card</span>
+              <div class="specimen-row">
+                <a class="btn btn--yellow" href="#buttons">Get started</a>
+                <a class="btn" href="#buttons">Explore treatments</a>
+                <a class="btn btn--outline" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Yellow → Blue-dark · Dark → Yellow · Outline → Yellow. One Yellow element per viewport.</p>
+            </div>
+            <div class="surface surface--dark on-dark">
+              <span class="surface-title">Deep Teal surface</span>
+              <div class="specimen-row">
+                <a class="btn btn--yellow" href="#buttons">Get started</a>
+                <a class="btn btn--outline-light" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Outline Light (Paper border and label) → Yellow.</p>
+            </div>
+            <div class="surface surface--dark on-dark">
+              <span class="surface-title">Photo · shown on a Deep Teal stand-in</span>
+              <div class="specimen-row">
+                <a class="btn btn--outline-light btn--on-photo" href="#buttons">Explore treatments</a>
+              </div>
+              <p class="cap">Outline Light on a photo fills Blue-dark with a Paper label (Avi, 07.10.2026). Class <code>.btn--on-photo</code>.</p>
+            </div>
+            <div class="surface surface--wash-blue surface-accent">
+              <span class="surface-title">Wash Blue surface</span>
+              <div class="specimen-row">
+                <a class="btn" href="#buttons">Get started</a>
+                <a class="btn btn--outline" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Rule 03: on a Yellow, Blue or Wash surface every button hovers to White. Class <code>.surface-accent</code> on the surface.</p>
+            </div>
+            <div class="surface surface--wash-yellow surface-accent">
+              <span class="surface-title">Wash Yellow surface</span>
+              <div class="specimen-row">
+                <a class="btn" href="#buttons">Get started</a>
+                <a class="btn btn--outline" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Wash Yellow counts as a Yellow surface. Yellow itself is never a section background.</p>
+            </div>
+            <div class="stack">
+              <div class="surface surface--blue surface-accent on-dark">
+                <div class="specimen-row">
+                  <a class="btn" href="#buttons">Get started</a>
+                </div>
+              </div>
+              <p class="cap"><span class="surface-title">Pastel Blue surface.</span> Pastel Blue #6E8B97 is for shapes and surfaces, never a button fill. Small text does not sit on it (Paper is 3.53:1), so this caption sits outside.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Hover matrix.</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Type</th><th>Surface</th><th>Rest</th><th>Hover (150ms ease-out, lift 2px)</th><th>Label contrast</th><th>Class</th></tr></thead>
+              <tbody>
+                <tr><td>Dark</td><td>Standard</td><td>Deep Teal #264653 (<code>--color-brand-deep-teal</code>), Paper label</td><td>Yellow #FFBE0B (<code>--color-brand-yellow</code>), Teal-deep #1C3742 label</td><td>9.82 → 7.54</td><td><code>.btn</code></td></tr>
+                <tr><td>Yellow</td><td>Standard, Deep Teal</td><td>Yellow #FFBE0B, Teal-deep label</td><td>Blue-dark #4E6873 (<code>--color-brand-blue-dark</code>), Paper label</td><td>7.54 → 5.76</td><td><code>.btn--yellow</code></td></tr>
+                <tr><td>Outline</td><td>Standard</td><td>Transparent, Deep Teal border and label</td><td>Yellow fill and border, Teal-deep label</td><td>9.82 → 7.54</td><td><code>.btn--outline</code></td></tr>
+                <tr><td>Outline Light</td><td>Deep Teal</td><td>Transparent, Paper #FEFCF6 border and label</td><td>Yellow fill and border, Teal-deep label</td><td>9.82 → 7.54</td><td><code>.btn--outline-light</code></td></tr>
+                <tr><td>Outline Light</td><td>Photo</td><td>Transparent, Paper border and label</td><td>Blue-dark #4E6873 fill, Paper label</td><td>→ 5.76</td><td><code>.btn--outline-light.btn--on-photo</code></td></tr>
+                <tr><td>Any type</td><td>Yellow, Blue or Wash</td><td>The type’s rest colours</td><td>White #FFFFFF (<code>--color-surface-card</code>), Teal-deep label</td><td>→ 12.54</td><td><code>.surface-accent .btn</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">Contrast is label against fill (AA needs 4.5:1 for a 15px label). Figma’s Yellow hover is Pastel Blue #6E8B97 at 3.53:1; Edition 02 uses Blue-dark (see <a href="#changes">Changes from Figma</a>).</p>
+        </div>
+
+        <div class="sub">
+          <h3>States.</h3>
+          <div class="specimen">
+            <div class="states">
+              <div class="state"><span class="btn" aria-hidden="true">Get started</span><span class="cap">Default</span></div>
+              <div class="state"><span class="btn is-hover" aria-hidden="true">Get started</span><span class="cap">Hover · Yellow, lift 2px</span></div>
+              <div class="state"><span class="btn is-focus" aria-hidden="true">Get started</span><span class="cap">Focus · 2px ring, 3px offset</span></div>
+              <div class="state"><span class="btn is-active" aria-hidden="true">Get started</span><span class="cap">Active · hover colour, no lift</span></div>
+              <div class="state"><button class="btn" type="button" disabled>Get started</button><span class="cap">Disabled <span class="status status--proposed">To confirm</span></span></div>
+              <div class="state"><span class="slot-loading">Loading</span><span class="cap"><span class="status status--proposed">To confirm in Figma</span></span></div>
+            </div>
+            <p class="cap">Disabled: Line/Base #E3DFD5 fill (<code>--color-line-base</code>), Slate #55747F label (<code>--color-text-secondary</code>), no hover, no lift, <code>cursor: not-allowed</code>. Figma has no Disabled or Loading variant yet; both are to be added in Figma (decision 15). Loading keeps the button’s width and shape; its look is not designed yet.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Motion.</h3>
+          <div class="grid-3">
+            <div class="rule"><b>150ms ease-out.</b><p>Colour, border and lift share one transition: <code>--motion-duration-fast</code> with <code>--motion-easing-ui</code>. Press = hover = 150ms.</p></div>
+            <div class="rule"><b>Lift 2px.</b><p>Every button rises <code>--motion-distance-lift</code> on hover and settles back on press. No shadow, no scale.</p></div>
+            <div class="rule"><b>Reduced motion.</b><p>With <code>prefers-reduced-motion</code> the colour changes instantly and nothing lifts (brand.css sets both tokens to 0).</p></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Labels and use.</h3>
+          <div class="dodont">
+            <div class="rule rule--do"><b>Do.</b><p>Sentence case: “Get started”, “Explore treatments”, “Start your assessment”, “Learn more”. One primary action per view. One Yellow element per viewport. Full width only for E-03 and the footer CTA on mobile.</p></div>
+            <div class="rule rule--dont"><b>Don’t.</b><p>Title case (“Get Started”), a second size, a shadow, a Pastel Blue fill, Yellow text, a label that wraps, or a Back button in its own style (use Outline).</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================== 2 · LINKS & FOCUS -->
+      <section class="sec" id="links" aria-labelledby="links-h">
+        <div class="sec-head">
+          <h2 id="links-h">Links and focus.</h2>
+          <p>Links are Deep Teal and underlined; the underline thickens on hover. Focus is one ring for the whole system.</p>
+        </div>
+        <div class="grid-2">
+          <div class="specimen">
+            <p>Read the <a class="link" href="#links">telehealth notice</a> before you start. Questions about an order go to <a class="link" href="#links">member support</a>.</p>
+            <div class="kv"><span class="cap">Rest</span> <span class="link">1px underline</span> <span class="cap">Hover</span> <span class="link link--forced">2px underline</span></div>
+            <p class="cap">Deep Teal #264653 (<code>--color-text-link</code>), 9.82:1 on Paper. Underline 1px at rest, 2px on hover, offset 3px, 150ms ease-out. Class <code>.link</code>.</p>
+          </div>
+          <div class="specimen specimen--dark on-dark">
+            <p>On Deep Teal, links are Paper and underlined. <a class="link" href="#links">Privacy policy</a>.</p>
+            <p class="cap">Paper #FEFCF6 (<code>--color-text-on-dark</code>). Never Blue, never Yellow, never without an underline in running text.</p>
+          </div>
+        </div>
+        <div class="sub">
+          <h3>Focus ring.</h3>
+          <div class="grid-2">
+            <div class="specimen">
+              <div class="specimen-row"><span class="focus-demo">Focused link</span><span class="btn is-focus" aria-hidden="true">Get started</span></div>
+              <p class="cap">2px Deep Teal (<code>--size-focus-width</code>, <code>--color-focus-ring</code>), 3px offset (<code>--size-focus-offset</code>). Shown on <code>:focus-visible</code>, never removed.</p>
+            </div>
+            <div class="specimen specimen--dark on-dark">
+              <div class="specimen-row"><span class="focus-demo">Focused link</span><span class="btn btn--outline-light is-focus" aria-hidden="true">Learn more</span></div>
+              <p class="cap">On Deep Teal and photos the ring is Paper (<code>--color-focus-ring-on-dark</code>). Menu rows draw the same ring inside the row.</p>
+            </div>
+          </div>
+          <p class="cap">Press Tab anywhere on this page to see the live ring.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 3 · FIELDS -->
+      <section class="sec" id="fields" aria-labelledby="fields-h">
+        <div class="sec-head">
+          <h2 id="fields-h">Form fields.</h2>
+          <p>Fields are 50px with a 12px radius and a 1px Slate border. The label sits above and never becomes a placeholder.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="specimen">
+            <div class="field">
+              <label class="field__label" for="f-name">First name</label>
+              <input class="field__input" id="f-name" type="text" autocomplete="off" aria-describedby="f-name-help">
+              <p class="field__help" id="f-name-help">As it appears on your ID.</p>
+            </div>
+            <div class="field field--error">
+              <label class="field__label" for="f-email">Email address</label>
+              <input class="field__input" id="f-email" type="email" autocomplete="off" value="name@" aria-invalid="true" aria-describedby="f-email-err">
+              <p class="field__help" id="f-email-err">Enter an email address in the format name@example.com.</p>
+            </div>
+            <div class="field field--disabled">
+              <label class="field__label" for="f-zip">ZIP code</label>
+              <input class="field__input" id="f-zip" type="text" value="Filled from your address" disabled>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Part</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Height</td><td>50px · <code>--size-control</code></td></tr>
+                  <tr><td>Radius</td><td>12px · <code>--radius-small</code></td></tr>
+                  <tr><td>Border</td><td>1px Slate #55747F · <code>--color-line-field</code> (4.88:1, passes 3:1)</td></tr>
+                  <tr><td>Hover</td><td>Border Deep Teal</td></tr>
+                  <tr><td>Focus</td><td>The system ring, 2px Deep Teal, 3px offset</td></tr>
+                  <tr><td>Label</td><td>Above, 12/16 SemiBold +2%, sentence case · <code>--type-desktop-label-*</code></td></tr>
+                  <tr><td>Help text</td><td>Caption 13 Slate · <code>--color-text-secondary</code></td></tr>
+                  <tr><td>Error</td><td>2px Coral #E76F51 border + Coral dot icon; the message stays Deep Teal. Coral is never text.</td></tr>
+                  <tr><td>Disabled</td><td>Mist fill, Line/Base border, Slate text <span class="status status--proposed">To confirm</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Validate on blur, never on keystroke. The message says what to do. Errors use <code>aria-invalid</code> and <code>aria-describedby</code>.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Answer options.</h3>
+          <div class="specimen">
+            <fieldset class="options">
+              <legend class="question">When is the best time for a provider to reach you?</legend>
+              <label class="option"><input class="check check--radio" type="radio" name="q-time" value="morning"> Morning</label>
+              <label class="option"><input class="check check--radio" type="radio" name="q-time" value="afternoon" checked> Afternoon</label>
+              <label class="option"><input class="check check--radio" type="radio" name="q-time" value="evening"> Evening</label>
+              <label class="option"><input class="check check--radio" type="radio" name="q-time" value="not-sure"> Not sure</label>
+            </fieldset>
+            <p class="cap">Assessment question: DM Serif 26/1.3 (H3, <code>--type-desktop-h3-*</code>; 21 on mobile). Option 50px min, radius 12, 1px Slate border. Selected: Deep Teal border plus a 1px inset, no scale, no fill. “Not sure” is always offered and never styled as lesser. Arrow keys move between answers. Specimen copy, not clinical.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Checkbox and radio.</h3>
+          <div class="grid-2">
+            <div class="specimen">
+              <fieldset class="check-group">
+                <legend>Acknowledgements</legend>
+                <label class="check-row"><input class="check" type="checkbox"> <span>I understand this is an assessment, not a diagnosis.</span></label>
+                <label class="check-row"><input class="check" type="checkbox" checked> <span>Send me order updates by email.</span></label>
+                <label class="check-row check-row--disabled"><input class="check" type="checkbox" disabled> <span>Unavailable option</span></label>
+              </fieldset>
+            </div>
+            <div class="specimen">
+              <fieldset class="check-group">
+                <legend>Delivery</legend>
+                <label class="check-row"><input class="check check--radio" type="radio" name="r-ship" checked> <span>Standard</span></label>
+                <label class="check-row"><input class="check check--radio" type="radio" name="r-ship"> <span>Express</span></label>
+                <label class="check-row check-row--disabled"><input class="check check--radio" type="radio" name="r-ship" disabled> <span>Pick up</span></label>
+              </fieldset>
+            </div>
+          </div>
+          <p class="cap">Drawn in CSS on tokens: 24px (<code>--size-icon</code>), 1px Slate border. The checkbox is square and fills Deep Teal with a Paper tick; the radio is round with a Deep Teal dot. The whole row is the hit area, at least 44px (<code>--size-tap-min</code>). Each acknowledgement is its own box, never pre-ticked. <span class="status status--proposed">To confirm</span> No checkbox or radio is drawn in Figma yet.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Progress is the quadrant mark.</h3>
+          <div class="specimen">
+            <div class="progress">
+              <div class="quad" role="progressbar" aria-label="Assessment progress" aria-valuemin="1" aria-valuemax="4" aria-valuenow="2" aria-valuetext="Step 2 of 4" data-quad>
+                <i class="is-on"></i><i class="is-on"></i><i></i><i></i>
+              </div>
+              <span class="progress__text" aria-live="polite" data-quad-text>Step 2 of 4</span>
+            </div>
+            <div class="specimen-row">
+              <button class="btn btn--outline" type="button" data-quad-step="-1">Back</button>
+              <button class="btn" type="button" data-quad-step="1">Continue</button>
+            </div>
+            <p class="cap">Four quarters fill clockwise, one per step, 220ms ease-out (<code>--motion-duration-open</code>). Done = Deep Teal, ahead = Line/Base. The text always states the step. <span class="status status--proposed">To confirm</span> The assessment has one true length; four steps is a placeholder until Avi confirms it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================== 4 · CARDS -->
+      <section class="sec" id="cards" aria-labelledby="cards-h">
+        <div class="sec-head">
+          <h2 id="cards-h">Cards, chips and steps.</h2>
+          <p>UI is flat: borders, not shadows. Cards that are links fill Deep Teal on hover, with no lift.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Cards.</h3>
+          <div class="grid-3">
+            <div class="card">
+              <h3>Information card</h3>
+              <p>Not a link. No hover. Radius 16, 1px Line/Base border, Card white.</p>
+            </div>
+            <a class="card" href="#cards">
+              <h3>Sexual health</h3>
+              <p>Link card. Hover fills Deep Teal with light text, 150ms ease-out.</p>
+              <span class="card__go">Explore</span>
+            </a>
+            <a class="card" href="#cards">
+              <h3>How it works</h3>
+              <p>The whole card is one link. Never nest a second link or button inside it.</p>
+              <span class="card__go">Read more</span>
+            </a>
+          </div>
+          <p class="cap">Card radius 16 (<code>--radius-card</code>), padding 24 (<code>--space-6</code>), border <code>--color-line-base</code>, fill <code>--color-surface-card</code>. Title Card Serif 24/30 (21/27 on mobile). Link cards: homepage product cards and product-page benefit cards.</p>
+          <div class="radii">
+            <figure><div class="radius-box" style="border-radius: var(--radius-card);"></div><figcaption class="cap">16 · <code>--radius-card</code> · cards, framed media</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-small);"></div><figcaption class="cap">12 · <code>--radius-small</code> · fields, chips, dropdown panel</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-xs);"></div><figcaption class="cap">8 · <code>--radius-xs</code> · menu rows, thumbnails</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-pill);"></div><figcaption class="cap">999 · <code>--radius-pill</code> · buttons, chips, nav pills</figcaption></figure>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Chips.</h3>
+          <div class="specimen">
+            <div class="chips" role="group" aria-label="FAQ topics" data-chips>
+              <button class="chip" type="button" aria-pressed="true">All</button>
+              <button class="chip" type="button" aria-pressed="false">Getting started</button>
+              <button class="chip" type="button" aria-pressed="false">Assessment</button>
+              <button class="chip" type="button" aria-pressed="false">Orders and delivery</button>
+            </div>
+            <p class="cap">Pill, 44px min height (<code>--size-tap-min</code>), 1px Slate border, Compact 14/21. Pressed = Deep Teal fill, Paper label, <code>aria-pressed="true"</code>. One topic at a time in this filter.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Step numbers.</h3>
+          <div class="specimen">
+            <div class="steps" role="tablist" aria-label="How it works" data-steps>
+              <button class="step-tab" type="button" role="tab" id="st-1" aria-selected="true" aria-controls="sp-1"><span class="step-num">1</span>Answer a few questions</button>
+              <button class="step-tab" type="button" role="tab" id="st-2" aria-selected="false" aria-controls="sp-2" tabindex="-1"><span class="step-num">2</span>A provider reviews them</button>
+              <button class="step-tab" type="button" role="tab" id="st-3" aria-selected="false" aria-controls="sp-3" tabindex="-1"><span class="step-num">3</span>Your next steps</button>
+            </div>
+            <div class="step-panel" role="tabpanel" id="sp-1" aria-labelledby="st-1">Step 1 panel. Specimen copy; the real How it works content lives in Figma.</div>
+            <div class="step-panel" role="tabpanel" id="sp-2" aria-labelledby="st-2" hidden>Step 2 panel. Specimen copy.</div>
+            <div class="step-panel" role="tabpanel" id="sp-3" aria-labelledby="st-3" hidden>Step 3 panel. Specimen copy.</div>
+            <p class="cap">Circle 44px, 1px border in the text colour, DM Serif digits. Hover, tap or selected → Yellow #FFBE0B fill with Teal-deep digits, 150ms. On How it works the steps are tabs; arrow keys move between them. The selected step is the viewport’s one Yellow element.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Accordion (FAQ).</h3>
+          <div class="acc" data-acc>
+            <div class="acc__row">
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-1" id="acc-1-b">What is the assessment?<span class="pm" aria-hidden="true"></span></button>
+              <div class="acc__panel" id="acc-1" role="region" aria-labelledby="acc-1-b"><div><p>A short set of questions about your health that a licensed provider reads. Specimen copy.</p></div></div>
+            </div>
+            <div class="acc__row">
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-2" id="acc-2-b">Who reviews my answers?<span class="pm" aria-hidden="true"></span></button>
+              <div class="acc__panel" id="acc-2" role="region" aria-labelledby="acc-2-b"><div><p>A licensed provider. Specimen copy.</p></div></div>
+            </div>
+            <div class="acc__row">
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-3" id="acc-3-b">Can I change my answers?<span class="pm" aria-hidden="true"></span></button>
+              <div class="acc__panel" id="acc-3" role="region" aria-labelledby="acc-3-b"><div><p>Yes, until you submit them. Specimen copy.</p></div></div>
+            </div>
+          </div>
+          <p class="cap">Row min height 56 (<code>--space-14</code>), question Card 17/24 SemiBold, 1px Line/Base dividers. Icon 24px line, 1.5px stroke, Deep Teal: + at rest, − when open (150ms). The panel opens in 220ms ease-out (<code>--motion-duration-open</code>); the button carries <code>aria-expanded</code> and <code>aria-controls</code>. FAQ entries may be questions; section headlines may not. <span class="status status--proposed">To confirm</span> Rows open independently here; whether opening one closes the others is not decided.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Tap targets.</h3>
+          <div class="prose"><p>Every interactive element is at least 44×44 (<code>--size-tap-min</code>, <a href="rulebook.html#r-74">R-74</a>). Smaller targets ship only as logged exceptions.</p></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Exception</th><th>Element</th><th>Size</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><a href="rulebook.html#e-01">E-01</a></td><td>Mobile footer links (Footer v2 compact, Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4343">2719-4343</a>)</td><td>36px rows</td><td><span class="status status--current">Approved 05.10.2026</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">E-02 (header CTA 44px) and E-03 (mobile bar 48px) are exceptions to the button height, not to the tap target: both stay at or above 44.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 5 · HEADER -->
+      <section class="sec" id="header" aria-labelledby="header-h">
+        <div class="sec-head">
+          <h2 id="header-h">Header and main menu v3.</h2>
+          <p>Sexual health ▾ · How it works · FAQ · Sign in · Get started. Structure from the archive copy of Figma <a href="https://www.figma.com/design/aOretSqF3eNZeDp38Urlwv/?node-id=4046-606">Main menu v3 4046-606</a>, behaviour from the <a href="https://www.figma.com/design/aOretSqF3eNZeDp38Urlwv/?node-id=4010-609">interactions spec 4010-609</a>, timings mapped to Edition 02 tokens.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Desktop.</h3>
+          <p class="cap">Live specimen. Hover Sexual health, or tab to it and press Enter or ↓. Esc closes and returns focus. Scroll inside the frame: the hairline appears after 8px.</p>
+          <div class="hdr-demo" data-scroll-demo tabindex="0" role="region" aria-label="Desktop header specimen. Scroll inside to see the sticky header.">
+            <div class="hdr-demo__inner">
+              <header class="mh" data-mh>
+                <a class="logo-lockup" href="#header" aria-label="SoviCare home (specimen)"><img src="assets/brand/symbol.svg" width="28" height="37" alt=""><span>SoviCare</span></a>
+                <nav aria-label="Main menu specimen">
+                  <ul class="mh__list">
+                    <li class="mh__item" data-dd>
+                      <button class="mh__link" type="button" aria-expanded="false" aria-controls="dd-sh" data-dd-trigger>
+                        <span class="mh__pill">Sexual health <svg class="mh__chev" width="11" height="7" viewBox="0 0 10.5 6.5" fill="none" aria-hidden="true"><path d="M0.75 0.75L5.25 5.75L9.75 0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                        <span class="mh__ind" aria-hidden="true"></span>
+                      </button>
+                      <div class="mh__dd overlay" id="dd-sh" hidden data-dd-panel>
+                        <ul>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><svg class="mthumb" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="currentColor"/></svg><span class="mrow__label">SoviCare Trio</span></span><span class="mrow__meta">3 ingredients</span></a></li>
+                        </ul>
+                        <hr class="mdiv">
+                        <a class="link mall" href="#header">View all Sexual health →</a>
+                      </div>
+                    </li>
+                    <li class="mh__item"><a class="mh__link" href="#header"><span class="mh__pill">How it works</span><span class="mh__ind" aria-hidden="true"></span></a></li>
+                    <li class="mh__item"><a class="mh__link" href="#header"><span class="mh__pill">FAQ</span><span class="mh__ind" aria-hidden="true"></span></a></li>
+                  </ul>
+                </nav>
+                <div class="mh__actions">
+                  <a class="mh__signin" href="#header">Sign in</a>
+                  <a class="btn btn--header" href="#header">Get started</a>
+                </div>
+              </header>
+              <div class="page-fill" aria-hidden="true">
+                <p>Page content scrolls under the sticky header.</p>
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+          </div>
+          <p class="cap">On narrow screens the frame scrolls sideways. The SoviCare Trio thumbnail is an empty Mist slot until a Trio packshot exists.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Mobile.</h3>
+          <div class="grid-2">
+            <div class="mm" data-mm>
+              <div class="mm__head">
+                <a class="logo-lockup" href="#header" aria-label="SoviCare home (mobile specimen)"><img src="assets/brand/symbol.svg" width="24" height="32" alt=""><span>SoviCare</span></a>
+                <button class="mm__toggle" type="button" aria-expanded="false" aria-controls="mm-panel" aria-label="Open menu" data-mm-toggle>
+                  <svg class="i-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                  <svg class="i-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+              </div>
+              <div class="mm__page">
+                <div class="page-fill" aria-hidden="true"><p>Page content.</p><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="mm__panel" id="mm-panel" hidden data-mm-panel>
+                <nav class="mm__nav" aria-label="Main menu specimen, mobile">
+                  <ul>
+                    <li class="mm-row" data-mm-acc>
+                      <button class="mm-row__head" type="button" aria-expanded="false" aria-controls="mm-sub-sh">Sexual health <svg class="mh__chev" width="12" height="8" viewBox="0 0 10.5 6.5" fill="none" aria-hidden="true"><path d="M0.75 0.75L5.25 5.75L9.75 0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                      <div class="mm-sub" id="mm-sub-sh"><div>
+                        <ul class="mm-card">
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><svg class="mthumb" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="currentColor"/></svg><span class="mrow__label">SoviCare Trio</span></span><span class="mrow__meta">3 ingredients</span></a></li>
+                          <li><hr class="mdiv"></li>
+                          <li><a class="link mall" href="#header">View all Sexual health →</a></li>
+                        </ul>
+                      </div></div>
+                    </li>
+                    <li class="mm-row"><a class="mm-row__link" href="#header">How it works</a></li>
+                    <li class="mm-row"><a class="mm-row__link" href="#header">FAQ</a></li>
+                    <li class="mm-row"><a class="mm-row__link" href="#header">Sign in</a></li>
+                  </ul>
+                </nav>
+                <div class="mm__bar">
+                  <a class="btn btn--bar" href="#header">Get started</a>
+                  <p class="mm__note">Assessment only. Not a diagnosis.</p>
+                </div>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="rule"><b>Open.</b><p>☰ in a 44×44 button opens a full-screen menu that slides down in 220ms; the icon turns to ✕ and the page behind stops scrolling. Esc or ✕ closes it and returns focus to the button. Tab stays inside the menu while it is open.</p></div>
+              <div class="rule"><b>Rows.</b><p>Category rows are 56px, Inter Medium 16/25. Sexual health expands in place (220ms) into a white card, radius 12, with rows of 48px or more. Only one category is open at a time. Tapping a product goes to its page and closes the menu.</p></div>
+              <div class="rule"><b>Bottom bar.</b><p>Get started, Deep Teal, full width, 48px (E-03), then “Assessment only. Not a diagnosis.” in Body Fine Slate, above the device safe area.</p></div>
+              <p class="cap">The frame is 390 wide (<code>--layout-frame-mobile</code>) with the 64px mobile header (<code>--size-header-mobile</code>).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Spec.</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Part</th><th>Value</th><th>Token</th><th>Figma</th></tr></thead>
+              <tbody>
+                <tr><td>Header height</td><td>80 desktop · 64 mobile</td><td><code>--size-header-desktop</code> · <code>--size-header-mobile</code></td><td>4046-606</td></tr>
+                <tr><td>Header inset</td><td>56 desktop · 20 mobile</td><td><code>--layout-header-inset</code> · <code>--layout-margin-mobile</code></td><td>4046-606</td></tr>
+                <tr><td>Surface</td><td>Paper #FEFCF6, sticky at top 0</td><td><code>--color-surface-paper</code></td><td>4010-609</td></tr>
+                <tr><td>Hairline</td><td>1px Line/Soft #EDEAE2 after 8px of scroll, 220ms</td><td><code>--color-line-soft</code> · <code>--space-2</code> · <code>--motion-duration-open</code></td><td>4010-609</td></tr>
+                <tr><td>Logo</td><td>Symbol 28×37 + “SoviCare” DM Serif 22</td><td><code>--font-family-serif</code> (22 has no token yet)</td><td>4046-606</td></tr>
+                <tr><td>Nav item</td><td>Inter Medium 14/1.4 Deep Teal; pill padding 8/12; hit area 44</td><td><code>--type-desktop-nav-*</code> · <code>--space-2</code>/<code>--space-3</code> · <code>--size-tap-min</code></td><td>4046-606</td></tr>
+                <tr><td>Nav hover</td><td>Line/Soft pill, 150ms ease-out</td><td><code>--color-line-soft</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td><td>4010-609 (180 ease)</td></tr>
+                <tr><td>Open</td><td>Hover with 100ms intent, or click, Enter, Space, ↓. One dropdown at a time.</td><td><code>--motion-intent-delay</code></td><td>4010-609</td></tr>
+                <tr><td>Open state</td><td>Pill stays, chevron flips, 24×2 Deep Teal indicator</td><td><code>--space-6</code> · <code>--color-brand-deep-teal</code></td><td>4046-606</td></tr>
+                <tr><td>Dropdown</td><td>Centred under the item, 8px below the header; Card white, radius 12, 1px Line/Soft, overlay shadow; padding 4</td><td><code>--space-2</code> · <code>--color-surface-card</code> · <code>--radius-small</code> · <code>--shadow-overlay</code> · <code>--space-1</code></td><td>4010-609</td></tr>
+                <tr><td>Dropdown enter</td><td>Opacity 0 → 1 and 6px → 0, 220ms ease-out</td><td><code>--motion-distance-dropdown</code> · <code>--motion-duration-open</code></td><td>4010-609 (180 ease)</td></tr>
+                <tr><td>Dropdown exit</td><td>After a 150ms delay, fade 150ms</td><td><code>--motion-close-delay</code> · <code>--motion-duration-fast</code></td><td>4010-609 (fade 140)</td></tr>
+                <tr><td>Rows</td><td>44 min, side padding 12, radius 8; hover Line/Soft; focus 2px Deep Teal inside ring</td><td><code>--size-tap-min</code> · <code>--space-3</code> · <code>--radius-xs</code> · <code>--size-focus-width</code></td><td>4010-609</td></tr>
+                <tr><td>Row content</td><td>30×30 packshot radius 8 · label Inter Medium 14 · meta Body Fine 12/18 Slate</td><td><code>--radius-xs</code> · <code>--type-desktop-nav-*</code> · <code>--type-desktop-fine-*</code> · <code>--color-text-secondary</code></td><td>4046-606 (meta Slate Light)</td></tr>
+                <tr><td>Rows listed</td><td>Tadalafil · Sildenafil · SoviCare Trio, a Line/Base divider, then “View all Sexual health →” in Deep Teal, underlined</td><td><code>--color-line-base</code> · <code>--color-text-link</code></td><td>4046-606</td></tr>
+                <tr><td>Sign in</td><td>Text link, Inter Medium 14, Slate → Deep Teal on hover <span class="status status--proposed">To confirm</span></td><td><code>--color-text-secondary</code></td><td>4046-606</td></tr>
+                <tr><td>Get started</td><td>Dark button, 44px, label 14 (E-02)</td><td><code>--size-control-exception-header</code></td><td>4046-606 (43)</td></tr>
+                <tr><td>Keyboard</td><td>Trigger is a button with <code>aria-expanded</code> and <code>aria-controls</code>; ↓ and ↑ move through rows; Esc closes and returns focus; tabbing past the last row closes</td><td>—</td><td>4010-609</td></tr>
+                <tr><td>Mobile menu</td><td>☰ 44×44; full screen, slides down 220ms; ✕; scroll lock; rows 56; sub-rows 48 or more; one category open at a time</td><td><code>--size-tap-min</code> · <code>--motion-duration-open</code> · <code>--space-14</code> · <code>--space-12</code></td><td>4046-606</td></tr>
+                <tr><td>Mobile bottom bar</td><td>Get started, Deep Teal, full width, 48 (E-03) + “Assessment only. Not a diagnosis.” + safe area</td><td><code>--size-control-exception-mobile-bar</code></td><td>4046-911</td></tr>
+                <tr><td>Reduced motion</td><td>Open and close instantly; no slide, no fade, no intent delay</td><td>brand.css sets durations to 0</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">Figma column: node in the archive copy <code>aOretSqF3eNZeDp38Urlwv</code>; a value in brackets is what Figma says where the hub differs. Off-scale Figma spacers (panel padding 6, row padding 7, thumbnail gap 10) are snapped to the nearest token; aligning them in Figma is an open layout item.</p>
+          <p class="cap"><span class="status status--proposed">To confirm</span> The meta lines (“Up to 36 hrs”, “Plan ahead”, “3 ingredients”) come from Figma; “Up to 36 hrs” next to an Rx name may read as a benefit claim (decision 25). On the live site, clicking Sexual health opens the category page (Avi, 07.10.2026); this specimen follows the menu spec, where the item is a button.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 6 · FOOTER -->
+      <section class="sec" id="footer" aria-labelledby="footer-h">
+        <div class="sec-head">
+          <h2 id="footer-h">Footer v2 compact.</h2>
+          <p>One continuous Deep Teal block: CTA strip, brand and newsletter, link columns, legal. Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4253">2719-4253</a> (mobile <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4343">2719-4343</a>), approved 05.10.2026.</p>
+        </div>
+
+        <div class="ftr on-dark">
+          <div class="ftr__in">
+            <div class="ftr__cta">
+              <div class="ftr__copy">
+                <p class="ftr__title">Ready to feel more like yourself?</p>
+                <p class="ftr__sub">Start with a private assessment and discover which care options may be right for you.</p>
+              </div>
+              <div class="ftr__action">
+                <a class="btn btn--yellow" href="#footer">Get started</a>
+                <p class="ftr__note">Takes only a few minutes. No obligation.</p>
+              </div>
+            </div>
+            <div class="ftr__rule"></div>
+            <div class="ftr__main">
+              <div class="ftr__brand">
+                <a class="logo-lockup" href="#footer" aria-label="SoviCare home (footer specimen)"><img src="assets/brand/symbol-on-dark.svg" width="25" height="33" alt=""><span>SoviCare</span></a>
+                <form class="ftr__news" novalidate data-news>
+                  <p class="ftr__newslabel" id="fn-label">Notes on care, now and then. Unsubscribe anytime.</p>
+                  <div class="ftr__newsrow">
+                    <label class="sr-only" for="fn-email">Email address</label>
+                    <input class="ftr__field" id="fn-email" type="email" autocomplete="off" placeholder="Your email address" aria-describedby="fn-label fn-status">
+                    <button class="btn btn--outline-light" type="submit">Subscribe</button>
+                  </div>
+                  <p class="ftr__fine ftr__status" id="fn-status" role="status" aria-live="polite"></p>
+                  <p class="ftr__fine">By subscribing you agree to our <a href="#footer">Privacy policy</a>.</p>
+                </form>
+              </div>
+              <nav class="ftr__cols" aria-label="Footer specimen">
+                <div class="ftr__col"><p class="ftr__colt">Care options</p><ul class="ftr__links"><li><a class="ftr__link" href="#footer">Sexual health</a></li><li><a class="ftr__link" href="#footer">Men</a></li><li><a class="ftr__link" href="#footer">Women</a></li></ul></div>
+                <div class="ftr__col"><p class="ftr__colt">SoviCare</p><ul class="ftr__links"><li><a class="ftr__link" href="#footer">How it works</a></li><li><a class="ftr__link" href="#footer">About us</a></li></ul></div>
+                <div class="ftr__col"><p class="ftr__colt">Help</p><ul class="ftr__links"><li><a class="ftr__link" href="#footer">FAQ</a></li><li><a class="ftr__link" href="#footer">Contact</a></li><li><a class="ftr__link" href="#footer">Sign in</a></li></ul></div>
+              </nav>
+            </div>
+            <div class="ftr__rule"></div>
+            <div class="ftr__legal">
+              <p class="ftr__fine">Medical care available through SoviCare is provided by licensed healthcare professionals. SoviCare provides the technology and administrative support that connects patients with care. Any treatment or prescription is determined by the treating provider based on your individual medical needs. The content on this website is for general information and is not a substitute for professional medical advice, diagnosis, or treatment. If you have questions about your health, consult a healthcare professional. This website is an advertisement for telehealth services.</p>
+              <div class="ftr__bar">
+                <div class="ftr__barl">
+                  <p class="ftr__fine">© 2026 SoviCare. All rights reserved.</p>
+                  <ul class="ftr__legallinks"><li><a class="ftr__link" href="#footer">Privacy policy</a></li><li><a class="ftr__link" href="#footer">Terms of service</a></li><li><a class="ftr__link" href="#footer">Telehealth notice</a></li></ul>
+                </div>
+                <ul class="ftr__social" aria-label="Social profiles (links pending)">
+                  <li><span title="Instagram, link pending"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.9167 2.91667H7.08333C4.78215 2.91667 2.91667 4.78215 2.91667 7.08333V12.9167C2.91667 15.2179 4.78215 17.0833 7.08333 17.0833H12.9167C15.2179 17.0833 17.0833 15.2179 17.0833 12.9167V7.08333C17.0833 4.78215 15.2179 2.91667 12.9167 2.91667Z"/><path d="M10 13.3333C11.8409 13.3333 13.3333 11.8409 13.3333 10C13.3333 8.15905 11.8409 6.66667 10 6.66667C8.15905 6.66667 6.66667 8.15905 6.66667 10C6.66667 11.8409 8.15905 13.3333 10 13.3333Z"/><path d="M14.3333 6.16667C14.6095 6.16667 14.8333 5.94281 14.8333 5.66667C14.8333 5.39052 14.6095 5.16667 14.3333 5.16667C14.0572 5.16667 13.8333 5.39052 13.8333 5.66667C13.8333 5.94281 14.0572 6.16667 14.3333 6.16667Z"/></svg><span class="sr-only">Instagram, link pending</span></span></li>
+                  <li><span title="Facebook, link pending"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.0833 7.08333H13.75V4.16667H11.6667C10.8931 4.16667 10.1513 4.47396 9.60427 5.02094C9.05729 5.56792 8.75 6.30979 8.75 7.08333V9.16667H6.66667V12.0833H8.75V17.5H11.6667V12.0833H13.6667L14.1667 9.16667H11.6667V7.5C11.6667 7.38949 11.7106 7.28351 11.7887 7.20537C11.8668 7.12723 11.9728 7.08333 12.0833 7.08333Z"/></svg><span class="sr-only">Facebook, link pending</span></span></li>
+                  <li><span title="LinkedIn, link pending"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 2.91667H5.41667C4.03595 2.91667 2.91667 4.03595 2.91667 5.41667V14.5833C2.91667 15.964 4.03595 17.0833 5.41667 17.0833H14.5833C15.964 17.0833 17.0833 15.964 17.0833 14.5833V5.41667C17.0833 4.03595 15.964 2.91667 14.5833 2.91667Z"/><path d="M6.66667 8.75V13.3333M6.66667 6.5V6.58333M9.58333 13.3333V8.75M9.58333 10.8333C9.58333 10.2808 9.80283 9.75089 10.1935 9.36019C10.5842 8.96949 11.1141 8.75 11.6667 8.75C12.2192 8.75 12.7491 8.96949 13.1398 9.36019C13.5305 9.75089 13.75 10.2808 13.75 10.8333V13.3333"/></svg><span class="sr-only">LinkedIn, link pending</span></span></li>
+                  <li><span title="YouTube, link pending"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 4.58333H5.41667C3.57572 4.58333 2.08333 6.07572 2.08333 7.91667V12.0833C2.08333 13.9243 3.57572 15.4167 5.41667 15.4167H14.5833C16.4243 15.4167 17.9167 13.9243 17.9167 12.0833V7.91667C17.9167 6.07572 16.4243 4.58333 14.5833 4.58333Z"/><path d="M8.75 7.91667V12.0833L12.25 10L8.75 7.91667Z"/></svg><span class="sr-only">YouTube, link pending</span></span></li>
+                  <li><span title="TikTok, link pending"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 3.33333V12.0833C11.25 12.5778 11.1034 13.0611 10.8287 13.4723C10.554 13.8834 10.1635 14.2038 9.70671 14.393C9.24989 14.5823 8.74723 14.6318 8.26227 14.5353C7.77732 14.4388 7.33186 14.2007 6.98223 13.8511C6.6326 13.5015 6.3945 13.056 6.29804 12.5711C6.20157 12.0861 6.25108 11.5834 6.4403 11.1266C6.62952 10.6698 6.94995 10.2794 7.36107 10.0047C7.7722 9.72996 8.25555 9.58333 8.75 9.58333"/><path d="M11.25 3.33333C11.25 4.3279 11.6451 5.28172 12.3483 5.98498C13.0516 6.68825 14.0054 7.08333 15 7.08333"/></svg><span class="sr-only">TikTok, link pending</span></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cap">Content from the live site’s footer, which is built from Figma. The newsletter form here is a specimen and sends nothing; on the site it needs a mailing service that is not connected yet. Social profile links are pending, so the icons are not links.</p>
+
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Rules.</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Part</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Surface</td><td>Deep Teal #264653, one block, always last. Rules 1px Line/On-dark (<code>--color-line-on-dark</code>)</td></tr>
+                  <tr><td>CTA strip</td><td>Section 36/40 serif (28/34 mobile), Small 15 Wash Blue sub line, Yellow “Get started” (full width on mobile), Caption note</td></tr>
+                  <tr><td>Newsletter</td><td>Label Inter Medium 14; 50px pill field on <code>--color-surface-on-dark-field</code>; Outline Light “Subscribe”; Body Fine legal line</td></tr>
+                  <tr><td>Columns</td><td>Care options · SoviCare · Help. Title Label 12/16 SemiBold +2%, sentence case, Wash Blue; links Compact 14/21 Mist → Paper with an underline on hover</td></tr>
+                  <tr><td>Legal</td><td>Body Fine 12/18 Wash Blue (<code>--color-text-on-dark-muted</code>, 5.21:1); © line; Privacy policy · Terms of service · Telehealth notice; social icons 24 in 44 targets</td></tr>
+                  <tr><td>Focus</td><td>Paper ring (<code>--color-focus-ring-on-dark</code>)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="rule"><b>E-01 · 36px mobile link rows.</b><p>On mobile the column links sit in 36px rows, below the 44px tap target. Approved 05.10.2026 with Footer v2 compact. No other footer element goes below 44.</p></div>
+          </div>
+          <div class="stack">
+            <div class="ftr-mobile">
+              <div class="ftr on-dark">
+                <div class="ftr__in">
+                  <div class="ftr__cta">
+                    <div class="ftr__copy">
+                      <p class="ftr__title">Ready to feel more like yourself?</p>
+                      <p class="ftr__sub">Start with a private assessment and discover which care options may be right for you.</p>
+                    </div>
+                    <div class="ftr__action">
+                      <a class="btn btn--yellow" href="#footer">Get started</a>
+                      <p class="ftr__note">Takes only a few minutes. No obligation.</p>
+                    </div>
+                  </div>
+                  <div class="ftr__rule"></div>
+                  <div class="ftr__main">
+                    <a class="logo-lockup" href="#footer" aria-label="SoviCare home (mobile footer specimen)"><img src="assets/brand/symbol-on-dark.svg" width="23" height="31" alt=""><span>SoviCare</span></a>
+                    <nav class="ftr__cols" aria-label="Footer specimen, mobile">
+                      <div class="ftr__col"><p class="ftr__colt">Care options</p><ul class="ftr__links"><li><a class="ftr__link" href="#footer">Sexual health</a></li><li><a class="ftr__link" href="#footer">Men</a></li><li><a class="ftr__link" href="#footer">Women</a></li></ul></div>
+                      <div class="ftr__col"><p class="ftr__colt">SoviCare</p><ul class="ftr__links"><li><a class="ftr__link" href="#footer">How it works</a></li><li><a class="ftr__link" href="#footer">About us</a></li></ul></div>
+                      <div class="ftr__col"><p class="ftr__colt">Help</p><ul class="ftr__links"><li><a class="ftr__link" href="#footer">FAQ</a></li><li><a class="ftr__link" href="#footer">Contact</a></li><li><a class="ftr__link" href="#footer">Sign in</a></li></ul></div>
+                    </nav>
+                  </div>
+                  <div class="ftr__rule"></div>
+                  <div class="ftr__legal">
+                    <div class="ftr__bar">
+                      <div class="ftr__barl">
+                        <p class="ftr__fine">© 2026 SoviCare. All rights reserved.</p>
+                        <ul class="ftr__legallinks"><li><a class="ftr__link" href="#footer">Privacy policy</a></li><li><a class="ftr__link" href="#footer">Terms of service</a></li><li><a class="ftr__link" href="#footer">Telehealth notice</a></li></ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="cap">Mobile, 390 wide. Newsletter and legal text are left out here for length. Link rows are 36px (E-01).</p>
+          </div>
+        </div>
+        <p class="cap"><span class="status status--proposed">To confirm</span> Five footer points need Avi: the CTA title is a question (headlines are never questions); the legal text says “patients” (glossary: member); the newsletter field is a pill while fields are radius 12; its border, Line/On-dark #3E5C6B, is 1.42:1 on Deep Teal (below 3:1); and the site’s CTA strip puts a Yellow Circle kit piece beside the Yellow button, two Yellow elements in one view, so the piece is left out here.</p>
+      </section>
+
+      <!-- =========================================================== 7 · OVERLAY -->
+      <section class="sec" id="overlay" aria-labelledby="overlay-h">
+        <div class="sec-head">
+          <h2 id="overlay-h">Overlay surface.</h2>
+          <p>Dropdowns and dialogs are the only raised surfaces and carry the only shadow.</p>
+        </div>
+        <div class="grid-2">
+          <div class="specimen specimen--mist">
+            <div class="overlay overlay-demo">
+              <b>Overlay surface</b>
+              <p>Card white, 1px Line/Soft, radius 12, <code>--shadow-overlay</code>.</p>
+            </div>
+            <div class="specimen-row"><button class="btn btn--outline" type="button" data-dlg-open="dlg">Open a dialog</button></div>
+          </div>
+          <div class="stack">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Part</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Fill</td><td>White #FFFFFF · <code>--color-surface-card</code></td></tr>
+                  <tr><td>Border</td><td>1px Line/Soft #EDEAE2 · <code>--color-line-soft</code></td></tr>
+                  <tr><td>Radius</td><td>12 · <code>--radius-small</code></td></tr>
+                  <tr><td>Shadow</td><td><code>0 24px 60px rgba(38, 70, 83, 0.16), 0 2px 6px rgba(38, 70, 83, 0.06)</code> · <code>--shadow-overlay</code> (Figma menu spec 4010-609)</td></tr>
+                  <tr><td>Enter</td><td>Fade and 6px rise, 220ms ease-out</td></tr>
+                  <tr><td>Class</td><td><code>.overlay</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Nothing else casts a shadow: not cards, not buttons, not the header. Dialogs close with Esc and return focus to the button that opened them. <span class="status status--proposed">To confirm</span> No dialog is drawn in Figma yet, and the backdrop (scrim) colour has no token, so this specimen uses none.</p>
+          </div>
+        </div>
+        <dialog class="overlay dlg" id="dlg" aria-labelledby="dlg-h">
+          <h3 id="dlg-h">Leave this page.</h3>
+          <p>Your answers on this page are not saved yet. Specimen copy.</p>
+          <form method="dialog">
+            <button class="btn" type="submit" value="stay" autofocus>Stay on this page</button>
+            <button class="btn btn--outline" type="submit" value="leave">Leave</button>
+          </form>
+        </dialog>
+      </section>
+
+      <!-- =========================================================== CHANGES FROM FIGMA -->
+      <section class="sec" id="changes" aria-labelledby="changes-h">
+        <div class="sec-head">
+          <h2 id="changes-h">Changes from Figma.</h2>
+          <p>Every place this page differs from a value read in Figma on 08.10.2026, so Figma can be updated. Rows marked To confirm or Proposed wait for Avi; until then Figma wins.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Item</th><th>Figma value (node)</th><th>Hub Edition 02 value</th><th>Why</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Yellow button hover</td><td>Blue #6E8B97, light label (2676-309)</td><td>Blue-dark #4E6873, Paper label · <code>--color-brand-blue-dark</code></td><td>3.53:1 fails AA; 5.76:1 passes</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Outline Light on photo hover</td><td>Blue #6E8B97 fill (2676-309)</td><td>Blue-dark #4E6873 fill, Paper label</td><td>Same contrast fix</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Button labels</td><td>Title case: “Get Started”, “Explore Treatments”, “Start Your Assessment”, “Learn More” (homepage 2673-209)</td><td>Sentence case: “Get started” and so on</td><td>Decision 6</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Header CTA height</td><td>43 (4046-606)</td><td>44 · <code>--size-control-exception-header</code></td><td>Tap target (E-02)</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Nav item hover</td><td>Line/Soft pill, 180ms ease (4010-609)</td><td>150ms ease-out · <code>--motion-duration-fast</code></td><td>One hover timing</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Dropdown enter</td><td>180ms ease (4010-609)</td><td>220ms ease-out · <code>--motion-duration-open</code></td><td>Open and close timing</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Dropdown exit fade</td><td>140ms (4010-609)</td><td>150ms · <code>--motion-duration-fast</code></td><td>No 140 token</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Dropdown meta text</td><td>Slate Light #7E9AA6 (4046-606)</td><td>Slate #55747F · <code>--color-text-secondary</code></td><td>Slate Light fails AA on light surfaces</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Wordmark</td><td>“Sovicare” (4046-606, footer 2719-4253)</td><td>“SoviCare”</td><td>Decision 5</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer column title</td><td>“Sovicare” (2719-4253)</td><td>“SoviCare”</td><td>Decision 5</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer column titles</td><td>Uppercase, 12/16, wide tracking (2719-4253)</td><td>Sentence case Label 12/16 SemiBold +2% (11/16 mobile) · <code>--type-desktop-label-*</code></td><td>Decision 13</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Mobile menu note</td><td>Slate Light, 11/18 (4046-911)</td><td>Slate, Body Fine 12/18 · <code>--type-desktop-fine-*</code></td><td>AA; 12 is the smallest text</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>☰ and ✕ icon stroke</td><td>1.75px (4046-606 export)</td><td>1.5px · <code>--size-icon-stroke</code></td><td>Icon rule: 24px line, 1.5px stroke</td><td><span class="status status--proposed">Proposed</span></td></tr>
+              <tr><td>Footer social icons</td><td>20px icons in 40×40 targets (2719-4253)</td><td>24px icons in 44×44 targets · <code>--size-icon</code>, <code>--size-tap-min</code></td><td>Icon rule and tap target; not a logged exception</td><td><span class="status status--proposed">Proposed</span></td></tr>
+              <tr><td>Footer link hover</td><td>Underline grows left to right in 220ms (2719-4253, as built on the site)</td><td>150ms · <code>--motion-duration-fast</code></td><td>Hover = 150ms</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>Outline button border</td><td>1px (2676-309, as recorded in the audit)</td><td>1.5px (components.css)</td><td>Not decided</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>Disabled button</td><td>No variant (2676-309)</td><td>Line/Base fill, Slate label, no hover</td><td>Needed by forms; add to Figma</td><td><span class="status status--proposed">Proposed</span></td></tr>
+              <tr><td>Menu spacers</td><td>Panel padding 6, row padding 7/12, thumbnail gap 10 (4046-606)</td><td>4 · 0/12 with a 44 min height · 12 (<code>--space-1</code>, <code>--space-3</code>)</td><td>Spacing scale; open layout item</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>Footer CTA kit piece</td><td>Yellow Circle beside the Yellow button (2719-4253, as built on the site)</td><td>Left out of the specimen</td><td>One Yellow element per viewport</td><td><span class="status status--proposed">To confirm</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="page-foot cap">
+        <span>SoviCare Brand Hub · Brand Edition 02 · 08.10.2026</span>
+        <span>Values: <a href="tokens/tokens.json">tokens/tokens.json</a> → <a href="brand.css">brand.css</a> · Components: <a href="components.css">components.css</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+<script>
+(function () {
+  var root = getComputedStyle(document.documentElement);
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function ms(name) { return reduce.matches ? 0 : (parseFloat(root.getPropertyValue(name)) || 0); }
+  function canHover() { return window.matchMedia('(hover: hover) and (pointer: fine)').matches; }
+
+  /* Button width readout */
+  function measure() {
+    document.querySelectorAll('[data-measure]').forEach(function (m) {
+      var b = m.querySelector('.btn').getBoundingClientRect();
+      var l = m.querySelector('.measure__label').getBoundingClientRect();
+      m.querySelector('[data-measure-out]').textContent =
+        'Label ' + Math.round(l.width) + ' + height ' + Math.round(b.height) + ' = width ' + Math.round(b.width) + ' px';
+    });
+  }
+  measure();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+  /* Show every hover state (touch-friendly) */
+  document.querySelectorAll('[data-force-hover]').forEach(function (t) {
+    var target = document.querySelector(t.getAttribute('data-force-hover'));
+    t.addEventListener('click', function () {
+      var on = t.getAttribute('aria-pressed') !== 'true';
+      t.setAttribute('aria-pressed', String(on));
+      target.classList.toggle('force-hover', on);
+    });
+  });
+
+  /* Quadrant progress */
+  var quad = document.querySelector('[data-quad]');
+  if (quad) {
+    var step = 2, max = 4, text = document.querySelector('[data-quad-text]');
+    var renderQuad = function () {
+      quad.querySelectorAll('i').forEach(function (q, i) { q.classList.toggle('is-on', i < step); });
+      quad.setAttribute('aria-valuenow', String(step));
+      quad.setAttribute('aria-valuetext', 'Step ' + step + ' of ' + max);
+      text.textContent = 'Step ' + step + ' of ' + max;
+    };
+    document.querySelectorAll('[data-quad-step]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        step = Math.min(max, Math.max(1, step + parseInt(b.getAttribute('data-quad-step'), 10)));
+        renderQuad();
+      });
+    });
+  }
+
+  /* Chips: one topic at a time */
+  document.querySelectorAll('[data-chips]').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      var c = e.target.closest('.chip'); if (!c) return;
+      g.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === c)); });
+    });
+  });
+
+  /* Step tabs */
+  document.querySelectorAll('[data-steps]').forEach(function (list) {
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+    function select(tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(t); });
+      t.addEventListener('keydown', function (e) {
+        var n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = tabs[(i + 1) % tabs.length];
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = tabs[(i - 1 + tabs.length) % tabs.length];
+        if (e.key === 'Home') n = tabs[0];
+        if (e.key === 'End') n = tabs[tabs.length - 1];
+        if (n) { e.preventDefault(); select(n, true); }
+      });
+    });
+  });
+
+  /* Accordion */
+  document.querySelectorAll('[data-acc] .acc__btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open));
+      b.closest('.acc__row').classList.toggle('is-open', open);
+    });
+  });
+
+  /* Desktop header: sticky hairline inside the frame */
+  var frame = document.querySelector('[data-scroll-demo]');
+  var mh = document.querySelector('[data-mh]');
+  if (frame && mh) {
+    var onScroll = function () { mh.classList.toggle('is-scrolled', frame.scrollTop > 8); };
+    frame.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* Desktop dropdown — menu v3 behaviour, timings read from tokens */
+  document.querySelectorAll('[data-dd]').forEach(function (item) {
+    var trigger = item.querySelector('[data-dd-trigger]');
+    var panel = item.querySelector('[data-dd-panel]');
+    var openTimer = 0, closeTimer = 0, hideTimer = 0;
+    var isOpen = function () { return trigger.getAttribute('aria-expanded') === 'true'; };
+    var links = function () { return Array.prototype.slice.call(panel.querySelectorAll('a')); };
+    function open() {
+      clearTimeout(closeTimer); clearTimeout(hideTimer);
+      if (isOpen()) return;
+      document.querySelectorAll('[data-dd]').forEach(function (o) { if (o !== item) o.dispatchEvent(new CustomEvent('dd:close')); });
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); });
+    }
+    function close() {
+      clearTimeout(openTimer);
+      if (!isOpen()) return;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.classList.remove('is-open');
+      clearTimeout(hideTimer);
+      var fade = ms('--motion-duration-fast');
+      if (!fade) panel.hidden = true;
+      else hideTimer = setTimeout(function () { panel.hidden = true; }, fade);
+    }
+    item.addEventListener('dd:close', close);
+    trigger.addEventListener('click', function () { if (isOpen()) close(); else open(); });
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); open(); var l = links()[0]; if (l) l.focus(); }
+    });
+    panel.addEventListener('keydown', function (e) {
+      var ls = links(), i = ls.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); ls[Math.min(i + 1, ls.length - 1)].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); if (i <= 0) trigger.focus(); else ls[i - 1].focus(); }
+    });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) { e.stopPropagation(); close(); trigger.focus(); }
+    });
+    item.addEventListener('focusout', function (e) {
+      if (e.relatedTarget && !item.contains(e.relatedTarget)) close();
+    });
+    item.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse' || !canHover()) return;
+      clearTimeout(closeTimer);
+      openTimer = setTimeout(open, ms('--motion-intent-delay'));
+    });
+    item.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse' || !canHover()) return;
+      clearTimeout(openTimer);
+      closeTimer = setTimeout(close, ms('--motion-close-delay'));
+    });
+    document.addEventListener('click', function (e) { if (isOpen() && !item.contains(e.target)) close(); });
+  });
+
+  /* Mobile menu specimen */
+  document.querySelectorAll('[data-mm]').forEach(function (mm) {
+    var toggle = mm.querySelector('[data-mm-toggle]');
+    var panel = mm.querySelector('[data-mm-panel]');
+    var hideTimer = 0;
+    var isOpen = function () { return toggle.getAttribute('aria-expanded') === 'true'; };
+    function openMenu() {
+      clearTimeout(hideTimer);
+      panel.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close menu');
+      mm.classList.add('is-open');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); });
+    }
+    function closeMenu(returnFocus) {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
+      mm.classList.remove('is-open');
+      panel.classList.remove('is-open');
+      var d = ms('--motion-duration-open');
+      if (!d) panel.hidden = true; else hideTimer = setTimeout(function () { panel.hidden = true; }, d);
+      if (returnFocus) toggle.focus();
+    }
+    toggle.addEventListener('click', function () { if (isOpen()) closeMenu(true); else openMenu(); });
+    mm.addEventListener('keydown', function (e) {
+      if (!isOpen()) return;
+      if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); return; }
+      if (e.key === 'Tab') {
+        var f = [toggle].concat(Array.prototype.slice.call(panel.querySelectorAll('a, button')).filter(function (el) {
+          return el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
+        }));
+        var i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
+    });
+    panel.addEventListener('click', function (e) { if (e.target.closest('a')) closeMenu(false); });
+    mm.querySelectorAll('[data-mm-acc]').forEach(function (row) {
+      var head = row.querySelector('.mm-row__head');
+      head.addEventListener('click', function () {
+        var open = head.getAttribute('aria-expanded') !== 'true';
+        mm.querySelectorAll('[data-mm-acc]').forEach(function (r) {
+          var on = r === row && open;
+          r.classList.toggle('is-expanded', on);
+          r.querySelector('.mm-row__head').setAttribute('aria-expanded', String(on));
+        });
+      });
+    });
+  });
+
+  /* Footer newsletter specimen: sends nothing, and says so */
+  document.querySelectorAll('[data-news]').forEach(function (f) {
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      f.querySelector('.ftr__status').textContent = 'Specimen only. This form is not connected to a mailing service.';
+    });
+  });
+
+  /* Dialog */
+  document.querySelectorAll('[data-dlg-open]').forEach(function (b) {
+    var d = document.getElementById(b.getAttribute('data-dlg-open'));
+    b.addEventListener('click', function () { if (d.showModal) d.showModal(); });
+  });
+})();
+</script>
+</body>
+</html>

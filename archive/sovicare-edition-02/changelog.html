@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog · SoviCare Brand Hub</title>
+<meta name="description" content="What changed in each SoviCare brand edition.">
+<link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<!-- page-specific <style> goes here: tokens only (var(--…)), no hex, no off-scale px -->
+</head>
+<body>
+<div class="archive-banner"><span>Archived · SoviCare Brand Edition 02 (08.10.2026). Superseded by unifiedmeds Brand Edition 03 (15.11.2026).</span><a href="../../index.html">Go to the current hub</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <span class="hub-edition">Brand Edition 02 · 08.10.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html">Overview</a>
+      <a href="rulebook.html">Rulebook &amp; decisions</a>
+      <a href="changelog.html" aria-current="page">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html">Brand &amp; imagery</a>
+      <a href="logo.html">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html">Foundations</a>
+      <a href="components.html">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="../index.html">Archive · Edition 01</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">Start</span>
+        <h1>Changelog.</h1>
+        <p class="lead">Every edition, what changed, what was retired and what is still open. The same text lives in CHANGELOG.md.</p>
+        <nav class="toc" aria-label="On this page"><a href="#ed02">Edition 02</a><a href="#ed01">Edition 01</a></nav>
+      </header>
+<section class="sec" id="ed02" aria-labelledby="ed02-h"><div class="sec-head"><span class="status status--current">Current</span><h2 id="ed02-h">Brand Edition 02 · 08.10.2026.</h2></div><div class="prose">
+<p>Figma version: live file <code>h7D0eRszARBaWdJT1NWrpZ</code> &quot;SoviCare - Website&quot;, read 08.10.2026 (no named version yet — Avi is still editing it).</p>
+<p>Tokens: <code>tokens/tokens.json</code> → <code>brand.css</code> (generated).</p>
+<p>Decisions: 29 decisions approved by Avi on 08.10.2026, with three amendments (see <a class="link" href="rulebook.html">the rulebook</a>).</p>
+<p><b>Changed</b></p>
+<ul>
+<li>One token file (<code>tokens/tokens.json</code>) replaces brand.css, the handoff data, navigation.html and brand-rules.md as competing sources of values.</li>
+<li>Colour: Pastel palette from Figma. Blue #219EBC → #6E8B97, Green #2A9D8F → #6A8670, Mist #F2F7F9 → #E8E7E1 (alternate surface), Paper #FFFFFF → #FEFCF6 (the page), cool lines → warm lines (#EDEAE2 / #E3DFD5 / #C4BDAE). New: Blue-dark #4E6873, Teal-light #5F7075, washes, Card #FFFFFF.</li>
+<li>Accessibility: Yellow button hover → Blue-dark with Paper label (5.76:1); focus ring 2px Deep Teal (Paper on dark); links Deep Teal underlined; captions Slate, never Slate Light on light; field borders Slate (4.88:1).</li>
+<li>Type: Figma text styles 1:1 (desktop + mobile). Homepage hero 70/60 only; other heroes 46/54. Serif floor 24 desktop / 21 mobile. Labels sentence case. Italic highlight retired.</li>
+<li>Layout: 1440 / 390 frames, 1240 content, margins 100 / 40 / 20, 12 columns, breakpoints 390 / 768 / 1024 / 1440, spacing scale 4…96.</li>
+<li>Radius: pill 999, card 16, small 12, xs 8.</li>
+<li>Buttons: one height (50px), side padding = radius = height ÷ 2, Figma hover matrix, 2px lift. Exceptions: header 44, mobile bar 48.</li>
+<li>Motion: one principle; durations 150 / 220 / 320 / 420 / 520; easing ease-out (UI) + one enter curve (brand shapes); rise 12px; 24 motion cards.</li>
+<li>Navigation: Main menu v3 (Sexual health · How it works · FAQ · Sign in · Get started) and Footer v2 compact are the only patterns.</li>
+<li>Logo: symbol redrawn in the Pastel palette; wordmark &quot;SoviCare&quot;; backgrounds Paper / Mist / Deep Teal only.</li>
+<li>Content: primary CTA &quot;Get started&quot;, sentence case; glossary (provider, assessment, member); required lines; privacy rules (no pixels on condition/product pages).</li>
+</ul>
+<p><b>Removed / retired</b></p>
+<ul>
+<li>From the build guide: press strip, clinical stats count-up, reviews, star ratings, &quot;Save 15%&quot;.</li>
+<li>Edition 01 motion: loops (except the loader), bounce/overshoot, Pivot fade, rolling odometer, 82px type.</li>
+<li>All Figma links to trashed files (Csrbx…, ILQVNp…, yimfrn…).</li>
+</ul>
+<p><b>Archived (not deleted)</b></p>
+<ul>
+<li>All 42 Edition 01 pages, the old brand.css, brand-rules.md and README, the interactive showcase, demo scripts and Edition 01 photos → <code>archive/edition-01/</code>, each page with an &quot;Archived&quot; banner. Old URLs redirect via <code>404.html</code>.</li>
+<li>Longevity and Hair loss pages are archived as planned categories; they will return as new categories.</li>
+</ul>
+<p><b>Brand check:</b> <code>python3 tools/check.py</code> — passes for Edition 02 files.</p>
+<p><b>Exceptions:</b> E-01 mobile footer links 36px · E-02 header CTA 44px · E-03 mobile bar CTA 48px.</p>
+<p><b>Not in this edition (open items):</b> tagline choice · consultation fee · assessment length · Disabled/Loading button variants in Figma · Figma clean-up after Avi&#x27;s edits (spacers, 72 vs 100 inset, wordmark, symbol colours, sentence-case CTAs, menu timings).</p>
+</div></section>
+<section class="sec" id="ed01" aria-labelledby="ed01-h"><div class="sec-head"><span class="status">Archived</span><h2 id="ed01-h">Brand Edition 01 · 27.09 – 06.10.2026.</h2></div><div class="prose">
+<p>&quot;Meeting Review V1&quot; (27.09), developer handoff (01.10), menu v3 navigation page (06.10). Archived in <code>archive/edition-01/</code>.</p>
+</div></section>
+
+      <footer class="page-foot cap">
+        <span>SoviCare Brand Hub · Brand Edition 02 · 08.10.2026</span>
+        <span>Values: <a href="tokens/tokens.json">tokens/tokens.json</a> → <a href="brand.css">brand.css</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+</body>
+</html>

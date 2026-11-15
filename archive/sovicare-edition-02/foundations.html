@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foundations · SoviCare Brand Hub</title>
+<meta name="description" content="SoviCare Brand Edition 02 foundations: color, contrast, typography, layout, radius, elevation and icons, built live from the design tokens.">
+<link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<style>
+/* Foundations page — tokens only. Prefix fx- = this page. */
+.fx-authority ol { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-1); }
+.fx-authority li { color: var(--color-text-primary); }
+.fx-figma { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.fx-figma a { color: var(--color-text-link); }
+.sub h3 + p, .fx-note { color: var(--color-text-secondary); max-width: 68ch; }
+code { overflow-wrap: anywhere; }
+
+/* Swatches */
+.fx-sw { display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--color-line-base); border-radius: var(--radius-card); overflow: hidden; background: var(--color-surface-card); min-width: 0; }
+.fx-sw__chip { height: var(--space-24); border-bottom: 1px solid var(--color-line-base); display: flex; align-items: flex-end; padding: var(--space-3); }
+.fx-sw__body { padding: var(--space-4) var(--space-5) var(--space-5); display: grid; gap: var(--space-2); align-content: start; }
+.fx-sw h4, .fx-tile h4 { margin: 0; font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.fx-meta { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.fx-sw p { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+.fx-sw b { font-weight: 600; color: var(--color-text-strong); }
+.fx-field-on-dark { width: 100%; height: var(--space-10); border-radius: var(--radius-small); border: 1px solid var(--color-line-on-dark); }
+
+/* Samples */
+.fx-aa { display: inline-flex; align-items: center; justify-content: center; min-width: var(--space-12); height: var(--space-8); padding: 0 var(--space-2); border-radius: var(--radius-xs); border: 1px solid var(--color-line-base); font: 400 var(--type-desktop-body-size) / 1 var(--font-family-sans); }
+.fx-ui { display: inline-block; width: var(--space-12); height: var(--space-8); border-radius: var(--radius-xs); border: var(--size-focus-width) solid; }
+.fx-dot { display: inline-block; width: var(--space-4); height: var(--space-4); border-radius: 50%; border: 1px solid var(--color-line-base); vertical-align: middle; }
+.fx-num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.fx-num { font-weight: 600; color: var(--color-text-strong); }
+.fx-group th { background: var(--color-surface-paper); color: var(--color-text-secondary); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); padding-top: var(--space-5); }
+.fx-v { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); white-space: nowrap; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+.fx-v--pass { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.fx-v--large { background: var(--color-surface-wash-blue); color: var(--color-brand-teal-deep); }
+.fx-v--never { background: var(--color-surface-card); color: var(--color-text-primary); border: 1px solid var(--color-line-base); }
+.fx-v--never .fx-icon { color: var(--color-brand-coral); }
+.fx-table-min { min-width: calc(var(--space-24) * 7); }
+
+/* Lines */
+.fx-lines { display: grid; gap: var(--space-5); }
+.fx-line-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-4); align-items: center; }
+.fx-line { height: 0; border-top: 1px solid; }
+.fx-line--field { height: var(--space-10); border: 1px solid var(--color-line-field); border-radius: var(--radius-small); background: var(--color-surface-card); }
+
+/* Focus */
+.fx-ring { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.on-dark .fx-ring { outline-color: var(--color-focus-ring-on-dark); }
+.specimen--dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
+
+/* Change table */
+.fx-change { display: inline-flex; align-items: center; gap: var(--space-2); }
+
+/* Type */
+.fx-family { display: grid; gap: var(--space-3); }
+.fx-family__aa { font: 400 var(--type-desktop-h2-size) / 1 var(--font-family-serif); color: var(--color-text-strong); }
+.fx-family__aa--sans { font-family: var(--font-family-sans); font-size: var(--type-desktop-h3-size); }
+.fx-weights { display: grid; gap: var(--space-1); }
+.fx-weights span { font-size: var(--type-desktop-subhead-size); line-height: var(--type-desktop-subhead-line); }
+.fx-type { display: grid; border-top: 1px solid var(--color-line-base); }
+.fx-type__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, calc(var(--space-24) * 2.5)); gap: var(--space-6); align-items: start; padding: var(--space-5) 0; border-bottom: 1px solid var(--color-line-soft); }
+.fx-type__spec { margin: 0; color: var(--color-text-strong); overflow-wrap: anywhere; min-width: 0; }
+.fx-type__meta { display: grid; gap: var(--space-1); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.fx-type__meta b { font: var(--type-desktop-card-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-strong); }
+.fx-type__spec.t-body-long, .fx-type__spec.t-lead { max-width: 68ch; }
+/* Mobile scale specimens — always mobile values, at every screen width */
+.fx-m-hero { font: var(--type-mobile-hero-weight) var(--type-mobile-hero-size) / var(--type-mobile-hero-line) var(--type-mobile-hero-family); }
+.fx-m-section { font: var(--type-mobile-section-weight) var(--type-mobile-section-size) / var(--type-mobile-section-line) var(--type-mobile-section-family); }
+.fx-m-card-serif { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--type-mobile-card-serif-family); }
+.fx-m-card { font: var(--type-mobile-card-weight) var(--type-mobile-card-size) / var(--type-mobile-card-line) var(--type-mobile-card-family); }
+.fx-m-subhead { font: var(--type-mobile-subhead-weight) var(--type-mobile-subhead-size) / var(--type-mobile-subhead-line) var(--type-mobile-subhead-family); }
+.fx-m-body { font: var(--type-mobile-body-weight) var(--type-mobile-body-size) / var(--type-mobile-body-line) var(--type-mobile-body-family); }
+.fx-m-compact { font: var(--type-mobile-compact-weight) var(--type-mobile-compact-size) / var(--type-mobile-compact-line) var(--type-mobile-compact-family); }
+.fx-m-label { font: var(--type-mobile-label-weight) var(--type-mobile-label-size) / var(--type-mobile-label-line) var(--type-mobile-label-family); letter-spacing: var(--type-mobile-label-tracking); }
+.fx-m-button { font: var(--type-mobile-button-weight) var(--type-mobile-button-size) / var(--type-mobile-button-line) var(--type-mobile-button-family); }
+.fx-mobile-frame { max-width: var(--layout-frame-mobile); }
+
+/* Rules list */
+.fx-rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.fx-rules .rule { align-content: start; }
+
+/* Layout */
+.fx-stat { display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-small); background: var(--color-surface-card); align-content: start; }
+.fx-stat__v { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+.fx-gridwrap { container-type: inline-size; container-name: fxgrid; overflow-x: auto; display: grid; gap: var(--space-3); }
+.fx-frame { box-sizing: border-box; background: var(--color-surface-mist); zoom: 0.2; }
+.fx-frame--desktop { width: var(--layout-frame-desktop); padding: 0 var(--layout-margin-desktop); }
+.fx-frame--mobile { width: var(--layout-frame-mobile); padding: 0 var(--layout-margin-mobile); }
+.fx-frame__content { background: var(--color-surface-paper); height: calc(var(--space-24) * 3); display: grid; grid-template-columns: repeat(var(--layout-columns), minmax(0, 1fr)); gap: var(--layout-gutter); }
+.fx-frame--mobile .fx-frame__content { grid-template-columns: minmax(0, 1fr); }
+.fx-frame__content span { background: var(--color-surface-wash-blue); }
+@container fxgrid (min-width: 440px) { .fx-frame { zoom: 0.3; } }
+@container fxgrid (min-width: 580px) { .fx-frame { zoom: 0.4; } }
+@container fxgrid (min-width: 730px) { .fx-frame { zoom: 0.5; } }
+@container fxgrid (min-width: 870px) { .fx-frame { zoom: 0.6; } }
+.fx-legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
+.fx-legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
+.fx-key { display: inline-block; width: var(--space-4); height: var(--space-4); border-radius: var(--radius-none); border: 1px solid var(--color-line-base); }
+.fx-bar { display: block; height: var(--space-3); background: var(--color-brand-blue); }
+.fx-bar-cell { width: 45%; }
+
+/* Radius */
+.fx-rad { height: var(--space-24); background: var(--color-surface-mist); border: 1px solid var(--color-line-mid); }
+.fx-rad--pill { height: var(--size-control); }
+.fx-tile { display: grid; gap: var(--space-3); align-content: start; }
+
+/* Elevation · dropdown specimen */
+.fx-stage { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); padding: var(--space-8) var(--space-6); display: grid; justify-items: center; }
+.fx-dd { width: 100%; max-width: calc(var(--space-24) * 3); padding: var(--space-2); display: grid; gap: var(--space-1); }
+.fx-dd__row { display: flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs); font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); color: var(--color-text-primary); }
+.fx-dd__row--hover { background: var(--color-line-soft); }
+.fx-dd__thumb { flex: none; width: var(--space-8); height: var(--space-8); border-radius: var(--radius-xs); background: var(--color-surface-mist); }
+.fx-dd__foot { border-top: 1px solid var(--color-line-base); padding: var(--space-3) var(--space-3) var(--space-2); font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); }
+
+/* Icons */
+.fx-icon { width: var(--size-icon); height: var(--size-icon); stroke-width: var(--size-icon-stroke); flex: none; }
+.fx-icon--sm { width: var(--space-4); height: var(--space-4); }
+.fx-icons { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-3); }
+.fx-ico { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-4) var(--space-2); border: 1px solid var(--color-line-base); border-radius: var(--radius-small); background: var(--color-surface-card); color: var(--color-text-primary); text-align: center; }
+.specimen--dark .fx-ico { background: transparent; border-color: var(--color-line-on-dark); color: var(--color-text-on-dark); }
+.fx-ico span { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.specimen--dark .fx-ico span { color: var(--color-text-on-dark-muted); }
+.fx-tap { display: inline-grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border: 1px dashed var(--color-line-mid); border-radius: var(--radius-xs); background: transparent; color: var(--color-text-primary); cursor: pointer; }
+.fx-err { display: flex; align-items: center; gap: var(--space-2); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-primary); }
+.fx-err .fx-icon { color: var(--color-brand-coral); }
+.fx-err .fx-icon.fx-ok { color: var(--color-brand-green); }
+
+@media (max-width: 1023px) {
+  .fx-icons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .fx-type__row { grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
+  .fx-rules, .fx-line-row { grid-template-columns: minmax(0, 1fr); }
+  .fx-line-row { gap: var(--space-2); }
+  .fx-family__aa { font-size: var(--type-mobile-section-size); }
+}
+</style>
+</head>
+<body>
+<div class="archive-banner"><span>Archived · SoviCare Brand Edition 02 (08.10.2026). Superseded by unifiedmeds Brand Edition 03 (15.11.2026).</span><a href="../../index.html">Go to the current hub</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <span class="hub-edition">Brand Edition 02 · 08.10.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html">Overview</a>
+      <a href="rulebook.html">Rulebook &amp; decisions</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html">Brand &amp; imagery</a>
+      <a href="logo.html">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html" aria-current="page">Foundations</a>
+      <a href="components.html">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="../index.html">Archive · Edition 01</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">System</span>
+        <h1>Foundations.</h1>
+        <p class="lead">Color, contrast, type, layout, radius, elevation and icons for Brand Edition 02. Every specimen on this page is drawn from <a href="tokens/tokens.json">tokens/tokens.json</a>, so it shows the values the website uses.</p>
+        <div class="rule fx-authority">
+          <b>Which source wins.</b>
+          <ol>
+            <li>Figma <code>h7D0eRszARBaWdJT1NWrpZ</code> (<a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website">SoviCare - Website</a>) wins on every visual value. Values were read on 08.10.2026.</li>
+            <li><a href="brand-rules.md">brand-rules.md</a> wins on compliance and wording.</li>
+            <li>The hub explains and mirrors both. If the hub and Figma disagree, the hub is wrong.</li>
+          </ol>
+        </div>
+        <nav class="toc" aria-label="On this page">
+          <a href="#colour">Color</a>
+          <a href="#contrast">Contrast</a>
+          <a href="#type">Typography</a>
+          <a href="#layout">Layout</a>
+          <a href="#radius">Radius</a>
+          <a href="#elevation">Elevation</a>
+          <a href="#icons">Icons</a>
+        </nav>
+      </header>
+
+      <!-- ================= 1 · COLOUR ================= -->
+      <section class="sec" id="colour" aria-labelledby="colour-h">
+        <div class="sec-head">
+          <h2 id="colour-h"><span id="color"></span>Color.</h2>
+          <p>Nine brand colors, six surfaces, eight text roles, five lines and one focus ring. The palette is Pastel: Blue and Green are soft and carry shapes, not words. Text is always Deep Teal, Teal-deep, Slate, Blue-dark or Paper.</p>
+          <p class="fx-figma">Figma: <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4672">color swatches 2719-4672</a></p>
+        </div>
+
+        <div class="sub">
+          <h3>Brand palette.</h3>
+          <div class="grid-3">
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-deep-teal);"></div><div class="fx-sw__body">
+              <h4>Deep Teal</h4><p class="fx-meta">#264653 · <code>--color-brand-deep-teal</code></p>
+              <p>Primary ink. Body text, links, Dark button, logo, dark sections, focus ring.</p>
+              <p><b>Do</b> use it for body text and the Dark button.</p>
+              <p><b>Don't</b> place two Deep Teal bands next to each other.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-teal-deep);"></div><div class="fx-sw__body">
+              <h4>Teal-deep</h4><p class="fx-meta">#1C3742 · <code>--color-brand-teal-deep</code></p>
+              <p>Darkest ink. Headlines on light surfaces and labels on Yellow.</p>
+              <p><b>Do</b> use it for headlines and the Yellow button label.</p>
+              <p><b>Don't</b> use it as a section background.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-teal-light);"></div><div class="fx-sw__body">
+              <h4>Teal Light</h4><p class="fx-meta">#5F7075 · <code>--color-brand-teal-light</code></p>
+              <p>Muted teal for shapes and secondary surfaces.</p>
+              <p><b>Do</b> use it for a kit piece or a quiet surface.</p>
+              <p><b>Don't</b> use it as a text role. Slate covers secondary text.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-blue);"></div><div class="fx-sw__body">
+              <h4>Blue (Pastel)</h4><p class="fx-meta">#6E8B97 · <code>--color-brand-blue</code></p>
+              <p>Shapes, surfaces and icons.</p>
+              <p><b>Do</b> use it for kit pieces and icons.</p>
+              <p><b>Don't</b> put text or a button label on it (Paper on Blue is 3.53:1). Use Blue-dark.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-blue-dark);"></div><div class="fx-sw__body">
+              <h4>Blue-dark</h4><p class="fx-meta">#4E6873 · <code>--color-brand-blue-dark</code></p>
+              <p>Hover fill of the Yellow button and Outline Light on photos. Secondary text on Mist. Hero kit quarter.</p>
+              <p><b>Do</b> use it for every Blue fill that carries a label (Paper label 5.76:1).</p>
+              <p><b>Don't</b> use it as a large section background.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-green);"></div><div class="fx-sw__body">
+              <h4>Green (Pastel)</h4><p class="fx-meta">#6A8670 · <code>--color-brand-green</code></p>
+              <p>Shapes, in-range markers and icons.</p>
+              <p><b>Do</b> use it for an in-range marker or a confirmed icon.</p>
+              <p><b>Don't</b> set text in it (3.89:1 on Paper).</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-yellow);"></div><div class="fx-sw__body">
+              <h4>Yellow</h4><p class="fx-meta">#FFBE0B · <code>--color-brand-yellow</code></p>
+              <p>The one accent: a CTA, a hover or a step marker.</p>
+              <p><b>Do</b> keep it to one Yellow element per viewport.</p>
+              <p><b>Don't</b> use it as a section background or as text.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-coral);"></div><div class="fx-sw__body">
+              <h4>Coral</h4><p class="fx-meta">#E76F51 · <code>--color-brand-coral</code></p>
+              <p>Errors and out-of-range values only, always with an icon.</p>
+              <p><b>Do</b> use it for an error icon and the error field border.</p>
+              <p><b>Don't</b> use it as a text color or as decoration.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-clay);"></div><div class="fx-sw__body">
+              <h4>Clay</h4><p class="fx-meta">#CFC6B8 · <code>--color-brand-clay</code></p>
+              <p>Packaging and posters only.</p>
+              <p><b>Do</b> use it on labels, boxes and printed posters.</p>
+              <p><b>Don't</b> use it anywhere in the website UI.</p>
+            </div></article>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Surfaces.</h3>
+          <p>Paper is the page. Mist is the alternate band. Card is for raised panels. Washes are soft bands; Wash Blue and Wash Yellow count as accent surfaces for the button hover rule.</p>
+          <div class="grid-3">
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-surface-paper);"></div><div class="fx-sw__body">
+              <h4>Paper</h4><p class="fx-meta">#FEFCF6 · <code>--color-surface-paper</code></p>
+              <p>The page background on every screen.</p>
+              <p><b>Don't</b> replace it with pure white.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-surface-mist);"></div><div class="fx-sw__body">
+              <h4>Mist</h4><p class="fx-meta">#E8E7E1 · <code>--color-surface-mist</code></p>
+              <p>Alternate band and hero ground.</p>
+              <p><b>Do</b> use Blue-dark, not Slate, for secondary text on Mist.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-surface-card);"></div><div class="fx-sw__body">
+              <h4>Card</h4><p class="fx-meta">#FFFFFF · <code>--color-surface-card</code></p>
+              <p>Dropdown panels, fields and raised cards.</p>
+              <p><b>Don't</b> use it as a page or band background.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-surface-wash-blue);"></div><div class="fx-sw__body">
+              <h4>Wash Blue</h4><p class="fx-meta">#A8BEC7 · <code>--color-surface-wash-blue</code></p>
+              <p>Soft Blue band, for example the final CTA on the Sexual health page. Also the muted text color on Deep Teal.</p>
+              <p><b>Do</b> hover buttons to White on this band.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-surface-wash-green);"></div><div class="fx-sw__body">
+              <h4>Wash Green</h4><p class="fx-meta">#B6CDBB · <code>--color-surface-wash-green</code></p>
+              <p>Soft Green band.</p>
+              <p><b>Do</b> keep all text Deep Teal on it.</p>
+            </div></article>
+            <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-surface-wash-yellow);"></div><div class="fx-sw__body">
+              <h4>Wash Yellow</h4><p class="fx-meta">#FCE7AE · <code>--color-surface-wash-yellow</code></p>
+              <p>Soft Yellow band. It is a wash, not the Yellow accent, so it does not count toward the one-Yellow rule.</p>
+              <p><b>Do</b> hover buttons to White on this band.</p>
+            </div></article>
+          </div>
+          <div class="specimen specimen--dark on-dark">
+            <div class="fx-field-on-dark" style="background: var(--color-surface-on-dark-field);"></div>
+            <p class="cap">On-dark field · Paper at 6% opacity (rgba 254, 252, 246, 0.06) · <code>--color-surface-on-dark-field</code>. Input fill on Deep Teal only.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Text roles.</h3>
+          <p>Pick text color by role, never by hex. Ratios are on the surface named in each row; the full table is in <a href="#contrast">Contrast</a>.</p>
+          <div class="table-wrap">
+            <table class="fx-table-min">
+              <thead><tr><th scope="col">Sample</th><th scope="col">Role · token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead>
+              <tbody>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-primary); background: var(--color-surface-paper);">Aa</span></td><td>Primary · <code>--color-text-primary</code></td><td>Deep Teal #264653</td><td>Body text on light surfaces (9.82:1 on Paper)</td></tr>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-strong); background: var(--color-surface-paper);">Aa</span></td><td>Strong · <code>--color-text-strong</code></td><td>Teal-deep #1C3742</td><td>Headlines on light surfaces (12.22:1)</td></tr>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-secondary); background: var(--color-surface-paper);">Aa</span></td><td>Secondary (Slate) · <code>--color-text-secondary</code></td><td>Slate #55747F</td><td>Captions, labels and secondary text on Paper and Card only (4.88:1 / 5.01:1)</td></tr>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-secondary-on-mist); background: var(--color-surface-mist);">Aa</span></td><td>Secondary on Mist · <code>--color-text-secondary-on-mist</code></td><td>Blue-dark #4E6873</td><td>Secondary text on Mist (4.77:1) and Wash Yellow (4.84:1). On Wash Blue and Wash Green use Deep Teal <span class="status status--proposed">To confirm</span></td></tr>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-tertiary); background: var(--color-brand-deep-teal);">Aa</span></td><td>Tertiary (Slate Light) · <code>--color-text-tertiary</code></td><td>Slate Light #7E9AA6</td><td>Never on light surfaces. Muted large text on Deep Teal only (3.39:1)</td></tr>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-on-dark); background: var(--color-brand-deep-teal);">Aa</span></td><td>On dark · <code>--color-text-on-dark</code></td><td>Paper #FEFCF6</td><td>Text on Deep Teal (9.82:1), Teal-deep and Blue-dark</td></tr>
+                <tr><td><span class="fx-aa" style="color: var(--color-text-on-dark-muted); background: var(--color-brand-deep-teal);">Aa</span></td><td>On dark, muted · <code>--color-text-on-dark-muted</code></td><td>Wash Blue #A8BEC7</td><td>Secondary text on Deep Teal (5.21:1)</td></tr>
+                <tr><td><a class="link" href="#colour">Link</a></td><td>Link · <code>--color-text-link</code></td><td>Deep Teal #264653</td><td>Links are Deep Teal and always underlined</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Lines.</h3>
+          <p>Warm hairlines, 1px. Only the field line is strong enough to mark a control boundary (3:1 or more).</p>
+          <div class="specimen fx-lines">
+            <div class="fx-line-row"><p class="fx-meta"><b>Soft</b> #EDEAE2 · <code>--color-line-soft</code><br>Dividers, header border after scroll, menu hover pill, overlay border.</p><div class="fx-line" style="border-top-color: var(--color-line-soft);"></div></div>
+            <div class="fx-line-row"><p class="fx-meta"><b>Base</b> #E3DFD5 · <code>--color-line-base</code><br>Card borders, section rules, dropdown divider.</p><div class="fx-line" style="border-top-color: var(--color-line-base);"></div></div>
+            <div class="fx-line-row"><p class="fx-meta"><b>Mid</b> #C4BDAE · <code>--color-line-mid</code><br>Decorative rules only (1.82:1). Never a field boundary.</p><div class="fx-line" style="border-top-color: var(--color-line-mid);"></div></div>
+            <div class="fx-line-row"><p class="fx-meta"><b>Field</b> #55747F · <code>--color-line-field</code><br>Field and checkbox boundary (4.88:1 on Paper, passes 3:1).</p><div class="fx-line--field"></div></div>
+          </div>
+          <div class="specimen specimen--dark fx-lines">
+            <div class="fx-line-row"><p class="cap"><b>On dark</b> #3E5C6B · <code>--color-line-on-dark</code><br>Dividers on Deep Teal.</p><div class="fx-line" style="border-top-color: var(--color-line-on-dark);"></div></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Focus.</h3>
+          <p>Every focusable element shows a 2px ring (<code>--size-focus-width</code>) at a 3px offset (<code>--size-focus-offset</code>). Deep Teal on light surfaces (<code>--color-focus-ring</code>), Paper on Deep Teal and photos (<code>--color-focus-ring-on-dark</code>). Never remove it. Press Tab to try the live controls.</p>
+          <div class="grid-2">
+            <div class="specimen">
+              <div class="specimen-row"><span class="btn fx-ring">Get started</span><a class="link" href="#colour">How it works</a></div>
+              <p class="cap">Left: static preview of the ring. Right: a live link.</p>
+            </div>
+            <div class="specimen specimen--dark on-dark">
+              <div class="specimen-row"><span class="btn btn--outline-light fx-ring">Get started</span><button class="btn btn--outline-light" type="button">Live button</button></div>
+              <p class="cap">Paper ring on Deep Teal (9.82:1).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>The Yellow rule.</h3>
+          <div class="dodont">
+            <div class="rule rule--do"><b>Do</b><p>Use Yellow for a CTA, a hover or a step marker, with at most one Yellow element per viewport. The Yellow button hovers to Blue-dark #4E6873 with a Paper label (5.76:1).</p></div>
+            <div class="rule rule--dont"><b>Don't</b><p>Use Yellow as a section background, as text, for icons, or as a label marker. Never put a Paper label on Pastel Blue #6E8B97; that color is for shapes and surfaces only.</p></div>
+          </div>
+          <div class="specimen">
+            <div class="specimen-row"><a class="btn btn--yellow" href="#colour">Get started</a><a class="btn btn--outline" href="#colour">How it works</a></div>
+            <p class="cap">One Yellow element in this view. Hover the Yellow button to see the Blue-dark hover.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Coral and Clay.</h3>
+          <div class="dodont">
+            <div class="rule"><b>Coral is a state, not a color scheme.</b><p>Errors and out-of-range values only. It always comes with an icon and never colors text: the message stays Deep Teal, the icon and the field border turn Coral.</p></div>
+            <div class="rule"><b>Clay is for print.</b><p>Packaging and posters only. Clay never appears in the website UI, not as a band, a card or a logo background.</p></div>
+          </div>
+          <div class="specimen">
+            <div class="field field--error">
+              <label class="field__label" for="fx-dob">Date of birth</label>
+              <input class="field__input" id="fx-dob" type="text" value="31/02/1980" aria-describedby="fx-dob-err" aria-invalid="true">
+            </div>
+            <p class="fx-err" id="fx-dob-err"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.2v.1"/></svg>Enter a date in MM/DD/YYYY.</p>
+            <p class="cap">Coral border and icon, Deep Teal message.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>What changed from Edition 01.</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">Role</th><th scope="col">Edition 01</th><th scope="col">Edition 02</th></tr></thead>
+              <tbody>
+                <tr><td>Blue</td><td><span class="fx-change"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="#219EBC"/></svg>#219EBC, saturated</span></td><td><span class="fx-change"><span class="fx-dot" style="background: var(--color-brand-blue);"></span>#6E8B97 Pastel · <code>--color-brand-blue</code></span></td></tr>
+                <tr><td>Green</td><td><span class="fx-change"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="#2A9D8F"/></svg>#2A9D8F, saturated</span></td><td><span class="fx-change"><span class="fx-dot" style="background: var(--color-brand-green);"></span>#6A8670 Pastel · <code>--color-brand-green</code></span></td></tr>
+                <tr><td>Mist</td><td><span class="fx-change"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="#F2F7F9" stroke="#C6D6DF"/></svg>#F2F7F9, cool, was the page</span></td><td><span class="fx-change"><span class="fx-dot" style="background: var(--color-surface-mist);"></span>#E8E7E1 warm, alternate band · <code>--color-surface-mist</code></span></td></tr>
+                <tr><td>Paper</td><td><span class="fx-change"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="#FFFFFF" stroke="#C6D6DF"/></svg>#FFFFFF, was cards</span></td><td><span class="fx-change"><span class="fx-dot" style="background: var(--color-surface-paper);"></span>#FEFCF6, now the page · <code>--color-surface-paper</code></span></td></tr>
+                <tr><td>Lines</td><td><span class="fx-change"><svg width="64" height="16" viewBox="0 0 64 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="#DDE8ED"/><circle cx="24" cy="8" r="7.5" fill="#D6E2E9"/><circle cx="40" cy="8" r="7.5" fill="#C6D6DF"/><circle cx="56" cy="8" r="7.5" fill="#A8C2CD"/></svg>Cool blue-gray: #DDE8ED · #D6E2E9 · #C6D6DF · #A8C2CD</span></td><td><span class="fx-change"><span class="fx-dot" style="background: var(--color-line-soft);"></span><span class="fx-dot" style="background: var(--color-line-base);"></span><span class="fx-dot" style="background: var(--color-line-mid);"></span>Warm: Soft #EDEAE2 · Base #E3DFD5 · Mid #C4BDAE, plus Field #55747F and On dark #3E5C6B</span></td></tr>
+                <tr><td>Unchanged</td><td colspan="2">Deep Teal #264653 · Teal-deep #1C3742 · Yellow #FFBE0B · Coral #E76F51 · Clay #CFC6B8 · Slate #55747F · Slate Light #7E9AA6</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="fx-note">New in Edition 02: Blue-dark #4E6873, Teal Light #5F7075, the three washes and the on-dark field. Retired: the category colors, the pink accent, the tint ramps and the Yellow hover #E9AD05. History lives in the <a href="../index.html">archive</a>.</p>
+        </div>
+      </section>
+
+      <!-- ================= 2 · CONTRAST ================= -->
+      <section class="sec" id="contrast" aria-labelledby="contrast-h">
+        <div class="sec-head">
+          <h2 id="contrast-h">Contrast.</h2>
+          <p>Approved text pairs, with ratios computed from the token values using the WCAG 2.x relative-luminance formula (python3, 08.10.2026). Text needs 4.5:1. Large text (24px regular, or 18.66px bold) and UI parts such as borders, icons and focus rings need 3:1.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="fx-table-min">
+            <thead><tr><th scope="col">Sample</th><th scope="col">Text on surface</th><th scope="col">Ratio</th><th scope="col">Verdict</th><th scope="col">Use</th></tr></thead>
+            <tbody>
+<tr class="fx-group"><th colspan="5" scope="colgroup">Text on light surfaces</th></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-teal-deep); background: var(--color-surface-paper);">Aa</span></td><td>Teal-deep on Paper</td><td class="fx-num">12.22:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Headlines (<code>--color-text-strong</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-surface-paper);">Aa</span></td><td>Deep Teal on Paper</td><td class="fx-num">9.82:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Body text and links (<code>--color-text-primary</code>, <code>--color-text-link</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-surface-card);">Aa</span></td><td>Deep Teal on Card</td><td class="fx-num">10.08:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text in cards, dropdowns and fields</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-text-secondary); background: var(--color-surface-paper);">Aa</span></td><td>Slate on Paper</td><td class="fx-num">4.88:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Captions, labels, secondary text (<code>--color-text-secondary</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-text-secondary); background: var(--color-surface-card);">Aa</span></td><td>Slate on Card</td><td class="fx-num">5.01:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Captions and help text in cards and fields</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-surface-mist);">Aa</span></td><td>Deep Teal on Mist</td><td class="fx-num">8.14:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Body text on Mist bands</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-blue-dark); background: var(--color-surface-mist);">Aa</span></td><td>Blue-dark on Mist</td><td class="fx-num">4.77:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Secondary text on Mist (<code>--color-text-secondary-on-mist</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-text-secondary); background: var(--color-surface-mist);">Aa</span></td><td>Slate on Mist</td><td class="fx-num">4.04:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Do not use for captions on Mist. Use Blue-dark</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-surface-wash-blue);">Aa</span></td><td>Deep Teal on Wash Blue</td><td class="fx-num">5.21:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on the Wash Blue band (final CTA)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-surface-wash-green);">Aa</span></td><td>Deep Teal on Wash Green</td><td class="fx-num">5.97:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on the Wash Green band</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-surface-wash-yellow);">Aa</span></td><td>Deep Teal on Wash Yellow</td><td class="fx-num">8.25:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on the Wash Yellow band</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-blue-dark); background: var(--color-surface-wash-yellow);">Aa</span></td><td>Blue-dark on Wash Yellow</td><td class="fx-num">4.84:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Secondary text on Wash Yellow</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-blue-dark); background: var(--color-surface-wash-green);">Aa</span></td><td>Blue-dark on Wash Green</td><td class="fx-num">3.50:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Secondary text on Wash Green: use Deep Teal</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-blue-dark); background: var(--color-surface-wash-blue);">Aa</span></td><td>Blue-dark on Wash Blue</td><td class="fx-num">3.06:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Secondary text on Wash Blue: use Deep Teal</td></tr>
+<tr class="fx-group"><th colspan="5" scope="colgroup">Text on dark and accent fills</th></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-deep-teal);">Aa</span></td><td>Paper on Deep Teal</td><td class="fx-num">9.82:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on Deep Teal, Dark button label (<code>--color-text-on-dark</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-teal-deep);">Aa</span></td><td>Paper on Teal-deep</td><td class="fx-num">12.22:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on Teal-deep</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-surface-wash-blue); background: var(--color-brand-deep-teal);">Aa</span></td><td>Wash Blue on Deep Teal</td><td class="fx-num">5.21:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Secondary text on Deep Teal (<code>--color-text-on-dark-muted</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-text-tertiary); background: var(--color-brand-deep-teal);">Aa</span></td><td>Slate Light on Deep Teal</td><td class="fx-num">3.39:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Muted large text on Deep Teal only (<code>--color-text-tertiary</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-teal-deep); background: var(--color-brand-yellow);">Aa</span></td><td>Teal-deep on Yellow</td><td class="fx-num">7.54:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Yellow button label</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-deep-teal); background: var(--color-brand-yellow);">Aa</span></td><td>Deep Teal on Yellow</td><td class="fx-num">6.06:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Step number on Yellow (hover or tap)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-blue-dark);">Aa</span></td><td>Paper on Blue-dark</td><td class="fx-num">5.76:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Yellow button on hover, Outline Light on photos on hover</td></tr>
+<tr class="fx-group"><th colspan="5" scope="colgroup">Never use</th></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-text-tertiary); background: var(--color-surface-paper);">Aa</span></td><td>Slate Light on Paper</td><td class="fx-num">2.90:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Slate Light is never text on a light surface</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-text-tertiary); background: var(--color-surface-mist);">Aa</span></td><td>Slate Light on Mist</td><td class="fx-num">2.40:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Slate Light is never text on a light surface</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-blue);">Aa</span></td><td>Paper on Blue</td><td class="fx-num">3.53:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Pastel Blue is never behind a label or text. Use Blue-dark</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-teal-deep); background: var(--color-brand-blue);">Aa</span></td><td>Teal-deep on Blue</td><td class="fx-num">3.47:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Pastel Blue is never behind a label or text</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-coral); background: var(--color-surface-paper);">Aa</span></td><td>Coral on Paper</td><td class="fx-num">3.01:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Coral is never a text color. Error text is Deep Teal with a Coral icon</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-yellow); background: var(--color-surface-paper);">Aa</span></td><td>Yellow on Paper</td><td class="fx-num">1.62:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Yellow is never text</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-yellow); background: var(--color-brand-deep-teal);">Aa</span></td><td>Yellow on Deep Teal</td><td class="fx-num">6.06:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Yellow is never text, even where the ratio passes</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-green); background: var(--color-surface-paper);">Aa</span></td><td>Green on Paper</td><td class="fx-num">3.89:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Pastel Green is for shapes, markers and icons, not text</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-brand-blue); background: var(--color-surface-paper);">Aa</span></td><td>Blue on Paper</td><td class="fx-num">3.53:1</td><td><span class="fx-v fx-v--never"><svg class="fx-icon fx-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Not allowed</span></td><td>Pastel Blue is for shapes, surfaces and icons, not text</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sub">
+          <h3>UI parts and icons (3:1).</h3>
+          <div class="table-wrap">
+            <table class="fx-table-min">
+              <thead><tr><th scope="col">Sample</th><th scope="col">Part on surface</th><th scope="col">Ratio</th><th scope="col">Verdict</th><th scope="col">Use</th></tr></thead>
+              <tbody>
+<tr><td><span class="fx-ui" style="border-color: var(--color-brand-deep-teal); background: var(--color-surface-paper);"></span></td><td>Deep Teal on Paper</td><td class="fx-num">9.82:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>Focus ring on light surfaces (<code>--color-focus-ring</code>)</td></tr>
+<tr><td><span class="fx-ui" style="border-color: var(--color-surface-paper); background: var(--color-brand-deep-teal);"></span></td><td>Paper on Deep Teal</td><td class="fx-num">9.82:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>Focus ring on Deep Teal and photos (<code>--color-focus-ring-on-dark</code>)</td></tr>
+<tr><td><span class="fx-ui" style="border-color: var(--color-text-secondary); background: var(--color-surface-card);"></span></td><td>Slate on Card</td><td class="fx-num">5.01:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>Field and checkbox boundary (<code>--color-line-field</code>)</td></tr>
+<tr><td><span class="fx-ui" style="border-color: var(--color-text-secondary); background: var(--color-surface-paper);"></span></td><td>Slate on Paper</td><td class="fx-num">4.88:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>Field boundary on Paper</td></tr>
+<tr><td><span class="fx-ui" style="border-color: var(--color-brand-green); background: var(--color-surface-paper);"></span></td><td>Green on Paper</td><td class="fx-num">3.89:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>In-range marker, status icon</td></tr>
+<tr><td><span class="fx-ui" style="border-color: var(--color-brand-blue); background: var(--color-surface-paper);"></span></td><td>Blue on Paper</td><td class="fx-num">3.53:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>Icon or shape</td></tr>
+<tr><td><span class="fx-ui" style="border-color: var(--color-brand-coral); background: var(--color-surface-paper);"></span></td><td>Coral on Paper</td><td class="fx-num">3.01:1</td><td><span class="fx-v fx-v--pass">Pass 3:1</span></td><td>Error icon next to Deep Teal text</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="fx-note">Line Mid on Paper is 1.82:1, so it stays decorative. Line Soft and Line Base are dividers, not boundaries.</p>
+        </div>
+        <div class="dodont">
+          <div class="rule rule--do"><b>Do</b><p>Use Deep Teal or Teal-deep for text on every light surface and wash. Use Slate only on Paper and Card. Use Blue-dark for any blue fill that carries a label.</p></div>
+          <div class="rule rule--dont"><b>Don't</b><p>Set Slate Light on a light surface, put text on Pastel Blue, or use Coral, Yellow, Green or Blue as a text color.</p></div>
+        </div>
+        <p class="fx-note">Slate Light on Deep Teal (3.39:1) passes only as WCAG large text. The token note says “18px+”; WCAG large text is 24px regular or 18.66px bold. <span class="status status--proposed">To confirm</span></p>
+      </section>
+
+      <!-- ================= 3 · TYPOGRAPHY ================= -->
+      <section class="sec" id="type" aria-labelledby="type-h">
+        <div class="sec-head">
+          <h2 id="type-h">Typography.</h2>
+          <p>Two families. DM Serif Display for headlines, Inter for everything else. The hub copies Figma's text styles one to one (tokens <code>typography.*</code>, classes <code>.t-*</code>).</p>
+        </div>
+
+        <div class="sub">
+          <h3>Families.</h3>
+          <div class="grid-2">
+            <div class="specimen fx-family">
+              <span class="fx-family__aa" aria-hidden="true">Aa Bb 0123</span>
+              <h4 class="t-card">DM Serif Display · 400</h4>
+              <p class="cap">Headlines, the hero, card titles and assessment questions. One weight only, never bold, never italic. <code>--font-family-serif</code></p>
+            </div>
+            <div class="specimen fx-family">
+              <span class="fx-family__aa fx-family__aa--sans" aria-hidden="true">Aa Bb 0123</span>
+              <div class="fx-weights">
+                <span style="font-weight: 400;">Inter Regular 400 · body</span>
+                <span style="font-weight: 500;">Inter Medium 500 · buttons, nav</span>
+                <span style="font-weight: 600;">Inter SemiBold 600 · labels, card titles</span>
+                <span style="font-weight: 700;">Inter Bold 700 · rare emphasis</span>
+              </div>
+              <p class="cap">Body, UI, labels, numbers. Weights 400, 500, 600 and 700 only. <code>--font-family-sans</code></p>
+            </div>
+          </div>
+          <p class="fx-note">One font request for both: DM Serif Display plus Inter 400;500;600;700, with <code>display=swap</code>. No third face. A monospace face is allowed only on internal and code screens.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Desktop scale.</h3>
+          <p>Live <code>.t-*</code> classes. Below 768px these classes switch to the mobile values, exactly as on the website.</p>
+          <div class="fx-type">
+            <div class="fx-type__row"><p class="fx-type__spec t-hero-home">Feel more like yourself.</p><div class="fx-type__meta"><b>Hero home · <code>.t-hero-home</code></b><span>DM Serif 70 / 60 · 400</span><span>Figma: Hero/Home · homepage only</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-hero">Better Intimacy.</p><div class="fx-type__meta"><b>Hero · <code>.t-hero</code></b><span>DM Serif 46 / 54 · 400</span><span>Figma: Home/Heading/Hero · every other hero</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-h2">How it works.</p><div class="fx-type__meta"><b>H2 · <code>.t-h2</code></b><span>DM Serif 46 / 1.10 · 400</span><span>Figma: Heading/H2</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-section">Treatments for sexual health.</p><div class="fx-type__meta"><b>Section · <code>.t-section</code></b><span>DM Serif 36 / 40 · 400</span><span>Figma: Home/Heading/Section</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-h3">How often do you notice this?</p><div class="fx-type__meta"><b>H3 · <code>.t-h3</code></b><span>DM Serif 26 / 1.30 · 400</span><span>Figma: Heading/H3 · assessment question</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-card-serif">SoviCare Trio</p><div class="fx-type__meta"><b>Card serif · <code>.t-card-serif</code></b><span>DM Serif 24 / 30 · 400</span><span>Figma: Home/Heading/Card Serif · desktop serif floor</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-card">Tadalafil</p><div class="fx-type__meta"><b>Card · <code>.t-card</code></b><span>Inter 17 / 24 · 600</span><span>Figma: Home/Heading/Card</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-lead">A licensed provider reviews your assessment before anything is prescribed.</p><div class="fx-type__meta"><b>Lead · <code>.t-lead</code></b><span>Inter 20 / 1.62 · 400</span><span>Figma: Body/Lead</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-subhead">Start with a short assessment. A provider reviews it.</p><div class="fx-type__meta"><b>Subhead · <code>.t-subhead</code></b><span>Inter 18 / 28 · 400</span><span>Figma: Home/Body/Subhead</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-body-long">Long-form reading, such as treatment details and FAQ answers. Keep running text near 68 characters per line so the eye finds the next line without effort.</p><div class="fx-type__meta"><b>Body long · <code>.t-body-long</code></b><span>Inter 17 / 1.75 · 400</span><span>Figma: Body/Base</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-body">Answer a few questions about your health and history.</p><div class="fx-type__meta"><b>Body · <code>.t-body</code></b><span>Inter 16 / 24 · 400</span><span>Figma: Home/Body/Default</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-small">Your provider may ask a follow-up question.</p><div class="fx-type__meta"><b>Small · <code>.t-small</code></b><span>Inter 15 / 1.62 · 400</span><span>Figma: Body/Small</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-compact">Dropdown meta, table cells, compact UI text.</p><div class="fx-type__meta"><b>Compact · <code>.t-compact</code></b><span>Inter 14 / 21 · 400</span><span>Figma: Home/Body/Compact</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-caption">Caption under an image or a field.</p><div class="fx-type__meta"><b>Caption · <code>.t-caption</code></b><span>Inter 13 / 1.5 · 400</span><span>Figma: Body/Caption</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-fine">Assessment only. Not a diagnosis.</p><div class="fx-type__meta"><b>Fine · <code>.t-fine</code></b><span>Inter 12 / 18 · 400</span><span>Figma: Home/Body/Fine · smallest text anywhere</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-label">Sexual health</p><div class="fx-type__meta"><b>Label · <code>.t-label</code></b><span>Inter 12 / 16 · 600 · +2%</span><span>Figma: Home/Label · sentence case</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-nav">How it works</p><div class="fx-type__meta"><b>Nav · <code>.t-nav</code></b><span>Inter 14 / 1.4 · 500</span><span>Figma: UI/Nav</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec t-button">Get started</p><div class="fx-type__meta"><b>Button · <code>.t-button</code></b><span>Inter 15 / 20 · 500 (header CTA 14)</span><span>Figma: Buttons — Hover Rules 2676-309</span></div></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Mobile scale.</h3>
+          <p>Shown at mobile values on every screen. Steps without a mobile style (H3, Lead, Body long, Small, Caption, Fine, Nav) keep their desktop value. On mobile, Hero home and H2 use the Hero and Section mobile styles.</p>
+          <div class="fx-type">
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-hero">Feel more like yourself.</p><div class="fx-type__meta"><b>Hero · <code>--type-mobile-hero-*</code></b><span>DM Serif 34 / 40 · 400</span><span>Figma: Mobile/Heading/Hero</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-section">How it works.</p><div class="fx-type__meta"><b>Section · <code>--type-mobile-section-*</code></b><span>DM Serif 28 / 34 · 400</span><span>Figma: Mobile/Heading/Section</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-card-serif">SoviCare Trio</p><div class="fx-type__meta"><b>Card serif · <code>--type-mobile-card-serif-*</code></b><span>DM Serif 21 / 27 · 400</span><span>Figma: Mobile/Heading/Card Serif · mobile serif floor</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-card">Tadalafil</p><div class="fx-type__meta"><b>Card · <code>--type-mobile-card-*</code></b><span>Inter 16 / 22 · 600</span><span>Figma: Mobile/Heading/Card</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-subhead">Start with a short assessment.</p><div class="fx-type__meta"><b>Subhead · <code>--type-mobile-subhead-*</code></b><span>Inter 16 / 25 · 400</span><span>Figma: Mobile/Body/Subhead</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-body">Answer a few questions about your health and history.</p><div class="fx-type__meta"><b>Body · <code>--type-mobile-body-*</code></b><span>Inter 15 / 23 · 400</span><span>Figma: Mobile/Body/Default</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-compact">Compact UI text.</p><div class="fx-type__meta"><b>Compact · <code>--type-mobile-compact-*</code></b><span>Inter 13 / 20 · 400</span><span>Figma: Mobile/Body/Compact</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-label">Sexual health</p><div class="fx-type__meta"><b>Label · <code>--type-mobile-label-*</code></b><span>Inter 11 / 16 · 600 · +2%</span><span>Figma: Mobile/Label</span></div></div>
+            <div class="fx-type__row"><p class="fx-type__spec fx-m-button">Get started</p><div class="fx-type__meta"><b>Button · <code>--type-mobile-button-*</code></b><span>Inter 15 / 20 · 500</span><span>Figma: Mobile/Button</span></div></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Type rules.</h3>
+          <div class="fx-rules">
+            <div class="rule"><b>Serif floor: 24px desktop, 21px mobile.</b><p>DM Serif Display never goes below Card serif. Anything smaller is Inter. The wordmark is artwork, not type.</p></div>
+            <div class="rule"><b>Inter never above 26px.</b><p>The largest Inter style is Lead at 20px. Big numbers and headlines are DM Serif.</p></div>
+            <div class="rule"><b>Hero home only on the homepage.</b><p>70/60 belongs to the homepage hero. Every other hero is 46/54.</p></div>
+            <div class="rule"><b>Sentence case everywhere.</b><p>Headlines, buttons, nav items and labels. Headlines end with a full stop and are never questions. Assessment questions and picker prompts may be questions, set in H3.</p></div>
+            <div class="rule"><b>Labels: 12/16 SemiBold, +2%.</b><p>Mobile 11/16. Sentence case, Slate on Paper. No Yellow marker and no uppercase.</p></div>
+            <div class="rule"><b>No italic highlight.</b><p>Figma sets “yourself” upright in the hero. The serif italic highlight is not used in Edition 02. Avi may re-open it.</p></div>
+            <div class="rule"><b>Line length about 68ch.</b><p>Running text stays near 68 characters per line. Headlines may run wider.</p></div>
+            <div class="rule"><b>Numerals carry their unit.</b><p>A number never appears bare: “$25”, “30 minutes”, “2 tablets”. Tables and prices use tabular figures (<code>font-variant-numeric: tabular-nums</code>).</p></div>
+            <div class="rule"><b>No letterspacing except the label.</b><p>Every heading and body style has 0 tracking. Only labels take +2%.</p></div>
+            <div class="rule"><b>US English.</b><p>“Color” in site copy, “center”, “license”. Provider, assessment and member, never doctor, quiz or patient.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4 · LAYOUT ================= -->
+      <section class="sec" id="layout" aria-labelledby="layout-h">
+        <div class="sec-head">
+          <h2 id="layout-h">Layout.</h2>
+          <p>Two Figma frames, one grid and one spacing scale. Content sits in a 1240 column inside the 1440 frame.</p>
+          <p class="fx-figma">Figma: <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2708-1034">Sexual health 2708-1034</a> (100 margins) · <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2673-209">Homepage desktop 2673-209</a> · <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2673-835">Homepage mobile 2673-835</a></p>
+        </div>
+
+        <div class="grid-4">
+          <div class="fx-stat"><span class="eyebrow">Frame</span><span class="fx-stat__v">1440 / 390</span><span class="fx-meta"><code>--layout-frame-desktop</code> · <code>--layout-frame-mobile</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Content</span><span class="fx-stat__v">1240</span><span class="fx-meta"><code>--layout-content-max</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Margins</span><span class="fx-stat__v">100 / 40 / 20</span><span class="fx-meta">Desktop, tablet, mobile · <code>--layout-margin-*</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Grid</span><span class="fx-stat__v">12 × 85, 20</span><span class="fx-meta">12 columns of 85, 20 gutter · <code>--layout-columns</code>, <code>--layout-gutter</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Section</span><span class="fx-stat__v">96 / 56</span><span class="fx-meta">Top and bottom padding · <code>--layout-section-y</code>, <code>--layout-section-y-mobile</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Header</span><span class="fx-stat__v">80 / 64</span><span class="fx-meta">Inset 56 · <code>--size-header-*</code>, <code>--layout-header-inset</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Control</span><span class="fx-stat__v">50</span><span class="fx-meta">Buttons and fields · <code>--size-control</code></span></div>
+          <div class="fx-stat"><span class="eyebrow">Tap target</span><span class="fx-stat__v">44</span><span class="fx-meta">Minimum · <code>--size-tap-min</code></span></div>
+        </div>
+
+        <div class="sub">
+          <h3>The grid.</h3>
+          <div class="specimen">
+            <div class="fx-gridwrap">
+              <div class="fx-frame fx-frame--desktop" role="img" aria-label="Desktop frame 1440 wide: 100 margins, 1240 content, 12 columns with 20 gutters"><div class="fx-frame__content"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+              <p class="cap">Desktop 1440 · 100 + 1240 + 100 · 12 columns of 85 with 20 gutters (12 × 85 + 11 × 20 = 1240).</p>
+              <div class="fx-frame fx-frame--mobile" role="img" aria-label="Mobile frame 390 wide: 20 margins, 350 content"><div class="fx-frame__content"><span></span></div></div>
+              <p class="cap">Mobile 390 · 20 + 350 + 20 · one column. Drawn to the same scale as desktop. The mobile column grid is not defined in Figma <span class="status status--proposed">To confirm</span></p>
+            </div>
+            <div class="fx-legend cap"><span><i class="fx-key" style="background: var(--color-surface-mist);"></i>Margin</span><span><i class="fx-key" style="background: var(--color-surface-wash-blue);"></i>Column</span><span><i class="fx-key" style="background: var(--color-surface-paper);"></i>Gutter</span></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Breakpoints.</h3>
+          <p>Figma draws 1440 and 390 only. There is no tablet frame; tablet and laptop reflow the desktop layout.</p>
+          <div class="table-wrap">
+            <table class="fx-table-min">
+              <thead><tr><th scope="col">Name</th><th scope="col">Token</th><th scope="col">Range</th><th scope="col">Side margin</th><th scope="col">Type</th><th scope="col">Section padding</th></tr></thead>
+              <tbody>
+                <tr><td>Mobile</td><td><code>--layout-breakpoint-mobile</code> 390</td><td>0–767 (designed at 390)</td><td>20 · <code>--layout-margin-mobile</code></td><td>Mobile scale</td><td>56</td></tr>
+                <tr><td>Tablet</td><td><code>--layout-breakpoint-tablet</code> 768</td><td>768–1023</td><td>40 · <code>--layout-margin-tablet</code></td><td>Desktop scale</td><td>96 <span class="status status--proposed">To confirm</span></td></tr>
+                <tr><td>Laptop</td><td><code>--layout-breakpoint-laptop</code> 1024</td><td>1024–1439</td><td>40 until content reaches 1240 <span class="status status--proposed">To confirm</span></td><td>Desktop scale</td><td>96</td></tr>
+                <tr><td>Desktop</td><td><code>--layout-breakpoint-desktop</code> 1440</td><td>1440 and up</td><td>100 at 1440 · <code>--layout-margin-desktop</code>; content stays 1240</td><td>Desktop scale</td><td>96</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="fx-note">brand.css switches the type classes at 767/768. The width where the header changes from the desktop menu to ☰ is not yet set <span class="status status--proposed">To confirm</span></p>
+        </div>
+
+        <div class="sub">
+          <h3>Spacing scale.</h3>
+          <p>Twelve steps. Every gap, padding and margin uses one of them (<code>--space-*</code>).</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col" class="fx-bar-cell">Scale</th><th scope="col">Typical use</th></tr></thead>
+              <tbody>
+                <tr><td><code>--space-1</code></td><td class="fx-num">4</td><td><span class="fx-bar" style="width: var(--space-1);"></span></td><td>Hairline gaps</td></tr>
+                <tr><td><code>--space-2</code></td><td class="fx-num">8</td><td><span class="fx-bar" style="width: var(--space-2);"></span></td><td>Label to field, nav pill padding, dropdown offset</td></tr>
+                <tr><td><code>--space-3</code></td><td class="fx-num">12</td><td><span class="fx-bar" style="width: var(--space-3);"></span></td><td>Icon to label, menu row padding</td></tr>
+                <tr><td><code>--space-4</code></td><td class="fx-num">16</td><td><span class="fx-bar" style="width: var(--space-4);"></span></td><td>Field padding, small card gap</td></tr>
+                <tr><td><code>--space-5</code></td><td class="fx-num">20</td><td><span class="fx-bar" style="width: var(--space-5);"></span></td><td>Gutter, card gap, mobile margin</td></tr>
+                <tr><td><code>--space-6</code></td><td class="fx-num">24</td><td><span class="fx-bar" style="width: var(--space-6);"></span></td><td>Card padding</td></tr>
+                <tr><td><code>--space-8</code></td><td class="fx-num">32</td><td><span class="fx-bar" style="width: var(--space-8);"></span></td><td>Heading to content</td></tr>
+                <tr><td><code>--space-10</code></td><td class="fx-num">40</td><td><span class="fx-bar" style="width: var(--space-10);"></span></td><td>Tablet margin, block gap</td></tr>
+                <tr><td><code>--space-12</code></td><td class="fx-num">48</td><td><span class="fx-bar" style="width: var(--space-12);"></span></td><td>Block gap inside a section</td></tr>
+                <tr><td><code>--space-14</code></td><td class="fx-num">56</td><td><span class="fx-bar" style="width: var(--space-14);"></span></td><td>Mobile section padding, header inset</td></tr>
+                <tr><td><code>--space-18</code></td><td class="fx-num">72</td><td><span class="fx-bar" style="width: var(--space-18);"></span></td><td>Large block gap</td></tr>
+                <tr><td><code>--space-24</code></td><td class="fx-num">96</td><td><span class="fx-bar" style="width: var(--space-24);"></span></td><td>Desktop section padding</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="rule">
+          <b>Open item · Figma spacing <span class="status status--proposed">To confirm</span></b>
+          <p>Figma frames still use off-scale spacers (6, 10, 14, 18, 22, 26, 28, 34), and the homepage uses a 72px side inset while the Sexual health page uses 100. Both will be aligned in Figma when Avi finishes his edits. Until then, build with <code>--space-*</code> and the 100px desktop margin.</p>
+        </div>
+      </section>
+
+      <!-- ================= 5 · RADIUS ================= -->
+      <section class="sec" id="radius" aria-labelledby="radius-h">
+        <div class="sec-head">
+          <h2 id="radius-h">Radius.</h2>
+          <p>Five radii, each tied to a role. Nothing in between.</p>
+        </div>
+        <div class="grid-3">
+          <div class="specimen fx-tile"><div class="fx-rad fx-rad--pill" style="border-radius: var(--radius-pill);"></div><h4>Pill · 999</h4><p class="fx-meta"><code>--radius-pill</code><br>Buttons, chips, nav pills, status pills.</p><div class="specimen-row"><span class="btn">Get started</span></div></div>
+          <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-card);"></div><h4>Card · 16</h4><p class="fx-meta"><code>--radius-card</code><br>Cards and framed media, such as product cards and photos in a frame.</p></div>
+          <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-small);"></div><h4>Small · 12</h4><p class="fx-meta"><code>--radius-small</code><br>Fields, answer options, the dropdown panel and small cards.</p><input class="field__input" type="text" aria-label="Field specimen" value="Field, 50 high"></div>
+          <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-xs);"></div><h4>Extra small · 8</h4><p class="fx-meta"><code>--radius-xs</code><br>Menu rows, thumbnails and packshots in the dropdown.</p></div>
+          <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-none);"></div><h4>None · 0</h4><p class="fx-meta"><code>--radius-none</code><br>Full-bleed bands, full-bleed photos and the Quadrant Kit's square edges.</p></div>
+          <div class="rule rule--dont"><b>Don't</b><p>Use any other radius, an oval, or a soft-cornered rectangle as a shape. Figma frames still show 10 and 14 in places; build them as 12 and 16. <span class="status status--proposed">To confirm</span></p></div>
+        </div>
+      </section>
+
+      <!-- ================= 6 · ELEVATION ================= -->
+      <section class="sec" id="elevation" aria-labelledby="elevation-h">
+        <div class="sec-head">
+          <h2 id="elevation-h">Elevation.</h2>
+          <p>The UI is flat. Cards and panels are separated by borders, not shadows. There is one shadow, and it belongs to things that float over the page: dropdowns and dialogs.</p>
+          <p class="fx-figma">Figma: <a href="https://www.figma.com/design/aOretSqF3eNZeDp38Urlwv/?node-id=4010-609">Main menu v3 interaction spec 4010-609</a> (archive copy)</p>
+        </div>
+        <div class="grid-2">
+          <div class="fx-tile">
+            <div class="card"><h4>Flat card</h4><p class="fx-meta">1px <code>--color-line-base</code> border, radius 16, no shadow. A link card fills Deep Teal on hover and does not lift.</p></div>
+            <a class="card" href="#elevation"><h4>Link card</h4><p>Hover or focus this card.</p></a>
+          </div>
+          <div class="fx-stage">
+            <div class="overlay fx-dd" role="group" aria-label="Dropdown specimen">
+              <span class="fx-dd__row fx-dd__row--hover"><span class="fx-dd__thumb"></span>Tadalafil</span>
+              <span class="fx-dd__row"><span class="fx-dd__thumb"></span>Sildenafil</span>
+              <span class="fx-dd__row"><span class="fx-dd__thumb"></span>SoviCare Trio</span>
+              <div class="fx-dd__foot"><a class="link" href="#elevation">View all Sexual health →</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Level</th><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead>
+            <tbody>
+              <tr><td>Flat</td><td><code>--color-line-base</code></td><td>1px #E3DFD5 border</td><td>Cards, specimens, tables</td></tr>
+              <tr><td>Divider</td><td><code>--color-line-soft</code></td><td>1px #EDEAE2</td><td>Section dividers, header border after 8px of scroll, overlay border</td></tr>
+              <tr><td>Overlay</td><td><code>--shadow-overlay</code></td><td>0 24px 60px Deep Teal at 16% + 0 2px 6px Deep Teal at 6%</td><td>Dropdown panel and dialogs only, with a 1px Line Soft border and radius 12</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dodont">
+          <div class="rule rule--do"><b>Do</b><p>Use a border to separate a card from the page. Use <code>--shadow-overlay</code> only for something that floats above content.</p></div>
+          <div class="rule rule--dont"><b>Don't</b><p>Add shadows to cards, buttons, photos or kit pieces, or invent a second shadow. The 2px button lift on hover is motion, not elevation.</p></div>
+        </div>
+      </section>
+
+      <!-- ================= 7 · ICONS ================= -->
+      <section class="sec" id="icons" aria-labelledby="icons-h">
+        <div class="sec-head">
+          <h2 id="icons-h">Icons.</h2>
+          <p>Line icons on a 24px box, drawn with the same calm geometry as the Quadrant Kit. An icon labels a thing; it never replaces the label.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Property</th><th scope="col">Rule</th><th scope="col">Token</th></tr></thead>
+            <tbody>
+              <tr><td>Size</td><td>24px only. No other icon size is approved.</td><td><code>--size-icon</code></td></tr>
+              <tr><td>Stroke</td><td>1.5px, round caps and round joins, one weight per icon</td><td><code>--size-icon-stroke</code></td></tr>
+              <tr><td>Fill</td><td>None. No duotone, no icon inside a colored circle.</td><td>—</td></tr>
+              <tr><td>Color</td><td><code>currentColor</code>: Deep Teal on light, Paper on dark. Green or Blue for status and shape icons. Coral only for the error icon. Never Yellow.</td><td><code>--color-text-primary</code>, <code>--color-text-on-dark</code></td></tr>
+              <tr><td>Tap area</td><td>An icon-only control sits in a 44 × 44 target and has an <code>aria-label</code>.</td><td><code>--size-tap-min</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="specimen">
+          <div class="fx-icons">
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0"/></svg><span>Provider</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 5.5 6v6c0 4 2.8 6.9 6.5 8.5 3.7-1.6 6.5-4.5 6.5-8.5V6z"/></svg><span>Privacy</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.5 2"/></svg><span>Duration</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></svg><span>Confirmed</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5h15v10h-9l-4 3.5z"/></svg><span>Consult</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.1"/></svg><span>Info</span></div>
+          </div>
+          <p class="cap">Six examples at 24px, Deep Teal on Card.</p>
+        </div>
+        <div class="specimen specimen--dark on-dark">
+          <div class="fx-icons">
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0"/></svg><span>Provider</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 5.5 6v6c0 4 2.8 6.9 6.5 8.5 3.7-1.6 6.5-4.5 6.5-8.5V6z"/></svg><span>Privacy</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.5 2"/></svg><span>Duration</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></svg><span>Confirmed</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5h15v10h-9l-4 3.5z"/></svg><span>Consult</span></div>
+            <div class="fx-ico"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.1"/></svg><span>Info</span></div>
+          </div>
+          <p class="cap">The same set in Paper on Deep Teal.</p>
+        </div>
+        <div class="grid-2">
+          <div class="specimen">
+            <div class="specimen-row">
+              <button class="fx-tap" type="button" aria-label="Open menu (specimen)"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+              <button class="fx-tap" type="button" aria-label="Close menu (specimen)"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </div>
+            <p class="cap">Icon-only controls: 24px icon in a 44 × 44 tap area (dashed outline shows the area), with an <code>aria-label</code>.</p>
+          </div>
+          <div class="specimen">
+            <p class="fx-err"><svg class="fx-icon fx-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></svg>Within range</p>
+            <p class="fx-err"><svg class="fx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.2v.1"/></svg>Out of range</p>
+            <p class="cap">Status icons: Green for in range, Coral for error and out of range. The words stay Deep Teal.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="page-foot cap">
+        <span>SoviCare Brand Hub · Brand Edition 02 · 08.10.2026</span>
+        <span>Values: <a href="tokens/tokens.json">tokens/tokens.json</a> → <a href="brand.css">brand.css</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+</body>
+</html>

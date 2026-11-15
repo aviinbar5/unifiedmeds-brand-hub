@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand &amp; imagery · SoviCare Brand Hub</title>
+<meta name="description" content="Who SoviCare is, how the categories are organised, the name and tagline proposals, the Quadrant Kit and the photography rules for Brand Edition 02.">
+<link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<style>
+  /* brand.html — tokens only */
+  .f-teal { fill: var(--color-brand-deep-teal); }
+  .f-blue { fill: var(--color-brand-blue); }
+  .f-blue-dark { fill: var(--color-brand-blue-dark); }
+  .f-green { fill: var(--color-brand-green); }
+  .f-yellow { fill: var(--color-brand-yellow); }
+  .f-wash-blue { fill: var(--color-surface-wash-blue); }
+  .f-mist { fill: var(--color-surface-mist); }
+  .f-ink { fill: var(--color-text-strong); font-family: var(--font-family-serif); }
+  .f-ink-sans { fill: var(--color-text-strong); font-family: var(--font-family-sans); }
+
+  .lead-para { font: var(--type-desktop-lead-weight) var(--type-desktop-lead-size) / var(--type-desktop-lead-line) var(--type-desktop-lead-family); color: var(--color-text-primary); max-width: 68ch; }
+
+  /* Lockup: every dimension is a ratio of the wordmark size (Figma header: symbol 28×37, wordmark 22, gap 10) */
+  .lockup { display: inline-flex; align-items: center; gap: calc(10 / 22 * 1em); color: var(--color-brand-deep-teal); }
+  .lockup img { width: calc(28 / 22 * 1em); height: calc(37.24 / 22 * 1em); flex: none; }
+  .lockup b { font-family: var(--font-family-serif); font-weight: 400; line-height: 1; }
+  .tagline-lockup { --lk: var(--type-desktop-section-size); display: grid; gap: var(--space-2); justify-items: start; font-size: var(--lk); }
+  .tagline-lockup .tagline { margin-left: calc((28 + 10) / 22 * var(--lk)); font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .tag-card { display: grid; gap: var(--space-4); align-content: start; }
+  .tag-card .stage { padding: var(--space-8) var(--space-6); border-radius: var(--radius-small); background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); overflow: hidden; }
+  .tag-card .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-1); }
+  .checks li { display: flex; gap: var(--space-2); align-items: flex-start; font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+  .checks svg { flex: none; width: var(--space-5); height: var(--space-5); }
+  .ic-ok { color: var(--color-brand-green); }
+  .ic-flag { color: var(--color-text-secondary); }
+  .ic-no { color: var(--color-brand-coral); }
+
+  .cat-card { display: grid; gap: var(--space-3); align-content: start; }
+  .cat-card .status { justify-self: start; }
+  .cat-card h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+  .cat-card ul { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-1); }
+
+  .kit-grid figure, .dd-grid figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .kit-tile { background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); border-radius: var(--radius-small); padding: var(--space-6); display: grid; place-items: center; }
+  .kit-tile svg { width: 100%; max-width: calc(var(--space-24) + var(--space-8)); height: auto; display: block; }
+  .kit-grid figcaption b, .dd-grid figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  .frame { display: block; width: 100%; height: auto; border-radius: var(--radius-small); }
+  .verdict { display: flex; gap: var(--space-2); align-items: flex-start; }
+  .verdict svg { flex: none; width: var(--space-5); height: var(--space-5); }
+
+  /* Entrance demo (Pivot, 520 ms, no fade). Without JS the piece simply sits in place. */
+  .pivot-stage { position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-paper); aspect-ratio: 16 / 7; }
+  .pivot-stage .copy { position: absolute; right: var(--space-8); top: 50%; transform: translateY(-50%); max-width: 55%; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+  .pivot-piece { position: absolute; left: 0; bottom: 0; width: 34%; aspect-ratio: 1; transform-origin: 0 100%; }
+  .pivot-piece svg { display: block; width: 100%; height: 100%; }
+  .pivot-stage.is-armed .pivot-piece { transform: rotate(90deg); }
+  .pivot-stage.is-armed.is-in .pivot-piece { transform: rotate(0deg); transition: transform var(--motion-duration-shape) var(--motion-easing-enter); }
+
+  /* Photography */
+  .ph { display: grid; place-items: center; aspect-ratio: 520 / 420; border-radius: var(--radius-card); background: var(--color-surface-mist); border: 1px dashed var(--color-line-mid); padding: var(--space-5); text-align: center; }
+  .ph span { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary-on-mist); }
+  .ph--tall { aspect-ratio: 440 / 460; }
+  .ph--wide { aspect-ratio: 548 / 300; }
+  .never { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-24) * 2.5)), 1fr)); gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
+  .never li { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-3) var(--space-4); border: 1px solid var(--color-line-base); border-left: var(--space-1) solid var(--color-brand-coral); border-radius: var(--radius-small); background: var(--color-surface-card); }
+  .never svg { flex: none; width: var(--space-5); height: var(--space-5); margin-top: calc(var(--space-1) / 2); }
+
+  @media (max-width: 767px) {
+    .tagline-lockup { --lk: var(--type-mobile-section-size); }
+    .tag-card .stage { padding: var(--space-6) var(--space-4); }
+    .pivot-stage { aspect-ratio: 4 / 3; }
+    .pivot-stage .copy { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); right: var(--space-4); max-width: 50%; }
+    .lead-para { font-size: var(--type-mobile-subhead-size); line-height: var(--type-mobile-subhead-line); }
+  }
+</style>
+</head>
+<body>
+<div class="archive-banner"><span>Archived · SoviCare Brand Edition 02 (08.10.2026). Superseded by unifiedmeds Brand Edition 03 (15.11.2026).</span><a href="../../index.html">Go to the current hub</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/symbol.svg" width="22" height="29" alt=""><b>SoviCare</b></a>
+    <span class="hub-edition">Brand Edition 02 · 08.10.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html">Overview</a>
+      <a href="rulebook.html">Rulebook &amp; decisions</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html" aria-current="page">Brand &amp; imagery</a>
+      <a href="logo.html">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html">Foundations</a>
+      <a href="components.html">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="../index.html">Archive · Edition 01</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">Brand</span>
+        <h1>Who we are, what we offer, and how it looks.</h1>
+        <p class="lead">Positioning, the category system, the name and tagline, the Quadrant Kit and photography. This is the brand layer every website page and asset is built on.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#who">Who we are</a>
+          <a href="#categories">Categories</a>
+          <a href="#name">Name &amp; tagline</a>
+          <a href="#kit">Quadrant Kit</a>
+          <a href="#photography">Photography</a>
+        </nav>
+        <div class="rule">
+          <b>Authority.</b>
+          <p>1. Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2673-208">h7D0eRszARBaWdJT1NWrpZ (SoviCare - Website)</a> wins on every visual value. 2. <a href="brand-rules.md">brand-rules.md</a> wins on compliance and wording. 3. The hub explains and mirrors both. If the hub and Figma disagree, the hub is wrong.</p>
+        </div>
+      </header>
+
+      <!-- 1 · Who we are -->
+      <section class="sec" id="who" aria-labelledby="who-h">
+        <div class="sec-head">
+          <span class="eyebrow">01 · Who we are</span>
+          <h2 id="who-h">A men's health brand that starts with Sexual health.</h2>
+          <p>One paragraph of positioning, the audience, five personality traits and the things the brand never does.</p>
+        </div>
+
+        <p class="lead-para">SoviCare is a men's health brand. It launches with Sexual health and will grow into further categories, starting with Hair loss and Longevity. A member completes an online assessment, a licensed provider reviews it and decides what happens next, and treatment arrives in closed, branded packaging. The brand speaks plainly and privately. It treats men's health as ordinary health care: no shame, no jokes, and no promises it cannot keep.</p>
+
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Audience</h3>
+            <div class="prose">
+              <ul>
+                <li><b>Men</b> are the audience today. Photography leads with men aged 35–65.</li>
+                <li><b>Partners</b> appear in Sexual health stories, because the topic is shared.</li>
+                <li><b>Women</b>: some planned products will also serve women <span class="status status--planned">Planned</span>. The brand stays the same for them; only the casting changes.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Vibe</h3>
+            <div class="prose">
+              <p><b>Masculine, on the gentle side.</b> The brand has the calm of a man who knows what he wants and does not need to raise his voice. It is assured without being hard, and warm without being soft. The five traits below turn that into decisions.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Personality: this, not that</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">Trait</th><th scope="col">This</th><th scope="col">Not that</th><th scope="col">How it shows</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Steady</th><td>Calm, even, unhurried</td><td>Stern, alarmist, urgent</td><td>Short sentences, generous whitespace, no countdowns or warning capitals. Motion confirms, it never performs.</td></tr>
+                <tr><th scope="row">Direct</th><td>Plain words, the next step stated</td><td>Blunt, clinical, euphemistic</td><td>Says what happens next and who is responsible. No innuendo, no medical jargon in headlines.</td></tr>
+                <tr><th scope="row">Warm</th><td>Respectful, kind, human first</td><td>Soft, sentimental, cute</td><td>The human sentence first, then the precise one. No emoji, no pet names, no pink theme.</td></tr>
+                <tr><th scope="row">Discreet</th><td>Private by design</td><td>Secretive, hidden costs</td><td>Privacy shows in the layout and the packaging. Process, provider and prices are open where they belong.</td></tr>
+                <tr><th scope="row">Confident</th><td>Mature, assured</td><td>Macho, boastful</td><td>Confidence comes from whitespace and specificity. No flames, wolves, "alpha", gym bodies or locker-room jokes.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>What the brand never does</h3>
+          <ul class="never">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Makes benefit or medical claims, or promises a result.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Shows clinical statistics, press logos, reviews or star ratings before legal approves real data.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Uses shame, fear, innuendo or jokes about performance.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Names a prescription drug in a hero, an ad or next to a benefit.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Presents an assessment as a diagnosis.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Shows before/after images, loose pills or clinic scenes.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Collects health data on the marketing site, or runs tracking pixels on condition and product pages.</span></li>
+          </ul>
+          <p class="cap">Full wording rules: <a href="content.html">Voice, content &amp; compliance</a>.</p>
+        </div>
+      </section>
+
+      <!-- 2 · Categories -->
+      <section class="sec" id="categories" aria-labelledby="categories-h">
+        <div class="sec-head">
+          <span class="eyebrow">02 · Categories</span>
+          <h2 id="categories-h">One master brand, one category at a time.</h2>
+          <p>SoviCare launches with one category. The system is built so planned categories slot in without a new look.</p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card cat-card">
+            <span class="status status--current">Current</span>
+            <h3>Sexual health</h3>
+            <p class="cap">Nav label and category name. "Better Intimacy" is used only as the editorial hero title of the category page.</p>
+            <ul>
+              <li>Tadalafil</li>
+              <li>Sildenafil</li>
+              <li>SoviCare Trio</li>
+            </ul>
+            <p class="cap">Launch catalogue until Avi adds more. Figma: <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2708-1034">category page 2708-1034</a>.</p>
+          </article>
+          <article class="card cat-card">
+            <span class="status status--planned">Planned</span>
+            <h3>Hair loss</h3>
+            <p class="cap">Products not defined yet. The Edition 01 page is archived, not deleted, and can come back as a starting point.</p>
+          </article>
+          <article class="card cat-card">
+            <span class="status status--planned">Planned</span>
+            <h3>Longevity</h3>
+            <p class="cap">Products not defined yet. The Edition 01 page is archived, not deleted, and can come back as a starting point.</p>
+          </article>
+        </div>
+        <p class="cap">Archived category pages: <a href="../index.html">Archive · Edition 01</a>.</p>
+
+        <div class="sub">
+          <h3>Rules for adding a category</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">#</th><th scope="col">Rule</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><b>One nav item.</b> The category gets one item in the main menu, built exactly like "Sexual health ▾" (Main menu v3): a dropdown with its products and a "View all" link. The name is in sentence case. <span class="status status--proposed">To confirm</span> With three or more categories the desktop bar may need a grouping item; decide when the second category goes live.</td></tr>
+                <tr><td>2</td><td><b>One category page template.</b> Every category page reuses the Sexual health category layout (Figma 2708-1034). No new section types per category.</td></tr>
+                <tr><td>3</td><td><b>One hero.</b> One hero per category page, Hero 46/54 (<code>--type-desktop-hero-*</code>). It may carry an editorial title, as "Better Intimacy" does; the nav and the category label keep the plain name.</td></tr>
+                <tr><td>4</td><td><b>Core palette only.</b> No category colours, no category theme, no pink theme. Every category uses the same tokens as Sexual health. The master brand is never recoloured.</td></tr>
+                <tr><td>5</td><td><b>Status first.</b> A category stays "Planned" in the hub until Avi approves it, and never appears in the live nav while Planned.</td></tr>
+                <tr><td>6</td><td><b>Products for women.</b> Some planned products serve women. They sit in the same categories and the same brand; only the photography casting changes. <span class="status status--proposed">To confirm</span> Which products.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 · Name & tagline -->
+      <section class="sec" id="name" aria-labelledby="name-h">
+        <div class="sec-head">
+          <span class="eyebrow">03 · Name &amp; tagline</span>
+          <h2 id="name-h">The name is SoviCare.</h2>
+          <p>One spelling everywhere, and a tagline still to be chosen.</p>
+        </div>
+
+        <div class="dodont">
+          <div class="rule rule--do">
+            <b>Write it SoviCare.</b>
+            <p>Capital S, capital C, one word: in running text, headings, legal copy and alt text. The legal entity is SoviCare LLC.</p>
+          </div>
+          <div class="rule rule--dont">
+            <b>Never Sovicare, SOVICARE or Sovi Care.</b>
+            <p>The Figma wordmark currently reads "Sovicare" and must change to "SoviCare". No all-caps brand name in eyebrows or labels.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Tagline proposals <span class="status status--proposed">Proposed</span></h3>
+          <div class="prose">
+            <p>Six options, shown live under the lockup. Each one is checked against four tests: no benefit or medical claim; works for future categories and for women; US English; five words or fewer. "Start with answers" is retired and not offered. <b>Avi chooses.</b> The tagline's size and position in the lockup are a proposal too <span class="status status--proposed">To confirm</span>.</p>
+          </div>
+          <div class="grid-2">
+            <article class="card tag-card" id="t-01">
+              <div class="meta"><span class="status status--proposed">Proposed</span><span class="cap">T-01 · 3 words</span></div>
+              <div class="stage"><div class="tagline-lockup"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span><span class="tagline">Health, handled quietly.</span></div></div>
+              <p>Discretion is the promise of the whole experience, and "handled" says someone qualified does the work.</p>
+              <ul class="checks">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>No benefit or medical claim.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fits every category, men and women.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>US English. Three words.</li>
+              </ul>
+            </article>
+            <article class="card tag-card" id="t-02">
+              <div class="meta"><span class="status status--proposed">Proposed</span><span class="cap">T-02 · 4 words</span></div>
+              <div class="stage"><div class="tagline-lockup"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span><span class="tagline">Care on your terms.</span></div></div>
+              <p>Describes the format: online, at the member's own time and pace. It promises control, not an outcome.</p>
+              <ul class="checks">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>No benefit or medical claim.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fits every category, men and women.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>US English. Four words.</li>
+              </ul>
+            </article>
+            <article class="card tag-card" id="t-03">
+              <div class="meta"><span class="status status--proposed">Proposed</span><span class="cap">T-03 · 5 words</span></div>
+              <div class="stage"><div class="tagline-lockup"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span><span class="tagline">Care without the waiting room.</span></div></div>
+              <p>The most concrete option. It names what is different about the service without touching outcomes.</p>
+              <ul class="checks">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-flag" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v5M12 16h0"/></svg>No medical claim, but true only if no category ever needs an in-person visit. Legal to confirm.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fits every category, men and women.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>US English. Five words, the limit.</li>
+              </ul>
+            </article>
+            <article class="card tag-card" id="t-04">
+              <div class="meta"><span class="status status--proposed">Proposed</span><span class="cap">T-04 · 4 words</span></div>
+              <div class="stage"><div class="tagline-lockup"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span><span class="tagline">Plain talk, private care.</span></div></div>
+              <p>Puts two traits side by side: a direct voice and discretion. It describes how we behave, not what treatment does.</p>
+              <ul class="checks">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>No benefit or medical claim.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fits every category, men and women.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>US English. Four words.</li>
+              </ul>
+            </article>
+            <article class="card tag-card" id="t-05">
+              <div class="meta"><span class="status status--proposed">Proposed</span><span class="cap">T-05 · 2 words</span></div>
+              <div class="stage"><div class="tagline-lockup"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span><span class="tagline">Healthcare, plainly.</span></div></div>
+              <p>The shortest option. A promise about tone that holds for any category and reads well on packaging.</p>
+              <ul class="checks">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>No benefit or medical claim.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fits every category, men and women.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>US English ("healthcare", one word). Two words.</li>
+              </ul>
+            </article>
+            <article class="card tag-card" id="t-06">
+              <div class="meta"><span class="status status--proposed">Proposed</span><span class="cap">T-06 · 3 words</span></div>
+              <div class="stage"><div class="tagline-lockup"><span class="lockup"><img src="assets/brand/symbol.svg" alt=""><b>SoviCare</b></span><span class="tagline">Care, made personal.</span></div></div>
+              <p>Points at the provider review behind every plan. Warm, and still factual.</p>
+              <ul class="checks">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-flag" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v5M12 16h0"/></svg>No medical claim, but true only if a provider reviews every assessment individually. Legal to confirm.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fits every category, men and women.</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>US English. Three words.</li>
+              </ul>
+            </article>
+          </div>
+          <p class="cap">Lockup: symbol and "SoviCare" in DM Serif Display at the Figma header proportions (see <a href="logo.html#wordmark">Logo · Wordmark</a>). Tagline in Inter Regular, Body/Small 15 (<code>--type-desktop-small-*</code>), Slate #55747F (<code>--color-text-secondary</code>), aligned to the start of the wordmark.</p>
+        </div>
+      </section>
+
+      <!-- 4 · Quadrant Kit -->
+      <section class="sec" id="kit" aria-labelledby="kit-h">
+        <div class="sec-head">
+          <span class="eyebrow">04 · Quadrant Kit</span>
+          <h2 id="kit-h">The Quadrant Kit has six pieces.</h2>
+          <p>Every graphic shape in the brand comes from these six pieces and nothing else. The symbol is built from the same vocabulary.</p>
+        </div>
+
+        <div class="grid-3 kit-grid">
+          <figure>
+            <div class="kit-tile"><svg viewBox="0 0 100 100" role="img" aria-label="Square"><rect width="100" height="100" class="f-teal"/></svg></div>
+            <figcaption class="cap"><b>Square</b>The unit. Shown in Deep Teal.</figcaption>
+          </figure>
+          <figure>
+            <div class="kit-tile"><svg viewBox="0 0 100 100" role="img" aria-label="Quarter"><path d="M0 0H100A100 100 0 0 1 0 100Z" class="f-blue"/></svg></div>
+            <figcaption class="cap"><b>Quarter</b>A quarter circle; radius = one side. The piece Figma uses most. Shown in Blue.</figcaption>
+          </figure>
+          <figure>
+            <div class="kit-tile"><svg viewBox="0 0 100 100" role="img" aria-label="Half"><path d="M25 0A50 50 0 0 1 25 100Z" class="f-green"/></svg></div>
+            <figcaption class="cap"><b>Half</b>A half circle cut on its axis; the piece of the S. Shown in Green.</figcaption>
+          </figure>
+          <figure>
+            <div class="kit-tile"><svg viewBox="0 0 100 100" role="img" aria-label="Circle"><circle cx="50" cy="50" r="50" class="f-yellow"/></svg></div>
+            <figcaption class="cap"><b>Circle</b>A true circle, never an oval. Shown in Yellow.</figcaption>
+          </figure>
+          <figure>
+            <div class="kit-tile"><svg viewBox="0 0 100 100" role="img" aria-label="Arch"><path d="M0 100V50A50 50 0 0 1 100 50V100Z" class="f-wash-blue"/></svg></div>
+            <figcaption class="cap"><b>Arch</b>A square with a half-circle top; used as an image frame. Shown in Wash Blue.</figcaption>
+          </figure>
+          <figure>
+            <div class="kit-tile"><svg viewBox="0 0 100 100" role="img" aria-label="Arc"><path d="M100 0A100 100 0 0 1 0 100V86A86 86 0 0 0 86 0Z" class="f-blue-dark"/></svg></div>
+            <figcaption class="cap"><b>Arc</b>A solid quarter band, 14% of the radius thick. Shown in Blue-dark.</figcaption>
+          </figure>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Rules</h3>
+            <div class="prose">
+              <ol>
+                <li><b>Six pieces only.</b> No capsule, no oval, no soft-cornered rectangle, no freehand curve.</li>
+                <li><b>Two pieces at most per surface.</b> This matches Figma 2708-1034, where every section uses one or two.</li>
+                <li><b>No text on a piece.</b> Never a headline, a label or a disclaimer on top of a shape.</li>
+                <li><b>Solid only.</b> No transparency, no gradient, no blur, no shadow, no outline.</li>
+                <li><b>Axis-aligned.</b> At rest every piece sits square to the frame. A piece may rotate only during its entrance (Pivot).</li>
+                <li><b>Enters from a corner toward the subject.</b> The curve faces the content, so the shape frames it rather than pushing it away.</li>
+                <li><b>Bleed or sit inside.</b> A piece either runs off a frame edge or sits fully inside. <span class="status status--proposed">To confirm</span> How much may be cropped: Figma's 447px intro circle shows only about a fifth of itself.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Colours</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Colour</th><th scope="col">Token</th><th scope="col">Where</th></tr></thead>
+                <tbody>
+                  <tr><td>Deep Teal #264653</td><td><code>--color-brand-deep-teal</code></td><td>Website</td></tr>
+                  <tr><td>Blue #6E8B97</td><td><code>--color-brand-blue</code></td><td>Website</td></tr>
+                  <tr><td>Blue-dark #4E6873</td><td><code>--color-brand-blue-dark</code></td><td>Website</td></tr>
+                  <tr><td>Green #6A8670</td><td><code>--color-brand-green</code></td><td>Website</td></tr>
+                  <tr><td>Yellow #FFBE0B</td><td><code>--color-brand-yellow</code></td><td>Website; one Yellow element per viewport</td></tr>
+                  <tr><td>Wash Blue #A8BEC7</td><td><code>--color-surface-wash-blue</code></td><td>Website</td></tr>
+                  <tr><td>Clay #CFC6B8</td><td><code>--color-brand-clay</code></td><td>Packaging and posters only</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Piece sizes in Figma 2708-1034: 34, 120, 168, 220 and 447px. There are no size tokens yet.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Do and don't</h3>
+          <div class="grid-3 dd-grid">
+            <figure>
+              <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Correct: Mist frame, a Wash Blue circle bleeding off the right edge, a Yellow quarter in the bottom-left corner, headline on the clean area">
+                <rect width="320" height="200" class="f-mist"/>
+                <circle cx="330" cy="40" r="80" class="f-wash-blue"/>
+                <path d="M0 200V140A60 60 0 0 1 60 200Z" class="f-yellow"/>
+                <text x="96" y="104" font-size="20" class="f-ink">Headline on a</text>
+                <text x="96" y="128" font-size="20" class="f-ink">clean area.</text>
+              </svg>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do</b>Two solid pieces, one bleeding, one in a corner. Copy sits clear of both.</span></figcaption>
+            </figure>
+            <figure>
+              <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Wrong: four scattered pieces">
+                <rect width="320" height="200" class="f-mist"/>
+                <circle cx="70" cy="60" r="34" class="f-yellow"/>
+                <rect x="210" y="30" width="60" height="60" class="f-teal"/>
+                <path d="M120 200V130A70 70 0 0 1 190 200Z" class="f-green"/>
+                <path d="M260 120H320A60 60 0 0 1 260 180Z" class="f-blue"/>
+              </svg>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't scatter</b>More than two pieces turns the page into a mood board.</span></figcaption>
+            </figure>
+            <figure>
+              <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Wrong: a disclaimer set on a Green quarter">
+                <rect width="320" height="200" class="f-mist"/>
+                <path d="M0 200V40A160 160 0 0 1 160 200Z" class="f-green"/>
+                <text x="20" y="170" font-size="12" class="f-ink-sans">Not a diagnosis.</text>
+              </svg>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't put text on a piece</b>Least of all a disclaimer.</span></figcaption>
+            </figure>
+            <figure>
+              <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Wrong: a ghosted, transparent circle">
+                <rect width="320" height="200" class="f-mist"/>
+                <circle cx="220" cy="100" r="90" class="f-blue" opacity="0.2"/>
+              </svg>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't ghost a piece</b>Pieces are solid. No opacity, no gradient.</span></figcaption>
+            </figure>
+            <figure>
+              <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Wrong: a quarter left tilted at rest">
+                <rect width="320" height="200" class="f-mist"/>
+                <path d="M120 40H220A100 100 0 0 1 120 140Z" class="f-teal" transform="rotate(25 170 90)"/>
+              </svg>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't tilt at rest</b>Rotation exists only during an entrance.</span></figcaption>
+            </figure>
+            <figure>
+              <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Wrong: a capsule shape">
+                <rect width="320" height="200" class="f-mist"/>
+                <rect x="90" y="60" width="140" height="80" rx="40" class="f-blue"/>
+              </svg>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't add a capsule</b>The capsule is not a kit piece, and neither is an oval.</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Entrance</h3>
+          <div class="specimen specimen--mist">
+            <div class="pivot-stage" id="pivot-stage">
+              <div class="pivot-piece" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M0 100V0A100 100 0 0 1 100 100Z" class="f-teal"/></svg></div>
+              <p class="copy">The piece arrives, then stays still.</p>
+            </div>
+            <div class="specimen-row">
+              <button class="btn btn--outline" type="button" id="pivot-replay">Replay</button>
+              <span class="cap">Pivot: the quarter turns 90° up from its corner, toward the copy. <code>--motion-duration-shape</code> 520 ms, <code>--motion-easing-enter</code>, no fade. Plays once; with reduced motion it appears in place. Full set on <a href="motion.html">Motion</a>.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 · Photography -->
+      <section class="sec" id="photography" aria-labelledby="photography-h">
+        <div class="sec-head">
+          <span class="eyebrow">05 · Photography</span>
+          <h2 id="photography-h">Photography shows ordinary life.</h2>
+          <p>Real people in real places, in natural light. Nothing clinical, nothing staged for effect.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="sub">
+            <h3>Casting</h3>
+            <div class="prose">
+              <ul>
+                <li>Men aged 35–65 lead.</li>
+                <li>Partners appear in Sexual health stories: relaxed and natural, never suggestive.</li>
+                <li>Women lead only in future women's products <span class="status status--planned">Planned</span>.</li>
+                <li>Real ages and real bodies. No gym physiques.</li>
+                <li>Unposed, doing something. Eye contact optional, never intense.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Light and setting</h3>
+            <div class="prose">
+              <ul>
+                <li>Natural, available light. True colour; no teal-and-orange grade, no duotone.</li>
+                <li>Home, bathroom and outdoors, as in Figma 2708-1034.</li>
+                <li>Shoot wide with a clean corner, so a kit piece or copy has somewhere to land.</li>
+                <li>Closed, branded bottles are allowed (Figma Packaging · Labels → 03 · Bottle mockups).</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Faces</h3>
+            <div class="prose">
+              <ul>
+                <li>Faces are never covered by a piece, by text or by the crop.</li>
+                <li>One exception: at most one faceless detail crop per page, such as the neck-and-hands crop in the Figma category hero.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Never in a photo</h3>
+          <ul class="never">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Loose pills or open packs</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Syringes</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Lab coats, scrubs, stethoscopes, clinics</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Before/after pairs</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Covered faces, beyond the one detail crop per page</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Watermarked stock; the Edition 01 Unsplash+ placeholders are retired</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>A model captioned as a member, e.g. "Member · 47"</span></li>
+          </ul>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Alt text</h3>
+            <div class="prose">
+              <ul>
+                <li>Describe what the photo shows in one plain sentence. Do not start with "Image of".</li>
+                <li>Describe this photo, not the one it replaced. Update the alt text whenever the image changes.</li>
+                <li>No claims, and no feelings the photo does not show.</li>
+                <li>Product images are content: name the product, e.g. "SoviCare Tadalafil bottle, closed".</li>
+                <li>Use an empty <code>alt=""</code> only when the photo is purely decorative.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Copy over photos</h3>
+            <div class="rule">
+              <b>No scrim. Place copy on clean areas. <span class="status status--proposed">To confirm</span></b>
+              <p>There is no scrim token in tokens/tokens.json, so no Deep Teal overlay is used. Choose or crop photos with a calm area for copy, or set the copy beside the photo. Buttons on photos use Outline Light, which fills Blue-dark #4E6873 on hover (<code>.btn--outline-light.btn--on-photo</code>).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Placeholders</h3>
+          <p class="prose">Until real photography exists, use a Mist frame labelled "IMAGE · &lt;what&gt;" at the frame's real ratio. Never use a watermarked stock photo as a stand-in. The ratios below follow the Figma category page frames: 520×420, 440×460 and 548×300.</p>
+          <div class="grid-3">
+            <div class="ph" role="img" aria-label="Placeholder frame, 520 by 420"><span>IMAGE · Man, 50s, at home by a window, morning light</span></div>
+            <div class="ph ph--tall" role="img" aria-label="Placeholder frame, 440 by 460"><span>IMAGE · Couple, 40s, in a kitchen, talking</span></div>
+            <div class="ph ph--wide" role="img" aria-label="Placeholder frame, 548 by 300"><span>IMAGE · SoviCare bottle, closed, on a bathroom shelf</span></div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="page-foot cap">
+        <span>SoviCare Brand Hub · Brand Edition 02 · 08.10.2026</span>
+        <span>Values: <a href="tokens/tokens.json">tokens/tokens.json</a> → <a href="brand.css">brand.css</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+<script>
+  /* Kit entrance demo: plays once when visible; Replay restarts it. Durations come from tokens (0 under reduced motion). */
+  (function () {
+    var stage = document.getElementById('pivot-stage');
+    var btn = document.getElementById('pivot-replay');
+    if (!stage || !btn) return;
+    stage.classList.add('is-armed');
+    function play() {
+      stage.classList.remove('is-in');
+      void stage.offsetWidth;
+      stage.classList.add('is-in');
+    }
+    btn.addEventListener('click', play);
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { play(); io.disconnect(); }
+      }, { threshold: 0.5 });
+      io.observe(stage);
+    } else {
+      play();
+    }
+  })();
+</script>
+</body>
+</html>
