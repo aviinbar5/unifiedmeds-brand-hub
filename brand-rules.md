@@ -76,7 +76,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 
 - **R-30** [changed] Radius: buttons 5 (`--radius-button`); cards 16; fields, chips and the dropdown panel 12; menu rows and thumbnails 8; chips, nav pills and status pills 999 (`--radius-pill`). No other radius. The capsule is a shape (R-31), not a radius value. · Source: U-11, Figma 2676:310
 - **R-31** [changed] Two shape families. **Quadrant Kit:** Square, Quarter, Half, Circle, Arch, Arc. **Capsule:** the logo's capsule form, in the variants Split, Split Blue, Outline and Vertical (Figma "Capsule Kit", 2678:2), plus the capsule as an image crop. Both families may appear on the website, as needed. No oval and no soft-cornered rectangle. · Source: U-03
-- **R-32** [changed] A capsule may be filled, outline or transparent, and may be shown whole or cropped by the frame edge. Quadrant pieces stay axis-aligned and may rotate only during their entrance. How many shapes per surface, which opacity values, and how the two families combine on one surface are **To confirm** (`GAP`: to be read from the approved Figma pages and shown to Avi). Seen in Figma 15.11.2026: opacity 0.7 and 0.5 on shapes. · Source: U-03
+- **R-32** [changed] A capsule may be filled, outline or transparent, and may be shown whole or cropped by the frame edge. Website pattern (Figma homepage, Avi 15.11.2026): a large outline capsule with a 20px stroke (`--size-capsule-stroke`) in Wash Blue at 70% opacity (`--opacity-capsule`), cropped by a section edge; vertical in dark sections; filled capsules at 50% (`--opacity-capsule-soft`). Quadrant pieces stay axis-aligned and may rotate only during their entrance. How many shapes per surface is still **To confirm**. · Source: U-03, Figma 2673:209
 - **R-33** [changed] No text on a shape, ever. A disclaimer never sits on a shape. A photo may be cropped to a capsule.
 - **R-34** [changed] Logo: see R-90 to R-94. The SoviCare quadrant symbol is Retired and kept only in the archive.
 - **R-35** [changed] Icons: the unifiedmeds line set built on the capsule (12 icons, Figma 3042:221). 1.5px stroke, round caps, no fill, never Yellow. Drawn on a 64px grid. Placed sizes and icon colour on the website are **To confirm** (`GAP`: Figma places them at 40 and 48px; Foundations draws them in Navy, which R-84 reserves for the logo). · Source: Figma 3042:221
@@ -171,7 +171,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | O-02 | Tagline | R-09 |
 | O-03 | Website use of product colours | R-85 |
 | O-04 | Logo wordmark typeface name | R-18 |
-| O-05 | Shape limits, opacity values, how Quadrant and capsule combine | R-32 |
+| O-05 | Shape limits and how Quadrant and capsule combine (opacity values set 15.11.2026) | R-32 |
 | O-06 | Icon sizes and icon colour on the website | R-35 |
 | O-07 | Secondary logo colour versions | R-94 |
 | ~~O-08~~ | Closed 15.11.2026: Light hovers to Yellow; on Yellow, Blue or Wash it hovers to Deep Teal (Figma 3045:2714) | R-41 |

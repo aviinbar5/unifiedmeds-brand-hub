@@ -237,6 +237,7 @@
   --size-favicon-md: 32px;
   --size-favicon-sm: 16px;
   --size-button-padding-x: 24px;
+  --size-capsule-stroke: 20px;
   --shadow-overlay: 0 24px 60px rgba(38, 70, 83, 0.16), 0 2px 6px rgba(38, 70, 83, 0.06);
   --motion-duration-fast: 150ms;
   --motion-duration-open: 220ms;
@@ -255,6 +256,8 @@
   --motion-intent-delay: 100ms;
   --motion-loader-delay: 400ms;
   --motion-auto-advance: 320ms;
+  --opacity-capsule: 0.7;
+  --opacity-capsule-soft: 0.5;
 }
 
 @media (prefers-reduced-motion: reduce) {

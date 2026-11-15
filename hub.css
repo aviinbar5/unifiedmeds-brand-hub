@@ -108,7 +108,27 @@ tr:last-child td { border-bottom: 0; }
 .archive-banner { position: sticky; top: 0; z-index: 9999; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding: 10px 20px; background: var(--color-brand-teal-deep); color: var(--color-text-on-dark); font: 500 14px/1.4 var(--font-family-sans); }
 .archive-banner a { color: var(--color-text-on-dark); }
 
+/* ---------- Capsule decor (Avi 15.11.2026, from the Figma homepage) ----------
+   A large outline capsule, cropped by the edge, behind the page head. Never under text (R-33). */
+.hub-main { position: relative; overflow-x: clip; }
+.hub-main::before {
+  content: ''; position: absolute; z-index: 0; pointer-events: none;
+  top: var(--space-12); right: calc(var(--space-24) * -3);
+  width: calc(var(--space-24) * 6.25); height: calc(var(--space-24) * 2.7);
+  box-sizing: border-box; border: var(--size-capsule-stroke) solid var(--color-surface-wash-blue);
+  border-radius: var(--radius-pill); opacity: var(--opacity-capsule);
+}
+.hub-main > .page { position: relative; z-index: 1; }
+/* Capsule band: Deep Teal ground, copy on the left, a vertical capsule (outline and filled) cropped by the right edge */
+.cap-band { position: relative; overflow: hidden; display: grid; gap: var(--space-4); padding: var(--space-12) var(--space-10); padding-right: calc(var(--space-24) * 3); border-radius: var(--radius-card); background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.cap-band h3 { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--type-desktop-section-family); color: var(--color-text-on-dark); }
+.cap-band p { color: var(--color-text-on-dark-muted); max-width: 52ch; }
+.cap-band::before, .cap-band::after { content: ''; position: absolute; pointer-events: none; box-sizing: border-box; border-radius: var(--radius-pill); }
+.cap-band::before { right: calc(var(--space-24) * -0.4); top: calc(var(--space-12) * -1); width: calc(var(--space-24) * 1.6); height: calc(var(--space-24) * 3.6); border: var(--size-capsule-stroke) solid var(--color-surface-wash-blue); opacity: var(--opacity-capsule); }
+.cap-band::after { right: calc(var(--space-24) * 1.5); bottom: calc(var(--space-24) * -1.4); width: calc(var(--space-24) * 1.2); height: calc(var(--space-24) * 2.6); background: var(--color-brand-blue); opacity: var(--opacity-capsule-soft); }
+
 /* ---------- Responsive ---------- */
+@media (max-width: 1279px) { .hub-main::before { display: none; } }
 @media (max-width: 1023px) {
   .hub { grid-template-columns: minmax(0, 1fr); }
   .hub-top { display: flex; position: sticky; top: 0; z-index: 20; align-items: center; justify-content: space-between; height: var(--size-header-mobile); padding: 0 var(--layout-margin-mobile); background: var(--color-surface-paper); border-bottom: 1px solid var(--color-line-soft); }
@@ -119,6 +139,9 @@ tr:last-child td { border-bottom: 0; }
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 767px) {
+  .cap-band { padding: var(--space-8) var(--space-6); padding-bottom: calc(var(--space-24) * 2); }
+  .cap-band::before { right: calc(var(--space-24) * -0.6); top: auto; bottom: calc(var(--space-24) * -1.6); }
+  .cap-band::after { display: none; }
   body { font-size: var(--type-mobile-body-size); line-height: var(--type-mobile-body-line); }
   .page { padding: var(--space-10) var(--layout-margin-mobile) var(--space-18); gap: var(--space-14); }
   .page-head h1 { font: var(--type-mobile-hero-weight) var(--type-mobile-hero-size) / var(--type-mobile-hero-line) var(--type-mobile-hero-family); }
