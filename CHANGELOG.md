@@ -1,5 +1,10 @@
 # unifiedmeds Brand Hub · changelog
 
+## Edition 03 · update 15.11.2026 (buttons and labels)
+- Buttons are rounded rectangles, not pills (U-11): radius 5 (`--radius-button`), padding 24 (`--size-button-padding-x`), height 50. The Dark button fills Teal-deep; labels on Yellow and Paper are Deep Teal; new Light button type. Source: Avi's Figma Button set 2676:310.
+- Labels: R-89 rewritten from the Figma label master (2680:16): Deep Teal ground, reversed seal, vertical capsule in the product colour. Product images now show the unifiedmeds label.
+- Open: O-16 Yellow hover colour (Figma Pastel Blue fails AA; hub keeps Blue-dark).
+
 ## unifiedmeds Brand Edition 03 · 15.11.2026.
 The rebrand from SoviCare to unifiedmeds. Figma read on 15.11.2026: website file h7D0eRszARBaWdJT1NWrpZ and logo file VX5oKsl1ZIKbiWLR0tjf7L ("B · capsule seal"). Nothing in either Figma file was changed.
 Decisions: U-01 to U-10, approved by Avi on 15.11.2026 (see brand-rules.md).

@@ -60,10 +60,10 @@ td code, th code { white-space: nowrap; }
   content: ''; position: absolute; top: 0; bottom: 0; width: 0;
   border-left: 1px dashed var(--color-text-on-dark-muted);
 }
-.measure .btn::before { left: calc(var(--btn-h) / 2); }
-.measure .btn::after { right: calc(var(--btn-h) / 2); }
+.measure .btn::before { left: var(--size-button-padding-x); }
+.measure .btn::after { right: var(--size-button-padding-x); }
 .measure__label { outline: 1px dashed var(--color-text-on-dark-muted); outline-offset: 0; }
-.ruler { display: grid; grid-template-columns: calc(var(--size-control) / 2) minmax(0, 1fr) calc(var(--size-control) / 2); }
+.ruler { display: grid; grid-template-columns: var(--size-button-padding-x) minmax(0, 1fr) var(--size-button-padding-x); }
 .ruler span {
   display: grid; justify-items: center; gap: var(--space-1);
   font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans);
@@ -76,8 +76,8 @@ td code, th code { white-space: nowrap; }
 .heights figure { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
 .heights figure.wide { width: var(--layout-frame-mobile); max-width: 100%; justify-items: stretch; }
 .slot-loading {
-  display: inline-flex; align-items: center; height: var(--size-control); padding: 0 calc(var(--size-control) / 2);
-  border: 1px dashed var(--color-line-field); border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; height: var(--size-control); padding: 0 var(--size-button-padding-x);
+  border: 1px dashed var(--color-line-field); border-radius: var(--radius-button);
   font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / 1 var(--font-family-sans); color: var(--color-text-secondary);
 }
 .states { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: start; }
@@ -468,30 +468,30 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
       <section class="sec" id="buttons" aria-labelledby="buttons-h">
         <div class="sec-head">
           <h2 id="buttons-h">Buttons.</h2>
-          <p>Four types, one height, one motion. Source: Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2676-309">Buttons — Hover Rules 2676-309</a> (board <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4438">2719-4438</a>) and Avi’s button rule of 08.10.2026 (<a href="rulebook.html#r-40">R-40</a>).</p>
+          <p>Five types, one height, one shape, one motion. Source: Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2676-309">Buttons — Hover Rules 2676-309</a> (board <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4438">2719-4438</a>) and Avi’s button rule of 08.10.2026 (<a href="rulebook.html#r-40">R-40</a>).</p>
         </div>
 
         <div class="sub">
-          <h3>Width follows the curve.</h3>
+          <h3>Rounded rectangle, fixed padding.</h3>
           <div class="prose">
-            <p>Side padding = radius = height ÷ 2. The label starts exactly where the left curve ends and ends exactly where the right curve begins. So <b>width = label width + one button height</b>. At 50px (<code>--size-control</code>) the side padding is 25px. The dashed lines mark where each curve ends; the dashed box is the label.</p>
+            <p>Buttons are rounded rectangles with 5px corners (<code>--radius-button</code>), never pills: the capsule belongs to the logo (decision U-11, Avi 15.11.2026). Height 50px (<code>--size-control</code>), side padding 24px (<code>--size-button-padding-x</code>), so <b>width = label width + 48</b>. The dashed lines mark the padding; the dashed box is the label. Source: Figma Button set 2676-310.</p>
           </div>
           <div class="specimen">
             <div class="measures">
               <div class="measure" data-measure>
                 <span class="btn" aria-hidden="true"><span class="measure__label">Get started</span></span>
-                <div class="ruler" aria-hidden="true"><span>25</span><span>label</span><span>25</span></div>
-                <p class="measure__out" data-measure-out>Label + 50 = width</p>
+                <div class="ruler" aria-hidden="true"><span>24</span><span>label</span><span>24</span></div>
+                <p class="measure__out" data-measure-out>Label + 48 = width</p>
               </div>
               <div class="measure" data-measure>
                 <span class="btn" aria-hidden="true"><span class="measure__label">Explore treatments</span></span>
-                <div class="ruler" aria-hidden="true"><span>25</span><span>label</span><span>25</span></div>
-                <p class="measure__out" data-measure-out>Label + 50 = width</p>
+                <div class="ruler" aria-hidden="true"><span>24</span><span>label</span><span>24</span></div>
+                <p class="measure__out" data-measure-out>Label + 48 = width</p>
               </div>
               <div class="measure" data-measure>
                 <span class="btn" aria-hidden="true"><span class="measure__label">Start your assessment</span></span>
-                <div class="ruler" aria-hidden="true"><span>25</span><span>label</span><span>25</span></div>
-                <p class="measure__out" data-measure-out>Label + 50 = width</p>
+                <div class="ruler" aria-hidden="true"><span>24</span><span>label</span><span>24</span></div>
+                <p class="measure__out" data-measure-out>Label + 48 = width</p>
               </div>
             </div>
             <p class="cap">Measured live in your browser. Label Inter Medium 15/20 (<code>--type-desktop-button-*</code>; mobile <code>--type-mobile-button-*</code>, same values). Labels never wrap. The 1.5px border is drawn inside the padding, as Figma draws strokes, so it never moves the label.</p>
@@ -583,12 +583,13 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
             <table>
               <thead><tr><th>Type</th><th>Surface</th><th>Rest</th><th>Hover (150ms ease-out, lift 2px)</th><th>Label contrast</th><th>Class</th></tr></thead>
               <tbody>
-                <tr><td>Dark</td><td>Standard</td><td>Deep Teal #264653 (<code>--color-brand-deep-teal</code>), Paper label</td><td>Yellow #FFBE0B (<code>--color-brand-yellow</code>), Teal-deep #1C3742 label</td><td>9.82 → 7.54</td><td><code>.btn</code></td></tr>
-                <tr><td>Yellow</td><td>Standard, Deep Teal</td><td>Yellow #FFBE0B, Teal-deep label</td><td>Blue-dark #4E6873 (<code>--color-brand-blue-dark</code>), Paper label</td><td>7.54 → 5.76</td><td><code>.btn--yellow</code></td></tr>
-                <tr><td>Outline</td><td>Standard</td><td>Transparent, Deep Teal border and label</td><td>Yellow fill and border, Teal-deep label</td><td>9.82 → 7.54</td><td><code>.btn--outline</code></td></tr>
-                <tr><td>Outline Light</td><td>Deep Teal</td><td>Transparent, Paper #FEFCF6 border and label</td><td>Yellow fill and border, Teal-deep label</td><td>9.82 → 7.54</td><td><code>.btn--outline-light</code></td></tr>
+                <tr><td>Dark</td><td>Standard</td><td>Teal-deep #1C3742 (<code>--color-brand-teal-deep</code>), Paper label</td><td>Yellow #FFBE0B (<code>--color-brand-yellow</code>), Deep Teal #264653 label</td><td>12.22 → 6.06</td><td><code>.btn</code></td></tr>
+                <tr><td>Yellow</td><td>Standard, Deep Teal</td><td>Yellow #FFBE0B, Deep Teal label</td><td>Blue-dark #4E6873 (<code>--color-brand-blue-dark</code>), Paper label. Figma draws Pastel Blue #6E8B97 (3.53:1, fails AA); the hub keeps Blue-dark (R-12)</td><td>6.06 → 5.76</td><td><code>.btn--yellow</code></td></tr>
+                <tr><td>Outline</td><td>Standard</td><td>Transparent, Teal-deep border, Deep Teal label</td><td>Yellow fill and border, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--outline</code></td></tr>
+                <tr><td>Outline Light</td><td>Deep Teal</td><td>Transparent, Paper #FEFCF6 border and label</td><td>Yellow fill and border, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--outline-light</code></td></tr>
                 <tr><td>Outline Light</td><td>Photo</td><td>Transparent, Paper border and label</td><td>Blue-dark #4E6873 fill, Paper label</td><td>→ 5.76</td><td><code>.btn--outline-light.btn--on-photo</code></td></tr>
-                <tr><td>Any type</td><td>Yellow, Blue or Wash</td><td>The type’s rest colours</td><td>White #FFFFFF (<code>--color-surface-card</code>), Teal-deep label</td><td>→ 12.54</td><td><code>.surface-accent .btn</code></td></tr>
+                <tr><td>Light</td><td>Standard</td><td>Paper fill, Deep Teal label</td><td>Yellow fill, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--light</code></td></tr>
+                <tr><td>Any type</td><td>Yellow, Blue or Wash</td><td>The type’s rest colours</td><td>Paper #FEFCF6 (<code>--color-surface-paper</code>), Deep Teal label. Light hovers to Deep Teal with a Paper label</td><td>→ 9.82</td><td><code>.surface-accent .btn</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -791,7 +792,8 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
             <figure><div class="radius-box" style="border-radius: var(--radius-card);"></div><figcaption class="cap">16 · <code>--radius-card</code> · cards, framed media</figcaption></figure>
             <figure><div class="radius-box" style="border-radius: var(--radius-small);"></div><figcaption class="cap">12 · <code>--radius-small</code> · fields, chips, dropdown panel</figcaption></figure>
             <figure><div class="radius-box" style="border-radius: var(--radius-xs);"></div><figcaption class="cap">8 · <code>--radius-xs</code> · menu rows, thumbnails</figcaption></figure>
-            <figure><div class="radius-box" style="border-radius: var(--radius-pill);"></div><figcaption class="cap">999 · <code>--radius-pill</code> · buttons, chips, nav pills</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-button);"></div><figcaption class="cap">5 · <code>--radius-button</code> · buttons</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-pill);"></div><figcaption class="cap">999 · <code>--radius-pill</code> · chips, nav pills</figcaption></figure>
           </div>
         </div>
 
@@ -880,8 +882,8 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                       </button>
                       <div class="mh__dd overlay" id="dd-sh" hidden data-dd-panel>
                         <ul>
-                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
-                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.png" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.png" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
                           <li><a class="mrow" href="#header"><span class="mrow__left"><svg class="mthumb" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="currentColor"/></svg><span class="mrow__label">Combo</span></span><span class="mrow__meta">3 ingredients</span></a></li>
                         </ul>
                         <hr class="mdiv">
@@ -927,8 +929,8 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                       <button class="mm-row__head" type="button" aria-expanded="false" aria-controls="mm-sub-sh">Sexual health <svg class="mh__chev" width="12" height="8" viewBox="0 0 10.5 6.5" fill="none" aria-hidden="true"><path d="M0.75 0.75L5.25 5.75L9.75 0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                       <div class="mm-sub" id="mm-sub-sh"><div>
                         <ul class="mm-card">
-                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
-                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.jpg" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.png" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.png" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
                           <li><a class="mrow" href="#header"><span class="mrow__left"><svg class="mthumb" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="currentColor"/></svg><span class="mrow__label">Combo</span></span><span class="mrow__meta">3 ingredients</span></a></li>
                           <li><hr class="mdiv"></li>
                           <li><a class="link mall" href="#header">View all Sexual health →</a></li>
@@ -977,7 +979,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                 <tr><td>Row content</td><td>30×30 packshot radius 8 · label Inter Medium 14 · meta Body Fine 12/18 Slate</td><td><code>--radius-xs</code> · <code>--type-desktop-nav-*</code> · <code>--type-desktop-fine-*</code> · <code>--color-text-secondary</code></td><td>4046-606 (meta Slate Light)</td></tr>
                 <tr><td>Rows listed</td><td>Tadalafil · Sildenafil · Combo, a Line/Base divider, then “View all Sexual health →” in Deep Teal, underlined</td><td><code>--color-line-base</code> · <code>--color-text-link</code></td><td>4046-606</td></tr>
                 <tr><td>Sign in</td><td>Text link, Inter Medium 14, Slate → Deep Teal on hover <span class="status status--proposed">To confirm</span></td><td><code>--color-text-secondary</code></td><td>4046-606</td></tr>
-                <tr><td>Get started</td><td>Dark button, 44px, label 14 (E-02)</td><td><code>--size-control-exception-header</code></td><td>4046-606 (43)</td></tr>
+                <tr><td>Get started</td><td>Dark button (Teal-deep), 44px, label 14 (E-02)</td><td><code>--size-control-exception-header</code></td><td>4046-606 (43)</td></tr>
                 <tr><td>Keyboard</td><td>Trigger is a button with <code>aria-expanded</code> and <code>aria-controls</code>; ↓ and ↑ move through rows; Esc closes and returns focus; tabbing past the last row closes</td><td>—</td><td>4010-609</td></tr>
                 <tr><td>Mobile menu</td><td>☰ 44×44; full screen, slides down 220ms; ✕; scroll lock; rows 56; sub-rows 48 or more; one category open at a time</td><td><code>--size-tap-min</code> · <code>--motion-duration-open</code> · <code>--space-14</code> · <code>--space-12</code></td><td>4046-606</td></tr>
                 <tr><td>Mobile bottom bar</td><td>Get started, Deep Teal, full width, 48 (E-03) + “Assessment only. Not a diagnosis.” + safe area</td><td><code>--size-control-exception-mobile-bar</code></td><td>4046-911</td></tr>
@@ -1206,7 +1208,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
       var b = m.querySelector('.btn').getBoundingClientRect();
       var l = m.querySelector('.measure__label').getBoundingClientRect();
       m.querySelector('[data-measure-out]').textContent =
-        'Label ' + Math.round(l.width) + ' + height ' + Math.round(b.height) + ' = width ' + Math.round(b.width) + ' px';
+        'Label ' + Math.round(l.width) + ' + padding 48 = width ' + Math.round(b.width) + ' px';
     });
   }
   measure();

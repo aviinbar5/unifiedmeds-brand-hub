@@ -20,6 +20,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | U-08 | The new brand hub lives in a new GitHub repository, `unifiedmeds-brand-hub`, on GitHub Pages. |
 | U-09 | The October Astro site code is a reference for the developer, who decides whether to reuse it. |
 | U-10 | The Claude Design project "SoviCare Homepage Desktop V1" is archive only. |
+| U-11 | Buttons are rounded rectangles (5px corners), not pills: the capsule shape belongs to the logo. Button and label values follow Avi's Figma (Button set 2676:310, Packaging 2678:2). |
 
 ---
 
@@ -73,7 +74,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 
 ### Shape and imagery
 
-- **R-30** [same] Radius: cards 16, fields, chips and the dropdown panel 12, menu rows and thumbnails 8, buttons and pills 999. No other radius. The capsule is a shape (R-31), not a radius value.
+- **R-30** [changed] Radius: buttons 5 (`--radius-button`); cards 16; fields, chips and the dropdown panel 12; menu rows and thumbnails 8; chips, nav pills and status pills 999 (`--radius-pill`). No other radius. The capsule is a shape (R-31), not a radius value. · Source: U-11, Figma 2676:310
 - **R-31** [changed] Two shape families. **Quadrant Kit:** Square, Quarter, Half, Circle, Arch, Arc. **Capsule:** the logo's capsule form, in the variants Split, Split Blue, Outline and Vertical (Figma "Capsule Kit", 2678:2), plus the capsule as an image crop. Both families may appear on the website, as needed. No oval and no soft-cornered rectangle. · Source: U-03
 - **R-32** [changed] A capsule may be filled, outline or transparent, and may be shown whole or cropped by the frame edge. Quadrant pieces stay axis-aligned and may rotate only during their entrance. How many shapes per surface, which opacity values, and how the two families combine on one surface are **To confirm** (`GAP`: to be read from the approved Figma pages and shown to Avi). Seen in Figma 15.11.2026: opacity 0.7 and 0.5 on shapes. · Source: U-03
 - **R-33** [changed] No text on a shape, ever. A disclaimer never sits on a shape. A photo may be cropped to a capsule.
@@ -94,8 +95,8 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 
 ### Components
 
-- **R-40** [same] Buttons have one height, 50px. Side padding = radius = height ÷ 2. Label Inter Medium 15/20. Only logged exceptions differ (E-02, E-03).
-- **R-41** [changed] Button hover (Figma 2719:4438): Dark to Yellow; Outline to Yellow; Yellow to Blue-dark with a Paper label; Outline Light on Deep Teal to Yellow; any button on a Yellow, Blue or Wash surface to White. Every button lifts 2px in 150ms ease-out. The new **Light** button type (Figma 3045:2714) has a hover state in Figma; its written rule is **To confirm**.
+- **R-40** [changed] Buttons are rounded rectangles, never pills: radius 5 (`--radius-button`), one height 50px (`--size-control`), side padding 24 (`--size-button-padding-x`), so width = label width + 48. Label Inter Medium 15/20, sentence case. Only logged exceptions differ in height (E-02, E-03). · Source: U-11, Figma 2676:310
+- **R-41** [changed] Button types and hover (Figma 2676:310 and 2719:4438): Dark fills Teal-deep #1C3742 with a Paper label and hovers to Yellow; Outline (Teal-deep border) hovers to Yellow; Light (Paper fill) hovers to Yellow; Outline Light on Deep Teal hovers to Yellow, on photos to Blue-dark; Yellow hovers to Blue-dark with a Paper label. Labels on Yellow and Paper are Deep Teal #264653. On a Yellow, Blue or Wash surface every button hovers to Paper, and Light hovers to Deep Teal. Every button lifts 2px in 150ms ease-out. Figma draws the Yellow hover in Pastel Blue #6E8B97 (Paper label 3.53:1, fails AA); the hub keeps Blue-dark (R-12, R-72) and the difference is on the Figma clean-up list. · Source: U-11, D-08
 - **R-42** [changed] Fields: 50px, radius 12, 1px Slate border. Selected: Deep Teal border plus a 1px inset, no scale. Disabled and Loading variants are still to be added in Figma. Progress mark (quadrant or capsule) **To confirm**.
 - **R-43** [same] Cards: radius 16. Cards that are links fill Deep Teal with light text on hover, with no lift.
 - **R-44** [same] Step numbers: on hover or tap the circle fills Yellow with dark digits.
@@ -141,7 +142,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 
 ### Packaging
 
-- **R-89** [new] Labels are built from the label master (Figma 2680:16) and the bottle master "Bottle / Amber 360" (2680:89). Each label carries the product name, strength · form, "Prescription treatment" and "Rx only", the primary seal, and one capsule from the Capsule Kit in the product colour (R-85). Clay is not used on labels. · Source: Figma 2678:2
+- **R-89** [changed] Labels follow the Figma label master (2680:16) on the bottle master "Bottle / Amber 360" (2680:89): Deep Teal ground; the primary seal small, reversed, top left; the product name in DM Serif Display, Paper; strength (Inter SemiBold) · form (Inter Regular); a thin divider; "Prescription treatment" and "Rx only" (Inter Regular); one vertical capsule cropped by the right edge, outlined in the product colour with its upper half filled (R-85). Clay is not used on labels. Combo label strength reads 100 mg in Figma: **To confirm**. · Source: Figma 2678:2, U-11
 
 ### Accessibility
 
@@ -173,11 +174,12 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | O-05 | Shape limits, opacity values, how Quadrant and capsule combine | R-32 |
 | O-06 | Icon sizes and icon colour on the website | R-35 |
 | O-07 | Secondary logo colour versions | R-94 |
-| O-08 | Light button hover rule | R-41 |
+| ~~O-08~~ | Closed 15.11.2026: Light hovers to Yellow; on Yellow, Blue or Wash it hovers to Deep Teal (Figma 3045:2714) | R-41 |
 | O-09 | Disabled and Loading states; progress mark | R-42 |
 | O-10 | Phase 2 menu wording | R-86 |
 | O-11 | Loader shape | R-53 |
 | O-12 | Assessment length; consultation fee line | R-60, R-62 |
 | O-13 | Licensed photography | R-39 |
 | O-14 | Legal approval of Longevity and Hair loss product pages | R-87 |
+| O-16 | Yellow button hover: Figma Pastel Blue (fails AA) or the hub's Blue-dark | R-41 |
 | ~~O-15~~ | Closed 15.11.2026: logo height in the desktop header is 30px in both menus (`--size-logo-header-desktop`). Figma short nav (45px) goes on the clean-up list | R-90 |

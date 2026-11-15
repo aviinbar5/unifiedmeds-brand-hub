@@ -110,7 +110,7 @@ td.wide { min-width: 28ch; }
             <thead><tr><th scope="col">Token path</th><th scope="col">CSS custom property</th><th scope="col">Value</th></tr></thead>
             <tbody>
               <tr><td><code>color.surface.paper</code></td><td><code>--color-surface-paper</code></td><td>#FEFCF6 · the page</td></tr>
-              <tr><td><code>color.brand.deep-teal</code></td><td><code>--color-brand-deep-teal</code></td><td>#264653 · primary ink, Dark button</td></tr>
+              <tr><td><code>color.brand.deep-teal</code></td><td><code>--color-brand-deep-teal</code></td><td>#264653 · primary ink, footer ground</td></tr>
               <tr><td><code>color.text.secondary</code></td><td><code>--color-text-secondary</code></td><td>#55747F · Slate, captions and labels</td></tr>
               <tr><td><code>color.line.field</code></td><td><code>--color-line-field</code></td><td>#55747F · field boundary</td></tr>
               <tr><td><code>typography.desktop.hero</code></td><td><code>--type-desktop-hero-family</code>, <code>-size</code>, <code>-weight</code>, <code>-line</code>, <code>-tracking</code></td><td>DM Serif Display 46 / 54</td></tr>
@@ -134,7 +134,8 @@ td.wide { min-width: 28ch; }
 }
 .btn {
   height: var(--size-control);
-  padding: 0 calc(var(--size-control) / 2);   /* side padding = radius = height ÷ 2 */
+  padding: 0 var(--size-button-padding-x);    /* 24px */
+  border-radius: var(--radius-button);         /* 5px: rounded rectangle, never a pill */
   transition: transform var(--motion-duration-fast) var(--motion-easing-ui);
 }
 .btn:hover { transform: translateY(calc(var(--motion-distance-lift) * -1)); }

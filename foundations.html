@@ -219,8 +219,8 @@ td.fx-num { font-weight: 600; color: var(--color-text-strong); }
           <div class="grid-3">
             <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-deep-teal);"></div><div class="fx-sw__body">
               <h4>Deep Teal</h4><p class="fx-meta">#264653 · <code>--color-brand-deep-teal</code></p>
-              <p>Primary ink. Body text, links, Dark button, dark sections, footer, focus ring. Not the logo colour (R-84).</p>
-              <p><b>Do</b> use it for body text and the Dark button.</p>
+              <p>Primary ink. Body text, links, button labels on Yellow and Paper, dark sections, footer, focus ring. Not the logo colour (R-84).</p>
+              <p><b>Do</b> use it for body text and button labels on light fills. The Dark button fills Teal-deep.</p>
               <p><b>Don't</b> place two Deep Teal bands next to each other.</p>
             </div></article>
             <article class="fx-sw"><div class="fx-sw__chip" style="background: var(--color-brand-teal-deep);"></div><div class="fx-sw__body">
@@ -483,7 +483,7 @@ td.fx-num { font-weight: 600; color: var(--color-text-strong); }
 <tr><td><span class="fx-aa" style="color: var(--color-brand-blue-dark); background: var(--color-surface-wash-green);">Aa</span></td><td>Blue-dark on Wash Green</td><td class="fx-num">3.50:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Secondary text on Wash Green: use Deep Teal</td></tr>
 <tr><td><span class="fx-aa" style="color: var(--color-brand-blue-dark); background: var(--color-surface-wash-blue);">Aa</span></td><td>Blue-dark on Wash Blue</td><td class="fx-num">3.06:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Secondary text on Wash Blue: use Deep Teal</td></tr>
 <tr class="fx-group"><th colspan="5" scope="colgroup">Text on dark and accent fills</th></tr>
-<tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-deep-teal);">Aa</span></td><td>Paper on Deep Teal</td><td class="fx-num">9.82:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on Deep Teal, Dark button label (<code>--color-text-on-dark</code>)</td></tr>
+<tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-deep-teal);">Aa</span></td><td>Paper on Deep Teal</td><td class="fx-num">9.82:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on Deep Teal (<code>--color-text-on-dark</code>)</td></tr>
 <tr><td><span class="fx-aa" style="color: var(--color-surface-paper); background: var(--color-brand-teal-deep);">Aa</span></td><td>Paper on Teal-deep</td><td class="fx-num">12.22:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Text on Teal-deep</td></tr>
 <tr><td><span class="fx-aa" style="color: var(--color-surface-wash-blue); background: var(--color-brand-deep-teal);">Aa</span></td><td>Wash Blue on Deep Teal</td><td class="fx-num">5.21:1</td><td><span class="fx-v fx-v--pass">Pass AA</span></td><td>Secondary text on Deep Teal (<code>--color-text-on-dark-muted</code>)</td></tr>
 <tr><td><span class="fx-aa" style="color: var(--color-text-tertiary); background: var(--color-brand-deep-teal);">Aa</span></td><td>Slate Light on Deep Teal</td><td class="fx-num">3.39:1</td><td><span class="fx-v fx-v--large">Large text only</span></td><td>Muted large text on Deep Teal only (<code>--color-text-tertiary</code>)</td></tr>
@@ -698,10 +698,11 @@ td.fx-num { font-weight: 600; color: var(--color-text-strong); }
       <section class="sec" id="radius" aria-labelledby="radius-h">
         <div class="sec-head">
           <h2 id="radius-h">Radius.</h2>
-          <p>Five radii, each tied to a role. Nothing in between.</p>
+          <p>Six radii, each tied to a role. Nothing in between.</p>
         </div>
         <div class="grid-3">
-          <div class="specimen fx-tile"><div class="fx-rad fx-rad--pill" style="border-radius: var(--radius-pill);"></div><h4>Pill · 999</h4><p class="fx-meta"><code>--radius-pill</code><br>Buttons, chips, nav pills, status pills.</p><div class="specimen-row"><span class="btn">Get started</span></div></div>
+          <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-button);"></div><h4>Button · 5</h4><p class="fx-meta"><code>--radius-button</code><br>Every button. A rounded rectangle, never a pill (U-11).</p><div class="specimen-row"><span class="btn">Get started</span></div></div>
+          <div class="specimen fx-tile"><div class="fx-rad fx-rad--pill" style="border-radius: var(--radius-pill);"></div><h4>Pill · 999</h4><p class="fx-meta"><code>--radius-pill</code><br>Chips, nav pills, status pills. Not buttons.</p><div class="specimen-row"><span class="status">Status pill</span></div></div>
           <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-card);"></div><h4>Card · 16</h4><p class="fx-meta"><code>--radius-card</code><br>Cards and framed media, such as product cards and photos in a frame.</p></div>
           <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-small);"></div><h4>Small · 12</h4><p class="fx-meta"><code>--radius-small</code><br>Fields, answer options, the dropdown panel and small cards.</p><input class="field__input" type="text" aria-label="Field specimen" value="Field, 50 high"></div>
           <div class="specimen fx-tile"><div class="fx-rad" style="border-radius: var(--radius-xs);"></div><h4>Extra small · 8</h4><p class="fx-meta"><code>--radius-xs</code><br>Menu rows, thumbnails and packshots in the dropdown.</p></div>

@@ -1,4 +1,4 @@
-/* SoviCare components — Brand Edition 02 (08.10.2026)
+/* unifiedmeds components · Brand Edition 03 (15.11.2026, buttons updated)
    Reference implementation of the core components. Uses brand.css tokens only:
    no hex, no px values that are not tokens (except 1px hairlines and 1.5px button borders).
    Figma sources: Buttons — Hover Rules 2676:309 · Main menu v3 4046:606 / spec 4010:609 (archive copy aOret…). */
@@ -16,26 +16,26 @@
 .specimen--dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
 
 /* ---------- Buttons ----------
-   Rule (Avi, 08.10.2026): one height for every button — size.control (50px).
-   Side padding = radius = height / 2, so the label starts exactly where the curve ends
-   and ends exactly where the opposite curve begins. Width = label width + one height.
+   Rule (Avi, 15.11.2026, U-11): buttons are rounded rectangles, not pills, because the logo is the capsule.
+   One height for every button: size.control (50px). Radius radius.button (5px). Side padding size.button-padding-x (24px).
+   Width = label width + two paddings. Figma source: Button set 2676:310.
    Exceptions are explicit modifiers: .btn--header (44px) and .btn--bar (48px). */
 .btn {
   --btn-h: var(--size-control);
-  --btn-bg: var(--color-brand-deep-teal);
+  --btn-bg: var(--color-brand-teal-deep);
   --btn-fg: var(--color-text-on-dark);
   --btn-border: var(--btn-bg);
   --btn-bg-hover: var(--color-brand-yellow);
-  --btn-fg-hover: var(--color-brand-teal-deep);
+  --btn-fg-hover: var(--color-brand-deep-teal);
   --btn-border-hover: var(--btn-bg-hover);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   height: var(--btn-h);
-  padding: 0 calc(var(--btn-h) / 2 - var(--size-button-border));
+  padding: 0 calc(var(--size-button-padding-x) - var(--size-button-border));
   border: var(--size-button-border) solid var(--btn-border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-button);
   background: var(--btn-bg);
   color: var(--btn-fg);
   font: var(--type-desktop-button-weight) var(--type-desktop-button-size) / var(--type-desktop-button-line) var(--type-desktop-button-family);
@@ -58,11 +58,11 @@
 }
 .btn:active { transform: none; }
 
-/* Dark (default) → Yellow */
-/* Yellow → Blue-dark with a Paper label (AA 5.76:1) */
+/* Dark (default): Teal Deep → Yellow */
+/* Yellow → Blue-dark with a Paper label (AA 5.76:1, R-12). Figma draws Pastel Blue here (3.53:1); see the changelog. */
 .btn--yellow {
   --btn-bg: var(--color-brand-yellow);
-  --btn-fg: var(--color-brand-teal-deep);
+  --btn-fg: var(--color-brand-deep-teal);
   --btn-bg-hover: var(--color-brand-blue-dark);
   --btn-fg-hover: var(--color-text-on-dark);
 }
@@ -70,7 +70,7 @@
 .btn--outline {
   --btn-bg: transparent;
   --btn-fg: var(--color-brand-deep-teal);
-  --btn-border: var(--color-brand-deep-teal);
+  --btn-border: var(--color-brand-teal-deep);
 }
 /* Outline Light (on Deep Teal and photos) → Yellow; on photos: .btn--on-photo fills Blue-dark */
 .btn--outline-light {
@@ -82,11 +82,21 @@
   --btn-bg-hover: var(--color-brand-blue-dark);
   --btn-fg-hover: var(--color-text-on-dark);
 }
-/* Rule 03 — any button on a Yellow, Blue or Wash surface hovers to White */
+/* Light: Paper → Yellow (Figma 3045:2714) */
+.btn--light {
+  --btn-bg: var(--color-surface-paper);
+  --btn-fg: var(--color-brand-deep-teal);
+}
+/* Rule 03: any button on a Yellow, Blue or Wash surface hovers to Paper; the Light button hovers to Deep Teal there */
 .surface-accent .btn {
-  --btn-bg-hover: var(--color-surface-card);
-  --btn-fg-hover: var(--color-brand-teal-deep);
-  --btn-border-hover: var(--color-surface-card);
+  --btn-bg-hover: var(--color-surface-paper);
+  --btn-fg-hover: var(--color-brand-deep-teal);
+  --btn-border-hover: var(--color-surface-paper);
+}
+.surface-accent .btn--light {
+  --btn-bg-hover: var(--color-brand-deep-teal);
+  --btn-fg-hover: var(--color-text-on-dark);
+  --btn-border-hover: var(--color-brand-deep-teal);
 }
 /* Listed exceptions to the one-height rule */
 .btn--header { --btn-h: var(--size-control-exception-header); font-size: var(--type-desktop-nav-size); }
