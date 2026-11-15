@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rulebook · unifiedmeds Brand Hub</title>
+<meta name="description" content="unifiedmeds rules, decisions, exceptions and open items, Brand Edition 03.">
+<link rel="icon" href="assets/brand/app-icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="hub.css">
+<style>
+  .rules { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .rules li { padding: var(--space-4) var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-small); background: var(--color-surface-card); scroll-margin-top: var(--space-6); }
+  .rules li:target, tr:target { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+  .prose-p { max-width: var(--layout-measure); color: var(--color-text-secondary); }
+  .sec h3 { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); margin-top: var(--space-4); }
+  .mark { display: inline-flex; align-items: center; padding: 0 var(--space-2); border-radius: var(--radius-pill); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); vertical-align: middle; }
+  .mark--same { background: var(--color-surface-mist); color: var(--color-text-secondary-on-mist); }
+  .mark--changed { background: var(--color-surface-wash-yellow); color: var(--color-brand-teal-deep); }
+  .mark--new { background: var(--color-surface-wash-green); color: var(--color-brand-teal-deep); }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="hub">
+  <header class="hub-top">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/logo-horizontal.svg" width="185" height="30" alt="unifiedmeds"></a>
+    <button class="hub-toggle" type="button" aria-expanded="false" aria-controls="hub-nav" aria-label="Open the hub menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+  <nav class="hub-nav" id="hub-nav" aria-label="Brand hub">
+    <a class="hub-brand" href="index.html"><img src="assets/brand/logo-horizontal.svg" width="185" height="30" alt="unifiedmeds"></a>
+    <span class="hub-edition">Brand Edition 03 · 15.11.2026</span>
+    <div class="hub-group"><span>Start</span>
+      <a href="index.html">Overview</a>
+      <a href="rulebook.html" aria-current="page">Rulebook &amp; decisions</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="hub-group"><span>Brand</span>
+      <a href="brand.html">Brand &amp; imagery</a>
+      <a href="logo.html">Logo</a>
+      <a href="content.html">Voice, content &amp; compliance</a>
+    </div>
+    <div class="hub-group"><span>System</span>
+      <a href="foundations.html">Foundations</a>
+      <a href="components.html">Components</a>
+      <a href="motion.html">Motion</a>
+    </div>
+    <div class="hub-group"><span>Build</span>
+      <a href="handoff.html">Developer handoff</a>
+      <a href="archive/index.html">Archive · SoviCare editions</a>
+    </div>
+    <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
+  </nav>
+  <main class="hub-main" id="main">
+    <div class="page">
+      <header class="page-head">
+        <span class="eyebrow">Start</span>
+        <h1>Rulebook and decisions.</h1>
+        <p class="lead">Every rule, the Edition 03 decisions, the exceptions and the open items. Generated from <a class="link" href="brand-rules.md">brand-rules.md</a>, which wins on compliance and wording.</p>
+        <nav class="toc" aria-label="On this page"><a href="#edition-03-decisions-avi-15-11-2026">Edition 03 decisions (Avi, 15.11.2026)</a><a href="#rules">Rules</a><a href="#exceptions-log">Exceptions log</a><a href="#open-items-to-confirm">Open items (To confirm)</a></nav>
+      </header>
+      <div class="rule"><p>Rule marks: <span class="mark mark--same">same</span> unchanged from SoviCare Edition 02 · <span class="mark mark--changed">changed</span> rewritten for unifiedmeds · <span class="mark mark--new">new</span> added in Edition 03.</p></div>
+<p class="prose-p"><b>Brand Edition 03 · 15.11.2026 · Owner: Avi · Status: APPROVED by Avi 15.11.2026 (open items O-01 to O-14 stay To confirm)</b></p>
+<p class="prose-p">Supersedes SoviCare Brand Edition 02 (08.10.2026, kept in <code>archive/sovicare-edition-02/</code>). Rule IDs R-01 to R-83 keep their Edition 02 numbers so every change can be traced. New rules start at R-84.</p>
+<p class="prose-p">Status words: <b>Current</b> (decided, build it) · <b>Phase 2</b> (designed, ships after launch) · <span class="status status--proposed">To confirm</span> (open item, never ships as decided) · <b>Retired</b> (no longer applies).</p>
+<p class="prose-p">Change marks: <b><span class="mark mark--same">same</span></b> unchanged from Edition 02 · <b><span class="mark mark--changed">changed</span></b> rewritten in Edition 03 · <b><span class="mark mark--new">new</span></b> added in Edition 03.</p>
+<section class="sec" id="edition-03-decisions-avi-15-11-2026"><div class="sec-head"><h2>Edition 03 decisions (Avi, 15.11.2026).</h2></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Decision</th></tr></thead><tbody><tr id="u-01"><td>U-01</td><td>The brand name is written <b>unifiedmeds</b>, all lowercase, everywhere, including at the start of a sentence and in the footer.</td></tr><tr id="u-02"><td>U-02</td><td>The website keeps its palette (Deep Teal and the Pastel set). The logo colours are a separate group, used by the logo only.</td></tr><tr id="u-03"><td>U-03</td><td>Two shape families work together as needed: the Quadrant Kit and the capsule. The capsule may be filled, outline or transparent, shown whole or cropped.</td></tr><tr id="u-04"><td>U-04</td><td>Launch: Sexual health only, with the short menu. Longevity and Hair loss follow right after launch (Phase 2).</td></tr><tr id="u-05"><td>U-05</td><td>The third Sexual health product is <b>Combo</b>. "SoviCare Trio" is retired.</td></tr><tr id="u-06"><td>U-06</td><td>Longevity and Hair loss product pages stay in the design, marked "Legal review required". R-65 still applies.</td></tr><tr id="u-07"><td>U-07</td><td>Legal entity, domain and contact email are To confirm. The footer reads "© 2026 unifiedmeds".</td></tr><tr id="u-08"><td>U-08</td><td>The new brand hub lives in a new GitHub repository, <code>unifiedmeds-brand-hub</code>, on GitHub Pages.</td></tr><tr id="u-09"><td>U-09</td><td>The October Astro site code is a reference for the developer, who decides whether to reuse it.</td></tr><tr id="u-10"><td>U-10</td><td>The Claude Design project "SoviCare Homepage Desktop V1" is archive only.</td></tr></tbody></table></div>
+</section><section class="sec" id="rules"><div class="sec-head"><h2>Rules.</h2></div>
+<h3>Authority</h3>
+<ul class="rules">
+<li id="r-01"><b>R-01</b> <span class="mark mark--changed">changed</span> Figma <code>h7D0eRszARBaWdJT1NWrpZ</code> (the website file, still named "SoviCare - Website" in Figma) wins on every visual value. The logo file <code>VX5oKsl1ZIKbiWLR0tjf7L</code>, page "B · capsule seal", wins on the logo. If the hub and Figma disagree, the hub is wrong and the hub is fixed.</li>
+<li id="r-02"><b>R-02</b> <span class="mark mark--same">same</span> <code>brand-rules.md</code> wins on compliance and wording. The hub explains and mirrors both and never adds a rule of its own.</li>
+<li id="r-03"><b>R-03</b> <span class="mark mark--same">same</span> Every value has one home: <code>tokens/tokens.json</code>. <code>brand.css</code> is generated from it and never edited by hand. No colour, size or duration outside the tokens.</li>
+<li id="r-04"><b>R-04</b> <span class="mark mark--changed">changed</span> This is Brand Edition 03 (15.11.2026), the first unifiedmeds edition. SoviCare Editions 01 and 02 are archived, never deleted and never linked as current.</li>
+</ul>
+<h3>Brand and naming</h3>
+<ul class="rules">
+<li id="r-05"><b>R-05</b> <span class="mark mark--changed">changed</span> unifiedmeds is a men's health telehealth brand that launches with Sexual health. Vibe: masculine, on the gentle side. · Source: U-04</li>
+<li id="r-06"><b>R-06</b> <span class="mark mark--changed">changed</span> Launch catalogue: Tadalafil, Sildenafil and Combo. Longevity and Hair loss are Phase 2 categories (designed in Figma, not linked as live at launch). Some future products will be for women (Planned). · Source: U-04, U-05</li>
+<li id="r-07"><b>R-07</b> <span class="mark mark--changed">changed</span> The name is <b>unifiedmeds</b> everywhere, all lowercase, also at the start of a sentence. Never "Unifiedmeds", "UnifiedMeds", "Unified Meds" or "UNIFIEDMEDS". The legal entity name is <span class="status status--proposed">To confirm</span>; until then no entity name appears in new material, and "SoviCare LLC" never appears. · Source: U-01, U-07</li>
+<li id="r-08"><b>R-08</b> <span class="mark mark--same">same</span> The category is "Sexual health" in navigation and on the category page. "Better Intimacy" is used only as the editorial hero title.</li>
+<li id="r-09"><b>R-09</b> <span class="mark mark--same">same</span> A tagline sits under the name. Until Avi chooses one, no tagline ships. <span class="status status--proposed">To confirm</span></li>
+</ul>
+<h3>Colour</h3>
+<ul class="rules">
+<li id="r-10"><b>R-10</b> <span class="mark mark--same">same</span> Paper #FEFCF6 is the page. Mist #E8E7E1 is the alternate band and hero ground. Card #FFFFFF is for dropdowns and raised cards.</li>
+<li id="r-11"><b>R-11</b> <span class="mark mark--same">same</span> Yellow #FFBE0B may be a CTA, a hover or a step marker, at most one Yellow element per viewport. Never a section background, never text.</li>
+<li id="r-12"><b>R-12</b> <span class="mark mark--same">same</span> Pastel Blue #6E8B97 is for shapes and surfaces only, never behind a label. Blue-dark #4E6873 is the Yellow button hover fill, with a Paper label (5.76:1).</li>
+<li id="r-13"><b>R-13</b> <span class="mark mark--same">same</span> Text on light surfaces: body Deep Teal, headlines Teal Deep #1C3742, captions and labels Slate #55747F (on Mist and washes Blue-dark). Slate Light #7E9AA6 never sits on a light surface.</li>
+<li id="r-14"><b>R-14</b> <span class="mark mark--same">same</span> Links are Deep Teal #264653 and underlined.</li>
+<li id="r-15"><b>R-15</b> <span class="mark mark--changed">changed</span> Coral #E76F51 marks errors and out-of-range results only, always with an icon, never as a text colour. Clay #CFC6B8 is for posters only, never website UI. Packaging follows R-89. · Source: Figma 2678:2</li>
+<li id="r-16"><b>R-16</b> <span class="mark mark--same">same</span> Pastel Green #6A8670 is for shapes, in-range markers and icons. Never text.</li>
+<li id="r-17"><b>R-17</b> <span class="mark mark--same">same</span> There is no dark mode for now.</li>
+<li id="r-84"><b>R-84</b> <span class="mark mark--new">new</span> Logo colours are a separate token group used <b>only</b> by the logo, the app icon and the favicon: Navy #0F2E57, Ink #031D2C, Sky #C9DDEA, Logo Blue #3976C6, Cream #F1ECE0, plus White. They never colour website UI, text, buttons or sections. · Source: U-02, Figma VX5o 5:7</li>
+<li id="r-85"><b>R-85</b> <span class="mark mark--new">new</span> Product colours identify a product on labels and packaging: Tadalafil #9CC9E3, Sildenafil #3976C6, Combo #82CFCB (Figma "Option B · Softened"). Use on the website (for example product cards) is <span class="status status--proposed">To confirm</span>. Note: Sildenafil and Logo Blue share #3976C6. · Source: Figma 3069:280, 2719:4672</li>
+</ul>
+<h3>Type</h3>
+<ul class="rules">
+<li id="r-18"><b>R-18</b> <span class="mark mark--same">same</span> Two typefaces: DM Serif Display (Regular only) and Inter (400 to 700). A monospace face appears only on internal and code screens. The logo wordmark is artwork, not live type. Its typeface name is <span class="status status--proposed">To confirm</span> (<code>GAP</code>: the Figma logo is outlined vectors).</li>
+<li id="r-19"><b>R-19</b> <span class="mark mark--same">same</span> The hub copies Figma's text styles 1:1. No size outside the scale.</li>
+<li id="r-20"><b>R-20</b> <span class="mark mark--same">same</span> Hero: 70/60 on the homepage only, 46/54 on every other page, mobile 34/40. Checked in Figma 15.11.2026: homepage 70/60, Sexual health 46.</li>
+<li id="r-21"><b>R-21</b> <span class="mark mark--same">same</span> Serif floor: DM Serif never below 24px on desktop or 21px on mobile.</li>
+<li id="r-22"><b>R-22</b> <span class="mark mark--same">same</span> Labels are sentence case, Inter SemiBold 12/16 +2% (mobile 11/16). No uppercase labels.</li>
+<li id="r-23"><b>R-23</b> <span class="mark mark--same">same</span> No serif-italic highlight. Avi may re-open it.</li>
+<li id="r-24"><b>R-24</b> <span class="mark mark--same">same</span> Sentence case for every heading, label, button and nav item. Section headlines end with a full stop and are never questions.</li>
+<li id="r-25"><b>R-25</b> <span class="mark mark--same">same</span> Assessment questions are DM Serif 26/1.3 and may be questions.</li>
+</ul>
+<h3>Layout</h3>
+<ul class="rules">
+<li id="r-26"><b>R-26</b> <span class="mark mark--same">same</span> Frames 1440 desktop and 390 mobile. Content max 1240. Side margins 100 desktop, 40 tablet, 20 mobile.</li>
+<li id="r-27"><b>R-27</b> <span class="mark mark--same">same</span> 12 columns, 20px gutter. Breakpoints 390 / 768 / 1024 / 1440.</li>
+<li id="r-28"><b>R-28</b> <span class="mark mark--same">same</span> Spacing scale only: 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 72, 96. Section padding 96 desktop, 56 mobile.</li>
+<li id="r-29"><b>R-29</b> <span class="mark mark--same">same</span> Header 80px desktop, 64px mobile, desktop inset 56. Paper, sticky. A 1px Line/Soft border appears after 8px of scroll.</li>
+</ul>
+<h3>Shape and imagery</h3>
+<ul class="rules">
+<li id="r-30"><b>R-30</b> <span class="mark mark--same">same</span> Radius: cards 16, fields, chips and the dropdown panel 12, menu rows and thumbnails 8, buttons and pills 999. No other radius. The capsule is a shape (R-31), not a radius value.</li>
+<li id="r-31"><b>R-31</b> <span class="mark mark--changed">changed</span> Two shape families. <b>Quadrant Kit:</b> Square, Quarter, Half, Circle, Arch, Arc. <b>Capsule:</b> the logo's capsule form, in the variants Split, Split Blue, Outline and Vertical (Figma "Capsule Kit", 2678:2), plus the capsule as an image crop. Both families may appear on the website, as needed. No oval and no soft-cornered rectangle. · Source: U-03</li>
+<li id="r-32"><b>R-32</b> <span class="mark mark--changed">changed</span> A capsule may be filled, outline or transparent, and may be shown whole or cropped by the frame edge. Quadrant pieces stay axis-aligned and may rotate only during their entrance. How many shapes per surface, which opacity values, and how the two families combine on one surface are <span class="status status--proposed">To confirm</span> (<code>GAP</code>: to be read from the approved Figma pages and shown to Avi). Seen in Figma 15.11.2026: opacity 0.7 and 0.5 on shapes. · Source: U-03</li>
+<li id="r-33"><b>R-33</b> <span class="mark mark--changed">changed</span> No text on a shape, ever. A disclaimer never sits on a shape. A photo may be cropped to a capsule.</li>
+<li id="r-34"><b>R-34</b> <span class="mark mark--changed">changed</span> Logo: see R-90 to R-94. The SoviCare quadrant symbol is Retired and kept only in the archive.</li>
+<li id="r-35"><b>R-35</b> <span class="mark mark--changed">changed</span> Icons: the unifiedmeds line set built on the capsule (12 icons, Figma 3042:221). 1.5px stroke, round caps, no fill, never Yellow. Drawn on a 64px grid. Placed sizes and icon colour on the website are <span class="status status--proposed">To confirm</span> (<code>GAP</code>: Figma places them at 40 and 48px; Foundations draws them in Navy, which R-84 reserves for the logo). · Source: Figma 3042:221</li>
+<li id="r-36"><b>R-36</b> <span class="mark mark--same">same</span> The UI is flat, with borders. One shadow, for dropdowns and dialogs only.</li>
+<li id="r-37"><b>R-37</b> <span class="mark mark--same">same</span> Photography: men aged 35 to 65 lead. Partners may appear in sexual-health stories. Women lead only in future women's products.</li>
+<li id="r-38"><b>R-38</b> <span class="mark mark--same">same</span> Closed, branded bottles are allowed. Never loose pills, syringes, lab coats or before/after images. At most one faceless detail crop per page.</li>
+<li id="r-39"><b>R-39</b> <span class="mark mark--same">same</span> Watermarked placeholder photos never ship. Replace them before launch. <span class="status status--proposed">To confirm</span></li>
+</ul>
+<h3>Logo</h3>
+<ul class="rules">
+<li id="r-90"><b>R-90</b> <span class="mark mark--new">new</span> The logo is the <b>capsule seal</b>: "unified" (bold) in the filled half of a capsule, "meds" (regular) in the open half. Three lockups: Primary seal (where the brand needs presence), Horizontal (capsule icon + wordmark, the website navigation), Stacked (square spaces). In the website header the Horizontal lockup is 30px tall on desktop and 26px on mobile; in the footer 30px desktop and 28px mobile. · Source: Figma 3038:178, VX5o 5:80, Avi 15.11.2026</li>
+<li id="r-91"><b>R-91</b> <span class="mark mark--new">new</span> On light grounds (Paper, Mist, Cream) use the main version in Navy. On dark grounds (Deep Teal, Ink, Navy) and on photography use the reversed versions only. The website footer uses Horizontal reversed. · Source: Figma 3038:211</li>
+<li id="r-92"><b>R-92</b> <span class="mark mark--new">new</span> Clear space: the height of the "meds" half on every side. Never recolour individual parts, stretch, rotate, redraw or add effects. Use the exported files only.</li>
+<li id="r-93"><b>R-93</b> <span class="mark mark--new">new</span> App icon and favicon: the "u|m" capsule on a Navy rounded square. Favicon sizes 48, 32 and 16; at 16px the capsule is solid. The favicon never uses the wordmark. · Source: VX5o 5:144</li>
+<li id="r-94"><b>R-94</b> <span class="mark mark--new">new</span> The logo file also holds Scrubs green, Clinic sky, Black on white, White on black and Grey versions. Where each may be used is <span class="status status--proposed">To confirm</span>. Until then, only the versions in R-91 ship.</li>
+</ul>
+<h3>Components</h3>
+<ul class="rules">
+<li id="r-40"><b>R-40</b> <span class="mark mark--same">same</span> Buttons have one height, 50px. Side padding = radius = height ÷ 2. Label Inter Medium 15/20. Only logged exceptions differ (E-02, E-03).</li>
+<li id="r-41"><b>R-41</b> <span class="mark mark--changed">changed</span> Button hover (Figma 2719:4438): Dark to Yellow; Outline to Yellow; Yellow to Blue-dark with a Paper label; Outline Light on Deep Teal to Yellow; any button on a Yellow, Blue or Wash surface to White. Every button lifts 2px in 150ms ease-out. The new <b>Light</b> button type (Figma 3045:2714) has a hover state in Figma; its written rule is <span class="status status--proposed">To confirm</span>.</li>
+<li id="r-42"><b>R-42</b> <span class="mark mark--changed">changed</span> Fields: 50px, radius 12, 1px Slate border. Selected: Deep Teal border plus a 1px inset, no scale. Disabled and Loading variants are still to be added in Figma. Progress mark (quadrant or capsule) <span class="status status--proposed">To confirm</span>.</li>
+<li id="r-43"><b>R-43</b> <span class="mark mark--same">same</span> Cards: radius 16. Cards that are links fill Deep Teal with light text on hover, with no lift.</li>
+<li id="r-44"><b>R-44</b> <span class="mark mark--same">same</span> Step numbers: on hover or tap the circle fills Yellow with dark digits.</li>
+<li id="r-45"><b>R-45</b> <span class="mark mark--changed">changed</span> Launch menu (Figma "short nav" 2738:2783, mobile 2743:3337): Sexual health ▾ · How it works · FAQ · Sign in · Get started. The dropdown lists Tadalafil, Sildenafil, Combo and "View all Sexual health". · Source: U-04, U-05</li>
+<li id="r-86"><b>R-86</b> <span class="mark mark--new">new</span> Phase 2 menu (Figma "full nav" 2641:14411, dropdowns 2791:5681 to 2791:5709): adds Longevity and Hair loss, plus a Help dropdown. Its labels follow R-08 and R-24 (sentence case, "Sexual health" not "Better Intimacy"); the final wording is <span class="status status--proposed">To confirm</span> before Phase 2. · Source: U-04</li>
+<li id="r-46"><b>R-46</b> <span class="mark mark--same">same</span> Menu behaviour: hover shows a Line/Soft pill (150ms). The dropdown opens on hover after a 100ms intent delay, or on click, Enter or ↓. One dropdown at a time. Esc closes it and returns focus.</li>
+<li id="r-47"><b>R-47</b> <span class="mark mark--same">same</span> Mobile menu: ☰ in a 44×44 target opens a full-screen menu and locks body scroll. The bottom bar holds Get started and "Assessment only. Not a diagnosis."</li>
+<li id="r-48"><b>R-48</b> <span class="mark mark--changed">changed</span> Footer: Figma "Footer/Desktop" 2738:370 and "footer mobile" 2741:3169, with the CTA band 2738:1093 / 2741:3168. Deep Teal ground, logo Horizontal reversed.</li>
+</ul>
+<h3>Motion</h3>
+<ul class="rules">
+<li id="r-49"><b>R-49</b> <span class="mark mark--same">same</span> One principle: "Motion confirms, it never performs."</li>
+<li id="r-50"><b>R-50</b> <span class="mark mark--same">same</span> Durations: 150 hover, press, select, focus · 220 open, close, slide, accordion, step · 320 reveal · 420 wipe · 520 shape · 1400 loader. No other duration.</li>
+<li id="r-51"><b>R-51</b> <span class="mark mark--same">same</span> Easing: ease-out for every UI transition; the enter curve only for brand shapes entering.</li>
+<li id="r-52"><b>R-52</b> <span class="mark mark--same">same</span> Brand moves: Rise 12px; Pivot 520ms, no fade; Wipe 420ms; stagger 90ms, three items at most; Count for results only.</li>
+<li id="r-53"><b>R-53</b> <span class="mark mark--changed">changed</span> Nothing loops on the website except the loader (1.4s). Loader shape (quadrant or capsule) <span class="status status--proposed">To confirm</span>. Hero: static copy plus one shape entrance.</li>
+<li id="r-54"><b>R-54</b> <span class="mark mark--same">same</span> The hub's motion page is the only motion reference (M-001 to M-024).</li>
+</ul>
+<h3>Content</h3>
+<ul class="rules">
+<li id="r-55"><b>R-55</b> <span class="mark mark--same">same</span> The primary CTA is "Get started", in sentence case everywhere.</li>
+<li id="r-56"><b>R-56</b> <span class="mark mark--same">same</span> US English. Plain, short sentences in the active voice.</li>
+<li id="r-57"><b>R-57</b> <span class="mark mark--same">same</span> Glossary: provider (not doctor or clinician), assessment (not quiz or visit), member (not patient).</li>
+<li id="r-58"><b>R-58</b> <span class="mark mark--same">same</span> A hero headline and subhead carry no benefit claim, price or symptom list.</li>
+<li id="r-59"><b>R-59</b> <span class="mark mark--same">same</span> At most one normalising line per page, with no numbers.</li>
+<li id="r-60"><b>R-60</b> <span class="mark mark--same">same</span> A number never appears bare: it carries its unit and, for results, its range. One assessment length everywhere. <span class="status status--proposed">To confirm</span></li>
+<li id="r-61"><b>R-61</b> <span class="mark mark--same">same</span> No prices in heroes. Savings as a dollar amount per product, never a blanket "Save 15%".</li>
+<li id="r-62"><b>R-62</b> <span class="mark mark--same">same</span> One consultation line everywhere: "Consultation included with treatment purchase. Otherwise, $25." <span class="status status--proposed">To confirm</span></li>
+</ul>
+<h3>Compliance and privacy</h3>
+<ul class="rules">
+<li id="r-63"><b>R-63</b> <span class="mark mark--same">same</span> "Assessment only. Not a diagnosis." next to every assessment CTA above the fold, in the mobile menu bottom bar and on every assessment screen. Visible on load.</li>
+<li id="r-64"><b>R-64</b> <span class="mark mark--same">same</span> Wherever a next step is offered, a licensed provider is named as responsible for it.</li>
+<li id="r-65"><b>R-65</b> <span class="mark mark--same">same</span> Rx product names may appear in navigation and on product pages that carry safety information. Never in heroes or ads, and never next to a benefit claim.</li>
+<li id="r-87"><b>R-87</b> <span class="mark mark--new">new</span> Longevity and Hair loss product pages (NAD+ Capsules, NAD+ injection, Metformin, Finasteride, Hair Growth Spray) carry the status <b>Legal review required</b> and do not ship until legal approves them. This replaces the earlier decision to remove drug names from Longevity. · Source: U-06</li>
+<li id="r-66"><b>R-66</b> <span class="mark mark--same">same</span> Safety information on a product page is always fully expanded.</li>
+<li id="r-67"><b>R-67</b> <span class="mark mark--same">same</span> No press strip, clinical statistics, success rates, reviews, testimonials, endorsements, certifications or star ratings until legal approves real data.</li>
+<li id="r-68"><b>R-68</b> <span class="mark mark--same">same</span> No promised review or shipping time until operations confirm a service level.</li>
+<li id="r-69"><b>R-69</b> <span class="mark mark--same">same</span> Illustrative medical content shows the DEMO ONLY notice. Never invent clinical rules or statistics.</li>
+<li id="r-70"><b>R-70</b> <span class="mark mark--same">same</span> Assessment answers are collected only on the clinical intake domain.</li>
+<li id="r-71"><b>R-71</b> <span class="mark mark--same">same</span> No tracking pixels, ad tags or session replay on condition or product pages.</li>
+<li id="r-88"><b>R-88</b> <span class="mark mark--new">new</span> Footer legal line: "© 2026 unifiedmeds". Entity name, domain and contact email are added when confirmed. · Source: U-07</li>
+</ul>
+<h3>Packaging</h3>
+<ul class="rules">
+<li id="r-89"><b>R-89</b> <span class="mark mark--new">new</span> Labels are built from the label master (Figma 2680:16) and the bottle master "Bottle / Amber 360" (2680:89). Each label carries the product name, strength · form, "Prescription treatment" and "Rx only", the primary seal, and one capsule from the Capsule Kit in the product colour (R-85). Clay is not used on labels. · Source: Figma 2678:2</li>
+</ul>
+<h3>Accessibility</h3>
+<ul class="rules">
+<li id="r-72"><b>R-72</b> to <b>R-77</b> <span class="mark mark--same">same</span> WCAG AA contrast, 2px Deep Teal focus ring (Paper on dark), 44×44 tap targets, hover also works with touch and keyboard, reduced motion is instant, no sideways scroll at 390px.</li>
+<li id="r-95"><b>R-95</b> <span class="mark mark--new">new</span> The logo colours meet contrast in the versions in R-91. Any new logo pairing is checked for 3:1 before use.</li>
+</ul>
+<h3>Governance</h3>
+<ul class="rules">
+<li id="r-78"><b>R-78</b> to <b>R-83</b> <span class="mark mark--same">same</span> A rule changes in this order: decision → <code>brand-rules.md</code> → tokens → changelog → release. No silent mismatches. Exceptions are logged before they ship. Open items are marked To confirm. A change to palette, type scale, layout or a rule's meaning opens a new edition.</li>
+</ul>
+</section><section class="sec" id="exceptions-log"><div class="sec-head"><h2>Exceptions log.</h2></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Date</th><th>Scope</th><th>Rule</th><th>Exception</th><th>Status</th></tr></thead><tbody><tr id="e-01"><td>E-01</td><td>05.10.2026</td><td>Mobile footer links</td><td>R-74</td><td>36px tall, below 44px</td><td>Approved (carried from Edition 02)</td></tr><tr id="e-02"><td>E-02</td><td>08.10.2026</td><td>Header CTA</td><td>R-40</td><td>44px instead of 50px</td><td>Approved (carried from Edition 02)</td></tr><tr id="e-03"><td>E-03</td><td>08.10.2026</td><td>Mobile menu bottom bar CTA</td><td>R-40</td><td>48px, full width</td><td>Approved (carried from Edition 02)</td></tr></tbody></table></div>
+</section><section class="sec" id="open-items-to-confirm"><div class="sec-head"><h2>Open items (To confirm).</h2></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Item</th><th>Rule</th></tr></thead><tbody><tr id="o-01"><td>O-01</td><td>Legal entity, domain, contact email</td><td>R-07, R-88</td></tr><tr id="o-02"><td>O-02</td><td>Tagline</td><td>R-09</td></tr><tr id="o-03"><td>O-03</td><td>Website use of product colours</td><td>R-85</td></tr><tr id="o-04"><td>O-04</td><td>Logo wordmark typeface name</td><td>R-18</td></tr><tr id="o-05"><td>O-05</td><td>Shape limits, opacity values, how Quadrant and capsule combine</td><td>R-32</td></tr><tr id="o-06"><td>O-06</td><td>Icon sizes and icon colour on the website</td><td>R-35</td></tr><tr id="o-07"><td>O-07</td><td>Secondary logo colour versions</td><td>R-94</td></tr><tr id="o-08"><td>O-08</td><td>Light button hover rule</td><td>R-41</td></tr><tr id="o-09"><td>O-09</td><td>Disabled and Loading states; progress mark</td><td>R-42</td></tr><tr id="o-10"><td>O-10</td><td>Phase 2 menu wording</td><td>R-86</td></tr><tr id="o-11"><td>O-11</td><td>Loader shape</td><td>R-53</td></tr><tr id="o-12"><td>O-12</td><td>Assessment length; consultation fee line</td><td>R-60, R-62</td></tr><tr id="o-13"><td>O-13</td><td>Licensed photography</td><td>R-39</td></tr><tr id="o-14"><td>O-14</td><td>Legal approval of Longevity and Hair loss product pages</td><td>R-87</td></tr><tr id="o-15"><td><s>O-15</s></td><td>Closed 15.11.2026: logo height in the desktop header is 30px in both menus (<code>--size-logo-header-desktop</code>). Figma short nav (45px) goes on the clean-up list</td><td>R-90</td></tr></tbody></table></div>
+      </section>
+      <footer class="page-foot cap"><span>unifiedmeds Brand Hub · Brand Edition 03 · 15.11.2026</span><span>Source: <a href="brand-rules.md">brand-rules.md</a> · generated by tools/build_rulebook.py</span></footer>
+    </div>
+  </main>
+</div>
+<script src="hub.js" defer></script>
+</body>
+</html>
