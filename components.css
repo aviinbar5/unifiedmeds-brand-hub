@@ -197,3 +197,10 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 @media (max-width: 767px) {
   .btn { font-size: var(--type-mobile-button-size); }
 }
+
+/* Buttons with an icon (R-100): icon right, 20px, 8px gap, 20 padding on the icon side */
+.btn--icon { gap: var(--space-2); padding-right: calc(var(--space-5) - var(--size-button-border)); }
+.btn-icon { width: var(--space-5); height: var(--space-5); flex: none; transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
+.btn--icon:hover .btn-icon[data-dir="right"], .btn--icon:focus-visible .btn-icon[data-dir="right"] { transform: translateX(var(--motion-distance-lift)); }
+.btn--icon:hover .btn-icon[data-dir="down"], .btn--icon:focus-visible .btn-icon[data-dir="down"] { transform: translateY(var(--motion-distance-lift)); }
+.btn--icon:hover .btn-icon[data-dir="out"], .btn--icon:focus-visible .btn-icon[data-dir="out"] { transform: translate(var(--motion-distance-lift), calc(var(--motion-distance-lift) * -1)); }

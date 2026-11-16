@@ -1,7 +1,7 @@
 # unifiedmeds · brand-rules.md
 
 **Brand Edition 03 · 15.11.2026 · Owner: Avi · Status: APPROVED by Avi 15.11.2026 (open items O-01 to O-14 stay To confirm)**
-Supersedes SoviCare Brand Edition 02 (08.10.2026, kept in `archive/sovicare-edition-02/`). Rule IDs R-01 to R-83 keep their Edition 02 numbers so every change can be traced. New rules start at R-84.
+Supersedes Brand Edition 02 (08.10.2026, archived outside the published hub). Rule IDs R-01 to R-83 keep their Edition 02 numbers so every change can be traced. New rules start at R-84.
 
 Status words: **Current** (decided, build it) · **Phase 2** (designed, ships after launch) · **To confirm** (open item, never ships as decided) · **Retired** (no longer applies).
 Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in Edition 03 · **[new]** added in Edition 03.
@@ -21,6 +21,13 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | U-09 | The October Astro site code is a reference for the developer, who decides whether to reuse it. |
 | U-10 | The Claude Design project "SoviCare Homepage Desktop V1" is archive only. |
 | U-11 | Buttons are rounded rectangles (5px corners), not pills: the capsule shape belongs to the logo. Button and label values follow Avi's Figma (Button set 2676:310, Packaging 2678:2). |
+| U-12 | 16.11.2026 · Three logo stings are approved: B (two halves), C1 (built from the u), C2 (built from u and m). |
+| U-13 | 16.11.2026 · Labels: Avi's label master stays exactly as is; the ground is the category, the capsule colour is the product (R-96, R-97). |
+| U-14 | 16.11.2026 · A capsule hue never repeats in the catalogue while it is small (R-97). |
+| U-15 | 16.11.2026 · Both hubs open to anyone with the link, hidden from search engines (R-102). |
+| U-16 | 16.11.2026 · Every trace of the former brand leaves the published hubs; earlier editions are archived outside them, never deleted. |
+| U-17 | 16.11.2026 · Everything aligned and uniform: cards in a row share one height and one action line (R-98). |
+| U-18 | 16.11.2026 · Buttons get the full state set and an icon-button family, in Figma and in the hub (R-99, R-100). |
 
 ---
 
@@ -52,11 +59,11 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 - **R-16** [same] Pastel Green #6A8670 is for shapes, in-range markers and icons. Never text.
 - **R-17** [same] There is no dark mode for now.
 - **R-84** [new] Logo colours are a separate token group used **only** by the logo, the app icon and the favicon: Navy #0F2E57, Ink #031D2C, Sky #C9DDEA, Logo Blue #3976C6, Cream #F1ECE0, plus White. They never colour website UI, text, buttons or sections. · Source: U-02, Figma VX5o 5:7
-- **R-85** [new] Product colours identify a product on labels and packaging: Tadalafil #9CC9E3, Sildenafil #3976C6, Combo #82CFCB (Figma "Option B · Softened"). Use on the website (for example product cards) is **To confirm**. Note: Sildenafil and Logo Blue share #3976C6. · Source: Figma 3069:280, 2719:4672
+- **R-85** [changed] Product colours identify a product on labels and packaging (16.11.2026): Tadalafil Sky #9CC9E3, Sildenafil Coral #F4A38C, Combo Aqua #82CFCB, PT-141 Lime #CFE08F, NAD+ Capsules Ice #E6EEF2, NAD+ Injection Orchid #E7A6D9, Metformin Sand #E9CC98, Finasteride Violet #5B4A9E, Hair Growth Green #2E7D4F. Tokens `--color-product-*`. Use on the website (for example product cards) is **To confirm** (O-03). · Source: U-13, U-14
 
 ### Type
 
-- **R-18** [same] Two typefaces: DM Serif Display (Regular only) and Inter (400 to 700). A monospace face appears only on internal and code screens. The logo wordmark is artwork, not live type. Its typeface name is **To confirm** (`GAP`: the Figma logo is outlined vectors).
+- **R-18** [same] Two typefaces: DM Serif Display (Regular only) and Inter (400 to 700). A monospace face appears only on internal and code screens. The logo wordmark is artwork, not live type. It is drawn in Outfit Medium (from the logo sting source; confirmed by Avi 15.11.2026). Outfit is never used for website text.
 - **R-19** [same] The hub copies Figma's text styles 1:1. No size outside the scale.
 - **R-20** [same] Hero: 70/60 on the homepage only, 46/54 on every other page, mobile 34/40. Checked in Figma 15.11.2026: homepage 70/60, Sexual health 46.
 - **R-21** [same] Serif floor: DM Serif never below 24px on desktop or 21px on mobile.
@@ -105,6 +112,9 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 - **R-46** [same] Menu behaviour: hover shows a Line/Soft pill (150ms). The dropdown opens on hover after a 100ms intent delay, or on click, Enter or ↓. One dropdown at a time. Esc closes it and returns focus.
 - **R-47** [same] Mobile menu: ☰ in a 44×44 target opens a full-screen menu and locks body scroll. The bottom bar holds Get started and "Assessment only. Not a diagnosis."
 - **R-48** [changed] Footer: Figma "Footer/Desktop" 2738:370 and "footer mobile" 2741:3169, with the CTA band 2738:1093 / 2741:3168. Deep Teal ground, logo Horizontal reversed.
+- **R-98** [new] Alignment: elements in one row share one height; the action (button or link) sits at the bottom of every card on one line across the row; captions sit on one line; image galleries use one frame ratio per row. · Source: U-17
+- **R-99** [new] Button states: Default, Hover, Pressed (hover colours, no lift), Focus (hover look plus the 2px ring), Disabled (**To confirm**, O-09). Mobile has no hover: a tap shows Pressed. Same spec on desktop and mobile: Inter Medium 15/20, height 50, padding 24, radius 5, border 1.5 inside; exceptions Header 44 and Mobile bar 48; tap target at least 44. · Source: U-18
+- **R-100** [new] Buttons with an icon are a second family, never a replacement: same types, colours and states; one 20px icon on the right of the label, in the label colour, 8px gap, padding 24 on the label side and 20 on the icon side. The icon never replaces the label and is never Yellow. On hover the icon moves 2px in its direction (none with reduced motion). · Source: U-18
 
 ### Motion
 
@@ -114,6 +124,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 - **R-52** [same] Brand moves: Rise 12px; Pivot 520ms, no fade; Wipe 420ms; stagger 90ms, three items at most; Count for results only.
 - **R-53** [changed] Nothing loops on the website except the loader (1.4s). Loader shape (quadrant or capsule) **To confirm**. Hero: static copy plus one shape entrance.
 - **R-54** [same] The hub's motion page is the only motion reference (M-001 to M-024).
+- **R-101** [new] Logo stings: B is the default, C1 for brand and story moments, C2 for short social openers. One sting per video, at the start or the end, never in the middle. · Source: U-12
 
 ### Content
 
@@ -142,12 +153,15 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 
 ### Packaging
 
-- **R-89** [changed] Labels follow the Figma label master (2680:16) on the bottle master "Bottle / Amber 360" (2680:89): Deep Teal ground; the primary seal small, reversed, top left; the product name in DM Serif Display, Paper; strength (Inter SemiBold) · form (Inter Regular); a thin divider; "Prescription treatment" and "Rx only" (Inter Regular); one vertical capsule cropped by the right edge, outlined in the product colour with its upper half filled (R-85). Clay is not used on labels. Combo label strength reads 100 mg in Figma: **To confirm**. · Source: Figma 2678:2, U-11
+- **R-89** [changed] Labels follow the Figma label master (2680:16) on the bottle master "Bottle / Amber 360" (2680:89): the ground is the category colour (R-96); the primary seal small, reversed, top left; the product name in DM Serif Display, Paper; strength (Inter SemiBold) · form (Inter Regular); a thin divider; "Prescription treatment" and "Rx only" (Inter Regular); one vertical capsule cropped by the right edge, outlined in the product colour with its upper half filled (R-85). Clay is not used on labels. Combo label strength reads 100 mg in Figma: **To confirm**. · Source: Figma 2678:2, U-11
+- **R-96** [new] Label ground per category: Sexual health Deep Teal #264653, Longevity Forest #2F5240, Hair loss Sky #BFD9EA. Hair loss is a light label: name, text, divider and seal in Deep Teal; the word "unified" in the seal always knocks out to the label ground. Tokens `--color-category-*`. · Source: U-13
+- **R-97** [new] A capsule hue never repeats in the catalogue: "repeat" means the same hue family, not only the same hex. Past about 12 products a hue may repeat across categories but never within one. One product-name size per category (84, 79, 68 at the 560 master). Unknown strengths read "[DOSE]" until the clinical team confirms them. Every capsule keeps at least 3:1 against its ground. · Source: U-14
 
 ### Accessibility
 
 - **R-72** to **R-77** [same] WCAG AA contrast, 2px Deep Teal focus ring (Paper on dark), 44×44 tap targets, hover also works with touch and keyboard, reduced motion is instant, no sideways scroll at 390px.
 - **R-95** [new] The logo colours meet contrast in the versions in R-91. Any new logo pairing is checked for 3:1 before use.
+- **R-102** [new] Every page of both hubs carries `<meta name="robots" content="noindex, nofollow">`: open to anyone with the link, never listed by search engines. · Source: U-15
 
 ### Governance
 
@@ -170,7 +184,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | O-01 | Legal entity, domain, contact email | R-07, R-88 |
 | O-02 | Tagline | R-09 |
 | O-03 | Website use of product colours | R-85 |
-| O-04 | Logo wordmark typeface name | R-18 |
+| ~~O-04~~ | Closed 15.11.2026 (Avi): the wordmark is Outfit Medium | R-18 |
 | O-05 | Shape limits and how Quadrant and capsule combine (opacity values set 15.11.2026) | R-32 |
 | O-06 | Icon sizes and icon colour on the website | R-35 |
 | O-07 | Secondary logo colour versions | R-94 |

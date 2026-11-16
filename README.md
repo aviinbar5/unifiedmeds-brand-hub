@@ -1,6 +1,6 @@
 # unifiedmeds Brand Hub
 
-**Brand Edition 03 · 15.11.2026.** The design system and brand book for unifiedmeds (formerly SoviCare). Static site, no build step: every page is plain HTML. Published with GitHub Pages.
+**Brand Edition 03 · 15.11.2026.** The design system and brand book for unifiedmeds. Static site, no build step: every page is plain HTML. Published with GitHub Pages.
 
 ## Authority
 1. Figma `h7D0eRszARBaWdJT1NWrpZ` (website) wins on every visual value. Figma `VX5oKsl1ZIKbiWLR0tjf7L` ("B · capsule seal") wins on the logo.
@@ -17,7 +17,7 @@
 | What changed | `CHANGELOG.md` · `changelog.html` |
 | Logo files (SVG, exported from Figma) | `assets/brand/` |
 | Icon set (SVG, exported from Figma) | `assets/icons/` |
-| SoviCare Edition 02 (archived, not deleted) | `archive/sovicare-edition-02/` |
+| Earlier editions | Archived outside the published hub, not deleted |
 
 ## For developers
 Link `brand.css` (and `components.css` if useful), use only `var(--…)` tokens, and read `handoff.html`. Never copy hex values from screenshots.

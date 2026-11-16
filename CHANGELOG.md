@@ -1,5 +1,12 @@
 # unifiedmeds Brand Hub · changelog
 
+## Edition 03 · update 16.11.2026 (review with Avi)
+- Labels: the ground is the category (Sexual health Deep Teal, Longevity Forest, Hair loss Sky as a light label), the capsule colour is the product, and a capsule hue never repeats in the catalogue (U-13, U-14, R-96, R-97). New tokens `--color-category-*`; product colours updated, Sildenafil is now Coral #F4A38C.
+- Buttons: full state set (Default, Hover, Pressed, Focus, Disabled proposed), one spec for desktop and mobile, and a second family with an icon on the right; eight UI icons in `assets/icons/ui/` (U-18, R-99, R-100).
+- Alignment: cards in a row share one height and one action line; fixed rows on Brand, Components and Motion (U-17, R-98).
+- Former brand removed from the published hub: archive link, archive folder, Figma URL slugs and wording; earlier editions are archived outside the hub, not deleted (U-16).
+- Every page is hidden from search engines and stays open by link (U-15, R-102). Three logo stings approved (U-12, R-101).
+
 ## Edition 03 · update 15.11.2026 (buttons and labels)
 - Buttons are rounded rectangles, not pills (U-11): radius 5 (`--radius-button`), padding 24 (`--size-button-padding-x`), height 50. The Dark button fills Teal-deep; labels on Yellow and Paper are Deep Teal; new Light button type. Source: Avi's Figma Button set 2676:310.
 - Labels: R-89 rewritten from the Figma label master (2680:16): Deep Teal ground, reversed seal, vertical capsule in the product colour. Product images now show the unifiedmeds label.
@@ -20,7 +27,7 @@ Decisions: U-01 to U-10, approved by Avi on 15.11.2026 (see brand-rules.md).
 **Unchanged from Edition 02**
 - Website palette, type scale, layout, spacing, radius, buttons, fields, cards, motion, content and accessibility rules.
 **Archived (not deleted)**
-- SoviCare Edition 02 is in archive/sovicare-edition-02. Edition 01 stays on its own site.
+- Edition 02 is archived outside the published hub. Edition 01 stays on its own site.
 Open items: O-01 to O-14 in brand-rules.md (legal details, tagline, product colours on the website, wordmark typeface, shape limits, icon size and colour, secondary logo versions, Light button hover, field states, Phase 2 menu wording, loader shape, assessment length and fee line, licensed photography, legal review of Phase 2 product pages).
 
 ---

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Components · unifiedmeds Brand Hub</title>
 <meta name="description" content="unifiedmeds website components, live: buttons, links and focus, form fields, cards, chips, steps, accordion, header and main menu v3, Footer v2 compact and the overlay surface. Built on tokens; Figma wins on every visual value.">
@@ -41,6 +42,11 @@ td code, th code { white-space: nowrap; }
 
 /* ---------- Surfaces ---------- */
 .surfaces { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.surfaces > .surface { grid-row: span 3; grid-template-rows: subgrid; }
+.surfaces > .surface:has(+ .stack) { grid-row: auto; grid-template-rows: none; }
+.surface-title--spacer { visibility: hidden; }
+.surfaces .specimen-row { align-content: flex-start; align-self: start; }
+.grid-2 > :has(> .specimen-row) { display: grid; grid-row: span 2; grid-template-rows: subgrid; align-content: start; }
 .surface { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border-radius: var(--radius-card); min-width: 0; }
 .surface .specimen-row { gap: var(--space-3); }
 .surface--paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
@@ -437,7 +443,6 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
     </div>
     <div class="hub-group"><span>Build</span>
       <a href="handoff.html">Developer handoff</a>
-      <a href="archive/index.html">Archive · SoviCare editions</a>
     </div>
     <p class="hub-nav-foot">Figma wins on every visual value. brand-rules.md wins on compliance and wording.</p>
   </nav>
@@ -468,7 +473,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
       <section class="sec" id="buttons" aria-labelledby="buttons-h">
         <div class="sec-head">
           <h2 id="buttons-h">Buttons.</h2>
-          <p>Five types, one height, one shape, one motion. Source: Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2676-309">Buttons — Hover Rules 2676-309</a> (board <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2719-4438">2719-4438</a>) and Avi’s button rule of 08.10.2026 (<a href="rulebook.html#r-40">R-40</a>).</p>
+          <p>Five types, one height, one shape, one motion. Source: Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2676-309">Buttons — Hover Rules 2676-309</a> (board <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2719-4438">2719-4438</a>) and Avi’s button rule of 08.10.2026 (<a href="rulebook.html#r-40">R-40</a>).</p>
         </div>
 
         <div class="sub">
@@ -568,6 +573,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
             </div>
             <div class="stack">
               <div class="surface surface--blue surface-accent on-dark">
+                <span class="surface-title surface-title--spacer" aria-hidden="true">Pastel Blue surface</span>
                 <div class="specimen-row">
                   <a class="btn" href="#buttons">Get started</a>
                 </div>
@@ -603,7 +609,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
               <div class="state"><span class="btn" aria-hidden="true">Get started</span><span class="cap">Default</span></div>
               <div class="state"><span class="btn is-hover" aria-hidden="true">Get started</span><span class="cap">Hover · Yellow, lift 2px</span></div>
               <div class="state"><span class="btn is-focus" aria-hidden="true">Get started</span><span class="cap">Focus · 2px ring, 3px offset</span></div>
-              <div class="state"><span class="btn is-active" aria-hidden="true">Get started</span><span class="cap">Active · hover colour, no lift</span></div>
+              <div class="state"><span class="btn is-active" aria-hidden="true">Get started</span><span class="cap">Pressed · hover colour, no lift</span></div>
               <div class="state"><button class="btn" type="button" disabled>Get started</button><span class="cap">Disabled <span class="status status--proposed">To confirm</span></span></div>
               <div class="state"><span class="slot-loading">Loading</span><span class="cap"><span class="status status--proposed">To confirm in Figma</span></span></div>
             </div>
@@ -617,6 +623,48 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
             <div class="rule"><b>150ms ease-out.</b><p>Colour, border and lift share one transition: <code>--motion-duration-fast</code> with <code>--motion-easing-ui</code>. Press = hover = 150ms.</p></div>
             <div class="rule"><b>Lift 2px.</b><p>Every button rises <code>--motion-distance-lift</code> on hover and settles back on press. No shadow, no scale.</p></div>
             <div class="rule"><b>Reduced motion.</b><p>With <code>prefers-reduced-motion</code> the colour changes instantly and nothing lifts (brand.css sets both tokens to 0).</p></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Desktop and mobile.</h3>
+          <div class="grid-2">
+            <div class="rule"><b>One spec on both.</b><p>Inter Medium 15/20, height 50, padding 24, radius 5, 1.5 border drawn inside, labels never wrap. Exceptions: Header 44 and the mobile bottom bar 48, full width. Tap target at least 44 (<a class="link" href="rulebook.html">R-99</a>).</p></div>
+            <div class="rule"><b>Mobile has no hover.</b><p>A tap shows Pressed (hover colours, no lift) for 150ms, then the page reacts. Focus with a keyboard looks like hover plus the 2px ring, on every device.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="icon-buttons">
+          <h3>Buttons with an icon.</h3>
+          <p class="cap">A second family, never a replacement for the text buttons: same five types, colours, states and height. One 20px icon on the right of the label, in the label colour, 8px from it; padding 24 on the label side and 20 on the icon side. On hover the icon moves 2px in its direction, together with the lift; with reduced motion it stays still (<a class="link" href="rulebook.html">R-100</a>). Figma: our file, component set “Button / Icon”.</p>
+          <div class="specimen">
+            <div class="specimen-row">
+                <a class="btn btn--icon" href="#icon-buttons">Watch how it works<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.2L15 10L7 14.8V5.2Z"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Learn more<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg></a>
+                <a class="btn btn--icon btn--yellow" href="#icon-buttons">Get started<svg class="btn-icon" data-dir="right" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10H16M11 15L16 10L11 5"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Download PDF<svg class="btn-icon" data-dir="down" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5V12.5M14 8.5L10 12.5L6 8.5M4 16.25H16"/></svg></a>
+                <a class="btn btn--icon" href="#icon-buttons">Book a visit<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Message your provider<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6C4 5.06954 4.21071 4.56083 4.58579 4.18576C4.96086 3.81069 5.46957 3.6 6 3.6H14C14.5304 3.6 15.0391 3.81069 15.4142 4.18576C15.7893 4.56083 16 5.06954 16 5.6V11.4C16 11.9304 15.7893 12.4391 15.4142 12.8142C15.0391 13.1893 14.5304 13.4 14 13.4H9.2L5.8 16.2V13.4H6C5.46957 13.4 4.96086 13.1893 4.58579 12.8142C4.21071 12.4391 4 11.9304 4 11.4V5.6Z"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Open the full study<svg class="btn-icon" data-dir="out" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16.2 8.8V3.8H11.2M16.2 3.8L9.6 10.4M14.2 12V15C14.2 15.3978 14.042 15.7793 13.7606 16.0606C13.4793 16.3419 13.0978 16.5 12.7 16.5H5.3C4.90216 16.5 4.52063 16.3419 4.23933 16.0606C3.95802 15.7793 3.8 15.3978 3.8 15V7.6C3.8 7.20215 3.95802 6.82062 4.23933 6.53932C4.52063 6.25801 4.90216 6.1 5.3 6.1H8.2"/></svg></a>
+                <a class="btn btn--icon" href="#icon-buttons">Buy now<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 7.2V6C7.6 5.36346 7.85283 4.75301 8.30292 4.30292C8.75301 3.85283 9.36346 3.6 10 3.6C10.6365 3.6 11.2469 3.85283 11.697 4.30292C12.1471 4.75301 12.4 5.36346 12.4 6V7.2M4.6 7.2H15.4L14.6 16.4H5.4L4.6 7.2Z"/></svg></a>
+            </div>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Action</th><th>Icon</th><th>Example label</th></tr></thead>
+            <tbody>
+                <tr><td>Watch</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.2L15 10L7 14.8V5.2Z"/></svg> Play</td><td>“Watch how it works”</td></tr>
+                <tr><td>More information</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg> Info</td><td>“Learn more”</td></tr>
+                <tr><td>Buy</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 7.2V6C7.6 5.36346 7.85283 4.75301 8.30292 4.30292C8.75301 3.85283 9.36346 3.6 10 3.6C10.6365 3.6 11.2469 3.85283 11.697 4.30292C12.1471 4.75301 12.4 5.36346 12.4 6V7.2M4.6 7.2H15.4L14.6 16.4H5.4L4.6 7.2Z"/></svg> Bag</td><td>“Buy now”</td></tr>
+                <tr><td>Continue</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10H16M11 15L16 10L11 5"/></svg> Arrow right</td><td>“Get started”</td></tr>
+                <tr><td>Download</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5V12.5M14 8.5L10 12.5L6 8.5M4 16.25H16"/></svg> Download</td><td>“Download PDF”</td></tr>
+                <tr><td>Book</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg> Calendar</td><td>“Book a visit”</td></tr>
+                <tr><td>Message</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6C4 5.06954 4.21071 4.56083 4.58579 4.18576C4.96086 3.81069 5.46957 3.6 6 3.6H14C14.5304 3.6 15.0391 3.81069 15.4142 4.18576C15.7893 4.56083 16 5.06954 16 5.6V11.4C16 11.9304 15.7893 12.4391 15.4142 12.8142C15.0391 13.1893 14.5304 13.4 14 13.4H9.2L5.8 16.2V13.4H6C5.46957 13.4 4.96086 13.1893 4.58579 12.8142C4.21071 12.4391 4 11.9304 4 11.4V5.6Z"/></svg> Chat</td><td>“Message your provider”</td></tr>
+                <tr><td>Leave the site</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16.2 8.8V3.8H11.2M16.2 3.8L9.6 10.4M14.2 12V15C14.2 15.3978 14.042 15.7793 13.7606 16.0606C13.4793 16.3419 13.0978 16.5 12.7 16.5H5.3C4.90216 16.5 4.52063 16.3419 4.23933 16.0606C3.95802 15.7793 3.8 15.3978 3.8 15V7.6C3.8 7.20215 3.95802 6.82062 4.23933 6.53932C4.52063 6.25801 4.90216 6.1 5.3 6.1H8.2"/></svg> External link</td><td>“Open the full study”</td></tr>
+            </tbody>
+          </table></div>
+          <div class="dodont">
+            <div class="rule rule--do"><b>Do.</b><p>One icon per button, chosen by what the button does. Icon files: <code>assets/icons/ui/</code> (stroke uses <code>currentColor</code>).</p></div>
+            <div class="rule rule--dont"><b>Don’t.</b><p>An icon instead of the label, two icons, an icon on the left, a Yellow icon, or the large capsule icons inside a button.</p></div>
           </div>
         </div>
 
@@ -766,7 +814,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
       <section class="sec" id="cards" aria-labelledby="cards-h">
         <div class="sec-head">
           <h2 id="cards-h">Cards, chips and steps.</h2>
-          <p>UI is flat: borders, not shadows. Cards that are links fill Deep Teal on hover, with no lift.</p>
+          <p>UI is flat: borders, not shadows. Cards that are links fill Deep Teal on hover, with no lift. Cards in one row share one height; the action sits at the bottom of every card, on one line across the row, and captions sit on one line (<a class="link" href="rulebook.html">R-98</a>). In CSS: the row is a grid and each card uses <code>grid-template-rows: subgrid</code>.</p>
         </div>
 
         <div class="sub">
@@ -851,7 +899,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
             <table>
               <thead><tr><th>Exception</th><th>Element</th><th>Size</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td><a href="rulebook.html#e-01">E-01</a></td><td>Mobile footer links (Footer v2 compact, Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2741-3169">2741-3169</a>)</td><td>36px rows</td><td><span class="status status--current">Approved 05.10.2026</span></td></tr>
+                <tr><td><a href="rulebook.html#e-01">E-01</a></td><td>Mobile footer links (Footer v2 compact, Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2741-3169">2741-3169</a>)</td><td>36px rows</td><td><span class="status status--current">Approved 05.10.2026</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -996,7 +1044,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
       <section class="sec" id="footer" aria-labelledby="footer-h">
         <div class="sec-head">
           <h2 id="footer-h">Footer v2 compact.</h2>
-          <p>One continuous Deep Teal block: CTA strip, brand and newsletter, link columns, legal. Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2738-370">2738-370</a> (mobile <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/SoviCare---Website?node-id=2741-3169">2741-3169</a>), approved 05.10.2026.</p>
+          <p>One continuous Deep Teal block: CTA strip, brand and newsletter, link columns, legal. Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2738-370">2738-370</a> (mobile <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2741-3169">2741-3169</a>), approved 05.10.2026.</p>
         </div>
 
         <div class="ftr on-dark">
