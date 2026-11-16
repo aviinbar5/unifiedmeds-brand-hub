@@ -60,6 +60,8 @@
 
   .dont-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
   .ok { font-weight: 600; color: var(--color-text-strong); }
+  #microcopy .no { color: var(--color-text-secondary); text-decoration: line-through; text-decoration-color: var(--color-line-mid); }
+  #microcopy td code { white-space: nowrap; }
   td .status { white-space: nowrap; }
   table .num { text-align: right; white-space: nowrap; }
   tr.is-launch td:first-child { font-weight: 600; }
@@ -119,6 +121,7 @@
         <nav class="toc" aria-label="On this page">
           <a href="#voice">Voice</a>
           <a href="#wording">Wording rules</a>
+          <a href="#microcopy">Microcopy</a>
           <a href="#naming">Naming &amp; glossary</a>
           <a href="#required">Required lines</a>
           <a href="#compliance">Compliance</a>
@@ -312,6 +315,139 @@
             <div class="rule rule--dont"><b>Not this</b><p class="ex">“Most men wait four years before asking anyone.”</p><p class="src">An unsourced number used as reassurance (Edition 01).</p></div>
           </div>
         </div>
+      </section>
+
+
+      <!-- ============ Microcopy (16.11.2026, proposal) ============ -->
+      <section class="sec" id="microcopy" aria-labelledby="microcopy-h">
+        <div class="sec-head">
+          <span class="status status--proposed">Proposed · 16.11.2026</span>
+          <h2 id="microcopy-h">Microcopy library.</h2>
+          <p>The short words of the site and the product: buttons, labels, errors, empty states, confirmations. One voice on every screen. Square brackets are values the product fills in. The developer can import every line from <a class="link" href="assets/content/microcopy.json" download>microcopy.json</a>, keyed as in the last column.</p>
+        </div>
+        <div class="grid-3">
+            <div class="rule rule--do"><b>Sentence case.</b><p>Buttons, labels, menus and headings: “Get started”, never “Get Started” (R-24).</p></div>
+            <div class="rule rule--do"><b>Verb first, short.</b><p>A button says what happens, in one to three words.</p></div>
+            <div class="rule rule--do"><b>No “please”, no “!”.</b><p>Plain and calm. The interface is not asking a favour.</p></div>
+            <div class="rule rule--do"><b>Say what to do next.</b><p>Every error says how to fix it, in one sentence, without blame.</p></div>
+            <div class="rule rule--do"><b>Member, not patient.</b><p>In the product the person is a member (R-57).</p></div>
+            <div class="rule rule--do"><b>No health detail in passing.</b><p>Toasts, emails and notifications never name a condition, a medicine or a result.</p></div>
+        </div>
+          <div class="sub">
+            <h3>Buttons and links.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Primary action, everywhere</td><td class="ok">Get started</td><td class="no">Get Started · Start now! · Sign up today</td><td><code>cta.primary</code></td></tr>
+                <tr><td>Next to Get started</td><td class="ok">Explore treatments</td><td class="no">Shop now · Browse products</td><td><code>cta.secondary</code></td></tr>
+                <tr><td>Inside a category or product page</td><td class="ok">Start your assessment</td><td class="no">Take the quiz · Find out if you qualify</td><td><code>cta.assessment</code></td></tr>
+                <tr><td>Further reading</td><td class="ok">Learn more</td><td class="no">Click here · Read more &gt;&gt;</td><td><code>cta.more</code></td></tr>
+                <tr><td>Next step in a flow</td><td class="ok">Continue</td><td class="no">Next &gt;&gt; · Proceed</td><td><code>cta.continue</code></td></tr>
+                <tr><td>Previous step</td><td class="ok">Back</td><td class="no">Go back · Previous</td><td><code>cta.back</code></td></tr>
+                <tr><td>Keep changes</td><td class="ok">Save changes</td><td class="no">Submit · OK</td><td><code>cta.save</code></td></tr>
+                <tr><td>Leave without changes</td><td class="ok">Cancel</td><td class="no">Nevermind · Abort</td><td><code>cta.cancel</code></td></tr>
+                <tr><td>Plan card</td><td class="ok">Continue to checkout</td><td class="no">Buy now! · Pay</td><td><code>cta.checkout</code></td></tr>
+                <tr><td>End of the assessment</td><td class="ok">Send to my provider</td><td class="no">Submit answers</td><td><code>cta.send</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Form labels and help.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Email label</td><td class="ok">Email</td><td class="no">E-mail address *</td><td><code>field.email</code></td></tr>
+                <tr><td>Under the email field</td><td class="ok">We send order updates here. Nothing about your treatment.</td><td class="no">Enter a valid email</td><td><code>field.email.help</code></td></tr>
+                <tr><td>Password label</td><td class="ok">Password</td><td class="no">Pass</td><td><code>field.password</code></td></tr>
+                <tr><td>Under a new password</td><td class="ok">At least 8 characters.</td><td class="no">Password must meet complexity requirements</td><td><code>field.password.help</code></td></tr>
+                <tr><td>Date of birth group</td><td class="ok">Date of birth</td><td class="no">DOB</td><td><code>field.dob</code></td></tr>
+                <tr><td>Optional field suffix</td><td class="ok">(optional)</td><td class="no">* not required</td><td><code>field.optional</code></td></tr>
+                <tr><td>Sensitive question helper</td><td class="ok">Your provider needs this to check what is safe for you. Only your care team sees it.</td><td class="no">Required for compliance</td><td><code>field.why</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Field errors.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Empty required field</td><td class="ok">Enter your [field].</td><td class="no">This field is required!</td><td><code>error.required</code></td></tr>
+                <tr><td>Email that cannot work</td><td class="ok">Enter an email like name@example.com.</td><td class="no">Invalid email</td><td><code>error.email</code></td></tr>
+                <tr><td>No answer chosen</td><td class="ok">Choose one answer to continue.</td><td class="no">Please select an option</td><td><code>error.choice</code></td></tr>
+                <tr><td>Incomplete date</td><td class="ok">Enter your full date of birth.</td><td class="no">Invalid date format</td><td><code>error.date</code></td></tr>
+                <tr><td>Wrong password</td><td class="ok">That email and password don’t match. Try again or reset your password.</td><td class="no">Authentication failed</td><td><code>error.password</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>System errors.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Connection lost (toast)</td><td class="ok">That didn’t go through. Check your connection and try again.</td><td class="no">Error 503 · Something went wrong!</td><td><code>system.network</code></td></tr>
+                <tr><td>Page not found</td><td class="ok">This page has moved.</td><td class="no">Oops! 404</td><td><code>system.404</code></td></tr>
+                <tr><td>Server error</td><td class="ok">Something broke on our side. Your answers are safe.</td><td class="no">Internal server error</td><td><code>system.500</code></td></tr>
+                <tr><td>Payment declined</td><td class="ok">Your card was declined. Try another card or contact your bank.</td><td class="no">Transaction failed</td><td><code>system.payment</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Empty states.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>No messages</td><td class="ok">No messages yet. When your provider writes to you, the message lands here.</td><td class="no">Nothing here 🙁</td><td><code>empty.messages</code></td></tr>
+                <tr><td>No orders</td><td class="ok">No orders yet. Your first order appears here once a provider approves your treatment.</td><td class="no">You have no orders</td><td><code>empty.orders</code></td></tr>
+                <tr><td>No search results</td><td class="ok">No results for “[term]”. Try a shorter word or browse treatments.</td><td class="no">No matches found</td><td><code>empty.search</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Confirmations.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Answers saved (toast)</td><td class="ok">Answers saved. You can come back to them any time.</td><td class="no">Success!</td><td><code>done.saved</code></td></tr>
+                <tr><td>Assessment sent</td><td class="ok">A licensed provider will review your answers.</td><td class="no">You’re approved!</td><td><code>done.sent</code></td></tr>
+                <tr><td>Order placed</td><td class="ok">Thanks. We have your order.</td><td class="no">Woohoo! Order complete!</td><td><code>done.order</code></td></tr>
+                <tr><td>Settings changed</td><td class="ok">Changes saved.</td><td class="no">Your changes were saved successfully!</td><td><code>done.updated</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Loading and waiting.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Page loader label (screen readers)</td><td class="ok">Loading</td><td class="no">Please wait…</td><td><code>wait.page</code></td></tr>
+                <tr><td>Waiting for the provider</td><td class="ok">Your provider usually replies within [time].</td><td class="no">Hang tight!</td><td><code>wait.review</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Account.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Header link</td><td class="ok">Sign in</td><td class="no">Log In · Login</td><td><code>account.signin</code></td></tr>
+                <tr><td>Menu item</td><td class="ok">Sign out</td><td class="no">Log out</td><td><code>account.signout</code></td></tr>
+                <tr><td>Password help link</td><td class="ok">Forgot your password?</td><td class="no">Trouble logging in?</td><td><code>account.reset</code></td></tr>
+                <tr><td>How we name the person</td><td class="ok">member</td><td class="no">patient · user · customer (in the product)</td><td><code>account.member</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="sub">
+            <h3>Dialogs.</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Moment</th><th>Say</th><th>Not</th><th>Key</th></tr></thead>
+              <tbody>
+                <tr><td>Leaving with unsaved answers</td><td class="ok">Leave this page.</td><td class="no">Are you sure?</td><td><code>dialog.leave.title</code></td></tr>
+                <tr><td>Body line</td><td class="ok">Your answers on this page are not saved yet.</td><td class="no">You will lose all your data!</td><td><code>dialog.leave.body</code></td></tr>
+                <tr><td>Primary button</td><td class="ok">Stay on this page</td><td class="no">No</td><td><code>dialog.leave.stay</code></td></tr>
+                <tr><td>Secondary button</td><td class="ok">Leave</td><td class="no">Yes</td><td><code>dialog.leave.go</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
       </section>
 
       <!-- ============ 3. Naming & glossary ============ -->
