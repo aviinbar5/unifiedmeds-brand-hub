@@ -46,7 +46,7 @@ td code, th code { white-space: nowrap; }
 .surfaces > .surface:has(+ .stack) { grid-row: auto; grid-template-rows: none; }
 .surface-title--spacer { visibility: hidden; }
 .surfaces .specimen-row { align-content: flex-start; align-self: start; }
-.grid-2 > :has(> .specimen-row) { display: grid; grid-row: span 2; grid-template-rows: subgrid; align-content: start; }
+.grid-2 > :has(> .specimen-row:first-child + .cap:last-child) { display: grid; grid-row: span 2; grid-template-rows: subgrid; align-content: start; }
 .surface { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border-radius: var(--radius-card); min-width: 0; }
 .surface .specimen-row { gap: var(--space-3); }
 .surface--paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
@@ -460,6 +460,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           <a href="#header">Header &amp; main menu</a>
           <a href="#footer">Footer</a>
           <a href="#overlay">Overlay</a>
+          <a href="#states">Feedback &amp; states</a>
           <a href="#changes">Changes from Figma</a>
         </nav>
       </header>
@@ -1199,6 +1200,143 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
             <button class="btn btn--outline" type="submit" value="leave">Leave</button>
           </form>
         </dialog>
+      </section>
+
+      <!-- =========================================================== FEEDBACK & STATES (16.11.2026, proposal) -->
+      <section class="sec" id="states" aria-labelledby="states-h">
+        <div class="sec-head">
+          <span class="status status--proposed">Proposed · 16.11.2026</span>
+          <h2 id="states-h">Feedback and states.</h2>
+          <p>The pieces the product screens need around the forms and buttons: where the member is, what he chose, what happened, and what to do when there is nothing yet. Built from the Recommendation page in Avi's Figma (3180:1523, read only) and the Edition 03 rules. Everything here is a proposal until Avi approves it.</p>
+        </div>
+
+        <div class="sub" id="state-progress">
+          <h3>Progress steps.</h3>
+          <div class="specimen specimen--dark on-dark">
+            <ol class="steps-bar" aria-label="Your progress">
+              <li class="is-done"><span class="steps-dot"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span>Health assessment</li>
+              <li class="is-current" aria-current="step"><span class="steps-dot">2</span>Choose treatment</li>
+              <li><span class="steps-dot">3</span>Checkout</li>
+              <li><span class="steps-dot">4</span>Provider review</li>
+            </ol>
+          </div>
+          <p class="cap">Teal-deep bar, 46 high. Done: Paper dot with a Deep Teal check, Wash Blue label. Current: the one Yellow dot, Paper label. Next: outline dot, Wash Blue label. On mobile only the current step keeps its label. Figma uses Yellow for done steps too; here Yellow marks only the current step (R-11).</p>
+        </div>
+
+        <div class="sub" id="state-choice">
+          <h3>Choice cards.</h3>
+          <div class="grid-2">
+            <div class="choice-group" role="radiogroup" aria-label="Monthly supply">
+              <label class="choice"><input type="radio" name="supply-demo"><span class="choice-radio"></span><span class="choice-text"><b>10 tablets</b><span>$XX / month</span></span></label>
+              <label class="choice"><input type="radio" name="supply-demo" checked><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>12 tablets</b><span>$XX / month</span></span><span class="tag tag--highlight">Most popular</span></label>
+              <label class="choice"><input type="radio" name="supply-demo"><span class="choice-radio"></span><span class="choice-text"><b>16 tablets</b><span>$XX / month</span></span></label>
+            </div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>State</th><th>Look</th></tr></thead>
+              <tbody>
+                <tr><td>Default</td><td>Paper, 1px Line/Base, radius 16, padding 16 / 20, radio outline Wash Blue</td></tr>
+                <tr><td>Hover</td><td>Border Slate (Line/Field), 150ms</td></tr>
+                <tr><td>Selected</td><td>Deep Teal fill, Paper title, Wash Blue line two, Yellow radio with a Deep Teal check</td></tr>
+                <tr><td>Focus</td><td>2px focus ring, 3px offset</td></tr>
+                <tr><td>Badge</td><td>“Most popular”, Wash Yellow tag, one per group</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <p class="cap">One choice card per option, the whole card is the target. Figma draws radius 14; the card rule is 16 (R-43). Selected is a fill, never a scale (R-42).</p>
+        </div>
+
+        <div class="sub" id="state-segmented">
+          <h3>Segmented control and tabs.</h3>
+          <div class="grid-2">
+            <div class="specimen">
+              <div class="segmented" role="radiogroup" aria-label="How often">
+                <button type="button" role="radio" aria-checked="true">As needed</button>
+                <button type="button" role="radio" aria-checked="false">Daily</button>
+              </div>
+              <p class="cap">Mist track, radius 12, 4px inset; the chosen option is Paper, Deep Teal label; the other is Slate. For two or three short options only.</p>
+            </div>
+            <div class="specimen">
+              <div class="tabs" role="tablist" aria-label="Treatment details">
+                <button type="button" role="tab" aria-selected="true">Overview</button>
+                <button type="button" role="tab" aria-selected="false">How to take it</button>
+                <button type="button" role="tab" aria-selected="false">Safety</button>
+              </div>
+              <p class="cap">Tabs switch views of one subject. Active: Deep Teal label and a 2px Deep Teal line under it; the line moves in 220ms. Never hide safety information behind a tab on a product page (R-66).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub" id="state-tags">
+          <h3>Tags.</h3>
+          <div class="specimen">
+            <div class="specimen-row">
+              <span class="tag">Tadalafil 22mg</span>
+              <span class="tag tag--highlight">Recommended</span>
+              <span class="tag tag--product" style="--tag-colour: var(--color-product-combo)">Rapid-dissolve tablet</span>
+              <span class="tag tag--quiet">No visit needed</span>
+            </div>
+          </div>
+          <p class="cap">Tags describe, they never act: Inter Regular 13, padding 6 / 14, fully round like the menu pill. Default Line/Base border; Highlight on Wash Yellow; Product on the product colour (labels and product cards only, O-03); Quiet as an uppercase label. On dark grounds the default tag takes a Wash Blue border and Paper text.</p>
+        </div>
+
+        <div class="sub" id="state-toast">
+          <h3>Messages (toasts).</h3>
+          <div class="grid-3">
+            <div class="toast" role="status"><span class="toast-icon"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><p><b>Answers saved.</b> You can come back to them any time.</p><button class="toast-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+            <div class="toast" role="status"><span class="toast-icon"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0Z"/></svg></span><p><b>Your provider replied.</b> Open Messages to read it.</p><button class="toast-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+            <div class="toast toast--error" role="alert"><span class="toast-icon"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6.5V11M10 13.9V14M17.25 10a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0Z"/></svg></span><p><b>That didn’t go through.</b> Check your connection and try again.</p><button class="toast-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+          </div>
+          <p class="cap">Overlay surface, radius 12, the only other shadow. Bottom right on desktop, bottom centre on mobile, above the mobile bar. Success and info close after 5 seconds; an error stays until closed. Coral marks the error icon only, never the text (R-15). Never a toast for health results: results open their own page with the provider named.</p>
+        </div>
+
+        <div class="sub" id="state-empty">
+          <h3>Empty states.</h3>
+          <div class="grid-2">
+            <div class="empty">
+              <img src="assets/icons/icon-chat-with-a-provider.svg" width="64" height="64" alt="">
+              <b>No messages yet.</b>
+              <p>When your provider writes to you, the message lands here.</p>
+              <a class="btn btn--outline" href="#state-empty">Start your assessment</a>
+            </div>
+            <div class="empty">
+              <img src="assets/icons/icon-prescription.svg" width="64" height="64" alt="">
+              <b>No orders yet.</b>
+              <p>Your first order appears here once a provider approves your treatment.</p>
+              <a class="btn" href="#state-empty">Explore treatments</a>
+            </div>
+          </div>
+          <p class="cap">An invitation, not an apology: one capsule-set icon, a headline that names the space, one line, one action. Centred in the area it replaces.</p>
+        </div>
+
+        <div class="sub" id="state-errors">
+          <h3>Error pages.</h3>
+          <div class="grid-2">
+            <div class="errpage"><span class="eyebrow">404</span><b class="errpage-title">This page has moved.</b><p>The link may be old. Start again from the home page or ask us.</p><div class="specimen-row"><a class="btn" href="#state-errors">Go to the home page</a><a class="btn btn--outline" href="#state-errors">Contact us</a></div></div>
+            <div class="errpage"><span class="eyebrow">500</span><b class="errpage-title">Something broke on our side.</b><p>Your answers are safe. Try again in a minute.</p><div class="specimen-row"><a class="btn" href="#state-errors">Try again</a><a class="btn btn--outline" href="#state-errors">Contact us</a></div></div>
+          </div>
+          <p class="cap">Header and footer stay. Title in DM Serif Display at section size (the editorial moment of the page), no illustration of a broken object, no humour about health.</p>
+        </div>
+
+        <div class="sub" id="state-loading">
+          <h3>Loading.</h3>
+          <div class="grid-3">
+            <div class="specimen specimen--center"><svg class="cap-loader" viewBox="0 0 64 28" aria-hidden="true"><rect class="cap-loader-fill" x="2" y="2" width="60" height="24" rx="12"/><rect class="cap-loader-line" x="2" y="2" width="60" height="24" rx="12"/><path class="cap-loader-line" d="M32 2v24"/></svg><p class="cap">Page loader: the capsule fills from the open half, 1.4s, the only loop on the site (R-53, O-11). Shown after 400ms, never for less.</p></div>
+            <div class="specimen specimen--center"><button class="btn is-loading" type="button" aria-busy="true"><span class="btn-label">Continue to checkout</span><svg class="cap-loader" viewBox="0 0 64 28" aria-hidden="true"><rect class="cap-loader-fill" x="2" y="2" width="60" height="24" rx="12"/><rect class="cap-loader-line" x="2" y="2" width="60" height="24" rx="12"/><path class="cap-loader-line" d="M32 2v24"/></svg></button><p class="cap">Button loading: same width, label hidden, the small capsule loader inside; the button is not clickable.</p></div>
+            <div class="specimen"><div class="skeleton skeleton--title"></div><div class="skeleton"></div><div class="skeleton skeleton--short"></div><p class="cap">Skeleton: Mist blocks in the shape of the content. Static: no shimmer (only the loader loops).</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="state-check">
+          <h3>Included list.</h3>
+          <div class="specimen">
+            <ul class="check-list">
+              <li><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg>Online consultation included</li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg>Prescribed by a licensed U.S. provider</li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg>Discreet, free expedited shipping</li>
+            </ul>
+          </div>
+          <p class="cap">Deep Teal check in a 20px Wash Blue circle, Inter 14. Figma fills the checks Yellow; with a Yellow button in the same view that breaks R-11, so the proposal is Wash Blue. Facts only, every line checked with operations (R-68).</p>
+        </div>
       </section>
 
       <!-- =========================================================== CHANGES FROM FIGMA -->
