@@ -29,6 +29,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | U-17 | 16.11.2026 · Everything aligned and uniform: cards in a row share one height and one action line (R-98). |
 | U-18 | 16.11.2026 · Buttons get the full state set and an icon-button family, in Figma and in the hub (R-99, R-100). |
 | U-19 | 16.11.2026 · In every sticky header, on the website and on landing pages, the logo is taller than the call-to-action button. Mobile uses the Primary seal (R-103). |
+| U-20 | 16.11.2026 · Landing pages may carry up to three brand motion moments, beyond the website hero rule, each played once (R-104). |
 
 ---
 
@@ -127,6 +128,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 - **R-53** [changed] Nothing loops on the website except the loader (1.4s). Loader shape (quadrant or capsule) **To confirm**. Hero: static copy plus one shape entrance.
 - **R-54** [same] The hub's motion page is the only motion reference (M-001 to M-024).
 - **R-101** [new] Logo stings: B is the default, C1 for brand and story moments, C2 for short social openers. One sting per video, at the start or the end, never in the middle. · Source: U-12
+- **R-104** [new] Landing pages (campaign pages outside the website menu) may carry up to **three brand moments**: a capsule that draws, fills, closes or slides in. Each plays once, never loops, and uses the motion tokens only (R-50 to R-52). Where it tells a sequence, it follows the scroll, so the visitor sets the pace. One photo parallax at most, desktop only, at 0.85x. Rise on enter (12px, three items at most) is not a brand moment. The hero copy stays readable from the first frame: only the shape moves (R-53). With reduced motion every moment is off and the page shows its end state. The website itself keeps R-53. · Source: U-20, Sexual health landing page 16.11.2026
 
 ### Content
 
