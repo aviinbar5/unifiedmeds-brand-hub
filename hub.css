@@ -150,3 +150,8 @@ tr:last-child td { border-bottom: 0; }
   .grid-2, .grid-3, .grid-4, .dodont { grid-template-columns: minmax(0, 1fr); }
   .specimen { padding: var(--space-4); }
 }
+
+/* Asset actions: View in Figma and Download (16.11.2026) */
+.asset-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin: var(--space-4) 0 0; }
+.asset-dl { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.asset-actions select { height: var(--size-control-exception-header); padding: 0 var(--space-8) 0 var(--space-3); border: 1px solid var(--color-line-field); border-radius: var(--radius-small); background: var(--color-surface-card); font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-primary); }
