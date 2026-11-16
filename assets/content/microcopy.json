@@ -1,0 +1,218 @@
+{
+  "$description": "unifiedmeds microcopy library, Edition 03 proposal 16.11.2026. Square brackets are filled by the product.",
+  "cta.primary": {
+    "text": "Get started",
+    "moment": "Primary action, everywhere",
+    "category": "Buttons and links"
+  },
+  "cta.secondary": {
+    "text": "Explore treatments",
+    "moment": "Next to Get started",
+    "category": "Buttons and links"
+  },
+  "cta.assessment": {
+    "text": "Start your assessment",
+    "moment": "Inside a category or product page",
+    "category": "Buttons and links"
+  },
+  "cta.more": {
+    "text": "Learn more",
+    "moment": "Further reading",
+    "category": "Buttons and links"
+  },
+  "cta.continue": {
+    "text": "Continue",
+    "moment": "Next step in a flow",
+    "category": "Buttons and links"
+  },
+  "cta.back": {
+    "text": "Back",
+    "moment": "Previous step",
+    "category": "Buttons and links"
+  },
+  "cta.save": {
+    "text": "Save changes",
+    "moment": "Keep changes",
+    "category": "Buttons and links"
+  },
+  "cta.cancel": {
+    "text": "Cancel",
+    "moment": "Leave without changes",
+    "category": "Buttons and links"
+  },
+  "cta.checkout": {
+    "text": "Continue to checkout",
+    "moment": "Plan card",
+    "category": "Buttons and links"
+  },
+  "cta.send": {
+    "text": "Send to my provider",
+    "moment": "End of the assessment",
+    "category": "Buttons and links"
+  },
+  "field.email": {
+    "text": "Email",
+    "moment": "Email label",
+    "category": "Form labels and help"
+  },
+  "field.email.help": {
+    "text": "We send order updates here. Nothing about your treatment.",
+    "moment": "Under the email field",
+    "category": "Form labels and help"
+  },
+  "field.password": {
+    "text": "Password",
+    "moment": "Password label",
+    "category": "Form labels and help"
+  },
+  "field.password.help": {
+    "text": "At least 8 characters.",
+    "moment": "Under a new password",
+    "category": "Form labels and help"
+  },
+  "field.dob": {
+    "text": "Date of birth",
+    "moment": "Date of birth group",
+    "category": "Form labels and help"
+  },
+  "field.optional": {
+    "text": "(optional)",
+    "moment": "Optional field suffix",
+    "category": "Form labels and help"
+  },
+  "field.why": {
+    "text": "Your provider needs this to check what is safe for you. Only your care team sees it.",
+    "moment": "Sensitive question helper",
+    "category": "Form labels and help"
+  },
+  "error.required": {
+    "text": "Enter your [field].",
+    "moment": "Empty required field",
+    "category": "Field errors"
+  },
+  "error.email": {
+    "text": "Enter an email like name@example.com.",
+    "moment": "Email that cannot work",
+    "category": "Field errors"
+  },
+  "error.choice": {
+    "text": "Choose one answer to continue.",
+    "moment": "No answer chosen",
+    "category": "Field errors"
+  },
+  "error.date": {
+    "text": "Enter your full date of birth.",
+    "moment": "Incomplete date",
+    "category": "Field errors"
+  },
+  "error.password": {
+    "text": "That email and password don’t match. Try again or reset your password.",
+    "moment": "Wrong password",
+    "category": "Field errors"
+  },
+  "system.network": {
+    "text": "That didn’t go through. Check your connection and try again.",
+    "moment": "Connection lost (toast)",
+    "category": "System errors"
+  },
+  "system.404": {
+    "text": "This page has moved.",
+    "moment": "Page not found",
+    "category": "System errors"
+  },
+  "system.500": {
+    "text": "Something broke on our side. Your answers are safe.",
+    "moment": "Server error",
+    "category": "System errors"
+  },
+  "system.payment": {
+    "text": "Your card was declined. Try another card or contact your bank.",
+    "moment": "Payment declined",
+    "category": "System errors"
+  },
+  "empty.messages": {
+    "text": "No messages yet. When your provider writes to you, the message lands here.",
+    "moment": "No messages",
+    "category": "Empty states"
+  },
+  "empty.orders": {
+    "text": "No orders yet. Your first order appears here once a provider approves your treatment.",
+    "moment": "No orders",
+    "category": "Empty states"
+  },
+  "empty.search": {
+    "text": "No results for “[term]”. Try a shorter word or browse treatments.",
+    "moment": "No search results",
+    "category": "Empty states"
+  },
+  "done.saved": {
+    "text": "Answers saved. You can come back to them any time.",
+    "moment": "Answers saved (toast)",
+    "category": "Confirmations"
+  },
+  "done.sent": {
+    "text": "A licensed provider will review your answers.",
+    "moment": "Assessment sent",
+    "category": "Confirmations"
+  },
+  "done.order": {
+    "text": "Thanks. We have your order.",
+    "moment": "Order placed",
+    "category": "Confirmations"
+  },
+  "done.updated": {
+    "text": "Changes saved.",
+    "moment": "Settings changed",
+    "category": "Confirmations"
+  },
+  "wait.page": {
+    "text": "Loading",
+    "moment": "Page loader label (screen readers)",
+    "category": "Loading and waiting"
+  },
+  "wait.review": {
+    "text": "Your provider usually replies within [time].",
+    "moment": "Waiting for the provider",
+    "category": "Loading and waiting"
+  },
+  "account.signin": {
+    "text": "Sign in",
+    "moment": "Header link",
+    "category": "Account"
+  },
+  "account.signout": {
+    "text": "Sign out",
+    "moment": "Menu item",
+    "category": "Account"
+  },
+  "account.reset": {
+    "text": "Forgot your password?",
+    "moment": "Password help link",
+    "category": "Account"
+  },
+  "account.member": {
+    "text": "member",
+    "moment": "How we name the person",
+    "category": "Account"
+  },
+  "dialog.leave.title": {
+    "text": "Leave this page.",
+    "moment": "Leaving with unsaved answers",
+    "category": "Dialogs"
+  },
+  "dialog.leave.body": {
+    "text": "Your answers on this page are not saved yet.",
+    "moment": "Body line",
+    "category": "Dialogs"
+  },
+  "dialog.leave.stay": {
+    "text": "Stay on this page",
+    "moment": "Primary button",
+    "category": "Dialogs"
+  },
+  "dialog.leave.go": {
+    "text": "Leave",
+    "moment": "Secondary button",
+    "category": "Dialogs"
+  }
+}
