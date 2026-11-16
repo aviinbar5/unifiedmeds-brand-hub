@@ -1,6 +1,7 @@
 # unifiedmeds Brand Hub · changelog
 
 ## Edition 03 · update 16.11.2026 (review with Avi)
+- Header logo: in every sticky header, website and landing pages, the logo is taller than the call-to-action button (U-19, R-103). Desktop Horizontal lockup 52px, mobile Primary seal 50px; button 44.
 - Labels: the ground is the category (Sexual health Deep Teal, Longevity Forest, Hair loss Sky as a light label), the capsule colour is the product, and a capsule hue never repeats in the catalogue (U-13, U-14, R-96, R-97). New tokens `--color-category-*`; product colours updated, Sildenafil is now Coral #F4A38C.
 - Buttons: full state set (Default, Hover, Pressed, Focus, Disabled proposed), one spec for desktop and mobile, and a second family with an icon on the right; eight UI icons in `assets/icons/ui/` (U-18, R-99, R-100).
 - Alignment: cards in a row share one height and one action line; fixed rows on Brand, Components and Motion (U-17, R-98).

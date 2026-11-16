@@ -191,7 +191,8 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
   height: calc(var(--space-24) * 4); overflow: auto; overscroll-behavior: contain;
   border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper);
 }
-.hdr-demo__inner { min-width: calc(var(--space-24) * 8); }
+.hdr-demo__inner { min-width: calc(var(--space-24) * 10); }
+.mh__signin, .mh__pill { white-space: nowrap; }
 .mh {
   position: sticky; top: 0; z-index: 2;
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
@@ -203,6 +204,9 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
 .mh.is-scrolled { border-bottom-color: var(--color-line-soft); }
 .logo-lockup { display: inline-flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min); color: var(--color-brand-deep-teal); text-decoration: none; border-radius: var(--radius-xs); }
 .logo-lockup img { display: block; width: auto; }
+.mh .logo-lockup, .mm__head .logo-lockup { flex: none; }
+.mh .logo-lockup img { height: var(--size-logo-header-desktop); }
+.mm__head .logo-lockup img { height: var(--size-logo-header-mobile); }
 .mh__list { display: flex; align-items: center; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
 .mh__item { position: relative; }
 .mh__link {
@@ -926,7 +930,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           <div class="hdr-demo" data-scroll-demo tabindex="0" role="region" aria-label="Desktop header specimen. Scroll inside to see the sticky header.">
             <div class="hdr-demo__inner">
               <header class="mh" data-mh>
-                <a class="logo-lockup" href="#header" aria-label="unifiedmeds home (specimen)"><img src="assets/brand/logo-horizontal.svg" width="185" height="30" alt=""></a>
+                <a class="logo-lockup" href="#header" aria-label="unifiedmeds home (specimen)"><img src="assets/brand/logo-horizontal.svg" width="321" height="52" alt=""></a>
                 <nav aria-label="Main menu specimen">
                   <ul class="mh__list">
                     <li class="mh__item" data-dd>
@@ -967,7 +971,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           <div class="grid-2">
             <div class="mm" data-mm>
               <div class="mm__head">
-                <a class="logo-lockup" href="#header" aria-label="unifiedmeds home (mobile specimen)"><img src="assets/brand/logo-horizontal.svg" width="160" height="26" alt=""></a>
+                <a class="logo-lockup" href="#header" aria-label="unifiedmeds home (mobile specimen)"><img src="assets/brand/logo-seal.svg" width="137" height="50" alt=""></a>
                 <button class="mm__toggle" type="button" aria-expanded="false" aria-controls="mm-panel" aria-label="Open menu" data-mm-toggle>
                   <svg class="i-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
                   <svg class="i-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -1021,7 +1025,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                 <tr><td>Header inset</td><td>56 desktop · 20 mobile</td><td><code>--layout-header-inset</code> · <code>--layout-margin-mobile</code></td><td>4046-606</td></tr>
                 <tr><td>Surface</td><td>Paper #FEFCF6, sticky at top 0</td><td><code>--color-surface-paper</code></td><td>4010-609</td></tr>
                 <tr><td>Hairline</td><td>1px Line/Soft #EDEAE2 after 8px of scroll, 220ms</td><td><code>--color-line-soft</code> · <code>--space-2</code> · <code>--motion-duration-open</code></td><td>4010-609</td></tr>
-                <tr><td>Logo</td><td>Horizontal lockup, 30px tall (mobile 26px)</td><td><code>--size-logo-header-desktop</code>, <code>--size-logo-header-mobile</code></td><td>4046-606</td></tr>
+                <tr><td>Logo</td><td>Always taller than the header button (R-103): Horizontal lockup 52px on desktop, Primary seal 50px on mobile. Button 44</td><td><code>--size-logo-header-desktop</code>, <code>--size-logo-header-mobile</code></td><td>4046-606</td></tr>
                 <tr><td>Nav item</td><td>Inter Medium 14/1.4 Deep Teal; pill padding 8/12; hit area 44</td><td><code>--type-desktop-nav-*</code> · <code>--space-2</code>/<code>--space-3</code> · <code>--size-tap-min</code></td><td>4046-606</td></tr>
                 <tr><td>Nav hover</td><td>Line/Soft pill, 150ms ease-out</td><td><code>--color-line-soft</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td><td>4010-609 (180 ease)</td></tr>
                 <tr><td>Open</td><td>Hover with 100ms intent, or click, Enter, Space, ↓. One dropdown at a time.</td><td><code>--motion-intent-delay</code></td><td>4010-609</td></tr>

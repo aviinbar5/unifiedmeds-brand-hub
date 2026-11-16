@@ -27,8 +27,8 @@ p { margin: 0; }
   background: var(--color-surface-paper);
 }
 .hub-brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; color: var(--color-brand-deep-teal); }
-.hub-brand img { height: var(--size-logo-header-desktop); width: auto; flex: none; }
-@media (max-width: 1023px) { .hub-top .hub-brand img { height: var(--size-logo-header-mobile); } }
+.hub-brand img { height: var(--size-logo-footer-desktop); width: auto; flex: none; } /* hub chrome, not a website header (R-103 does not apply) */
+@media (max-width: 1023px) { .hub-top .hub-brand img { height: var(--size-logo-footer-mobile); } }
 .hub-edition { display: inline-flex; align-self: start; justify-self: start; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); background: var(--color-surface-mist); color: var(--color-text-secondary-on-mist); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
 .hub-group { display: grid; gap: var(--space-1); }
 .hub-group > span { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); padding: 0 var(--space-3) var(--space-1); }

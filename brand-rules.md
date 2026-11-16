@@ -28,6 +28,7 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | U-16 | 16.11.2026 · Every trace of the former brand leaves the published hubs; earlier editions are archived outside them, never deleted. |
 | U-17 | 16.11.2026 · Everything aligned and uniform: cards in a row share one height and one action line (R-98). |
 | U-18 | 16.11.2026 · Buttons get the full state set and an icon-button family, in Figma and in the hub (R-99, R-100). |
+| U-19 | 16.11.2026 · In every sticky header, on the website and on landing pages, the logo is taller than the call-to-action button. Mobile uses the Primary seal (R-103). |
 
 ---
 
@@ -94,11 +95,12 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 
 ### Logo
 
-- **R-90** [new] The logo is the **capsule seal**: "unified" (bold) in the filled half of a capsule, "meds" (regular) in the open half. Three lockups: Primary seal (where the brand needs presence), Horizontal (capsule icon + wordmark, the website navigation), Stacked (square spaces). In the website header the Horizontal lockup is 30px tall on desktop and 26px on mobile; in the footer 30px desktop and 28px mobile. · Source: Figma 3038:178, VX5o 5:80, Avi 15.11.2026
+- **R-90** [new] The logo is the **capsule seal**: "unified" (bold) in the filled half of a capsule, "meds" (regular) in the open half. Three lockups: Primary seal (where the brand needs presence), Horizontal (capsule icon + wordmark, the website navigation), Stacked (square spaces). In the header: the Horizontal lockup 52px tall on desktop, the Primary seal 50px tall on mobile (R-103); in the footer the Horizontal lockup 30px desktop and 28px mobile. · Source: Figma 3038:178, VX5o 5:80, Avi 15.11.2026
 - **R-91** [new] On light grounds (Paper, Mist, Cream) use the main version in Navy. On dark grounds (Deep Teal, Ink, Navy) and on photography use the reversed versions only. The website footer uses Horizontal reversed. · Source: Figma 3038:211
 - **R-92** [new] Clear space: the height of the "meds" half on every side. Never recolour individual parts, stretch, rotate, redraw or add effects. Use the exported files only.
 - **R-93** [new] App icon and favicon: the "u|m" capsule on a Navy rounded square. Favicon sizes 48, 32 and 16; at 16px the capsule is solid. The favicon never uses the wordmark. · Source: VX5o 5:144
 - **R-94** [new] The logo file also holds Scrubs green, Clinic sky, Black on white, White on black and Grey versions. Where each may be used is **To confirm**. Until then, only the versions in R-91 ship.
+- **R-103** [new] In every sticky header, on the website and on landing pages, the logo is always taller than the call-to-action button next to it. The header button is 44px (`.btn--header`); the logo is the Horizontal lockup at 52px on desktop (`--size-logo-header-desktop`) and the Primary seal at 50px on mobile (`--size-logo-header-mobile`), because the Horizontal lockup at that height does not fit beside the button on a phone. Header heights stay 80 and 64. Never shrink the logo below the button to make room: shorten the navigation first. · Source: Avi 16.11.2026
 
 ### Components
 
@@ -196,4 +198,4 @@ Change marks: **[same]** unchanged from Edition 02 · **[changed]** rewritten in
 | O-13 | Licensed photography | R-39 |
 | O-14 | Legal approval of Longevity and Hair loss product pages | R-87 |
 | ~~O-16~~ | Closed 15.11.2026 (Avi): the Yellow button hovers to Blue-dark #4E6873 with a Paper label (5.76:1). Figma's Pastel Blue stays on the clean-up list | R-41 |
-| ~~O-15~~ | Closed 15.11.2026: logo height in the desktop header is 30px in both menus (`--size-logo-header-desktop`). Figma short nav (45px) goes on the clean-up list | R-90 |
+| ~~O-15~~ | Closed 15.11.2026: logo height in the desktop header is 30px in both menus (`--size-logo-header-desktop`). Superseded 16.11.2026 by R-103: 52px. Figma short nav (45px) goes on the clean-up list | R-90 |
