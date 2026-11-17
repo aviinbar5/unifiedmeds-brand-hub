@@ -1,5 +1,9 @@
 # unifiedmeds Brand Hub · changelog
 
+## Edition 03 · update 17.11.2026 night (answers 81 to 90)
+- Mailer: the outside line "Packed with care, just for you." with a small outline capsule; welcome card greeting "Welcome to unifiedmeds." (U-29).
+- Product screens: the recommendation wording, Wash Yellow flags and the app logo sizes are decided; clinical admin and support work fully on a phone (U-29).
+
 ## Edition 03 · update 17.11.2026 evening (review and answers)
 - Capsule: every capsule keeps the divider between its halves at every size, like the seal; the stroke scales at 0.85% of the length (U-26, R-109).
 - Avi's review (U-25): capsule and the u|m logo stamp on photos (R-110), shapes in every fold with continuity and gentle scroll drift (R-111), adjacent buttons never the same colour (R-112), animated interactive states (R-113), the full footer (R-114), one accent per section (R-115), compact folds 64 / 48 (R-116).
