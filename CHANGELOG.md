@@ -1,5 +1,16 @@
 # unifiedmeds Brand Hub · changelog
 
+## Edition 03 · update 17.11.2026 evening (review and answers)
+- Capsule: every capsule keeps the divider between its halves at every size, like the seal; the stroke scales at 0.85% of the length (U-26, R-109).
+- Avi's review (U-25): capsule and the u|m logo stamp on photos (R-110), shapes in every fold with continuity and gentle scroll drift (R-111), adjacent buttons never the same colour (R-112), animated interactive states (R-113), the full footer (R-114), one accent per section (R-115), compact folds 64 / 48 (R-116).
+- Avi's answers (U-27): category colours on category pages (R-117), logo minimum sizes (R-118), icons in Deep Teal (R-35, O-06 closed), hub-only exception for stand-in photos (R-39), assessment wording (R-57), checkout price exception (E-04).
+
+## Edition 03 · update 17.11.2026 (Avi's decisions)
+- Capsule: always the logo's own proportions, never a symmetric pill (U-22, R-105). Page-head decor, capsule band, kit specimens, loaders, the 12 capsule icons and the shape files are redrawn from `tools/capsule_svg.py`.
+- Launch products confirmed: Tadalafil, Sildenafil, Combo (U-21, R-06). New naming rule R-108: medicine names and plain descriptive names, never a reference brand.
+- Shapes: two per surface at most (U-23, R-106). O-05 closed.
+- Mobile gets equal treatment in every category, deliverable and element, checked at 1440 and 390 (U-24, R-107).
+
 ## Edition 03 · update 16.11.2026 (review with Avi)
 - Landing pages: up to three brand motion moments, each played once, scroll-driven where it tells a sequence, one desktop parallax at most, all off with reduced motion (U-20, R-104). First use: the Sexual health landing page.
 - Header logo: in every sticky header, website and landing pages, the logo is taller than the call-to-action button (U-19, R-103). Desktop Horizontal lockup 52px, mobile Primary seal 50px; button 44.

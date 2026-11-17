@@ -69,6 +69,14 @@
   .ph span { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary-on-mist); }
   .ph--tall { aspect-ratio: 440 / 460; }
   .ph--wide { aspect-ratio: 548 / 300; }
+  /* stand-in photos in the placeholder frames (17.11.2026): not approved, to replace */
+  .ph { position: relative; overflow: hidden; }
+  .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph-fig { margin: 0; display: grid; gap: var(--space-2); align-content: end; }
+  .ph-fig figcaption { display: grid; gap: var(--space-1); justify-items: start; }
+  .ph-label { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+  .ph-tag { display: inline-flex; flex-wrap: wrap; gap: 0 var(--space-1); max-width: 100%; padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-wash-yellow); color: var(--color-brand-teal-deep); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); }
+  .ph-tag a { color: inherit; }
   .never { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-24) * 2.5)), 1fr)); gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
   .never li { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-3) var(--space-4); border: 1px solid var(--color-line-base); border-left: var(--space-1) solid var(--color-brand-coral); border-radius: var(--radius-small); background: var(--color-surface-card); }
   .never svg { flex: none; width: var(--space-5); height: var(--space-5); margin-top: calc(var(--space-1) / 2); }
@@ -83,10 +91,89 @@
   .s-teal { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 8; }
   .cap-grid figure { margin: 0; display: grid; gap: var(--space-3); }
   .cap-grid > figure { grid-row: span 2; grid-template-rows: subgrid; }
-  .grid-3:has(> .ph) { align-items: end; }
+  .grid-3:has(> .ph), .grid-3:has(> .ph-fig) { align-items: end; }
   .cap-grid figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
   .cap-grid .kit-tile svg { width: auto; max-width: 100%; height: calc(var(--space-24) + var(--space-6)); }
   .tag-logo { height: var(--size-logo-footer-desktop); width: auto; display: block; }
+
+  /* ---- Round 2 (17.11.2026): D1 stroke, D2 photos, D4 folds, D8 accent ---- */
+  .cs-line { fill: none; stroke: var(--color-brand-deep-teal); stroke-linejoin: round; }
+  .cs-line--paper { fill: none; stroke: var(--color-surface-paper); stroke-linejoin: round; }
+  .cs-line--wash { fill: none; stroke: var(--color-surface-wash-blue); stroke-linejoin: round; }
+  .cs-fill-paper { fill: var(--color-surface-paper); opacity: var(--opacity-capsule-soft); }
+  .cs-fill-wash { fill: var(--color-surface-wash-blue); opacity: var(--opacity-capsule-soft); }
+  .cs-solid { fill: var(--color-brand-deep-teal); }
+  .scale-list { display: grid; gap: var(--space-5); margin: 0; padding: 0; list-style: none; }
+  .d1-dm__h { grid-column: 1 / -1; }
+  .scale-list li { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--space-24) * 2.8); gap: var(--space-4); align-items: center; padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-line-soft); }
+  .scale-list svg { display: block; max-width: 100%; height: auto; }
+  .scale-list .cap b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  .scale-list .is-dont svg .cs-line { stroke: var(--color-brand-coral); }
+  .mob-frame { width: var(--layout-frame-mobile); max-width: 100%; border: 1px solid var(--color-line-base); border-radius: var(--radius-card); padding: var(--space-6) var(--layout-margin-mobile); background: var(--color-surface-paper); display: grid; gap: var(--space-4); }
+  /* D2 · capsule on a photo */
+  .cp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: start; }
+  .cp-grid figure, .cp-mob figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .cp-photo { position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-mist); }
+  .cp-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .cp-photo svg { position: absolute; display: block; height: auto; pointer-events: none; }
+  .cp-photo--45 { aspect-ratio: 4 / 5; }
+  .cp-photo--32 { aspect-ratio: 3 / 2; }
+  .cp-photo .cp-stamp { position: absolute; left: var(--space-4); bottom: var(--space-4); display: block; width: var(--stamp-w, var(--space-12)); height: auto; object-fit: contain; }
+  .cp-mob { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: start; }
+  .cp-mob figure { width: calc(var(--space-24) * 2.9); max-width: 100%; }
+  .cp-mob .cp-photo .cp-stamp { --stamp-w: var(--space-10); }
+  /* positions, in % of the frame so the shape scales with the photo */
+  .cp-a { right: -14%; bottom: 9%; width: 62%; }
+  .cp-b { right: -12%; bottom: 5%; width: 52%; }
+  .cp-x { left: 18%; top: 14%; width: 62%; }
+  .cp-am { right: -16%; bottom: 8%; width: 66%; }
+  .cp-bm { left: -22%; bottom: -6%; width: 78%; }
+  /* D4 · shapes in folds */
+  .fold-demo { position: relative; overflow: hidden; border: 1px solid var(--color-line-base); border-radius: var(--radius-card); }
+  .fold { position: relative; padding: var(--layout-section-y) var(--space-10); display: grid; gap: var(--layout-section-head-gap); }
+  .fold--paper { background: var(--color-surface-paper); }
+  .fold--mist { background: var(--color-surface-mist); }
+  .fold > * { position: relative; z-index: 2; max-width: 52%; }
+  .fold h4 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+  .fold p { color: var(--color-text-secondary); }
+  .fold-cap { position: absolute; z-index: 1; right: calc(var(--space-24) * -1.1); top: 0; width: calc(var(--space-24) * 3.75); height: auto; transform: translateY(-50%); opacity: var(--opacity-capsule); }
+  .fold-quarter { position: absolute; z-index: 1; right: 0; bottom: 0; width: calc(var(--space-24) * 1.1); height: auto; opacity: var(--opacity-capsule-soft); }
+  .fold-demo--mob { width: var(--layout-frame-mobile); max-width: 100%; }
+  .fold-demo--mob .fold { padding: var(--layout-section-y-mobile) var(--layout-margin-mobile); gap: var(--layout-section-head-gap-mobile); }
+  .fold-demo--mob .fold > * { max-width: 100%; }
+  .fold-demo--mob .fold--paper { padding-bottom: calc(var(--layout-section-y-mobile) + var(--space-12)); }
+  .fold-demo--mob .fold-cap { width: calc(var(--space-24) * 2.2); right: calc(var(--space-24) * -0.9); }
+  .fold-demo--mob .fold-quarter { width: var(--space-18); }
+  .fold-demo--mob .fold--mist { padding-bottom: calc(var(--layout-section-y-mobile) + var(--space-18)); }
+  .fold-row { display: grid; grid-template-columns: minmax(0, 1fr) var(--layout-frame-mobile); gap: var(--space-6); align-items: start; }
+  .fold-fig { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); align-content: start; }
+  @media (max-width: 1023px) { .fold-row { grid-template-columns: minmax(0, 1fr); } }
+  @supports (animation-timeline: view()) {
+    .fold-drift { animation: fold-drift linear both; animation-timeline: view(); }
+    @keyframes fold-drift { from { translate: 0 calc(var(--motion-distance-drift) / 2); } to { translate: 0 calc(var(--motion-distance-drift) / -2); } }
+  }
+  @media (prefers-reduced-motion: reduce) { .fold-drift { animation: none; translate: none; } }
+  /* D8 · one accent per section */
+  .acc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .acc-grid figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .acc-sec { position: relative; overflow: hidden; display: grid; gap: var(--space-3); align-content: start; padding: var(--space-8) var(--space-6) calc(var(--space-24) + var(--space-4)); border-radius: var(--radius-small); background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); }
+  .acc-sec > :not(.acc-shape) { position: relative; z-index: 1; max-width: 80%; }
+  .acc-sec .acc-eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+  .acc-sec .acc-eyebrow::before { content: ''; width: var(--space-4); height: var(--space-1); background: var(--acc); }
+  .acc-sec h4 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+  .acc-sec p { color: var(--color-text-secondary); }
+  .acc-icon { width: var(--space-10); height: var(--space-10); background-color: var(--acc); -webkit-mask: var(--icon) no-repeat center / contain; mask: var(--icon) no-repeat center / contain; }
+  .acc-shape { position: absolute; right: 0; bottom: 0; width: calc(var(--space-24) * 0.9); height: auto; opacity: var(--opacity-capsule-soft); }
+  .acc-shape path { fill: var(--acc); }
+  .acc--green { --acc: var(--color-brand-green); --icon: url("assets/icons/icon-provider-reviewed.svg"); }
+  .acc--blue { --acc: var(--color-brand-blue); --icon: url("assets/icons/icon-discreet.svg"); }
+  .acc--dont { --acc: var(--color-brand-green); --icon: url("assets/icons/icon-provider-reviewed.svg"); }
+  .acc--dont .acc-shape path { fill: var(--color-brand-blue); }
+  .acc--dont .acc-eyebrow::before { background: var(--color-brand-yellow); }
+  .acc-grid figcaption b, .cp-grid figcaption b, .cp-mob figcaption b, .fold-fig figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  @media (max-width: 1023px) { .cp-grid, .acc-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 767px) { .cp-photo .cp-stamp { --stamp-w: var(--space-10); } }
+  @media (max-width: 767px) { .scale-list li { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); } }
 </style>
 </head>
 <body>
@@ -136,7 +223,9 @@
           <a href="#categories">Categories</a>
           <a href="#name">Name &amp; tagline</a>
           <a href="#kit">Shapes</a>
+          <a href="#folds">Folds &amp; accent</a>
           <a href="#photography">Photography</a>
+          <a href="#photo-capsule">Capsule on a photo</a>
         </nav>
         <div class="rule">
           <b>Authority.</b>
@@ -245,7 +334,7 @@
                 <tr><td>1</td><td><b>One nav item.</b> The category gets one item in the main menu, built exactly like "Sexual health ▾" (Main menu v3): a dropdown with its products and a "View all" link. The name is in sentence case. Phase 2 uses the full menu (Figma 2641:14411) with Longevity, Sexual health, Hair loss and Help. Its wording is <span class="status status--proposed">To confirm</span> (O-10).</td></tr>
                 <tr><td>2</td><td><b>One category page template.</b> Every category page reuses the Sexual health category layout (Figma 2708-1034). No new section types per category.</td></tr>
                 <tr><td>3</td><td><b>One hero.</b> One hero per category page, Hero 46/54 (<code>--type-desktop-hero-*</code>). It may carry an editorial title, as "Better Intimacy" does; the nav and the category label keep the plain name.</td></tr>
-                <tr><td>4</td><td><b>Core palette only.</b> No category colours, no category theme, no pink theme. Every category uses the same tokens as Sexual health. The master brand is never recoloured.</td></tr>
+                <tr><td>4</td><td><b>Core palette, plus one category colour.</b> Every category uses the core tokens, and its category colour marks its own pages: Sexual health Deep Teal, Longevity Forest, Hair loss Sky (R-117, the same as the label grounds). No pink theme. The master brand is never recoloured.</td></tr>
                 <tr><td>5</td><td><b>Status first.</b> A Phase 2 category never appears in the live nav before Avi approves its launch and legal approves its product pages.</td></tr>
                 <tr><td>6</td><td><b>Products for women.</b> Some planned products serve women. They sit in the same categories and the same brand; only the photography casting changes. <span class="status status--proposed">To confirm</span> Which products.</td></tr>
               </tbody>
@@ -383,26 +472,56 @@
                 <div class="sub" id="capsule">
           <h3>The capsule</h3>
           <div class="prose"><p>The capsule comes from the logo and is the second shape family. Figma "Capsule Kit" (Packaging 2678:2) has four variants. On the website it may be filled, outline or transparent, shown whole or cropped by the frame edge, and it may crop a photo. Rules R-31 to R-33, decision U-03.</p></div>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>Every drawn capsule has the logo's proportions.</b> It is not symmetric: the left half is longer (55% of the length) and the right half is taller (the left half is 93.3% of its height). Standing, it is the same capsule turned 90° clockwise, long half on top. Draw it with <code>tools/capsule_svg.py</code> or use the files in <code>assets/shapes/</code>; never a rounded rectangle or a <code>--radius-pill</code> box with equal halves.</p></div>
           <div class="grid-4 cap-grid">
             <figure>
-              <div class="kit-tile"><svg viewBox="0 0 320 140" role="img" aria-label="Capsule, split"><rect x="4" y="4" width="312" height="132" rx="66" class="s-teal"/><rect x="156" width="8" height="140" class="f-teal"/><path d="M14 70C14 39.07 39.07 14 70 14H152V126H70C39.07 126 14 100.93 14 70Z" class="f-teal"/></svg></div>
-              <figcaption class="cap"><b>Split</b>Filled half and open half, like the seal.</figcaption>
+              <div class="kit-tile"><svg viewBox="0 0 320 116.41" role="img" aria-label="Capsule, split"><path d="M171.91 9.26L54.39 9.26A48.95 48.95 0 0 0 54.39 107.15L171.91 107.15" class="f-teal"/><path d="M175.99 5.18L54.39 5.18A53.03 53.03 0 0 0 54.39 111.23L175.99 111.23" class="cs-line" stroke-width="2.72"/><path d="M175.99 1.35L261.79 1.35A56.85 56.85 0 0 1 261.79 115.05L175.99 115.05Z" class="cs-line" stroke-width="2.72"/></svg></div>
+              <figcaption class="cap"><b>Split</b>Long half filled, inside the outline with a small gap, like the seal. The divider closes the short half; the step marks the joint.</figcaption>
             </figure>
             <figure>
-              <div class="kit-tile"><svg viewBox="0 0 320 140" role="img" aria-label="Capsule, split with a colour half"><rect x="4" y="4" width="312" height="132" rx="66" class="s-teal"/><rect x="156" width="8" height="140" class="f-teal"/><path d="M14 70C14 39.07 39.07 14 70 14H152V126H70C39.07 126 14 100.93 14 70Z" class="f-blue"/></svg></div>
+              <div class="kit-tile"><svg viewBox="0 0 320 116.41" role="img" aria-label="Capsule, split with a colour half"><path d="M171.91 9.26L54.39 9.26A48.95 48.95 0 0 0 54.39 107.15L171.91 107.15" class="f-blue"/><path d="M175.99 5.18L54.39 5.18A53.03 53.03 0 0 0 54.39 111.23L175.99 111.23" class="cs-line" stroke-width="2.72"/><path d="M175.99 1.35L261.79 1.35A56.85 56.85 0 0 1 261.79 115.05L175.99 115.05Z" class="cs-line" stroke-width="2.72"/></svg></div>
               <figcaption class="cap"><b>Split, colour half</b>The filled half takes a second colour. On labels: the product colour.</figcaption>
             </figure>
             <figure>
-              <div class="kit-tile"><svg viewBox="0 0 320 140" role="img" aria-label="Capsule, outline"><rect x="4" y="4" width="312" height="132" rx="66" class="s-teal"/><rect x="156" width="8" height="140" class="f-teal"/></svg></div>
-              <figcaption class="cap"><b>Outline</b>The line only, with the seam.</figcaption>
+              <div class="kit-tile"><svg viewBox="0 0 320 116.41" role="img" aria-label="Capsule, outline"><path d="M175.99 5.18L54.39 5.18A53.03 53.03 0 0 0 54.39 111.23L175.99 111.23" class="cs-line" stroke-width="2.72"/><path d="M175.99 1.35L261.79 1.35A56.85 56.85 0 0 1 261.79 115.05L175.99 115.05Z" class="cs-line" stroke-width="2.72"/></svg></div>
+              <figcaption class="cap"><b>Outline</b>The line only, with the divider at every size, like the seal: the step and the divider tell the halves.</figcaption>
             </figure>
             <figure>
-              <div class="kit-tile"><svg viewBox="0 0 90 206" role="img" aria-label="Capsule, vertical"><rect x="4" y="4" width="82" height="198" rx="41" class="s-teal"/><rect y="100.4" width="90" height="5.2" class="f-teal"/><path d="M9 45C9 25.13 25.12 9 45 9C64.88 9 81 25.13 81 45V97.85H9V45Z" class="f-green"/></svg></div>
-              <figcaption class="cap"><b>Vertical</b>The capsule standing up, for tall frames and labels.</figcaption>
+              <div class="kit-tile"><svg viewBox="0 0 74.94 206" role="img" aria-label="Capsule, vertical"><path d="M68.98 110.67L68.98 35.01A31.51 31.51 0 0 0 5.96 35.01L5.96 110.67" class="f-green"/><path d="M71.61 113.3L71.61 35.01A34.13 34.13 0 0 0 3.34 35.01L3.34 113.3" class="cs-line" stroke-width="1.75"/><path d="M74.07 113.3L74.07 168.53A36.59 36.59 0 0 1 0.88 168.53L0.88 113.3Z" class="cs-line" stroke-width="1.75"/></svg></div>
+              <figcaption class="cap"><b>Vertical</b>The capsule standing up, long half on top, for tall frames and labels.</figcaption>
             </figure>
           </div>
-          <p class="cap">Shown here in website colours. The exported Figma files (Sky and Logo Blue, for dark labels) are in <code>assets/shapes/</code>.</p>
-          <div class="cap-band" role="note"><h3>Website pattern.</h3><p>From the Figma homepage: a large outline capsule, 20px stroke, Wash Blue at 70%, cropped by the section edge. In dark sections it stands up vertically. Filled capsules sit at 50%. The same pattern runs across this hub.</p></div>
+          <p class="cap">Shown here in website colours, stroke 0.85% of the length (D1). The exported files (Sky and Logo Blue, for dark labels) are in <code>assets/shapes/</code>, redrawn 17.11.2026 with the same stroke rule.</p>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>The stroke scales with the capsule (D1).</b> An outline capsule's stroke is 0.85% of its full length, as in the seal, never less than 1.5px (<code>--size-capsule-stroke-ratio</code>, <code>--size-capsule-stroke-min</code>). At every size the capsule keeps the divider, like the seal (R-109): the long half is drawn open toward the joint, the short, taller half is closed by the divider line, and the step shows where the two heights meet. Never one continuous outline without the divider. A large capsule that needs weight takes a fill, solid or translucent, never a thicker stroke. The fixed 20px stroke (<code>--size-capsule-stroke</code>) is retired.</p></div>
+          <div class="sub">
+            <div class="sub">
+              <h4>Stroke scale, at true size.</h4>
+              <ul class="scale-list">
+                <li><svg viewBox="0 0 64 23.9" width="64" height="23.9" role="img" aria-label="Capsule 64px long, stroke 1.5px"><path d="M35.15 1.5L11.2 1.5A10.45 10.45 0 0 0 11.2 22.39L35.15 22.39" class="cs-line" stroke-width="1.5"/><path d="M35.15 0.75L52.05 0.75A11.2 11.2 0 0 1 52.05 23.15L35.15 23.15Z" class="cs-line" stroke-width="1.5"/></svg><p class="cap"><b>64px · stroke 1.5px · divider</b>Two halves and the divider, like the seal. Stroke at the 1.5px minimum.</p></li><li><svg viewBox="0 0 96 35.36" width="96" height="35.36" role="img" aria-label="Capsule 96px long, stroke 1.5px"><path d="M52.76 1.89L16.54 1.89A15.79 15.79 0 0 0 16.54 33.47L52.76 33.47" class="cs-line" stroke-width="1.5"/><path d="M52.76 0.75L78.32 0.75A16.93 16.93 0 0 1 78.32 34.61L52.76 34.61Z" class="cs-line" stroke-width="1.5"/></svg><p class="cap"><b>96px · stroke 1.5px · divider</b>0.85% would be 0.8px, so the 1.5px minimum applies.</p></li><li><svg viewBox="0 0 120 43.96" width="120" height="43.96" role="img" aria-label="Capsule 120px long, stroke 1.5px"><path d="M65.97 2.18L20.55 2.18A19.8 19.8 0 0 0 20.55 41.79L65.97 41.79" class="cs-line" stroke-width="1.5"/><path d="M65.97 0.75L98.02 0.75A21.23 21.23 0 0 1 98.02 43.21L65.97 43.21Z" class="cs-line" stroke-width="1.5"/></svg><p class="cap"><b>120px · stroke 1.5px · divider</b>The same construction as the seal: divider and step. 1.5px.</p></li><li><svg viewBox="0 0 240 87.31" width="240" height="87.31" role="img" aria-label="Capsule 240px long, stroke 2.04px"><path d="M132 3.89L40.79 3.89A39.77 39.77 0 0 0 40.79 83.43L132 83.43" class="cs-line" stroke-width="2.04"/><path d="M132 1.02L196.35 1.02A42.63 42.63 0 0 1 196.35 86.29L132 86.29Z" class="cs-line" stroke-width="2.04"/></svg><p class="cap"><b>240px · stroke 2px · divider</b>Stroke 2px (0.85% of 240). The divider stays.</p></li><li><svg viewBox="0 0 360 130.96" width="360" height="130.96" role="img" aria-label="Capsule 360px long, stroke 3.06px"><path d="M197.99 5.83L61.18 5.83A59.65 59.65 0 0 0 61.18 125.13L197.99 125.13" class="cs-line" stroke-width="3.06"/><path d="M197.99 1.53L294.52 1.53A63.95 63.95 0 0 1 294.52 129.43L197.99 129.43Z" class="cs-line" stroke-width="3.06"/></svg><p class="cap"><b>360px · stroke 3.1px · divider</b>Stroke 3.1px. The divider and the step between the halves read clearly.</p></li><li><svg viewBox="0 0 600 218.27" width="600" height="218.27" role="img" aria-label="Capsule 600px long, stroke 5.1px"><path d="M329.99 9.71L101.97 9.71A99.42 99.42 0 0 0 101.97 208.55L329.99 208.55" class="cs-line" stroke-width="5.1"/><path d="M329.99 2.55L490.86 2.55A106.59 106.59 0 0 1 490.86 215.72L329.99 215.72Z" class="cs-line" stroke-width="5.1"/></svg><p class="cap"><b>600px · stroke 5.1px · divider</b>Stroke 5.1px: the page-head capsule of this hub, divider included.</p></li><li class="is-dont"><svg viewBox="0 0 360 141.83" width="360" height="141.83" role="img" aria-label="Wrong: capsule 360px long with a fixed 20px stroke"><path d="M197.14 14.09L66.82 14.09A56.82 56.82 0 0 0 66.82 127.74L197.14 127.74" class="cs-line" stroke-width="20"/><path d="M197.14 10L289.08 10A60.92 60.92 0 0 1 289.08 131.83L197.14 131.83Z" class="cs-line" stroke-width="20"/></svg><p class="cap"><b>Don't · 360px · fixed 20px stroke</b>A thick fixed stroke swallows the 7px step between the halves: the capsule reads as a symmetric pill.</p></li>
+              </ul>
+              <p class="cap">Drawn by <code>tools/capsule_svg.py</code> (<code>stroke_for()</code>, <code>capsule_paths()</code>, <code>svg_outline()</code>). The stroke follows the length as rendered: a capsule scaled down on a phone keeps its proportion, and below 176px long the 1.5px minimum takes over.</p>
+            </div>
+            <div class="grid-2 d1-dm">
+              <h4 class="d1-dm__h">Desktop and mobile.</h4>
+              <div class="table-wrap"><table>
+                <thead><tr><th>Capsule</th><th>Desktop</th><th>Mobile (390)</th></tr></thead>
+                <tbody>
+                  <tr><td>Page-head outline (this hub)</td><td>600 long, stroke 5.1, divider</td><td>Hidden under 1280</td></tr>
+                  <tr><td>Band, standing outline</td><td>346 long, stroke 2.9, divider</td><td>Same size and stroke, under the copy</td></tr>
+                  <tr><td>Band, standing filled</td><td>250 long, no stroke</td><td>Hidden</td></tr>
+                  <tr><td>Website hero outline (Figma 600 × 260)</td><td>600 long, stroke 5.1, divider</td><td>Scaled with the frame: 350 long, stroke 3, divider</td></tr>
+                  <tr><td>Loader</td><td>72 long, divider, 1.5</td><td>Same</td></tr>
+                  <tr><td>Logo icon stamp (u|m) on a photo</td><td>48 long</td><td>40 long, never smaller</td></tr>
+                </tbody>
+              </table></div>
+              <div class="mob-frame" aria-label="Mobile view, 390 wide">
+                <span class="eyebrow">Mobile · 390</span>
+                <svg style="max-width: 100%; height: auto" viewBox="0 0 350 127.33" width="350" height="127.33" role="img" aria-label="Capsule 350px long on mobile, stroke 3px"><path d="M192.49 5.66L59.48 5.66A58 58 0 0 0 59.48 121.66L192.49 121.66" class="cs-line" stroke-width="2.98"/><path d="M192.49 1.48L286.34 1.48A62.18 62.18 0 0 1 286.34 125.84L192.49 125.84Z" class="cs-line" stroke-width="2.98"/></svg>
+                <p class="cap">The 600px hero capsule on a 390 screen: 350 long, stroke 3px, divider and step kept. Same shape, same proportion.</p>
+              </div>
+            </div>
+          </div>
+          <div class="cap-band" role="note"><h3>Website pattern.</h3><p>From the Figma homepage: a large outline capsule in Wash Blue at 70%, cropped by the section edge. Its stroke is 0.85% of its length (D1), not the 20px Figma draws. In dark sections it stands up vertically. Filled capsules sit at 50%. The same pattern runs across this hub, always in the logo's proportions.</p><p>In this hub: page head, 600px outline, stroke 5.1, desktop only (hidden under 1280px). Band, 346px standing outline (stroke 2.9) and 250px filled capsule on desktop; on mobile only the outline, under the copy, cropped by the right and bottom edges, the filled one hidden.</p></div>
         </div>
 
         <div class="grid-2">
@@ -475,7 +594,7 @@
             <figure>
               <svg class="frame" viewBox="0 0 320 200" role="img" aria-label="Correct: a transparent outline capsule cropped by the right edge, headline on the clean area">
                 <rect width="320" height="200" class="f-mist"/>
-                <rect x="190" y="40" width="200" height="120" rx="60" class="s-teal" opacity="0.7"/>
+                <path d="M291.09 63.23L206.77 63.23A36.77 36.77 0 0 0 206.77 136.76L291.09 136.76" class="cs-line" stroke-width="1.87" opacity="0.7"/><path d="M291.09 60.58L350.58 60.58A39.42 39.42 0 0 1 350.58 139.41L291.09 139.41Z" class="cs-line" stroke-width="1.87" opacity="0.7"/>
                 <text x="24" y="92" font-size="20" class="f-ink">Headline on a</text>
                 <text x="24" y="116" font-size="20" class="f-ink">clean area.</text>
               </svg>
@@ -497,6 +616,33 @@
               <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't invent shapes</b>No oval and no soft-cornered rectangle. Only the kit pieces and the capsule.</span></figcaption>
             </figure>
           </div>
+        </div>
+
+
+        <div class="sub" id="folds">
+          <h3>Shapes in folds.</h3>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>Up to two shapes a fold, and a shape may cross into the next (D4).</b> Each fold carries at most two shapes (R-106): the capsule in its true shape or Quadrant Kit pieces, outline or translucent fill, at <code>--opacity-capsule</code> or <code>--opacity-capsule-soft</code>, never under text. A shape may straddle the boundary between two folds; it counts once in each and carries the eye down the page. Optional scroll motion: the shape drifts at most 24px (<code>--motion-distance-drift</code>) or turns at most 6° (<code>--motion-drift-rotate</code>) across the fold's scroll, or draws its outline once. Only shapes move, never text. Reduced motion: the shape rests at its end state.</p></div>
+          <div class="fold-row">
+            <figure class="fold-fig"><div class="fold-demo" aria-label="Two folds with a capsule across the boundary">
+              <div class="fold fold--paper"><span class="eyebrow">Fold 1</span><h4>How it works.</h4><p>Copy keeps to the clean side. The capsule starts here.</p></div>
+              <div class="fold fold--mist"><svg class="fold-cap fold-drift" viewBox="0 0 360 130.96" aria-hidden="true"><path d="M197.99 5.83L61.18 5.83A59.65 59.65 0 0 0 61.18 125.13L197.99 125.13" class="cs-line--wash" stroke-width="3.06"/><path d="M197.99 1.53L294.52 1.53A63.95 63.95 0 0 1 294.52 129.43L197.99 129.43Z" class="cs-line--wash" stroke-width="3.06"/></svg><svg class="fold-quarter" viewBox="0 0 100 100" aria-hidden="true"><path d="M100 100V0A100 100 0 0 0 0 100Z" class="f-wash-blue"/></svg><span class="eyebrow">Fold 2</span><h4>One clear price.</h4><p>The same capsule continues here and counts once in each fold.</p></div>
+            </div><figcaption class="cap"><b>Desktop</b>Fold 1 holds half of a 360px outline (stroke 3.1, Wash Blue at 70%); fold 2 holds the other half and a Wash Blue Quarter at 50% in the bottom right corner, curve toward the copy: two shapes. Folds at 64 (D6). The capsule drifts 24px up as you scroll past (browsers with scroll timelines; static elsewhere).</figcaption></figure>
+            <figure class="fold-fig"><div class="fold-demo fold-demo--mob" aria-label="Two folds with a capsule across the boundary">
+              <div class="fold fold--paper"><span class="eyebrow">Fold 1</span><h4>How it works.</h4><p>Copy keeps to the clean side. The capsule starts here.</p></div>
+              <div class="fold fold--mist"><svg class="fold-cap fold-drift" viewBox="0 0 360 130.96" aria-hidden="true"><path d="M197.99 5.83L61.18 5.83A59.65 59.65 0 0 0 61.18 125.13L197.99 125.13" class="cs-line--wash" stroke-width="3.06"/><path d="M197.99 1.53L294.52 1.53A63.95 63.95 0 0 1 294.52 129.43L197.99 129.43Z" class="cs-line--wash" stroke-width="3.06"/></svg><svg class="fold-quarter" viewBox="0 0 100 100" aria-hidden="true"><path d="M100 100V0A100 100 0 0 0 0 100Z" class="f-wash-blue"/></svg><span class="eyebrow">Fold 2</span><h4>One clear price.</h4><p>The same capsule continues here and counts once in each fold.</p></div>
+            </div><figcaption class="cap"><b>Mobile · 390</b>Copy runs full width, so the capsule shrinks to 211px, sits further off the right edge and gets its own clear band under the copy of fold 1; the Quarter shrinks to 72px under the copy of fold 2. Folds at 48.</figcaption></figure>
+          </div>
+        </div>
+
+        <div class="sub" id="accent">
+          <h3>One accent colour per section.</h3>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>A section may add one brand accent (D8).</b> Green or Blue, through an icon, an eyebrow mark, a rule or a low-opacity shape of the same hue. One accent per section, never both. Yellow stays the single result moment. Text keeps its own colours: Green and Blue fall under 4.5:1 on Paper, so they mark, they never carry small text.</p></div>
+          <div class="acc-grid">
+            <figure><div class="acc-sec acc--green"><span class="acc-icon" aria-hidden="true"></span><span class="acc-eyebrow">Your provider</span><h4>A licensed provider reads every visit.</h4><p>Green icon, Green eyebrow mark, Green Quarter at 50%.</p><svg class="acc-shape" viewBox="0 0 100 100" aria-hidden="true"><path d="M100 100V0A100 100 0 0 0 0 100Z"/></svg></div><figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do · Green</b>One hue, three quiet touches.</span></figcaption></figure>
+            <figure><div class="acc-sec acc--blue"><span class="acc-icon" aria-hidden="true"></span><span class="acc-eyebrow">Delivery</span><h4>Plain box, at your door.</h4><p>Blue icon, Blue eyebrow mark and a Blue Quarter at 50%.</p><svg class="acc-shape" viewBox="0 0 100 100" aria-hidden="true"><path d="M100 100V0A100 100 0 0 0 0 100Z"/></svg></div><figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do · Blue</b>The same pattern in the other accent.</span></figcaption></figure>
+            <figure><div class="acc-sec acc--dont"><span class="acc-icon" aria-hidden="true"></span><span class="acc-eyebrow">Your provider</span><h4>A licensed provider reads every visit.</h4><p>Green icon, Yellow mark, Blue shape.</p><svg class="acc-shape" viewBox="0 0 100 100" aria-hidden="true"><path d="M100 100V0A100 100 0 0 0 0 100Z"/></svg></div><figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't mix</b>Three hues in one section, and Yellow spent on a label.</span></figcaption></figure>
+          </div>
+          <p class="cap">Mobile: the same section stacks; the shape keeps its corner and shrinks with the card, the icon stays 40px.</p>
         </div>
 
         <div class="sub">
@@ -592,14 +738,45 @@
           </div>
         </div>
 
+
+        <div class="sub" id="photo-capsule">
+          <h3>The capsule on a photo.</h3>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>Outline plus a translucent long half (D2).</b> On a photo the capsule is an outline with the D1 stroke, Paper on dark or busy photos and Deep Teal on light ones, and its long half is filled translucent (Paper or Wash Blue at <code>--opacity-capsule-soft</code>), like the filled half of the seal. It enters from a frame edge or corner, cropped by it, toward the subject. Never an opaque fill over a face, never over eyes or mouth, never under text. At most two shapes per photo, the stamp included. The logo icon, the u|m mark of the app icon without its tile (<code>assets/shapes/logo-stamp-paper.svg</code>, <code>logo-stamp-teal.svg</code>), may sit as a stamp in a photo corner: 48px long on desktop, 40 on mobile and never smaller, 16px from the edges, Paper on dark or busy photos and Deep Teal on light ones. In exported images (media kit, social) it is 12% of the image's short side.</p></div>
+          <div class="cp-grid">
+            <figure>
+              <div class="cp-photo cp-photo--45"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="A man with a grey beard drinks from a mug at a wooden table at home, in warm window light" loading="lazy" style="object-position: 45% 30%"><svg class="cp-a" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-wash"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line" stroke-width="2.55"/></svg><img class="cp-stamp" src="assets/shapes/logo-stamp-paper.svg" width="48" height="17.5" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do · light photo</b>Deep Teal outline, Wash Blue long half at 50%, entering from the right edge toward him, below his face. Paper logo icon stamp (u|m), 48px long (40 on mobile), bottom left on the dark table. Two shapes.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="cp-photo cp-photo--32"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="A smiling man with a cup talks with his partner at a kitchen table, seen past her shoulder" loading="lazy"><svg class="cp-b" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-paper"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line--paper" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line--paper" stroke-width="2.55"/></svg></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do · busy photo</b>Paper outline and Paper long half at 50%, cropped by the bottom right corner, over the shelves and his shirt, clear of both faces. One shape.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="cp-photo cp-photo--32"><img src="assets/photos/father-son-autumn-pexels-35688949.jpg" width="1600" height="1095" alt="Wrong: a solid capsule covers the faces of a father and his son on an autumn path" loading="lazy"><svg class="cp-x" viewBox="0 0 300 107.5" aria-hidden="true"><path d="M165.12 3.61L50.14 3.61A50.14 50.14 0 0 0 50.14 103.89L165.12 103.89M165.12 0L246.25 0A53.75 53.75 0 0 1 246.25 107.5L165.12 107.5Z" class="cs-solid"/></svg></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't</b>An opaque capsule floating over the faces, not entering from an edge.</span></figcaption>
+            </figure>
+          </div>
+          <div class="cp-mob" aria-label="Mobile crops">
+            <figure>
+              <div class="cp-photo cp-photo--45"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="" loading="lazy" style="object-position: 45% 30%"><svg class="cp-am" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-wash"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line" stroke-width="2.55"/></svg><img class="cp-stamp" src="assets/shapes/logo-stamp-paper.svg" width="48" height="17.5" alt=""></div>
+              <figcaption class="cap"><b>Mobile · 4:5</b>Same crop, the shape scales with the photo (positions in %). The stamp drops to 40px long (never smaller), still 16px from the edges.</figcaption>
+            </figure>
+            <figure>
+              <div class="cp-photo cp-photo--45"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="" loading="lazy" style="object-position: 62% 50%"><svg class="cp-bm" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-paper"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line--paper" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line--paper" stroke-width="2.55"/></svg></div>
+              <figcaption class="cap"><b>Mobile · 4:5, recropped</b>The 4:5 crop puts his face where the desktop capsule sat, so the capsule moves to the bottom left edge. If no edge is clear of a face, it hides.</figcaption>
+            </figure>
+          </div>
+        </div>
+
         <div class="sub">
           <h3>Placeholders</h3>
           <p class="prose">Until real photography exists, use a Mist frame labelled "IMAGE · &lt;what&gt;" at the frame's real ratio. Never use a watermarked stock photo as a stand-in. The ratios below follow the Figma category page frames: 520×420, 440×460 and 548×300.</p>
           <div class="grid-3">
-            <div class="ph" role="img" aria-label="Placeholder frame, 520 by 420"><span>IMAGE · Man, 50s, at home by a window, morning light</span></div>
-            <div class="ph ph--tall" role="img" aria-label="Placeholder frame, 440 by 460"><span>IMAGE · Couple, 40s, in a kitchen, talking</span></div>
-            <div class="ph ph--wide" role="img" aria-label="Placeholder frame, 548 by 300"><span>IMAGE · unifiedmeds bottle, closed, on a bathroom shelf</span></div>
+            <figure class="ph-fig"><div class="ph"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="A man with a grey beard drinks from a mug at a wooden table at home, in warm window light" loading="lazy" style="object-position: 40% 30%"></div><figcaption><span class="ph-label">IMAGE · Man, 50s, at home by a window, morning light · 520 × 420</span><span class="ph-tag">Not approved · to replace · Pexels, Mikhail Nilov</span></figcaption></figure>
+            <figure class="ph-fig"><div class="ph ph--tall"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="A smiling man with a cup talks with his partner at a kitchen table, seen past her shoulder" loading="lazy" style="object-position: 62% 50%"></div><figcaption><span class="ph-label">IMAGE · Couple, 40s, in a kitchen, talking · 440 × 460</span><span class="ph-tag">Not approved · to replace · Pexels, Gary Barnes</span></figcaption></figure>
+            <figure class="ph-fig"><div class="ph ph--wide"><img src="assets/photos/bathroom-niche-amber-pexels-16436909.jpg" width="1600" height="1068" alt="A closed amber bottle on a bathroom shelf in soft daylight" loading="lazy" style="object-position: 50% 60%"></div><figcaption><span class="ph-label">IMAGE · unifiedmeds bottle, closed, on a bathroom shelf · 548 × 300</span><span class="ph-tag">Not approved · to replace · Pexels, Luis Zambrano</span></figcaption></figure>
           </div>
+          <p class="cap">Stand-in photos (17.11.2026): free licence, not approved, shown so the frames carry the intended light, colour and mood. The label under each frame stays the brief for the real photo; the bottle stand-in is a generic amber bottle, not ours. Credits: assets/photos/CREDITS.md.</p>
         </div>
       </section>
 

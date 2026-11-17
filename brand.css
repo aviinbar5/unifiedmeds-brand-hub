@@ -209,8 +209,10 @@
   --layout-margin-tablet: 40px;
   --layout-margin-mobile: 20px;
   --layout-header-inset: 56px;
-  --layout-section-y: 96px;
-  --layout-section-y-mobile: 56px;
+  --layout-section-y: 64px;
+  --layout-section-y-mobile: 48px;
+  --layout-section-head-gap: 24px;
+  --layout-section-head-gap-mobile: 16px;
   --layout-columns: 12;
   --layout-gutter: 20px;
   --layout-breakpoint-mobile: 390px;
@@ -247,9 +249,13 @@
   --size-favicon-sm: 16px;
   --size-button-padding-x: 24px;
   --size-capsule-stroke: 20px;
+  --size-capsule-stroke-ratio: 0.0085;
+  --size-capsule-stroke-min: 1.5px;
+  --size-capsule-divider-max: 120px;
   --shadow-overlay: 0 24px 60px rgba(38, 70, 83, 0.16), 0 2px 6px rgba(38, 70, 83, 0.06);
   --motion-duration-fast: 150ms;
   --motion-duration-open: 220ms;
+  --motion-duration-crossfade: 180ms;
   --motion-duration-reveal: 320ms;
   --motion-duration-wipe: 420ms;
   --motion-duration-shape: 520ms;
@@ -260,25 +266,32 @@
   --motion-distance-rise: 12px;
   --motion-distance-lift: 2px;
   --motion-distance-dropdown: 6px;
+  --motion-distance-drift: 24px;
   --motion-stagger: 90ms;
+  --motion-stagger-fine: 40ms;
+  --motion-drift-rotate: 6deg;
   --motion-close-delay: 150ms;
   --motion-intent-delay: 100ms;
   --motion-loader-delay: 400ms;
   --motion-auto-advance: 320ms;
   --opacity-capsule: 0.7;
   --opacity-capsule-soft: 0.5;
+  --opacity-step-faded: 0.45;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-duration-fast: 0ms;
     --motion-duration-open: 0ms;
+    --motion-duration-crossfade: 0ms;
     --motion-duration-reveal: 0ms;
     --motion-duration-wipe: 0ms;
     --motion-duration-shape: 0ms;
     --motion-distance-rise: 0px;
     --motion-distance-lift: 0px;
     --motion-distance-dropdown: 0px;
+    --motion-distance-drift: 0px;
     --motion-stagger: 0ms;
+    --motion-stagger-fine: 0ms;
   }
 }

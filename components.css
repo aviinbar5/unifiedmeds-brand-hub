@@ -260,7 +260,8 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .errpage { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-10) var(--space-8); border-radius: var(--radius-card); background: var(--color-surface-mist); }
 .errpage-title { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--font-family-serif); color: var(--color-text-strong); }
 .errpage p { margin: 0 0 var(--space-2); color: var(--color-text-secondary-on-mist); }
-/* Loading */
+/* Loading. The loader is the logo capsule (tools/capsule_svg.py, length 60 in a 64 x 25.5 box): left half 55% of the length,
+   right half taller. Never a rounded rect with equal halves. 72px wide on desktop and mobile; 40px inside a button. */
 .cap-loader { width: calc(var(--space-14) + var(--space-2)); height: auto; overflow: visible; }
 .cap-loader-line { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 2; }
 .cap-loader-fill { fill: var(--color-brand-deep-teal); transform-box: fill-box; transform-origin: left center; animation: cap-fill var(--motion-duration-loader) var(--motion-easing-ui) infinite; }
@@ -276,3 +277,156 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
 .check-list li { display: flex; align-items: center; gap: var(--space-3); font: 400 var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-primary); }
 .check-list svg { flex: none; width: var(--space-5); height: var(--space-5); padding: calc(var(--space-1) * 0.75); box-sizing: border-box; border-radius: var(--radius-pill); background: var(--color-surface-wash-blue); color: var(--color-brand-deep-teal); }
+
+/* =====================================================================
+   Round 2 · Avi's review decisions D3, D5, D7 (17.11.2026, proposed)
+   ===================================================================== */
+
+/* ---------- D3 · Adjacent buttons never share a colour, in any state ----------
+   Next to a Yellow button: Outline, Outline Light and Light hover to Deep Teal with a Paper label
+   (never to Yellow); Dark hovers to Blue-dark (its rest Teal-deep is too close to Deep Teal).
+   On a dark surface (.on-dark) the outline and light buttons hover to Paper with a Deep Teal label,
+   because Deep Teal is the surface. Applies to any parent that holds the buttons as direct
+   children (:has), so no extra class is needed; .btn-pair adds the layout. */
+:where(*):has(> .btn--yellow) > .btn:is(.btn--outline, .btn--outline-light, .btn--light) {
+  --btn-bg-hover: var(--color-brand-deep-teal);
+  --btn-fg-hover: var(--color-text-on-dark);
+  --btn-border-hover: var(--color-brand-deep-teal);
+}
+:where(*):has(> .btn--yellow) > .btn:not([class*="btn--"]) {
+  --btn-bg-hover: var(--color-brand-blue-dark);
+  --btn-fg-hover: var(--color-text-on-dark);
+  --btn-border-hover: var(--color-brand-blue-dark);
+}
+:where(.on-dark, .on-dark *):has(> .btn--yellow) > .btn:is(.btn--outline-light, .btn--light) {
+  --btn-bg-hover: var(--color-surface-paper);
+  --btn-fg-hover: var(--color-brand-deep-teal);
+  --btn-border-hover: var(--color-surface-paper);
+}
+.btn-pair { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+@media (max-width: 767px) {
+  /* Mobile: the pair stacks, each button full width; the colour rule still applies */
+  .btn-pair { flex-direction: column; align-items: stretch; }
+  .btn-pair > .btn { width: 100%; }
+}
+
+/* ---------- D5 · Segmented toggle with a sliding thumb ----------
+   The Paper thumb slides under the chosen option (220ms, --motion-duration-open, --motion-easing-ui).
+   JS adds .has-thumb and sets --seg-i (index) and --seg-n (count); without JS the chosen button is Paper. */
+.segmented.has-thumb { position: relative; display: inline-grid; grid-template-columns: repeat(var(--seg-n, 2), minmax(0, 1fr)); }
+.segmented.has-thumb::before {
+  content: ''; position: absolute; z-index: 0; top: var(--space-1); bottom: var(--space-1); left: var(--space-1);
+  width: calc((100% - var(--space-1) * 2 - var(--space-1) * (var(--seg-n, 2) - 1)) / var(--seg-n, 2));
+  border-radius: var(--radius-xs); background: var(--color-surface-paper);
+  transform: translateX(calc(var(--seg-i, 0) * (100% + var(--space-1))));
+  transition: transform var(--motion-duration-open) var(--motion-easing-ui);
+}
+.segmented.has-thumb button { position: relative; z-index: 1; min-height: calc(var(--size-tap-min) - var(--space-2)); }
+.segmented.has-thumb [aria-checked="true"] { background: none; }
+.segmented--full { width: 100%; justify-self: stretch; }
+/* Content that depends on the toggle cross-fades (180ms, --motion-duration-crossfade) */
+.seg-panels { display: grid; }
+.seg-panels > [data-seg-panel] { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity var(--motion-duration-crossfade) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-crossfade); }
+.seg-panels > [data-seg-panel].is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+/* ---------- D5 · Two-state accent dots ----------
+   Each state has its own accent where it marks data: first state Green, second Blue
+   (brand colours, never product colours, never Yellow). Dots fill one after the other,
+   --motion-stagger-fine apart (40ms), never longer than --motion-duration-crossfade (180ms) in total. */
+.dots { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.dots li { display: grid; justify-items: center; gap: var(--space-1); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.dot { width: var(--space-6); height: var(--space-6); border-radius: 50%; border: 1.5px solid var(--color-line-mid); background: transparent; transition: background-color var(--motion-duration-fast) var(--motion-easing-ui) var(--dot-delay, 0ms), border-color var(--motion-duration-fast) var(--motion-easing-ui) var(--dot-delay, 0ms); }
+.dots[data-state="0"] .dot.is-on { background: var(--color-brand-green); border-color: var(--color-brand-green); }
+.dots[data-state="1"] .dot.is-on { background: var(--color-brand-blue); border-color: var(--color-brand-blue); }
+.state-key { display: inline-flex; align-items: center; gap: var(--space-2); }
+.state-key::before { content: ''; width: var(--space-3); height: var(--space-3); border-radius: 50%; background: var(--key); }
+
+/* ---------- D5 · Stepper / scroll story ----------
+   Not reached: --opacity-step-faded (0.45). Active: 2px Deep Teal border, filled number, short left accent bar.
+   Passed: full opacity, a small check. Every change 220ms; reduced motion: instant (tokens go to 0). */
+.stepper { display: grid; grid-template-columns: repeat(var(--steps, 4), minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; counter-reset: stp; }
+.stp { position: relative; display: grid; gap: var(--space-2); align-content: start; padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6); border: 2px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); opacity: var(--opacity-step-faded); cursor: pointer;
+  transition: opacity var(--motion-duration-open) var(--motion-easing-ui), border-color var(--motion-duration-open) var(--motion-easing-ui); }
+.stp::before { content: ''; position: absolute; left: var(--space-2); top: var(--space-5); width: var(--space-1); height: 0; border-radius: var(--radius-xs); background: var(--color-brand-deep-teal); transition: height var(--motion-duration-open) var(--motion-easing-ui); }
+.stp__num { display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: 50%; border: 1px solid var(--color-brand-deep-teal); font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / 1 var(--font-family-serif); color: var(--color-brand-deep-teal); transition: background-color var(--motion-duration-open) var(--motion-easing-ui), color var(--motion-duration-open) var(--motion-easing-ui); }
+.stp__num svg { display: none; width: var(--space-5); height: var(--space-5); }
+.stp b { font: 600 var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.stp p { color: var(--color-text-secondary); font-size: var(--type-desktop-small-size); line-height: var(--type-desktop-small-line); }
+.stp.is-active { opacity: 1; border-color: var(--color-brand-deep-teal); }
+.stp.is-active::before { height: var(--space-8); }
+.stp.is-active .stp__num { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.stp.is-passed { opacity: 1; }
+.stp.is-passed .stp__num { background: var(--color-surface-wash-green); border-color: var(--color-surface-wash-green); }
+.stp.is-passed .stp__num span { display: none; }
+.stp.is-passed .stp__num svg { display: block; }
+.stp:focus-visible { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+@media (max-width: 767px) {
+  .stepper { grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
+  .stp { grid-template-columns: auto minmax(0, 1fr); column-gap: var(--space-4); }
+  .stp__num { grid-row: span 2; }
+  .stp p { font-size: var(--type-mobile-compact-size); line-height: var(--type-mobile-compact-line); }
+}
+
+/* ---------- D7 · Footer v3 (website and landing pages) ----------
+   Mist ground, logo Horizontal 30 (28 mobile), brand line, four columns, newsletter (field + Dark button,
+   consent line, discreet promise), six social icons (24px in 44px targets), contact and compliance
+   placeholders, copyright. Layout follows the footer's own width (container query): from 768 the
+   desktop grid; under 768 the newsletter comes first and the columns become a one-open accordion (D5). */
+.ft3 { container-type: inline-size; border-radius: var(--radius-card); background: var(--color-surface-mist); color: var(--color-text-primary); border-top: 1px solid var(--color-line-base); }
+.ft3__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); grid-template-areas: "brand cols" "news social" "legal legal"; gap: var(--space-10) var(--space-12); padding: var(--layout-section-y) var(--space-10) var(--space-8); }
+.ft3__brand { grid-area: brand; display: grid; gap: var(--space-4); align-content: start; }
+.ft3__logo { display: block; height: var(--size-logo-footer-desktop); width: auto; }
+.ft3__line { max-width: 32ch; color: var(--color-text-secondary-on-mist); }
+.ft3__contact { font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-primary); }
+.ft3__cols { grid-area: cols; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
+.ft3__colh { margin: 0; }
+.ft3__colbtn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: default; pointer-events: none;
+  font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary-on-mist); }
+.ft3__colbtn .chev { display: none; }
+.ft3__panel { display: grid; grid-template-rows: 1fr; }
+.ft3__panel > div { min-height: 0; overflow: hidden; }
+.ft3__links { display: grid; gap: var(--space-2); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.ft3__links a, .ft3__legal a { color: var(--color-text-primary); text-decoration: none; font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans);
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat; transition: background-size var(--motion-duration-fast) var(--motion-easing-ui); }
+.ft3__links a:hover, .ft3__legal a:hover { background-size: 100% 1px; }
+.ft3__news { grid-area: news; display: grid; gap: var(--space-3); max-width: calc(var(--space-24) * 5); }
+.ft3__newsh { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); font-weight: 600; color: var(--color-text-strong); }
+.ft3__newsrow { display: flex; gap: var(--space-2); }
+.ft3__field { flex: 1; min-width: 0; height: var(--size-control); padding: 0 var(--space-4); border: 1px solid var(--color-line-field); border-radius: var(--radius-small); background: var(--color-surface-card); color: var(--color-text-primary);
+  font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+.ft3__field::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.ft3__fine { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+.ft3__promise { display: flex; align-items: center; gap: var(--space-2); font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-primary); }
+.ft3__promise svg { flex: none; width: var(--space-4); height: var(--space-4); color: var(--color-brand-green); }
+.ft3__status:empty { display: none; }
+.ft3__social { grid-area: social; align-self: end; justify-self: end; display: flex; flex-wrap: wrap; gap: 0; margin: 0; padding: 0; list-style: none; }
+.ft3__social a { display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: var(--radius-xs); color: var(--color-brand-deep-teal); transition: background-color var(--motion-duration-fast) var(--motion-easing-ui); }
+.ft3__social a:hover { background: var(--color-line-base); }
+.ft3__social svg { width: var(--size-icon); height: var(--size-icon); }
+.ft3__legal { grid-area: legal; display: grid; gap: var(--space-3); padding-top: var(--space-6); border-top: 1px solid var(--color-line-base); }
+.ft3__compliance { display: grid; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.ft3__compliance li { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+.ft3__compliance li:first-child { color: var(--color-text-primary); font-weight: 600; }
+.ft3__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-6); }
+.ft3__seal { display: inline-grid; place-items: center; min-height: var(--size-tap-min); padding: 0 var(--space-3); border: 1px dashed var(--color-line-mid); border-radius: var(--radius-xs); font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+@container (max-width: 767px) {
+  .ft3__in { grid-template-columns: minmax(0, 1fr); grid-template-areas: "news" "brand" "cols" "social" "legal"; gap: var(--space-8); padding: var(--layout-section-y-mobile) var(--layout-margin-mobile) var(--space-6); }
+  .ft3__logo { height: var(--size-logo-footer-mobile); }
+  .ft3__cols { grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 1px solid var(--color-line-base); }
+  .ft3__col { border-bottom: 1px solid var(--color-line-base); }
+  .ft3__colbtn { min-height: var(--space-14); pointer-events: auto; cursor: pointer; font: var(--type-mobile-card-weight, 600) var(--type-mobile-body-size) / var(--type-mobile-body-line) var(--font-family-sans); letter-spacing: 0; color: var(--color-text-strong); }
+  .ft3__colbtn .chev { display: block; flex: none; width: var(--size-icon); height: var(--size-icon); color: var(--color-brand-deep-teal); transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+  .ft3__colbtn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .ft3__panel { grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui); }
+  .ft3__panel > div { opacity: 0; visibility: hidden; transition: opacity var(--motion-duration-open) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-open); }
+  .ft3__col.is-open .ft3__panel { grid-template-rows: 1fr; }
+  .ft3__col.is-open .ft3__panel > div { opacity: 1; visibility: visible; transition-delay: 0s; }
+  .ft3__links { gap: 0; margin: 0 0 var(--space-3); }
+  .ft3__links li { display: flex; align-items: center; min-height: var(--size-tap-min); }
+  .ft3__news { max-width: none; }
+  .ft3__newsrow { flex-direction: column; }
+  .ft3__field { flex: none; width: 100%; }
+  .ft3__newsrow .btn { width: 100%; }
+  .ft3__social { justify-self: start; margin-left: calc(var(--space-3) * -1); }
+  .ft3__bar { flex-direction: column; align-items: flex-start; }
+}

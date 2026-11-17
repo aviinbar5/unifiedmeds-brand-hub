@@ -19,7 +19,7 @@
 /* ---------- Shared helpers ---------- */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .on-dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
-.stack { display: grid; gap: var(--space-4); align-content: start; min-width: 0; }
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); align-content: start; min-width: 0; }
 .kv { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: center; }
 td code, th code { white-space: nowrap; }
 .toolbar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
@@ -57,6 +57,11 @@ td code, th code { white-space: nowrap; }
 .surface--blue { background: var(--color-brand-blue); color: var(--color-text-on-dark); }
 .surface--wash-blue .cap, .surface--wash-yellow .cap { color: var(--color-text-primary); }
 .surface-title { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+/* stand-in photo behind the on-photo button (17.11.2026): not approved, to replace */
+.photo-stage { position: relative; overflow: hidden; min-height: calc(var(--space-24) * 2); align-items: flex-start; align-content: flex-start; padding: var(--space-4); border-radius: var(--radius-small); }
+.photo-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 65%; display: block; }
+.photo-stage .btn { position: relative; z-index: 1; }
+.surface .ph-tag { display: inline-flex; flex-wrap: wrap; max-width: 100%; margin-bottom: var(--space-1); padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-wash-yellow); color: var(--color-brand-teal-deep); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); }
 
 /* ---------- Button width diagram ---------- */
 .measures { display: flex; flex-wrap: wrap; gap: var(--space-10) var(--space-12); align-items: start; }
@@ -80,7 +85,7 @@ td code, th code { white-space: nowrap; }
 .measure__out { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-primary); font-variant-numeric: tabular-nums; }
 .heights { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: end; }
 .heights figure { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
-.heights figure.wide { width: var(--layout-frame-mobile); max-width: 100%; justify-items: stretch; }
+.heights figure.wide { width: min(var(--layout-frame-mobile), 100%); justify-items: stretch; }
 .slot-loading {
   display: inline-flex; align-items: center; height: var(--size-control); padding: 0 var(--size-button-padding-x);
   border: 1px dashed var(--color-line-field); border-radius: var(--radius-button);
@@ -181,9 +186,9 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
 .pm::after { width: var(--size-icon-stroke); height: var(--space-4); transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
 .acc__btn[aria-expanded="true"] .pm::after { transform: translate(-50%, -50%) scaleY(0); }
 .acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui); }
-.acc__panel > div { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s linear var(--motion-duration-open); }
+.acc__panel > div { min-height: 0; overflow: hidden; visibility: hidden; opacity: 0; transition: opacity var(--motion-duration-open) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-open); }
 .acc__row.is-open .acc__panel { grid-template-rows: 1fr; }
-.acc__row.is-open .acc__panel > div { visibility: visible; transition-delay: 0s; }
+.acc__row.is-open .acc__panel > div { visibility: visible; opacity: 1; transition-delay: 0s; }
 .acc__panel p { padding: 0 var(--space-10) var(--space-5) 0; color: var(--color-text-primary); max-width: 68ch; }
 
 /* ---------- Header & main menu v3 specimen ---------- */
@@ -416,6 +421,38 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
 @media (prefers-reduced-motion: reduce) {
   .dlg[open] { animation: none; }
 }
+
+/* ---- Round 2 (17.11.2026) page-only styles ---- */
+.acc__btn .chev { flex: none; width: var(--size-icon); height: var(--size-icon); color: var(--color-brand-deep-teal); transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+.acc__btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.pair-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.pair-cell { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-6); border-radius: var(--radius-small); background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); }
+.pair-cell.on-dark { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); }
+.pair-cell.on-dark .cap { color: var(--color-text-on-dark-muted); }
+.pair-cell .cap b { display: block; color: var(--color-text-strong); font-weight: 600; }
+.pair-cell.on-dark .cap b { color: var(--color-text-on-dark); }
+.pair-dont .btn--outline.is-hover { --btn-bg-hover: var(--color-brand-yellow); --btn-fg-hover: var(--color-brand-deep-teal); --btn-border-hover: var(--color-brand-yellow); }
+.verdict { display: flex; gap: var(--space-2); align-items: flex-start; }
+.verdict > svg { flex: none; width: var(--space-5); height: var(--space-5); }
+.ic-ok { color: var(--color-brand-green); } .ic-no { color: var(--color-brand-coral); }
+.ix-grid { display: grid; grid-template-columns: minmax(0, 1fr) var(--layout-frame-mobile); gap: var(--space-6); align-items: start; }
+.ix-card { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+.ix-card--mob { padding: var(--space-5) var(--layout-margin-mobile); }
+.ix-card .eyebrow { justify-self: start; }
+.price-panel { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-5); align-items: center; padding: var(--space-5); border-radius: var(--radius-small); background: var(--color-surface-mist); }
+.price-panel .packs { display: flex; gap: var(--space-1); align-items: end; min-height: calc(var(--space-24) + var(--space-6)); }
+.price-panel img { display: block; width: calc(var(--space-12) + var(--space-4)); height: auto; }
+.price-panel b { display: block; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+.price-panel p { color: var(--color-text-secondary-on-mist); }
+.ix-card--mob .price-panel { grid-template-columns: minmax(0, 1fr); }
+.ix-keys { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
+.ix-keys .cap { margin: 0; }
+.ix-note { color: var(--color-text-secondary); }
+.ix-ctrl { display: flex; gap: var(--space-3); }
+.ftr3-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+.ftr3-mobile { width: var(--layout-frame-mobile); max-width: 100%; }
+@media (max-width: 1023px) { .ix-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 767px) { .pair-grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -469,6 +506,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           <a href="#footer">Footer</a>
           <a href="#overlay">Overlay</a>
           <a href="#states">Feedback &amp; states</a>
+          <a href="#interactive">Interactive states</a>
           <a href="#changes">Changes from Figma</a>
         </nav>
       </header>
@@ -559,11 +597,12 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
               <p class="cap">Outline Light (Paper border and label) → Yellow.</p>
             </div>
             <div class="surface surface--dark on-dark">
-              <span class="surface-title">Photo · shown on a Deep Teal stand-in</span>
-              <div class="specimen-row">
+              <span class="surface-title">Photo · shown on a stand-in photo</span>
+              <div class="specimen-row photo-stage">
+                <img src="assets/photos/father-son-autumn-pexels-35688949.jpg" width="1600" height="1095" alt="A father crouches on a forest path to zip up his young son's jacket" loading="lazy">
                 <a class="btn btn--outline-light btn--on-photo" href="#buttons">Explore treatments</a>
               </div>
-              <p class="cap">Outline Light on a photo fills Blue-dark with a Paper label (Avi, 07.10.2026). Class <code>.btn--on-photo</code>.</p>
+              <p class="cap"><span class="ph-tag">Not approved · to replace · Pexels, Filip Rankovic Grobgaard</span><br>Outline Light on a photo fills Blue-dark with a Paper label (Avi, 07.10.2026). Class <code>.btn--on-photo</code>.</p>
             </div>
             <div class="surface surface--wash-blue surface-accent">
               <span class="surface-title">Wash Blue surface</span>
@@ -605,11 +644,28 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                 <tr><td>Outline Light</td><td>Deep Teal</td><td>Transparent, Paper #FEFCF6 border and label</td><td>Yellow fill and border, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--outline-light</code></td></tr>
                 <tr><td>Outline Light</td><td>Photo</td><td>Transparent, Paper border and label</td><td>Blue-dark #4E6873 fill, Paper label</td><td>→ 5.76</td><td><code>.btn--outline-light.btn--on-photo</code></td></tr>
                 <tr><td>Light</td><td>Standard</td><td>Paper fill, Deep Teal label</td><td>Yellow fill, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--light</code></td></tr>
+                <tr><td>Outline, Outline Light, Light</td><td>Next to a Yellow button (D3)</td><td>The type’s rest colours</td><td>Deep Teal #264653 fill and border, Paper label. On a Deep Teal surface: Paper fill, Deep Teal label</td><td>→ 9.82</td><td>automatic (<code>:has()</code>), layout <code>.btn-pair</code></td></tr>
+                <tr><td>Dark</td><td>Next to a Yellow button (D3)</td><td>Teal-deep, Paper label</td><td>Blue-dark #4E6873, Paper label</td><td>→ 5.76</td><td>automatic (<code>:has()</code>)</td></tr>
                 <tr><td>Any type</td><td>Yellow, Blue or Wash</td><td>The type’s rest colours</td><td>Paper #FEFCF6 (<code>--color-surface-paper</code>), Deep Teal label. Light hovers to Deep Teal with a Paper label</td><td>→ 9.82</td><td><code>.surface-accent .btn</code></td></tr>
               </tbody>
             </table>
           </div>
           <p class="cap">Contrast is label against fill (AA needs 4.5:1 for a 15px label). Figma’s Yellow hover is Pastel Blue #6E8B97 at 3.53:1; Edition 02 uses Blue-dark (see <a href="#changes">Changes from Figma</a>).</p>
+        </div>
+
+
+        <div class="sub" id="button-pairs">
+          <h3>Side by side, never the same colour.</h3>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>Two buttons side by side never show the same colour, at rest or on hover, press or focus (D3).</b> An Outline, Outline Light or Light button next to a Yellow button hovers to Deep Teal with a Paper label, never to Yellow. A Dark button next to Yellow hovers to Blue-dark. On a Deep Teal surface the outline button hovers to Paper. components.css applies this to any two buttons that share a parent (<code>:has(&gt; .btn--yellow)</code>); <code>.btn-pair</code> adds the row layout and stacks the pair full width on mobile.</p></div>
+          <div class="pair-grid">
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline" aria-hidden="true">How it works</span></div><p class="cap"><b>Rest</b>Yellow and Outline.</p></div>
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow is-hover" aria-hidden="true">Get started</span><span class="btn btn--outline" aria-hidden="true">How it works</span></div><p class="cap"><b>Yellow hovered</b>Blue-dark, Paper label. The Outline stays at rest.</p></div>
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline is-hover" aria-hidden="true">How it works</span></div><p class="cap"><b>Outline hovered</b>Deep Teal, Paper label, next to the Yellow at rest.</p></div>
+            <div class="pair-cell on-dark"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline-light is-hover" aria-hidden="true">How it works</span></div><p class="cap"><b>On Deep Teal, Outline Light hovered</b>Paper, Deep Teal label: Deep Teal would vanish into the surface.</p></div>
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn is-hover" aria-hidden="true">Sign in</span></div><p class="cap"><b>Dark hovered next to Yellow</b>Blue-dark, Paper label.</p></div>
+            <div class="pair-cell pair-dont"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline is-hover" aria-hidden="true">How it works</span></div><p class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don’t</b>The Outline hovers to Yellow: two Yellow buttons side by side.</span></p></div>
+          </div>
+          <p class="cap">Hover states are shown here statically. Mobile has no hover: the tap shows Pressed in the same colours for 150ms. On mobile the pair stacks, each button full width, and the rule still holds.</p>
         </div>
 
         <div class="sub">
@@ -653,7 +709,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                 <a class="btn btn--icon btn--outline" href="#icon-buttons">Learn more<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg></a>
                 <a class="btn btn--icon btn--yellow" href="#icon-buttons">Get started<svg class="btn-icon" data-dir="right" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10H16M11 15L16 10L11 5"/></svg></a>
                 <a class="btn btn--icon btn--outline" href="#icon-buttons">Download PDF<svg class="btn-icon" data-dir="down" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5V12.5M14 8.5L10 12.5L6 8.5M4 16.25H16"/></svg></a>
-                <a class="btn btn--icon" href="#icon-buttons">Book a visit<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg></a>
+                <a class="btn btn--icon" href="#icon-buttons">Start your assessment<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg></a>
                 <a class="btn btn--icon btn--outline" href="#icon-buttons">Message your provider<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6C4 5.06954 4.21071 4.56083 4.58579 4.18576C4.96086 3.81069 5.46957 3.6 6 3.6H14C14.5304 3.6 15.0391 3.81069 15.4142 4.18576C15.7893 4.56083 16 5.06954 16 5.6V11.4C16 11.9304 15.7893 12.4391 15.4142 12.8142C15.0391 13.1893 14.5304 13.4 14 13.4H9.2L5.8 16.2V13.4H6C5.46957 13.4 4.96086 13.1893 4.58579 12.8142C4.21071 12.4391 4 11.9304 4 11.4V5.6Z"/></svg></a>
                 <a class="btn btn--icon btn--outline" href="#icon-buttons">Open the full study<svg class="btn-icon" data-dir="out" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16.2 8.8V3.8H11.2M16.2 3.8L9.6 10.4M14.2 12V15C14.2 15.3978 14.042 15.7793 13.7606 16.0606C13.4793 16.3419 13.0978 16.5 12.7 16.5H5.3C4.90216 16.5 4.52063 16.3419 4.23933 16.0606C3.95802 15.7793 3.8 15.3978 3.8 15V7.6C3.8 7.20215 3.95802 6.82062 4.23933 6.53932C4.52063 6.25801 4.90216 6.1 5.3 6.1H8.2"/></svg></a>
                 <a class="btn btn--icon" href="#icon-buttons">Buy now<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 7.2V6C7.6 5.36346 7.85283 4.75301 8.30292 4.30292C8.75301 3.85283 9.36346 3.6 10 3.6C10.6365 3.6 11.2469 3.85283 11.697 4.30292C12.1471 4.75301 12.4 5.36346 12.4 6V7.2M4.6 7.2H15.4L14.6 16.4H5.4L4.6 7.2Z"/></svg></a>
@@ -887,19 +943,19 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           <h3>Accordion (FAQ).</h3>
           <div class="acc" data-acc>
             <div class="acc__row">
-              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-1" id="acc-1-b">What is the assessment?<span class="pm" aria-hidden="true"></span></button>
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-1" id="acc-1-b">What is the assessment?<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
               <div class="acc__panel" id="acc-1" role="region" aria-labelledby="acc-1-b"><div><p>A short set of questions about your health that a licensed provider reads. Specimen copy.</p></div></div>
             </div>
             <div class="acc__row">
-              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-2" id="acc-2-b">Who reviews my answers?<span class="pm" aria-hidden="true"></span></button>
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-2" id="acc-2-b">Who reviews my answers?<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
               <div class="acc__panel" id="acc-2" role="region" aria-labelledby="acc-2-b"><div><p>A licensed provider. Specimen copy.</p></div></div>
             </div>
             <div class="acc__row">
-              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-3" id="acc-3-b">Can I change my answers?<span class="pm" aria-hidden="true"></span></button>
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-3" id="acc-3-b">Can I change my answers?<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
               <div class="acc__panel" id="acc-3" role="region" aria-labelledby="acc-3-b"><div><p>Yes, until you submit them. Specimen copy.</p></div></div>
             </div>
           </div>
-          <p class="cap">Row min height 56 (<code>--space-14</code>), question Card 17/24 SemiBold, 1px Line/Base dividers. Icon 24px line, 1.5px stroke, Deep Teal: + at rest, − when open (150ms). The panel opens in 220ms ease-out (<code>--motion-duration-open</code>); the button carries <code>aria-expanded</code> and <code>aria-controls</code>. FAQ entries may be questions; section headlines may not. <span class="status status--proposed">To confirm</span> Rows open independently here; whether opening one closes the others is not decided.</p>
+          <p class="cap">Row min height 56 (<code>--space-14</code>), question Card 17/24 SemiBold, 1px Line/Base dividers. Chevron 24px line, 1.5px stroke, Deep Teal, turns 180° when open. One answer open at a time: opening one closes the other (D5, Avi 17.11.2026). Height and opacity animate together in 220ms ease-out (<code>--motion-duration-open</code>); reduced motion: instant. The button carries <code>aria-expanded</code> and <code>aria-controls</code>. FAQ entries may be questions; section headlines may not. Mobile: the same, full width, rows at least 56 high.</p>
         </div>
 
         <div class="sub">
@@ -942,7 +998,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                         <ul>
                           <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.png" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
                           <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.png" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
-                          <li><a class="mrow" href="#header"><span class="mrow__left"><svg class="mthumb" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="currentColor"/></svg><span class="mrow__label">Combo</span></span><span class="mrow__meta">3 ingredients</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-combo.png" width="30" height="30" alt=""><span class="mrow__label">Combo</span></span><span class="mrow__meta">3 ingredients</span></a></li>
                         </ul>
                         <hr class="mdiv">
                         <a class="link mall" href="#header">View all Sexual health →</a>
@@ -963,7 +1019,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
               </div>
             </div>
           </div>
-          <p class="cap">On narrow screens the frame scrolls sideways. The Combo thumbnail is an empty Mist slot until a Combo packshot exists.</p>
+          <p class="cap">On narrow screens the frame scrolls sideways.</p>
         </div>
 
         <div class="sub">
@@ -989,7 +1045,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                         <ul class="mm-card">
                           <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.png" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span><span class="mrow__meta">Up to 36 hrs</span></a></li>
                           <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.png" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span><span class="mrow__meta">Plan ahead</span></a></li>
-                          <li><a class="mrow" href="#header"><span class="mrow__left"><svg class="mthumb" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="currentColor"/></svg><span class="mrow__label">Combo</span></span><span class="mrow__meta">3 ingredients</span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-combo.png" width="30" height="30" alt=""><span class="mrow__label">Combo</span></span><span class="mrow__meta">3 ingredients</span></a></li>
                           <li><hr class="mdiv"></li>
                           <li><a class="link mall" href="#header">View all Sexual health →</a></li>
                         </ul>
@@ -1168,8 +1224,83 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           </div>
         </div>
         <p class="cap"><span class="status status--proposed">To confirm</span> Five footer points need Avi: the CTA title is a question (headlines are never questions); the legal text says “patients” (glossary: member); the newsletter field is a pill while fields are radius 12; its border, Line/On-dark #3E5C6B, is 1.42:1 on Deep Teal (below 3:1); and the site’s CTA strip puts a Yellow Circle kit piece beside the Yellow button, two Yellow elements in one view, so the piece is left out here.</p>
+
+        <div class="sub" id="footer3">
+          <h3>Footer v3, everything a footer carries.</h3>
+          <div class="rule"><span class="status status--proposed">Proposed · 17.11.2026</span><p><b>The full footer (D7), for the website and landing pages.</b> Logo Horizontal 30 (28 on mobile), a short brand line, four columns (Care, Company, Help, Legal), the newsletter (email field and Dark button, consent line, the promise “No product names in our emails”), six social icons (24px line icons in 44px targets), the contact placeholder, the compliance lines and the copyright. Mobile: the newsletter comes first and the columns become a one-open accordion (D5). Built in components.css (<code>.ft3</code>); its layout follows its own width.</p></div>
+          <div class="ftr3-wrap">
+            <footer class="ft3" aria-label="Footer v3 specimen">
+              <div class="ft3__in">
+                <div class="ft3__brand">
+                  <a href="#footer3" aria-label="unifiedmeds home (specimen)"><img class="ft3__logo" src="assets/brand/logo-horizontal.svg" width="185.0" height="30" alt=""></a>
+                  <p class="ft3__line">Men's health, handled privately. A licensed provider reviews every assessment.</p>
+                  <p class="ft3__contact">[support email · legal, O-01]</p>
+                </div>
+                <nav class="ft3__cols" aria-label="Footer" data-acc><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c0" id="f3d-b0">Care<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c0" role="region" aria-labelledby="f3d-b0"><div><ul class="ft3__links"><li><a href="#footer3">Sexual health</a></li><li><a href="#footer3">How it works</a></li><li><a href="#footer3">Start your assessment</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c1" id="f3d-b1">Company<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c1" role="region" aria-labelledby="f3d-b1"><div><ul class="ft3__links"><li><a href="#footer3">About us</a></li><li><a href="#footer3">Our providers</a></li><li><a href="#footer3">Press</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c2" id="f3d-b2">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c2" role="region" aria-labelledby="f3d-b2"><div><ul class="ft3__links"><li><a href="#footer3">FAQ</a></li><li><a href="#footer3">Contact us</a></li><li><a href="#footer3">Sign in</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c3" id="f3d-b3">Legal<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c3" role="region" aria-labelledby="f3d-b3"><div><ul class="ft3__links"><li><a href="#footer3">Privacy policy</a></li><li><a href="#footer3">Terms of service</a></li><li><a href="#footer3">Telehealth notice</a></li><li><a href="#footer3">Accessibility</a></li></ul></div></div></div></nav>
+                <form class="ft3__news" novalidate data-news3>
+                  <p class="ft3__newsh" id="f3d-nl">Notes on care, now and then.</p>
+                  <div class="ft3__newsrow">
+                    <label class="sr-only" for="f3d-em">Email address</label>
+                    <input class="ft3__field" id="f3d-em" type="email" autocomplete="off" placeholder="Your email address" aria-describedby="f3d-nl f3d-st">
+                    <button class="btn" type="submit">Subscribe</button>
+                  </div>
+                  <p class="ft3__fine ft3__status" id="f3d-st" role="status" aria-live="polite"></p>
+                  <p class="ft3__promise"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg>No product names in our emails.</p>
+                  <p class="ft3__fine">By subscribing you agree to our <a href="#footer3">Privacy policy</a>. Unsubscribe anytime.</p>
+                </form>
+                <ul class="ft3__social" aria-label="unifiedmeds on social media"><li><a href="#footer3" aria-label="Facebook (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.0833 7.08333H13.75V4.16667H11.6667C10.8931 4.16667 10.1513 4.47396 9.60427 5.02094C9.05729 5.56792 8.75 6.30979 8.75 7.08333V9.16667H6.66667V12.0833H8.75V17.5H11.6667V12.0833H13.6667L14.1667 9.16667H11.6667V7.5C11.6667 7.38949 11.7106 7.28351 11.7887 7.20537C11.8668 7.12723 11.9728 7.08333 12.0833 7.08333Z"/></svg></a></li><li><a href="#footer3" aria-label="Instagram (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.9167 2.91667H7.08333C4.78215 2.91667 2.91667 4.78215 2.91667 7.08333V12.9167C2.91667 15.2179 4.78215 17.0833 7.08333 17.0833H12.9167C15.2179 17.0833 17.0833 15.2179 17.0833 12.9167V7.08333C17.0833 4.78215 15.2179 2.91667 12.9167 2.91667Z"/><path d="M10 13.3333C11.8409 13.3333 13.3333 11.8409 13.3333 10C13.3333 8.15905 11.8409 6.66667 10 6.66667C8.15905 6.66667 6.66667 8.15905 6.66667 10C6.66667 11.8409 8.15905 13.3333 10 13.3333Z"/><path d="M14.3333 6.16667C14.6095 6.16667 14.8333 5.94281 14.8333 5.66667C14.8333 5.39052 14.6095 5.16667 14.3333 5.16667C14.0572 5.16667 13.8333 5.39052 13.8333 5.66667C13.8333 5.94281 14.0572 6.16667 14.3333 6.16667Z"/></svg></a></li><li><a href="#footer3" aria-label="TikTok (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 3.33333V12.0833C11.25 12.5778 11.1034 13.0611 10.8287 13.4723C10.554 13.8834 10.1635 14.2038 9.70671 14.393C9.24989 14.5823 8.74723 14.6318 8.26227 14.5353C7.77732 14.4388 7.33186 14.2007 6.98223 13.8511C6.6326 13.5015 6.3945 13.056 6.29804 12.5711C6.20157 12.0861 6.25108 11.5834 6.4403 11.1266C6.62952 10.6698 6.94995 10.2794 7.36107 10.0047C7.7722 9.72996 8.25555 9.58333 8.75 9.58333"/><path d="M11.25 3.33333C11.25 4.3279 11.6451 5.28172 12.3483 5.98498C13.0516 6.68825 14.0054 7.08333 15 7.08333"/></svg></a></li><li><a href="#footer3" aria-label="YouTube (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 4.58333H5.41667C3.57572 4.58333 2.08333 6.07572 2.08333 7.91667V12.0833C2.08333 13.9243 3.57572 15.4167 5.41667 15.4167H14.5833C16.4243 15.4167 17.9167 13.9243 17.9167 12.0833V7.91667C17.9167 6.07572 16.4243 4.58333 14.5833 4.58333Z"/><path d="M8.75 7.91667V12.0833L12.25 10L8.75 7.91667Z"/></svg></a></li><li><a href="#footer3" aria-label="LinkedIn (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 2.91667H5.41667C4.03595 2.91667 2.91667 4.03595 2.91667 5.41667V14.5833C2.91667 15.964 4.03595 17.0833 5.41667 17.0833H14.5833C15.964 17.0833 17.0833 15.964 17.0833 14.5833V5.41667C17.0833 4.03595 15.964 2.91667 14.5833 2.91667Z"/><path d="M6.66667 8.75V13.3333M6.66667 6.5V6.58333M9.58333 13.3333V8.75M9.58333 10.8333C9.58333 10.2808 9.80283 9.75089 10.1935 9.36019C10.5842 8.96949 11.1141 8.75 11.6667 8.75C12.2192 8.75 12.7491 8.96949 13.1398 9.36019C13.5305 9.75089 13.75 10.2808 13.75 10.8333V13.3333"/></svg></a></li><li><a href="#footer3" aria-label="X (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5L15 15M15 5L5 15"/></svg></a></li></ul>
+                <div class="ft3__legal">
+                  <ul class="ft3__compliance">
+                    <li>Assessment only. Not a diagnosis.</li>
+                    <li>[Telehealth notice: who provides care, in which states · legal, O-01]</li>
+                    <li>[Any treatment is decided by the treating provider · legal wording, O-01]</li>
+                  </ul>
+                  <div class="ft3__bar">
+                    <p class="ft3__fine">© [year] [legal entity · O-01]. All rights reserved.</p>
+                    <span class="ft3__seal">[LegitScript seal · placeholder, O-01]</span>
+                  </div>
+                </div>
+              </div>
+            </footer>
+            <div class="ftr3-mobile"><footer class="ft3" aria-label="Footer v3 specimen">
+              <div class="ft3__in">
+                <div class="ft3__brand">
+                  <a href="#footer3" aria-label="unifiedmeds home (specimen)"><img class="ft3__logo" src="assets/brand/logo-horizontal.svg" width="172.7" height="28" alt=""></a>
+                  <p class="ft3__line">Men's health, handled privately. A licensed provider reviews every assessment.</p>
+                  <p class="ft3__contact">[support email · legal, O-01]</p>
+                </div>
+                <nav class="ft3__cols" aria-label="Footer" data-acc><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c0" id="f3m-b0">Care<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c0" role="region" aria-labelledby="f3m-b0"><div><ul class="ft3__links"><li><a href="#footer3">Sexual health</a></li><li><a href="#footer3">How it works</a></li><li><a href="#footer3">Start your assessment</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c1" id="f3m-b1">Company<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c1" role="region" aria-labelledby="f3m-b1"><div><ul class="ft3__links"><li><a href="#footer3">About us</a></li><li><a href="#footer3">Our providers</a></li><li><a href="#footer3">Press</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c2" id="f3m-b2">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c2" role="region" aria-labelledby="f3m-b2"><div><ul class="ft3__links"><li><a href="#footer3">FAQ</a></li><li><a href="#footer3">Contact us</a></li><li><a href="#footer3">Sign in</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c3" id="f3m-b3">Legal<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c3" role="region" aria-labelledby="f3m-b3"><div><ul class="ft3__links"><li><a href="#footer3">Privacy policy</a></li><li><a href="#footer3">Terms of service</a></li><li><a href="#footer3">Telehealth notice</a></li><li><a href="#footer3">Accessibility</a></li></ul></div></div></div></nav>
+                <form class="ft3__news" novalidate data-news3>
+                  <p class="ft3__newsh" id="f3m-nl">Notes on care, now and then.</p>
+                  <div class="ft3__newsrow">
+                    <label class="sr-only" for="f3m-em">Email address</label>
+                    <input class="ft3__field" id="f3m-em" type="email" autocomplete="off" placeholder="Your email address" aria-describedby="f3m-nl f3m-st">
+                    <button class="btn" type="submit">Subscribe</button>
+                  </div>
+                  <p class="ft3__fine ft3__status" id="f3m-st" role="status" aria-live="polite"></p>
+                  <p class="ft3__promise"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg>No product names in our emails.</p>
+                  <p class="ft3__fine">By subscribing you agree to our <a href="#footer3">Privacy policy</a>. Unsubscribe anytime.</p>
+                </form>
+                <ul class="ft3__social" aria-label="unifiedmeds on social media"><li><a href="#footer3" aria-label="Facebook (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.0833 7.08333H13.75V4.16667H11.6667C10.8931 4.16667 10.1513 4.47396 9.60427 5.02094C9.05729 5.56792 8.75 6.30979 8.75 7.08333V9.16667H6.66667V12.0833H8.75V17.5H11.6667V12.0833H13.6667L14.1667 9.16667H11.6667V7.5C11.6667 7.38949 11.7106 7.28351 11.7887 7.20537C11.8668 7.12723 11.9728 7.08333 12.0833 7.08333Z"/></svg></a></li><li><a href="#footer3" aria-label="Instagram (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.9167 2.91667H7.08333C4.78215 2.91667 2.91667 4.78215 2.91667 7.08333V12.9167C2.91667 15.2179 4.78215 17.0833 7.08333 17.0833H12.9167C15.2179 17.0833 17.0833 15.2179 17.0833 12.9167V7.08333C17.0833 4.78215 15.2179 2.91667 12.9167 2.91667Z"/><path d="M10 13.3333C11.8409 13.3333 13.3333 11.8409 13.3333 10C13.3333 8.15905 11.8409 6.66667 10 6.66667C8.15905 6.66667 6.66667 8.15905 6.66667 10C6.66667 11.8409 8.15905 13.3333 10 13.3333Z"/><path d="M14.3333 6.16667C14.6095 6.16667 14.8333 5.94281 14.8333 5.66667C14.8333 5.39052 14.6095 5.16667 14.3333 5.16667C14.0572 5.16667 13.8333 5.39052 13.8333 5.66667C13.8333 5.94281 14.0572 6.16667 14.3333 6.16667Z"/></svg></a></li><li><a href="#footer3" aria-label="TikTok (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 3.33333V12.0833C11.25 12.5778 11.1034 13.0611 10.8287 13.4723C10.554 13.8834 10.1635 14.2038 9.70671 14.393C9.24989 14.5823 8.74723 14.6318 8.26227 14.5353C7.77732 14.4388 7.33186 14.2007 6.98223 13.8511C6.6326 13.5015 6.3945 13.056 6.29804 12.5711C6.20157 12.0861 6.25108 11.5834 6.4403 11.1266C6.62952 10.6698 6.94995 10.2794 7.36107 10.0047C7.7722 9.72996 8.25555 9.58333 8.75 9.58333"/><path d="M11.25 3.33333C11.25 4.3279 11.6451 5.28172 12.3483 5.98498C13.0516 6.68825 14.0054 7.08333 15 7.08333"/></svg></a></li><li><a href="#footer3" aria-label="YouTube (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 4.58333H5.41667C3.57572 4.58333 2.08333 6.07572 2.08333 7.91667V12.0833C2.08333 13.9243 3.57572 15.4167 5.41667 15.4167H14.5833C16.4243 15.4167 17.9167 13.9243 17.9167 12.0833V7.91667C17.9167 6.07572 16.4243 4.58333 14.5833 4.58333Z"/><path d="M8.75 7.91667V12.0833L12.25 10L8.75 7.91667Z"/></svg></a></li><li><a href="#footer3" aria-label="LinkedIn (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 2.91667H5.41667C4.03595 2.91667 2.91667 4.03595 2.91667 5.41667V14.5833C2.91667 15.964 4.03595 17.0833 5.41667 17.0833H14.5833C15.964 17.0833 17.0833 15.964 17.0833 14.5833V5.41667C17.0833 4.03595 15.964 2.91667 14.5833 2.91667Z"/><path d="M6.66667 8.75V13.3333M6.66667 6.5V6.58333M9.58333 13.3333V8.75M9.58333 10.8333C9.58333 10.2808 9.80283 9.75089 10.1935 9.36019C10.5842 8.96949 11.1141 8.75 11.6667 8.75C12.2192 8.75 12.7491 8.96949 13.1398 9.36019C13.5305 9.75089 13.75 10.2808 13.75 10.8333V13.3333"/></svg></a></li><li><a href="#footer3" aria-label="X (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5L15 15M15 5L5 15"/></svg></a></li></ul>
+                <div class="ft3__legal">
+                  <ul class="ft3__compliance">
+                    <li>Assessment only. Not a diagnosis.</li>
+                    <li>[Telehealth notice: who provides care, in which states · legal, O-01]</li>
+                    <li>[Any treatment is decided by the treating provider · legal wording, O-01]</li>
+                  </ul>
+                  <div class="ft3__bar">
+                    <p class="ft3__fine">© [year] [legal entity · O-01]. All rights reserved.</p>
+                    <span class="ft3__seal">[LegitScript seal · placeholder, O-01]</span>
+                  </div>
+                </div>
+              </div>
+            </footer></div>
+          </div>
+          <p class="cap">Desktop above, mobile (390) below: tap a column title to open it; opening one closes the other. Mist ground so the Dark Subscribe button reads (on Deep Teal it would not). Social glyphs: Facebook, Instagram, TikTok, YouTube and LinkedIn are the line glyphs from Footer v2 (Figma); X is a neutral placeholder cross, not the platform's mark, until the official glyph is supplied. Links are pending, so they point to this specimen. The form sends nothing.</p>
+        </div>
       </section>
 
+      <!-- footer v3 lives inside the footer section -->
       <!-- =========================================================== 7 · OVERLAY -->
       <section class="sec" id="overlay" aria-labelledby="overlay-h">
         <div class="sec-head">
@@ -1330,8 +1461,8 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
         <div class="sub" id="state-loading">
           <h3>Loading.</h3>
           <div class="grid-3">
-            <div class="specimen specimen--center"><svg class="cap-loader" viewBox="0 0 64 28" aria-hidden="true"><rect class="cap-loader-fill" x="2" y="2" width="60" height="24" rx="12"/><rect class="cap-loader-line" x="2" y="2" width="60" height="24" rx="12"/><path class="cap-loader-line" d="M32 2v24"/></svg><p class="cap">Page loader: the capsule fills from the open half, 1.4s, the only loop on the site (R-53, O-11). Shown after 400ms, never for less.</p></div>
-            <div class="specimen specimen--center"><button class="btn is-loading" type="button" aria-busy="true"><span class="btn-label">Continue to checkout</span><svg class="cap-loader" viewBox="0 0 64 28" aria-hidden="true"><rect class="cap-loader-fill" x="2" y="2" width="60" height="24" rx="12"/><rect class="cap-loader-line" x="2" y="2" width="60" height="24" rx="12"/><path class="cap-loader-line" d="M32 2v24"/></svg></button><p class="cap">Button loading: same width, label hidden, the small capsule loader inside; the button is not clickable.</p></div>
+            <div class="specimen specimen--center"><svg class="cap-loader" viewBox="0 0 64 25.5" aria-hidden="true"><path class="cap-loader-fill" d="M35.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L35.02 22.78M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z"/><path class="cap-loader-line" d="M35.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L35.02 22.78"/><path class="cap-loader-line" d="M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z"/></svg><p class="cap">Page loader: the capsule fills from the open half, 1.4s, the only loop on the site (R-53, O-11). Shown after 400ms, never for less. The logo capsule's own shape (left half longer, right half taller), 72 × 29px on desktop and mobile.</p></div>
+            <div class="specimen specimen--center"><button class="btn is-loading" type="button" aria-busy="true"><span class="btn-label">Continue to checkout</span><svg class="cap-loader" viewBox="0 0 64 25.5" aria-hidden="true"><path class="cap-loader-fill" d="M35.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L35.02 22.78M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z"/><path class="cap-loader-line" d="M35.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L35.02 22.78"/><path class="cap-loader-line" d="M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z"/></svg></button><p class="cap">Button loading: same width, label hidden, the small capsule loader inside (40 × 16px, same on mobile); the button is not clickable.</p></div>
             <div class="specimen"><div class="skeleton skeleton--title"></div><div class="skeleton"></div><div class="skeleton skeleton--short"></div><p class="cap">Skeleton: Mist blocks in the shape of the content. Static: no shimmer (only the loader loops).</p></div>
           </div>
         </div>
@@ -1350,6 +1481,77 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
       </section>
 
       <!-- =========================================================== CHANGES FROM FIGMA -->
+
+      <!-- =========================================================== INTERACTIVE STATES (D5) -->
+      <section class="sec" id="interactive" aria-labelledby="interactive-h">
+        <div class="sec-head">
+          <span class="status status--proposed">Proposed · 17.11.2026</span>
+          <h2 id="interactive-h">Interactive states.</h2>
+          <p>Toggles, two-state accents, steppers and the accordion, from Avi's review of the Sexual health landing page (D5). Working demos, tokens only. Reduced motion makes every change instant and keeps the colours.</p>
+        </div>
+
+        <div class="sub" id="ix-toggle">
+          <h3>Toggle with a sliding thumb.</h3>
+          <div class="rule"><b>The thumb slides, the content cross-fades.</b><p>The Paper thumb slides to the chosen option in 220ms (<code>--motion-duration-open</code>, <code>--motion-easing-ui</code>). Content that depends on the choice, here the price and the picture, cross-fades in 180ms (<code>--motion-duration-crossfade</code>). Options at least 44 high including the track. Arrow keys move the choice.</p></div>
+          <div class="ix-grid">
+            <div class="ix-card"><span class="eyebrow">Desktop</span><div class="segmented segmented--full" role="radiogroup" aria-label="How often you are billed" data-seg data-seg-panels="#ixp-p">
+                <button type="button" role="radio" aria-checked="true">Monthly</button>
+                <button type="button" role="radio" aria-checked="false">Every 3 months</button>
+              </div>
+              <div class="seg-panels" id="ixp-p" aria-live="polite">
+                <div class="price-panel is-on" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] a month</b><p>One bottle a month. [plan details · O-01]</p></div></div>
+                <div class="price-panel" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] every 3 months</b><p>Three bottles in one plain box. [plan details · O-01]</p></div></div>
+              </div></div>
+            <div class="ix-card ix-card--mob"><span class="eyebrow">Mobile · 390</span><div class="segmented segmented--full" role="radiogroup" aria-label="How often you are billed" data-seg data-seg-panels="#ixpm-p">
+                <button type="button" role="radio" aria-checked="true">Monthly</button>
+                <button type="button" role="radio" aria-checked="false">Every 3 months</button>
+              </div>
+              <div class="seg-panels" id="ixpm-p" aria-live="polite">
+                <div class="price-panel is-on" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] a month</b><p>One bottle a month. [plan details · O-01]</p></div></div>
+                <div class="price-panel" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] every 3 months</b><p>Three bottles in one plain box. [plan details · O-01]</p></div></div>
+              </div><p class="cap">Full-width track, the picture stacks above the price.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="ix-accent">
+          <h3>Each state has its own accent.</h3>
+          <div class="rule"><b>First state Green, second state Blue.</b><p>Where a multi-state control marks data, each state has its own brand accent: the first Green, the second Blue. Here, as on the Sexual health landing page: Daily (first) Green, As needed (second) Blue. Never product colours, never Yellow (Yellow is the single result moment). The dots fill one after the other, 40ms apart (<code>--motion-stagger-fine</code>), never more than 180ms in total.</p></div>
+          <div class="ix-grid">
+            <div class="ix-card"><span class="eyebrow">Desktop</span><div class="segmented segmented--full" role="radiogroup" aria-label="How you take it" data-seg data-seg-dots="#ixd-d" data-seg-panels="#ixd-t">
+                <button type="button" role="radio" aria-checked="true">Daily</button>
+                <button type="button" role="radio" aria-checked="false">As needed</button>
+              </div>
+              <ul class="dots" id="ixd-d" data-state="0" data-on-0="0,1,2,3,4,5,6" data-on-1="1,5" aria-hidden="true"><li><span class="dot"></span>M</li><li><span class="dot"></span>T</li><li><span class="dot"></span>W</li><li><span class="dot"></span>T</li><li><span class="dot"></span>F</li><li><span class="dot"></span>S</li><li><span class="dot"></span>S</li></ul>
+              <div class="seg-panels" id="ixd-t" aria-live="polite">
+                <p class="ix-note is-on" data-seg-panel>Once a day, every day. [dosing as prescribed by your provider]</p>
+                <p class="ix-note" data-seg-panel>Only on the days you choose. [dosing as prescribed by your provider]</p>
+              </div><div class="ix-keys"><span class="cap state-key" style="--key: var(--color-brand-green)">Daily · Green</span><span class="cap state-key" style="--key: var(--color-brand-blue)">As needed · Blue</span></div></div>
+            <div class="ix-card ix-card--mob"><span class="eyebrow">Mobile · 390</span><div class="segmented segmented--full" role="radiogroup" aria-label="How you take it" data-seg data-seg-dots="#ixdm-d" data-seg-panels="#ixdm-t">
+                <button type="button" role="radio" aria-checked="true">Daily</button>
+                <button type="button" role="radio" aria-checked="false">As needed</button>
+              </div>
+              <ul class="dots" id="ixdm-d" data-state="0" data-on-0="0,1,2,3,4,5,6" data-on-1="1,5" aria-hidden="true"><li><span class="dot"></span>M</li><li><span class="dot"></span>T</li><li><span class="dot"></span>W</li><li><span class="dot"></span>T</li><li><span class="dot"></span>F</li><li><span class="dot"></span>S</li><li><span class="dot"></span>S</li></ul>
+              <div class="seg-panels" id="ixdm-t" aria-live="polite">
+                <p class="ix-note is-on" data-seg-panel>Once a day, every day. [dosing as prescribed by your provider]</p>
+                <p class="ix-note" data-seg-panel>Only on the days you choose. [dosing as prescribed by your provider]</p>
+              </div><p class="cap">Seven 24px dots fit 350; labels stay under the dots.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="ix-stepper">
+          <h3>Stepper and scroll story.</h3>
+          <div class="rule"><b>Faded, active, passed.</b><p>Steps not reached sit at 45% (<code>--opacity-step-faded</code>). The active step gets a 2px Deep Teal border, a filled number and a short left accent bar. Passed steps return to full opacity with a small check. Each change takes 220ms. On a scroll story the active step follows the scroll; here Back and Next drive it, or tap a card.</p></div>
+          <ol class="stepper" id="ixs" aria-label="From your phone to your door" data-stepper><li class="stp is-active" tabindex="0" data-stp="0" aria-current="step"><span class="stp__num"><span>1</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>Answer a few questions</b><p>On your phone, at your own pace.</p></li><li class="stp" tabindex="0" data-stp="1"><span class="stp__num"><span>2</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>A provider reviews</b><p>A licensed provider reads your answers.</p></li><li class="stp" tabindex="0" data-stp="2"><span class="stp__num"><span>3</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>Your plan</b><p>If treatment fits, you see your options.</p></li><li class="stp" tabindex="0" data-stp="3"><span class="stp__num"><span>4</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>At your door</b><p>In a plain box, nothing on the outside.</p></li></ol>
+            <div class="ix-ctrl"><button class="btn btn--outline" type="button" data-stp-go="-1" data-for="ixs">Back</button><button class="btn" type="button" data-stp-go="1" data-for="ixs">Next step</button></div>
+          <p class="cap">Desktop: four cards in a row. Mobile: one column, number on the left, every card a full-width tap target. Copy here is specimen copy.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Accordion.</h3>
+          <div class="prose"><p>One answer open at a time, height and opacity in 220ms, the chevron turns 180°. The live demo is the FAQ accordion under <a class="link" href="#cards">Cards, chips and steps</a>; the footer columns on mobile use the same pattern.</p></div>
+        </div>
+      </section>
+
       <section class="sec" id="changes" aria-labelledby="changes-h">
         <div class="sec-head">
           <h2 id="changes-h">Changes from Figma.</h2>
@@ -1473,11 +1675,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
 
   /* Accordion */
   document.querySelectorAll('[data-acc] .acc__btn').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var open = b.getAttribute('aria-expanded') !== 'true';
-      b.setAttribute('aria-expanded', String(open));
-      b.closest('.acc__row').classList.toggle('is-open', open);
-    });
+    b.addEventListener('click', function () { accToggle(b); });
   });
 
   /* Desktop header: sticky hairline inside the frame */
@@ -1590,6 +1788,86 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
           r.querySelector('.mm-row__head').setAttribute('aria-expanded', String(on));
         });
       });
+    });
+  });
+
+
+  /* ---- Round 2 (17.11.2026): D5 accordion one-open, segmented thumb, dots, stepper; D7 footer form ---- */
+  function accToggle(btn) {
+    var group = btn.closest('[data-acc]');
+    var row = btn.closest('.acc__row, .ft3__col');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    if (open && group) {
+      group.querySelectorAll('[aria-expanded="true"]').forEach(function (o) {
+        if (o !== btn) { o.setAttribute('aria-expanded', 'false'); o.closest('.acc__row, .ft3__col').classList.remove('is-open'); }
+      });
+    }
+    btn.setAttribute('aria-expanded', String(open));
+    row.classList.toggle('is-open', open);
+  }
+  document.querySelectorAll('.ft3__colbtn').forEach(function (b) { b.addEventListener('click', function () { accToggle(b); }); });
+
+  document.querySelectorAll('[data-seg]').forEach(function (seg) {
+    var opts = Array.prototype.slice.call(seg.querySelectorAll('[role="radio"]'));
+    seg.classList.add('has-thumb');
+    seg.style.setProperty('--seg-n', opts.length);
+    function pick(i, focus) {
+      opts.forEach(function (o, k) { o.setAttribute('aria-checked', String(k === i)); o.tabIndex = k === i ? 0 : -1; });
+      seg.style.setProperty('--seg-i', i);
+      if (focus) opts[i].focus();
+      var p = seg.getAttribute('data-seg-panels');
+      if (p) document.querySelector(p).querySelectorAll('[data-seg-panel]').forEach(function (x, k) { x.classList.toggle('is-on', k === i); });
+      var d = seg.getAttribute('data-seg-dots');
+      if (d) {
+        var list = document.querySelector(d), dots = list.querySelectorAll('.dot');
+        var on = (list.getAttribute('data-on-' + i) || '').split(',').map(Number);
+        var step = Math.min(ms('--motion-stagger-fine'), ms('--motion-duration-crossfade') / Math.max(1, on.length - 1));
+        list.setAttribute('data-state', String(i));
+        var n = 0;
+        dots.forEach(function (dot, k) {
+          var lit = on.indexOf(k) !== -1;
+          dot.style.setProperty('--dot-delay', (lit ? Math.round(step * n++) : 0) + 'ms');
+          dot.classList.toggle('is-on', lit);
+        });
+      }
+    }
+    var start = Math.max(0, opts.findIndex(function (o) { return o.getAttribute('aria-checked') === 'true'; }));
+    pick(start);
+    opts.forEach(function (o, i) {
+      o.addEventListener('click', function () { pick(i); });
+      o.addEventListener('keydown', function (e) {
+        var n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % opts.length;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + opts.length) % opts.length;
+        if (n !== null) { e.preventDefault(); pick(n, true); }
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-stepper]').forEach(function (list) {
+    var items = Array.prototype.slice.call(list.querySelectorAll('.stp'));
+    var cur = 0;
+    function go(i) {
+      cur = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach(function (it, k) {
+        it.classList.toggle('is-active', k === cur);
+        it.classList.toggle('is-passed', k < cur);
+        if (k === cur) it.setAttribute('aria-current', 'step'); else it.removeAttribute('aria-current');
+      });
+    }
+    items.forEach(function (it, k) {
+      it.addEventListener('click', function () { go(k); });
+      it.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } });
+    });
+    document.querySelectorAll('[data-stp-go][data-for="' + list.id + '"]').forEach(function (b) {
+      b.addEventListener('click', function () { go(cur + parseInt(b.getAttribute('data-stp-go'), 10)); });
+    });
+  });
+
+  document.querySelectorAll('[data-news3]').forEach(function (f) {
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      f.querySelector('.ft3__status').textContent = 'Specimen only. This form is not connected to a mailing service.';
     });
   });
 
