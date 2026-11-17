@@ -107,6 +107,30 @@ def capsule_paths(x, y, length, vertical=False, inset=0.0):
     return render(left, 0), render(right, 1), box
 
 
+def solid_paths(x, y, length, vertical=False, gap=None):
+    """A FILLED capsule (Avi 17.11.2026): both halves filled, with a thin gap at the divider,
+    one stroke wide, like the seal. The right (short, taller) half is whole, as the divider
+    belongs to it; the left (long) half stops `gap` before the joint.
+    gap defaults to stroke_for(length), the D1 stroke of an outline capsule of this size.
+    Never fill the continuous silhouette: a solid capsule always shows the gap.
+    Same frame as capsule_paths(). Returns (left_d, right_d, (box_w, box_h)), both closed."""
+    g = geometry(length)
+    H, h, wl, L = g["H"], g["h"], g["wl"], length
+    gap = stroke_for(length) if gap is None else gap
+    cy, lr, rr = H / 2, h / 2, H / 2
+    lt, lb, le = cy - h / 2, cy + h / 2, wl - gap
+
+    def pt(u, v):
+        return (x + (H - v), y + u) if vertical else (x + u, y + v)
+
+    def P(u, v):
+        a, b = pt(u, v)
+        return f"{f(a)} {f(b)}"
+    left = f"M{P(le, lt)}L{P(lr, lt)}A{f(lr)} {f(lr)} 0 0 0 {P(lr, lb)}L{P(le, lb)}Z"
+    right = f"M{P(wl, 0)}L{P(L - rr, 0)}A{f(rr)} {f(rr)} 0 0 1 {P(L - rr, H)}L{P(wl, H)}Z"
+    return left, right, ((H, L) if vertical else (L, H))
+
+
 def svg_capsule(length, vertical=False, stroke=None, sw=0.0, fill_left="none",
                 fill_right="none", inner_fill=None, inner_gap=None, divider=True, pad=None):
     """A complete SVG file. stroke/sw draw the logo-style outline; inner_fill draws
@@ -192,7 +216,7 @@ def mask_data_uri(length, vertical=False, sw=0.0):
     """A CSS mask (url("data:image/svg+xml,...")) of the capsule, for decor drawn in CSS.
 
     sw > 0   outline (stroke baked in at this size): the two halves with the divider (R-109)
-    sw = 0   filled silhouette (both halves)
+    sw = 0   filled capsule: both halves, with the gap at the divider (solid_paths)
     The colour comes from the element's background-color (a token); the mask only
     gives the shape, so the black in the data URI is alpha, never a visible colour.
     Size the element to the returned box (or the same aspect ratio) with
@@ -210,7 +234,8 @@ def mask_data_uri(length, vertical=False, sw=0.0):
         body = (f"<path d='{ld}' fill='none' stroke='black' stroke-width='{f(sw)}'/>"
                 f"<path d='{rd}' fill='none' stroke='black' stroke-width='{f(sw)}'/>")
     else:
-        body = f"<path d='{ld}{rd}'/>"
+        sl, sr, _ = solid_paths(pad, pad, length, vertical)
+        body = f"<path d='{sl}{sr}'/>"
     svg = f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {f(W)} {f(Hh)}'>{body}</svg>"
     return f'url("data:image/svg+xml,{quote(svg, safe=" =:/,.-")}")', (W, Hh)
 
@@ -219,7 +244,7 @@ def mask_data_uri(length, vertical=False, sw=0.0):
 # 0.85% of the box length (stroke_for), the two halves with the divider (R-109, every size).
 #   head        page-head outline, 600px wide (calc(var(--space-24) * 6.25)), stroke 5.1
 #   band-line   capsule band, standing outline, 345.6px tall (calc(var(--space-24) * 3.6)), stroke 2.94
-#   band-fill   capsule band, standing filled, 249.6px tall (calc(var(--space-24) * 2.6))
+#   band-fill   capsule band, standing filled, 249.6px tall (calc(var(--space-24) * 2.6)), with the gap at the divider
 def _d1(box_length, **kw):
     sw = stroke_for(box_length)
     return dict(length=box_length - sw, sw=sw, **kw)
