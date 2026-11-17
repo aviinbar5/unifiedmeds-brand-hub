@@ -234,6 +234,8 @@
   --size-header-mobile: 64px;
   --size-icon: 24px;
   --size-icon-stroke: 1.5px;
+  --size-icon-glyph-grid: 20px;
+  --size-icon-glyph-stroke: 1.75px;
   --size-focus-width: 2px;
   --size-focus-offset: 3px;
   --size-header-scroll-threshold: 8px;
@@ -277,6 +279,7 @@
   --opacity-capsule: 0.7;
   --opacity-capsule-soft: 0.5;
   --opacity-step-faded: 0.45;
+  --opacity-disabled: 0.4;
 }
 
 @media (prefers-reduced-motion: reduce) {

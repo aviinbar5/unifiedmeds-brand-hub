@@ -676,10 +676,10 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
               <div class="state"><span class="btn is-hover" aria-hidden="true">Get started</span><span class="cap">Hover · Yellow, lift 2px</span></div>
               <div class="state"><span class="btn is-focus" aria-hidden="true">Get started</span><span class="cap">Focus · 2px ring, 3px offset</span></div>
               <div class="state"><span class="btn is-active" aria-hidden="true">Get started</span><span class="cap">Pressed · hover colour, no lift</span></div>
-              <div class="state"><button class="btn" type="button" disabled>Get started</button><span class="cap">Disabled <span class="status status--proposed">To confirm</span></span></div>
+              <div class="state"><button class="btn" type="button" disabled>Get started</button><span class="cap">Disabled <span class="status status--current">Approved</span></span></div>
               <div class="state"><span class="slot-loading">Loading</span><span class="cap"><span class="status status--proposed">To confirm in Figma</span></span></div>
             </div>
-            <p class="cap">Disabled: Line/Base #E3DFD5 fill (<code>--color-line-base</code>), Slate #55747F label (<code>--color-text-secondary</code>), no hover, no lift, <code>cursor: not-allowed</code>. Figma has no Disabled or Loading variant yet; both are to be added in Figma (decision 15). Loading keeps the button’s width and shape; its look is not designed yet.</p>
+            <p class="cap">Disabled (approved by Avi 17.11.2026, R-42): the button keeps its own colours at 40% opacity (<code>--opacity-disabled</code>), no hover, no lift, <code>cursor: not-allowed</code>; always say why it is disabled nearby. Figma has no Disabled or Loading variant yet; both are to be added in Figma (decision 15). Loading keeps the button’s width and shape; its look is not designed yet.</p>
           </div>
         </div>
 
@@ -813,7 +813,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
                   <tr><td>Label</td><td>Above, 12/16 SemiBold +2%, sentence case · <code>--type-desktop-label-*</code></td></tr>
                   <tr><td>Help text</td><td>Caption 13 Slate · <code>--color-text-secondary</code></td></tr>
                   <tr><td>Error</td><td>2px Coral #E76F51 border + Coral dot icon; the message stays Deep Teal. Coral is never text.</td></tr>
-                  <tr><td>Disabled</td><td>Mist fill, Line/Base border, Slate text <span class="status status--proposed">To confirm</span></td></tr>
+                  <tr><td>Disabled</td><td>Own colours at 40% opacity (<code>--opacity-disabled</code>), no hover <span class="status status--current">Approved</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -1577,7 +1577,7 @@ a.card:hover p { color: var(--color-text-on-dark-muted); }
               <tr><td>Footer social icons</td><td>20px icons in 40×40 targets (2738-370)</td><td>24px icons in 44×44 targets · <code>--size-icon</code>, <code>--size-tap-min</code></td><td>Icon rule and tap target; not a logged exception</td><td><span class="status status--proposed">Proposed</span></td></tr>
               <tr><td>Footer link hover</td><td>Underline grows left to right in 220ms (2738-370, as built on the site)</td><td>150ms · <code>--motion-duration-fast</code></td><td>Hover = 150ms</td><td><span class="status status--proposed">To confirm</span></td></tr>
               <tr><td>Outline button border</td><td>1px (2676-309, as recorded in the audit)</td><td>1.5px (components.css)</td><td>Not decided</td><td><span class="status status--proposed">To confirm</span></td></tr>
-              <tr><td>Disabled button</td><td>No variant (2676-309)</td><td>Line/Base fill, Slate label, no hover</td><td>Needed by forms; add to Figma</td><td><span class="status status--proposed">Proposed</span></td></tr>
+              <tr><td>Disabled button</td><td>No variant (2676-309)</td><td>Own colours at 40% opacity, no hover</td><td>Needed by forms; add to Figma</td><td><span class="status status--current">Approved</span></td></tr>
               <tr><td>Menu spacers</td><td>Panel padding 6, row padding 7/12, thumbnail gap 10 (4046-606)</td><td>4 · 0/12 with a 44 min height · 12 (<code>--space-1</code>, <code>--space-3</code>)</td><td>Spacing scale; open layout item</td><td><span class="status status--proposed">To confirm</span></td></tr>
               <tr><td>Footer CTA kit piece</td><td>Yellow Circle beside the Yellow button (2738-370, as built on the site)</td><td>Left out of the specimen</td><td>One Yellow element per viewport</td><td><span class="status status--proposed">To confirm</span></td></tr>
             </tbody>

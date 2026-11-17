@@ -124,8 +124,8 @@ tr:last-child td { border-bottom: 0; }
   --cap-mask-head: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 600 218.27%27%3E%3Cpath d=%27M329.99 9.71L101.97 9.71A99.42 99.42 0 0 0 101.97 208.56L329.99 208.56%27 fill=%27none%27 stroke=%27black%27 stroke-width=%275.1%27/%3E%3Cpath d=%27M329.99 2.55L490.86 2.55A106.59 106.59 0 0 1 490.86 215.72L329.99 215.72Z%27 fill=%27none%27 stroke=%27black%27 stroke-width=%275.1%27/%3E%3C/svg%3E");
   /* band-line: 125.72 x 345.6 */
   --cap-mask-band-line: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 125.72 345.6%27%3E%3Cpath d=%27M120.13 190.07L120.13 58.74A57.27 57.27 0 0 0 5.6 58.74L5.6 190.07%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272.94%27/%3E%3Cpath d=%27M124.26 190.07L124.26 282.74A61.39 61.39 0 0 1 1.47 282.74L1.47 190.07Z%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272.94%27/%3E%3C/svg%3E");
-  /* band-fill: 89.44 x 249.6 */
-  --cap-mask-band-fill: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 89.44 249.6%27%3E%3Cpath d=%27M86.43 137.38L86.43 41.71A41.71 41.71 0 0 0 3.01 41.71L3.01 137.38M89.44 137.38L89.44 204.88A44.72 44.72 0 0 1 0 204.88L0 137.38Z%27/%3E%3C/svg%3E");
+  /* band-fill: 89.44 x 249.6, gap at the divider (17.11.2026) */
+  --cap-mask-band-fill: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 89.44 249.6%27%3E%3Cpath d=%27M86.43 135.26L86.43 41.71A41.71 41.71 0 0 0 3.01 41.71L3.01 135.26ZM89.44 137.38L89.44 204.88A44.72 44.72 0 0 1 0 204.88L0 137.38Z%27/%3E%3C/svg%3E");
 }
 .hub-main { position: relative; overflow-x: clip; }
 .hub-main::before {

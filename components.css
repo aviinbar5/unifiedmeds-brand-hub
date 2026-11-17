@@ -102,12 +102,11 @@
 .btn--header { --btn-h: var(--size-control-exception-header); font-size: var(--type-desktop-nav-size); }
 .btn--bar { --btn-h: var(--size-control-exception-mobile-bar); width: 100%; }
 .btn[aria-disabled="true"], .btn:disabled {
-  --btn-bg: var(--color-line-base);
-  --btn-fg: var(--color-text-secondary);
-  --btn-border: var(--color-line-base);
+  /* R-42 (Avi 17.11.2026): the button keeps its own colours at 40% opacity and does not react to hover */
   --btn-bg-hover: var(--btn-bg);
   --btn-fg-hover: var(--btn-fg);
   --btn-border-hover: var(--btn-border);
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
   transform: none;
 }

@@ -759,15 +759,15 @@ td.fx-num { font-weight: 600; color: var(--color-text-strong); }
       <section class="sec" id="icons" aria-labelledby="icons-h">
         <div class="sec-head">
           <h2 id="icons-h">Icons.</h2>
-          <p>Two kinds of icon. UI glyphs (menu, close, check, error) on a 24px box, and the unifiedmeds feature set: 12 line icons built on the capsule. An icon labels a thing; it never replaces the label.</p>
+          <p>Two kinds of icon. UI glyphs (menu, close, check, error; 46 files in <code>assets/icons/ui/</code>) drawn on a 20 grid with a 1.75 stroke, placed in a 24px box inside controls, and the unifiedmeds feature set: 12 line icons built on the capsule. An icon labels a thing; it never replaces the label.</p>
         </div>
         <div class="asset-actions" data-figma="11-4" data-files="assets/icons/icon-chat-with-a-provider.svg|Chat with a provider;assets/icons/icon-discreet.svg|Discreet;assets/icons/icon-hair-loss.svg|Hair loss;assets/icons/icon-longevity.svg|Longevity;assets/icons/icon-ongoing.svg|Ongoing;assets/icons/icon-online-assessment.svg|Online assessment;assets/icons/icon-personalized.svg|Personalized;assets/icons/icon-prescription.svg|Prescription;assets/icons/icon-privacy.svg|Privacy;assets/icons/icon-provider-reviewed.svg|Provider reviewed;assets/icons/icon-sexual-health.svg|Sexual health;assets/icons/icon-weight.svg|Weight"></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th scope="col">Property</th><th scope="col">Rule</th><th scope="col">Token</th></tr></thead>
             <tbody>
-              <tr><td>Size</td><td>UI glyphs: 24px. Feature icons: see below.</td><td><code>--size-icon</code></td></tr>
-              <tr><td>Stroke</td><td>1.5px, round caps and round joins, one weight per icon</td><td><code>--size-icon-stroke</code></td></tr>
+              <tr><td>Size</td><td>UI glyphs: drawn on 20, placed at 20 in buttons (R-100) and in a 24 box in controls. Feature icons: 64 desktop, 48 mobile.</td><td><code>--size-icon-glyph-grid</code>, <code>--size-icon</code></td></tr>
+              <tr><td>Stroke</td><td>UI glyphs 1.75px; feature icons 1.5px; round caps and round joins, one weight per icon</td><td><code>--size-icon-glyph-stroke</code>, <code>--size-icon-stroke</code></td></tr>
               <tr><td>Fill</td><td>None. No duotone, no icon inside a colored circle.</td><td>—</td></tr>
               <tr><td>Color</td><td><code>currentColor</code>: Deep Teal on light, Paper on dark. Green or Blue for status and shape icons. Coral only for the error icon. Never Yellow.</td><td><code>--color-text-primary</code>, <code>--color-text-on-dark</code></td></tr>
               <tr><td>Tap area</td><td>An icon-only control sits in a 44 × 44 target and has an <code>aria-label</code>.</td><td><code>--size-tap-min</code></td></tr>
