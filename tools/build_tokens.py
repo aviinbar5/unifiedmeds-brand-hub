@@ -1,4 +1,4 @@
-"""Generate brand.css from tokens/tokens.json (unifiedmeds, Brand Edition 03).
+"""Generate brand.css from tokens/tokens.json (unifiedmeds, Brand Edition 04).
 
 Run from the project root:  python3 -I tools/build_tokens.py
 brand.css is generated. Never edit it by hand: change tokens.json and run this again.
@@ -65,12 +65,22 @@ def walk(node, path, out):
 lines = []
 walk(TOKENS, [], lines)
 
+# Reduced motion: every duration, distance, stagger and the fold-shape rotation drop to zero.
+# The loader keeps its cycle (R-53); delays keep their value (nothing moves during a delay).
 reduced = [n for n, _ in lines
-           if n.startswith(("--motion-duration-", "--motion-distance-", "--motion-stagger"))
+           if n.startswith(("--motion-duration-", "--motion-distance-", "--motion-stagger", "--motion-drift-rotate"))
            and n != "--motion-duration-loader"]
 
+
+def zero(name):
+    if "-distance-" in name:
+        return "0px"
+    if name == "--motion-drift-rotate":
+        return "0deg"
+    return "0ms"
+
 css = [
-    "/* unifiedmeds brand tokens · Brand Edition 03 (15.11.2026)",
+    "/* unifiedmeds brand tokens · Brand Edition 04 (from 18.11.2026)",
     "   GENERATED from tokens/tokens.json by tools/build_tokens.py. Do not edit by hand. */",
     "",
     ":root {",
@@ -79,7 +89,7 @@ css = [
     "",
     "@media (prefers-reduced-motion: reduce) {",
     "  :root {",
-    *[f"    {n}: {'0px' if '-distance-' in n else '0ms'};" for n in reduced],
+    *[f"    {n}: {zero(n)};" for n in reduced],
     "  }",
     "}",
     "",

@@ -11,15 +11,40 @@ clockwise: the long, narrower half (the filled half of the seal) is on top,
 the short, wider half is below. Same proportions, nothing redrawn.
 
 Usage
-  python3 -I tools/capsule_svg.py            # rewrites assets/shapes/capsule-*.svg
+  python3 -I tools/capsule_svg.py            # rewrites the shape set and the loader in assets/shapes/
   python3 -I tools/capsule_svg.py --print    # prints the geometry for a 280 x 100 box
   python3 -I tools/capsule_svg.py --css      # prints the CSS mask variables used in hub.css
+  python3 -I tools/capsule_svg.py --loader   # prints the inline loader SVG (R-42, R-53, R-109)
+  python3 -I tools/capsule_svg.py --favicon  # writes assets/brand/favicon-16.svg (R-93: solid capsule at 16px)
+
+Colours come from tokens/tokens.json through token() (B-29): never type a hex value here.
 
 Copy `capsule_paths()` into any other generator that draws a capsule. Never
 draw a capsule as one rounded rectangle (rx = height / 2): that is symmetric.
 """
+import json
 import os
 import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, ".."))
+_TOKENS = None
+
+
+def token(path):
+    """A colour (or any value) from tokens/tokens.json by dotted path, e.g. token("color.brand.deep-teal").
+    References such as "{color.brand.deep-teal}" are followed. Every generator reads colours here."""
+    global _TOKENS
+    if _TOKENS is None:
+        with open(os.path.join(ROOT, "tokens", "tokens.json")) as fh:
+            _TOKENS = json.load(fh)
+    node = _TOKENS
+    for part in path.split("."):
+        node = node[part]
+    v = node.get("$value", node.get("value")) if isinstance(node, dict) else node
+    if isinstance(v, str) and v.startswith("{") and v.endswith("}"):
+        return token(v[1:-1])
+    return v
 
 LEFT_SHARE = 136.43 / 247.87      # left half, share of the full length
 HEIGHT_RATIO = 88.82 / 247.87     # right-half height, share of the full length
@@ -264,14 +289,82 @@ def print_css():
         print(f"  --cap-mask-{name}: {uri};")
 
 
-SHAPES = {
-    # name: kwargs. D1 (17.11.2026): proportional stroke, the two halves with the divider (R-109),
-    # the long half filled for the split variants. Colours as before (Sky outline, Sky or Logo Blue fill).
-    "capsule-outline.svg": dict(length=320, stroke="#C9DDEA"),
-    "capsule-split.svg": dict(length=320, stroke="#C9DDEA", long_fill="#C9DDEA"),
-    "capsule-split-blue.svg": dict(length=320, stroke="#C9DDEA", long_fill="#3976C6"),
-    "capsule-vertical.svg": dict(length=206, vertical=True, stroke="#C9DDEA", long_fill="#3976C6"),
-}
+def shape_files():
+    """The one capsule shape set (q125, Avi 18.11.2026), in website colours: lying (-h) and standing (-v),
+    each as outline, split (long half filled inside the outline, the seal's gap) and solid (both halves
+    filled, a gap one stroke wide at the divider). Box 320 long (standing 320 tall), stroke stroke_for(320).
+    Deep Teal (color.brand.deep-teal). The same files are the mask sources for the .um-cap CSS classes:
+    a mask uses only the alpha, so the element's background-color (a token) gives the visible colour.
+    The Sky / Logo Blue set of 17.11.2026 is archived in archive/assets/shapes/ (R-84: logo colours stay
+    with the logo)."""
+    ink = token("color.brand.deep-teal")
+    BOX = 320
+    sw = stroke_for(BOX)
+    out = {}
+    for vertical in (False, True):
+        o = "v" if vertical else "h"
+        ld, rd, (bw, bh) = capsule_paths(sw / 2, sw / 2, BOX - sw, vertical)
+        W, H = bw + sw, bh + sw
+        st = f'stroke="{ink}" stroke-width="{f(sw)}"'
+        long_half = capsule_paths(sw / 2, sw / 2, BOX - sw, vertical, inset=sw * 1.5)[0]
+        # Solid: centre-line paths, filled and stroked; the left half stops 2 strokes before the joint,
+        # so the visible gap between the two stroked edges is exactly one stroke (R-109).
+        sl, sr, _ = solid_paths(sw / 2, sw / 2, BOX - sw, vertical, gap=2 * sw)
+        bodies = {
+            "outline": [f'<path d="{ld}{rd}" fill="none" {st}/>'],
+            "split": [f'<path d="{ld}{rd}" fill="none" {st}/>', f'<path d="{long_half}" fill="{ink}"/>'],
+            "solid": [f'<path d="{sl}{sr}" fill="{ink}" {st}/>'],
+        }
+        for kind, body in bodies.items():
+            title = f"unifiedmeds capsule, {kind}, {'standing' if vertical else 'lying'}"
+            out[f"capsule-{kind}-{o}.svg"] = (
+                f'<svg xmlns="http://www.w3.org/2000/svg" width="{f(W)}" height="{f(H)}" viewBox="0 0 {f(W)} {f(H)}" '
+                f'role="img" aria-label="{title}">\n  <title>{title}</title>\n  ' + "\n  ".join(body) + "\n</svg>\n")
+    # The loader as a standalone, self-animating file (for tools that take a file, such as a native app or
+    # an email preview). On the website use the inline markup from loader_svg() with components.css.
+    sw = stroke_for(64)
+    svg = loader_svg(64, "l").replace('<svg class="l"', '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="24"')
+    svg = svg.replace(' aria-hidden="true">', ' role="img" aria-label="Loading"><title>Loading</title><style>'
+                      f'.l-line{{fill:none;stroke:{ink};stroke-width:{f(sw)}}}'
+                      f'.l-fill{{fill:{ink};transform-box:fill-box;transform-origin:left center;'
+                      f'animation:f {token("motion.duration.loader")} cubic-bezier(0,0,0.58,1) infinite}}'
+                      '@keyframes f{0%{transform:scaleX(0)}60%,100%{transform:scaleX(1);opacity:.15}}'
+                      '@media (prefers-reduced-motion:reduce){.l-fill{animation:none;transform:scaleX(.5)}}</style>', 1)
+    out["capsule-loader.svg"] = svg + "\n"
+    return out
+
+
+def loader_svg(box=64, cls="cap-loader"):
+    """The capsule loader (R-42, R-53; O-11 closed 18.11.2026): the logo capsule drawn for a `box` px wide
+    slot (default 64), stroke stroke_for(box) so the rendered line is never under 1.5 (R-109), the two
+    halves with the divider. The fill (both halves, a visible gap one stroke wide at the divider) grows
+    from the open end with scaleX in --motion-duration-loader, ease-out, and loops while the wait lasts.
+    Classes: {cls}, {cls}-line, {cls}-fill (CSS in components.css). Returns inline SVG markup."""
+    sw = stroke_for(box)
+    L = box - sw
+    ld, rd, (bw, bh) = capsule_paths(sw / 2, sw / 2, L, False)
+    fl, fr, _ = solid_paths(sw / 2, sw / 2, L, False, gap=1.5 * sw)
+    W, H = bw + sw, bh + sw
+    return (f'<svg class="{cls}" viewBox="0 0 {f(W)} {f(H)}" aria-hidden="true">'
+            f'<path class="{cls}-fill" d="{fl}{fr}"/>'
+            f'<path class="{cls}-line" d="{ld}"/><path class="{cls}-line" d="{rd}"/></svg>')
+
+
+def favicon_svg(size=16):
+    """The 16px favicon (R-93, A-15): the app icon's Navy rounded square (radius 27/120 of the side, as in
+    assets/brand/app-icon.svg) with the capsule SOLID, both halves filled White with the gap one stroke wide
+    at the divider (R-109). The capsule keeps the app icon's share of the side (96.8/120, measured from the
+    outline's centre line). Drawn on the pixel grid of the target size. Logo colours (R-84)."""
+    navy, white = token("color.logo.navy"), token("color.logo.white")
+    r = size * 27 / 120
+    L = size * 96.812 / 120
+    H = geometry(L)["H"]
+    x, y = (size - L) / 2, (size - H) / 2
+    sl, sr, _ = solid_paths(x, y, L, False)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 {size} {size}" '
+            f'role="img" aria-label="unifiedmeds">\n  <title>unifiedmeds</title>\n'
+            f'  <rect width="{size}" height="{size}" rx="{f(r)}" fill="{navy}"/>\n'
+            f'  <path d="{sl}{sr}" fill="{white}"/>\n</svg>\n')
 
 
 def main():
@@ -283,12 +376,19 @@ def main():
     if "--css" in sys.argv:
         print_css()
         return
-    here = os.path.dirname(os.path.abspath(__file__))
-    out = os.path.join(here, "..", "assets", "shapes")
-    for name, kw in SHAPES.items():
+    if "--loader" in sys.argv:
+        print(loader_svg())
+        return
+    if "--favicon" in sys.argv:
+        with open(os.path.join(ROOT, "assets", "brand", "favicon-16.svg"), "w") as fh:
+            fh.write(favicon_svg(16))
+        print("wrote assets/brand/favicon-16.svg")
+        return
+    out = os.path.join(ROOT, "assets", "shapes")
+    for name, text in shape_files().items():
         with open(os.path.join(out, name), "w") as fh:
-            fh.write(svg_outline(**kw))
-        print("wrote", name)
+            fh.write(text)
+        print("wrote assets/shapes/" + name)
 
 
 if __name__ == "__main__":
