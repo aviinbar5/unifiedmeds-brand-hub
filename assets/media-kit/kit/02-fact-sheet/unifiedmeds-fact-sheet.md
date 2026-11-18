@@ -1,0 +1,32 @@
+# unifiedmeds · Fact sheet
+
+Media kit, Brand Edition 04 · November 18, 2026 · To confirm. Every [bracket] is a fact still to be confirmed.
+
+| | |
+|---|---|
+| **Name** | unifiedmeds. Always lowercase and one word, also at the start of a sentence. |
+| **What it is** | Online men's health care (telehealth). |
+| **Categories** | Sexual health at launch. Longevity and Hair loss are planned. |
+| **Launch products** | Tadalafil, Sildenafil and Combo. Prescription only: prescribed only when a licensed provider decides treatment is appropriate. [What Combo contains · clinical team] |
+| **How care works** | 1. Assessment / 2. Provider review / 3. Pharmacy / 4. Care continues |
+| **Where** | [States served · operations] |
+| **Founded** | [Year · legal, O-01] |
+| **Headquarters** | [City, state · legal, O-01] |
+| **Legal entity** | [Entity name · legal, O-01] |
+| **Website** | [Domain · legal, O-01] |
+| **Press contact** | [press@ · legal, O-01] |
+
+## How care works
+
+1. **Assessment.** A short online assessment, from home, on his own schedule. [Length · operations, O-12]
+2. **Provider review.** A licensed U.S. provider reviews the answers, may ask follow-up questions and decides whether treatment is appropriate.
+3. **Pharmacy.** If it is, a licensed U.S. pharmacy prepares the prescription and ships it in plain packaging. [Delivery time · operations, R-68]
+4. **Care continues.** The member can message his care team, and a provider reviews every refill.
+
+## About unifiedmeds
+
+unifiedmeds is a men's health telehealth brand. It launches with Sexual health, and Longevity and Hair loss are planned to follow. A man starts with a short online assessment, from home, on his own schedule. A licensed U.S. provider reviews his answers, may ask follow-up questions, and decides whether treatment is right for him. If it is, a licensed U.S. pharmacy prepares the prescription and ships it in plain packaging, with nothing on the outside about what is inside. Care continues after delivery: the member can message his care team, and a provider reviews every refill. The brand speaks plainly.
+
+## Writing the name
+
+unifiedmeds: all lowercase, one word, also at the start of a sentence and in headlines.
