@@ -1,5 +1,5 @@
 {
-  "$description": "unifiedmeds microcopy library, Edition 03 proposal 16.11.2026. Square brackets are filled by the product.",
+  "$description": "unifiedmeds microcopy library, Edition 04. Generated from the tables on src/content.html (Voice, content and compliance). Square brackets are filled by the product.",
   "cta.primary": {
     "text": "Get started",
     "moment": "Primary action, everywhere",
@@ -17,7 +17,7 @@
   },
   "cta.more": {
     "text": "Learn more",
-    "moment": "Further reading",
+    "moment": "Every category and product card, further reading",
     "category": "Buttons and links"
   },
   "cta.continue": {
@@ -56,18 +56,18 @@
     "category": "Form labels and help"
   },
   "field.email.help": {
-    "text": "We send order updates here. Nothing about your treatment.",
+    "text": "Enter your email, like name@example.com.",
     "moment": "Under the email field",
     "category": "Form labels and help"
   },
-  "field.password": {
-    "text": "Password",
-    "moment": "Password label",
+  "account.link.help": {
+    "text": "We’ll email you a link to sign in. No password needed.",
+    "moment": "Sign in, under the email field",
     "category": "Form labels and help"
   },
-  "field.password.help": {
-    "text": "At least 8 characters.",
-    "moment": "Under a new password",
+  "account.link.sent": {
+    "text": "Check your email for a link to sign in.",
+    "moment": "Sign-in link sent",
     "category": "Form labels and help"
   },
   "field.dob": {
@@ -96,8 +96,18 @@
     "category": "Field errors"
   },
   "error.choice": {
-    "text": "Choose one answer to continue.",
+    "text": "Choose an answer to go on.",
     "moment": "No answer chosen",
+    "category": "Field errors"
+  },
+  "error.consent": {
+    "text": "Agree to the Privacy notice and Terms to go on.",
+    "moment": "Consent: neither box ticked",
+    "category": "Field errors"
+  },
+  "error.consent.both": {
+    "text": "Agree to both to go on.",
+    "moment": "Consent: only one of the two ticked",
     "category": "Field errors"
   },
   "error.date": {
@@ -105,9 +115,9 @@
     "moment": "Incomplete date",
     "category": "Field errors"
   },
-  "error.password": {
-    "text": "That email and password don’t match. Try again or reset your password.",
-    "moment": "Wrong password",
+  "error.link": {
+    "text": "That link has expired. We can send you a new one.",
+    "moment": "Sign-in link expired or used",
     "category": "Field errors"
   },
   "system.network": {
@@ -123,6 +133,16 @@
   "system.500": {
     "text": "Something broke on our side. Your answers are safe.",
     "moment": "Server error",
+    "category": "System errors"
+  },
+  "assess.save.failed": {
+    "text": "That answer didn’t save. Check your connection and try again. Your other answers are safe.",
+    "moment": "Assessment: one answer did not save (toast)",
+    "category": "System errors"
+  },
+  "assess.load.failed": {
+    "text": "We couldn’t load the next question. Your answers so far are saved.",
+    "moment": "Assessment: next question did not load",
     "category": "System errors"
   },
   "system.payment": {
@@ -150,6 +170,11 @@
     "moment": "Answers saved (toast)",
     "category": "Confirmations"
   },
+  "assess.saved.link": {
+    "text": "Answers saved. We emailed you a link to come back.",
+    "moment": "Assessment: saved to finish later",
+    "category": "Confirmations"
+  },
   "done.sent": {
     "text": "A licensed provider will review your answers.",
     "moment": "Assessment sent",
@@ -164,6 +189,16 @@
     "text": "Changes saved.",
     "moment": "Settings changed",
     "category": "Confirmations"
+  },
+  "rec.match": {
+    "text": "Matches your answers",
+    "moment": "Tag on the matching option",
+    "category": "Recommendation"
+  },
+  "rec.decision": {
+    "text": "Your provider makes the final decision.",
+    "moment": "Always with it, on the same card",
+    "category": "Recommendation"
   },
   "wait.page": {
     "text": "Loading",
@@ -185,9 +220,9 @@
     "moment": "Menu item",
     "category": "Account"
   },
-  "account.reset": {
-    "text": "Forgot your password?",
-    "moment": "Password help link",
+  "account.link.resend": {
+    "text": "Send me a new link",
+    "moment": "Send a new sign-in link",
     "category": "Account"
   },
   "account.member": {
@@ -214,5 +249,30 @@
     "text": "Leave",
     "moment": "Secondary button",
     "category": "Dialogs"
+  },
+  "print.mailer": {
+    "text": "Packed with care, just for you.",
+    "moment": "Outside the mailer, after a small outline capsule",
+    "category": "Print and packaging"
+  },
+  "print.welcome": {
+    "text": "Welcome to unifiedmeds.",
+    "moment": "Welcome card, greeting",
+    "category": "Print and packaging"
+  },
+  "print.inside": {
+    "text": "Everything you need to begin is in this box.",
+    "moment": "Welcome card, body",
+    "category": "Print and packaging"
+  },
+  "print.refill": {
+    "text": "Your provider reviews your plan before each refill.",
+    "moment": "Welcome card, refill line",
+    "category": "Print and packaging"
+  },
+  "print.signoff": {
+    "text": "The unifiedmeds care team",
+    "moment": "Sign-off",
+    "category": "Print and packaging"
   }
 }
