@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sexual health · unifiedmeds (proposal)</title>
+<link rel="icon" href="../assets/brand/app-icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../brand.css">
+<link rel="stylesheet" href="../components.css">
+<style>
+  /* Landing page · Sexual health · Option A "The guided story" · rules R-109 to R-116. Tokens only. */
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --xfade: calc(var(--motion-duration-open) * 0.82); /* R-113 cross-fade, about 180ms; 0 with reduced motion */ }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--size-header-mobile) + var(--space-4)); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--color-surface-paper); color: var(--color-text-primary); font: var(--type-mobile-body-weight) var(--type-mobile-body-size) / var(--type-mobile-body-line) var(--font-family-sans); -webkit-font-smoothing: antialiased; }
+  main { overflow-x: clip; } /* shapes may be cropped by the page edge (R-111); clip keeps sticky working */
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+  .on-dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
+  .sr, .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  .wrap { width: 100%; max-width: calc(var(--layout-content-max) + 2 * var(--layout-margin-mobile)); margin: 0 auto; padding: 0 var(--layout-margin-mobile); }
+  /* R-116: folds 48 mobile, 64 desktop; heads to content 16 / 24 */
+  .sec { padding: var(--space-12) 0; }
+  .sec.alt { background: var(--color-surface-mist); }
+  main > section { position: relative; }
+  main > section > .wrap { position: relative; z-index: 2; }
+  .eyebrow { margin: 0 0 var(--space-3); font: var(--type-mobile-label-weight) var(--type-mobile-label-size) / var(--type-mobile-label-line) var(--font-family-sans); letter-spacing: var(--type-mobile-label-tracking); color: var(--color-text-secondary); } /* sentence case (R-22) */
+  .on-dark .eyebrow { color: var(--color-text-on-dark-muted); }
+  h1, h2, h3, h4 { margin: 0; font-weight: 400; color: var(--color-text-strong); }
+  .on-dark h1, .on-dark h2, .on-dark h3 { color: var(--color-text-on-dark); }
+  h1 { font: var(--type-mobile-hero-weight) var(--type-mobile-hero-size) / var(--type-mobile-hero-line) var(--type-mobile-hero-family); }
+  h2 { font: var(--type-mobile-section-weight) var(--type-mobile-section-size) / var(--type-mobile-section-line) var(--type-mobile-section-family); }
+  h3 { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--type-mobile-card-serif-family); }
+  .sub { margin: var(--space-4) 0 0; font: var(--type-mobile-subhead-weight) var(--type-mobile-subhead-size) / var(--type-mobile-subhead-line) var(--font-family-sans); color: var(--color-text-secondary); max-width: var(--layout-measure); }
+  .on-dark .sub, .on-dark p { color: var(--color-text-on-dark-muted); }
+  .fine { margin: var(--space-3) 0 0; font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .sec-head { display: grid; gap: 0; max-width: 720px; margin-bottom: var(--space-4); }
+  .sec-head.center { margin-inline: auto; text-align: center; justify-items: center; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+  .center-cta { display: grid; justify-items: center; text-align: center; margin-top: var(--space-6); }
+
+  /* R-112: an outline button next to a Yellow one hovers to Deep Teal, never Yellow */
+  .btn--outline { --btn-bg-hover: var(--color-brand-deep-teal); --btn-fg-hover: var(--color-text-on-dark); --btn-border-hover: var(--color-brand-deep-teal); }
+
+  /* Proposal notes: never part of the live page */
+  .demo-note { background: var(--color-surface-wash-yellow); color: var(--color-text-strong); font: 500 var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); padding: var(--space-2) 0; }
+  .ph-tag { justify-self: start; width: fit-content; max-width: 100%; display: inline-flex; align-items: center; gap: var(--space-1); margin-top: var(--space-3); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); border: 1px dashed var(--color-line-deep); font: 500 var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary); background: var(--color-surface-paper); }
+  .on-dark .ph-tag { border-color: var(--color-line-on-dark); color: var(--color-text-on-dark-muted); background: transparent; }
+
+  /* Capsule line (R-109): the two halves with the divider at every size, as in the seal (tools/capsule_svg.py
+     capsule_paths): the long half open toward the joint, the short, taller half closed by the divider, the step
+     where the heights meet. Stroke = 0.85% of the length (viewBox units on each path); the script keeps it at 1.5px
+     minimum. Fills sit inside the line, inset 1.5 strokes, like the seal's filled half; the How it works fill is
+     clipped to both inset halves, so the divider shows as a gap while it grows. */
+  .cap-line { fill: none; }
+  /* Fold shapes (R-111): low opacity, never under text, may straddle two folds; only shapes move */
+  .fs { position: absolute; z-index: 1; display: block; pointer-events: none; overflow: visible; }
+  /* Logo icon stamp on photos (R-110): shared file, 16px from the edges */
+  .stamp { position: absolute; width: var(--space-10); height: auto; pointer-events: none; } /* shared file assets/patterns/logo-stamp-*.svg; long side 40 mobile, 48 desktop */
+
+  /* 1 · Sticky header */
+  .lp-header { position: sticky; top: 0; z-index: 20; background: var(--color-surface-paper); border-bottom: 1px solid transparent; transition: border-color var(--motion-duration-fast) var(--motion-easing-ui), box-shadow var(--motion-duration-fast) var(--motion-easing-ui); }
+  .lp-header.is-scrolled { border-bottom-color: var(--color-line-base); }
+  .lp-header .bar { display: flex; align-items: center; gap: var(--space-6); height: var(--size-header-mobile); }
+  .lp-header .logo { display: block; flex: none; }
+  .lp-header .logo img { height: var(--size-logo-header-mobile); width: auto; } /* R-103: always taller than the 44px header button */
+  .lp-header .anchors { display: none; gap: var(--space-6); margin-left: auto; }
+  .lp-header .anchors a { white-space: nowrap; text-decoration: none; font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); color: var(--color-text-primary); }
+  .lp-header .anchors a:hover { text-decoration: underline; text-underline-offset: 6px; }
+  .lp-header .btn { margin-left: auto; }
+
+  /* 2 · Hero */
+  .hero { padding: var(--space-6) 0 var(--space-10); }
+  .hero-grid { display: grid; gap: var(--space-8); align-items: center; }
+  .hero .fine { margin-top: var(--space-2); }
+  .hero .fine.charge { margin-top: var(--space-4); } /* R-62: the charge line sits under the hero button */
+  .facts-inline { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: var(--space-5) 0 0; padding: 0; list-style: none; font: 500 var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-primary); }
+  .facts-inline li { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .facts-inline li::before { content: ''; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-pill); background: var(--color-brand-deep-teal); } /* a list mark, not a product (R-85) */
+  .hero-media { position: relative; margin: 0; border-radius: var(--radius-card); overflow: hidden; aspect-ratio: 4 / 3; background: var(--color-surface-mist); }
+  .hero-media img:not(.stamp) { width: 100%; height: 100%; object-fit: cover; object-position: 70% 30%; }
+  /* R-110: standing capsule rises from the bottom edge beside the man (never over the face); light photo = Deep Teal line, long half Wash Blue */
+  .hero-cap { left: 6%; bottom: -15%; height: 80%; width: auto; aspect-ratio: 115.5 / 308; }
+  .hero-cap .cap-line { stroke: var(--color-brand-deep-teal); stroke-dasharray: 1; }
+  .hero-cap .cap-fill { fill: var(--color-surface-wash-blue); opacity: var(--opacity-capsule-soft); }
+  .js .hero-cap .cap-line { stroke-dashoffset: 1; }
+  .js .hero-cap .cap-fill { opacity: 0; }
+  .js .hero-cap.is-drawn .cap-line { stroke-dashoffset: 0; transition: stroke-dashoffset calc(var(--motion-duration-shape) + var(--motion-duration-reveal)) var(--motion-easing-enter); }
+  .js .hero-cap.is-drawn .cap-fill { opacity: var(--opacity-capsule-soft); transition: opacity var(--motion-duration-reveal) var(--motion-easing-ui) calc(var(--motion-duration-shape) + var(--motion-duration-reveal)); }
+  .hero-media .stamp { top: var(--space-4); right: var(--space-4); }
+
+  /* Rise (R-52): transform only, so nothing is ever left invisible */
+  .js .rise { transform: translateY(var(--motion-distance-rise)); transition: transform var(--motion-duration-reveal) var(--motion-easing-enter); transition-delay: calc(var(--i, 0) * var(--motion-stagger)); }
+  .js .rise.is-in { transform: none; }
+
+  /* 3 · Trust strip: 2 x 2 on mobile, one centred row on desktop */
+  .trust { border-block: 1px solid var(--color-line-base); padding: var(--space-6) 0; }
+  .trust-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-4); margin: 0 auto; padding: 0 var(--layout-margin-mobile); list-style: none; }
+  .trust-grid li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-2); font: 500 var(--type-desktop-small-size) / 1.35 var(--font-family-sans); color: var(--color-text-strong); }
+  .trust-grid img, .trust-grid .ic { width: var(--size-icon); height: var(--size-icon); flex: none; }
+  .trust-grid .ic { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: var(--size-icon-stroke); stroke-linejoin: round; }
+  .trust-grid li[hidden] { display: none; } /* the member-rating slot stays hidden until legal approves (R-67) */
+  .trust-grid .slot { display: grid; justify-items: center; color: var(--color-text-secondary); font-weight: 400; }
+  .trust-grid .slot .ph-tag { justify-self: center; margin-top: var(--space-1); text-align: center; }
+
+  /* 4 · How it works · the wow (R-113 stepper) */
+  .how { background: var(--color-surface-mist); }
+  .how-grid { display: grid; gap: var(--space-6); }
+  .how-cap-col { position: sticky; top: calc(var(--size-header-mobile) + var(--space-2)); z-index: 2; display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) var(--space-4); border-radius: var(--radius-small); background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
+  .how-cap { width: 128px; flex: none; overflow: visible; }
+  .how-cap .cap-line { stroke: var(--color-brand-deep-teal); }
+  .how-cap .fill { fill: var(--color-brand-blue); transform-box: fill-box; transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform var(--motion-duration-shape) var(--motion-easing-enter); }
+  .how-count { margin: 0; font: 500 var(--type-desktop-small-size) / 1.35 var(--font-family-sans); color: var(--color-text-secondary); }
+  .how-count b { display: block; font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .how-steps { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+  .how-steps li { position: relative; display: grid; grid-template-columns: var(--size-tap-min) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-5); border-radius: var(--radius-card); background: var(--color-surface-paper); border: 1px solid var(--color-line-base); transition: opacity var(--motion-duration-open) var(--motion-easing-ui), border-color var(--motion-duration-open) var(--motion-easing-ui), box-shadow var(--motion-duration-open) var(--motion-easing-ui); }
+  .how-steps li::before { content: ''; position: absolute; left: -1px; top: var(--space-6); width: var(--space-1); height: var(--space-8); border-radius: 0 var(--radius-xs) var(--radius-xs) 0; background: var(--color-brand-deep-teal); transform: scaleY(0); transition: transform var(--motion-duration-open) var(--motion-easing-enter); }
+  .js .how-steps li:not(.is-active):not(.is-done) { opacity: .45; } /* R-113: not reached */
+  .how-steps li.is-active { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); } /* 2px, no layout shift */
+  .how-steps li.is-active::before { transform: scaleY(1); }
+  .how-steps .n { position: relative; display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: var(--radius-pill); border: 1px solid var(--color-line-mid); font: 400 var(--type-mobile-card-serif-size) / 1 var(--font-family-serif); color: var(--color-text-secondary); transition: background-color var(--motion-duration-open) var(--motion-easing-ui), color var(--motion-duration-open) var(--motion-easing-ui), border-color var(--motion-duration-open) var(--motion-easing-ui); }
+  .how-steps .n .ok { position: absolute; width: var(--space-5); height: var(--space-5); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(.6); transition: opacity var(--motion-duration-open) var(--motion-easing-ui), transform var(--motion-duration-open) var(--motion-easing-enter); }
+  .how-steps .n .num { transition: opacity var(--motion-duration-open) var(--motion-easing-ui); }
+  .how-steps li.is-active .n { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+  .how-steps li.is-done .n { border-color: var(--color-brand-deep-teal); color: var(--color-brand-deep-teal); background: var(--color-surface-paper); }
+  .how-steps li.is-done .n .num { opacity: 0; }
+  .how-steps li.is-done .n .ok { opacity: 1; transform: none; }
+  .how-steps p { margin: var(--space-2) 0 0; color: var(--color-text-secondary); }
+  .how-steps .tag { margin-top: var(--space-3); }
+  .how-shape { right: -40px; bottom: -110px; width: 82px; height: auto; aspect-ratio: 115.5 / 308; opacity: var(--opacity-capsule); }
+  .how-shape .cap-line { stroke: var(--color-surface-wash-blue); }
+
+  /* 5 · Video */
+  .video-grid { display: grid; gap: var(--space-6); align-items: center; }
+  .video-frame { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: var(--radius-card); overflow: hidden; aspect-ratio: 4 / 5; background: var(--color-brand-teal-deep); cursor: pointer; }
+  .video-frame img { width: 100%; height: 100%; object-fit: cover; opacity: var(--opacity-capsule); transition: opacity var(--motion-duration-open) var(--motion-easing-ui); }
+  .video-frame:hover img { opacity: 1; }
+  .video-frame .play { position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; display: grid; place-items: center; border-radius: var(--radius-pill); background: var(--color-surface-paper); color: var(--color-brand-deep-teal); transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
+  .video-frame:hover .play { transform: scale(1.04); }
+  .video-frame .play svg { width: 28px; height: 28px; margin-left: 4px; }
+  .video-frame .len { position: absolute; left: var(--space-4); bottom: var(--space-4); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); background: var(--color-brand-teal-deep); color: var(--color-text-on-dark); font: 600 var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); }
+  .video-frame .ph-tag { position: absolute; right: var(--space-4); top: var(--space-4); margin: 0; }
+
+  /* Segmented control with a sliding thumb (R-113): 220ms, motion easing; keyboard arrows move the choice */
+  .seg { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--space-1); border-radius: var(--radius-small); background: var(--color-surface-mist); }
+  .seg-thumb { position: absolute; top: var(--space-1); bottom: var(--space-1); left: var(--space-1); width: calc(50% - var(--space-1)); border-radius: var(--radius-xs); background: var(--color-brand-deep-teal); transition: transform var(--motion-duration-open) var(--motion-easing-enter); }
+  .seg[data-pos="1"] .seg-thumb { transform: translateX(100%); }
+  .seg--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .seg--3 .seg-thumb { width: calc((100% - var(--space-1) * 2) / 3); }
+  .seg[data-pos="2"] .seg-thumb { transform: translateX(200%); }
+  .seg button { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--size-tap-min); padding: 0 var(--space-3); border: 0; border-radius: var(--radius-xs); background: none; font: 500 var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-secondary); white-space: nowrap; cursor: pointer; transition: color var(--motion-duration-open) var(--motion-easing-ui); }
+  .seg button[aria-checked="true"] { color: var(--color-text-on-dark); }
+  .seg .key { width: var(--space-2); height: var(--space-2); border-radius: var(--radius-pill); background: var(--key); box-shadow: 0 0 0 1px var(--color-surface-paper); }
+
+  /* 6 · Two ways (interactive) · Daily = Green, As needed = Blue (R-113) */
+  .ways { background: var(--color-surface-mist); }
+  .ways-grid { display: grid; gap: var(--space-8); align-items: center; }
+  .ways-box { position: relative; }
+  .ways-panel { position: relative; z-index: 1; display: grid; gap: var(--space-5); padding: var(--space-6); border-radius: var(--radius-card); background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
+  .ways-box { --way-c: var(--color-brand-green); --way-wash: var(--color-surface-wash-green); }
+  .ways-box[data-way="needed"] { --way-c: var(--color-brand-blue); --way-wash: var(--color-surface-wash-blue); }
+  .key--daily { --key: var(--color-brand-green); } .key--needed { --key: var(--color-brand-blue); }
+  .week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .week li { display: grid; justify-items: center; gap: var(--space-2); font: 500 var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .week .dot { position: relative; display: block; align-self: center; width: 100%; height: auto; aspect-ratio: 1; max-width: 40px; border-radius: var(--radius-pill); border: 1px solid var(--color-line-mid); background: var(--color-surface-paper); transition: border-color var(--motion-duration-open) var(--motion-easing-ui) var(--d, 0ms); }
+  .week .dot::after { content: ''; position: absolute; inset: 3px; border-radius: var(--radius-pill); background: var(--way-c); transform: scale(0); opacity: 0; transition: transform var(--motion-duration-open) var(--motion-easing-enter) var(--d, 0ms), opacity var(--motion-duration-fast) var(--motion-easing-ui) var(--d, 0ms), background-color var(--motion-duration-open) var(--motion-easing-ui); }
+  .week li.on .dot { border-color: var(--way-c); }
+  .week li.on .dot::after { transform: scale(1); opacity: 1; }
+  .week li.on { color: var(--color-text-strong); }
+  .way-texts { display: grid; }
+  .way-text { grid-area: 1 / 1; margin: 0; color: var(--color-text-strong); font-weight: 500; transition: opacity var(--xfade) var(--motion-easing-ui); }
+  .way-text[aria-hidden="true"] { opacity: 0; }
+  .ways-shape { top: calc(var(--space-12) * -1); right: calc(var(--space-6) * -1); width: 92px; height: auto; aspect-ratio: 115.5 / 308; z-index: 0; }
+  .ways-shape .cap-fill { fill: var(--way-wash); opacity: var(--opacity-capsule-soft); transition: fill var(--xfade) var(--motion-easing-ui); }
+  .ways-shape .cap-line { stroke: var(--way-c); opacity: var(--opacity-capsule-soft); transition: stroke var(--xfade) var(--motion-easing-ui); }
+
+  /* 7 · Treatments (R-98: one row, one height when closed, buttons on one line) */
+  .tx-grid { display: grid; gap: var(--space-5); }
+  .tx { display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-6); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+  .tx-media { display: grid; }
+  .tx .label { position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-mist); aspect-ratio: 1; }
+  .tx .label img { position: absolute; inset: var(--space-4) 0 var(--space-2); margin: auto; height: calc(100% - var(--space-6)); width: auto; transform-origin: 50% 0; transition: transform var(--motion-duration-shape) var(--motion-easing-enter); }
+  .tx .meta { margin: var(--space-1) 0 0; font: 500 var(--type-desktop-small-size) / 1.4 var(--font-family-sans); color: var(--color-text-secondary); }
+  .tx p { margin: 0; color: var(--color-text-secondary); }
+  .tx .bottom { display: grid; gap: var(--space-4); align-content: end; justify-items: start; }
+  .tx .link { font: 500 var(--type-desktop-small-size) / 1.4 var(--font-family-sans); }
+  /* Detail: tap mode (mobile, touch) = toggle under the bottle; hover mode (desktop pointer) = opens under the bottle inside the label box */
+  .tx-more { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); width: 100%; min-height: var(--size-tap-min); margin-top: var(--space-2); padding: 0 var(--space-1); border: 0; border-bottom: 1px solid var(--color-line-base); background: none; font: 500 var(--type-desktop-small-size) / 1.4 var(--font-family-sans); color: var(--color-text-primary); text-align: left; cursor: pointer; }
+  .tx-more svg { width: var(--space-5); height: var(--space-5); flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+  .tx-more[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .tx-detail { display: grid; grid-template-rows: 1fr; }
+  .js .tx-detail { grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-open); }
+  .js .tx.is-open .tx-detail { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui), visibility 0s; }
+  .tx-detail-in { min-height: 0; overflow: hidden; }
+  .tx-facts { display: grid; gap: var(--space-2); margin: 0; padding: var(--space-3) var(--space-1) var(--space-1); list-style: none; font: 400 var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-primary); }
+  .tx-facts li { display: grid; grid-template-columns: var(--space-4) minmax(0, 1fr); gap: var(--space-2); align-items: start; }
+  .tx-facts svg { width: var(--space-4); height: var(--space-4); margin-top: 2px; fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .tx-facts b { font-weight: 600; color: var(--color-text-strong); }
+  .tx-facts a { font-weight: 500; }
+  .tx-approval { margin-top: var(--space-5); } /* the provider-approval line under every treatment list */
+
+  /* 8 · Reviews */
+  .rv-wrap { position: relative; }
+  .rv { display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: var(--space-4); margin: 0; padding: 0 0 var(--space-2); list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .rv::-webkit-scrollbar { display: none; }
+  .rv li { --hov: var(--color-surface-wash-blue); scroll-snap-align: start; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: var(--space-4); padding: var(--space-4) var(--space-4) var(--space-6); transition: background-color var(--motion-duration-open) var(--motion-easing-ui), transform var(--motion-duration-open) var(--motion-easing-ui), border-color var(--motion-duration-open) var(--motion-easing-ui); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+  .rv li:nth-child(3n+2) { --hov: var(--color-surface-wash-green); } .rv li:nth-child(3n) { --hov: var(--color-surface-wash-yellow); }
+  .rv li:hover, .rv li:focus-within { background: var(--hov); border-color: var(--hov); transform: translateY(calc(var(--motion-distance-lift) * -2)); }
+  .rv .ph { position: relative; margin: 0; border-radius: var(--radius-small); overflow: hidden; aspect-ratio: 3 / 2; background: var(--color-surface-mist); }
+  .rv .ph img:not(.stamp) { width: 100%; height: 100%; object-fit: cover; transition: transform var(--motion-duration-shape) var(--motion-easing-enter); }
+  .rv li:hover .ph img:not(.stamp) { transform: scale(1.04); }
+  .rv .ph .stamp.tr { top: var(--space-4); right: var(--space-4); }
+  .rv .ph .stamp.bl { bottom: var(--space-4); left: var(--space-4); }
+  .ph-cap { right: -24%; bottom: 7%; width: 62%; height: auto; aspect-ratio: 206 / 77.67; }
+  .ph-cap .cap-line { stroke: var(--color-brand-deep-teal); }
+  .ph-cap .cap-fill { fill: var(--color-surface-wash-blue); opacity: var(--opacity-capsule-soft); }
+  .rv-ic { display: grid; place-items: center; width: var(--space-10); height: var(--space-10); margin-inline: var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-mist); color: var(--color-brand-deep-teal); transition: background-color var(--motion-duration-open) var(--motion-easing-ui); }
+  .rv li:hover .rv-ic, .rv li:focus-within .rv-ic { background: var(--color-surface-paper); }
+  .rv-ic svg { width: var(--space-5); height: var(--space-5); fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .rv blockquote { padding: 0 var(--space-2); margin: 0; font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .rv .who, .rv .ph-tag { margin-inline: var(--space-2); }
+  .rv .who { font: 500 var(--type-desktop-small-size) / 1.4 var(--font-family-sans); color: var(--color-text-secondary); }
+  .rv .ph-tag { margin: 0; justify-self: start; }
+  .ph-tag.demo-only { border-style: solid; border-color: var(--color-brand-coral); color: var(--color-text-strong); font-weight: 600; } /* R-69 DEMO ONLY marker; Coral marks, never text */
+  .rv-nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-5); }
+  .rv-dots { display: flex; gap: var(--space-2); }
+  .rv-dots span { width: var(--space-2); height: var(--space-2); border-radius: var(--radius-pill); background: var(--color-line-mid); transition: background-color var(--motion-duration-fast) var(--motion-easing-ui), width var(--motion-duration-fast) var(--motion-easing-ui); }
+  .rv-dots span.on { width: var(--space-6); background: var(--color-brand-deep-teal); }
+  .rv-btns { display: flex; gap: var(--space-2); }
+  .icon-btn { display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: var(--radius-button); border: 1px solid var(--color-brand-deep-teal); background: transparent; color: var(--color-brand-deep-teal); cursor: pointer; transition: background-color var(--motion-duration-fast) var(--motion-easing-ui), color var(--motion-duration-fast) var(--motion-easing-ui); }
+  .icon-btn:hover { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+  .icon-btn svg { width: 20px; height: 20px; }
+  .icon-btn.prev svg { transform: scaleX(-1); }
+
+  /* 9 · Provider (dark, parallax) · accent Green (R-115): rule, icon, eyebrow and a same-hue shape */
+  .provider { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+  .provider-grid { display: grid; gap: var(--space-8); align-items: center; }
+  .provider-photo { margin: 0; border-radius: var(--radius-card); overflow: hidden; aspect-ratio: 4 / 3; }
+  .provider-photo img { width: 100%; height: 115%; object-fit: cover; will-change: transform; }
+  .provider .who { margin-top: var(--space-5); font: 600 var(--type-desktop-small-size) / 1.4 var(--font-family-sans); color: var(--color-text-on-dark); }
+  .pv-rule { display: block; width: var(--space-10); height: 2px; margin-bottom: var(--space-4); border-radius: var(--radius-pill); background: var(--color-surface-wash-green); }
+  .provider .pv-eyebrow { display: flex; align-items: center; gap: var(--space-2); color: var(--color-surface-wash-green); }
+  .pv-eyebrow svg { width: var(--space-5); height: var(--space-5); flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .pv-shape { right: -170px; bottom: -64px; width: 290px; height: auto; aspect-ratio: 612 / 227; }
+  .pv-shape .cap-fill { fill: var(--color-brand-green); opacity: var(--opacity-capsule-soft); }
+  .pv-shape .cap-line { stroke: var(--color-brand-green); opacity: var(--opacity-capsule); }
+
+  /* 10 · Plan */
+  .plan-grid { display: grid; gap: var(--space-8); align-items: start; }
+  .plan-card { display: grid; gap: var(--space-5); padding: var(--space-6); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+  .price { display: flex; align-items: baseline; gap: var(--space-2); }
+  .price b { font: 400 var(--type-mobile-hero-size) / 1 var(--font-family-serif); color: var(--color-text-strong); }
+  .price span { color: var(--color-text-secondary); }
+  .plan-card .billed { margin: calc(var(--space-3) * -1) 0 0; color: var(--color-text-secondary); font-size: var(--type-desktop-caption-size); transition: opacity var(--xfade) var(--motion-easing-ui); }
+  .plan-card .billed.is-swap { opacity: 0; }
+  .plan-card .check-list { margin: 0; }
+  .plan-card .btn { justify-self: start; }
+  .assure { justify-self: start; width: fit-content; margin: 0; display: flex; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-radius: var(--radius-xs); font-size: var(--type-desktop-small-size); background: var(--color-surface-wash-green); color: var(--color-text-strong); font-weight: 500; }
+  /* The supply picture follows the plan (Q100): one bottle for 1 month, a fuller supply for 3 and 6 months */
+  .supply { position: relative; height: 190px; margin-top: var(--space-6); border-radius: var(--radius-card); background: var(--color-surface-mist); overflow: hidden; }
+  .supply img { position: absolute; left: 0; right: 0; bottom: var(--space-4); margin: 0 auto; height: 82%; width: auto; transition: transform var(--motion-duration-open) var(--motion-easing-enter), opacity var(--xfade) var(--motion-easing-ui); }
+  .supply .b2 { z-index: 2; }
+  .supply .b1, .supply .b3 { z-index: 1; opacity: 0; visibility: hidden; transform: scale(.9); transition: transform var(--motion-duration-open) var(--motion-easing-enter), opacity var(--xfade) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-open); }
+  .supply:is([data-plan="q"], [data-plan="h"]) .b1, .supply:is([data-plan="q"], [data-plan="h"]) .b3 { visibility: visible; transition: transform var(--motion-duration-open) var(--motion-easing-enter), opacity var(--xfade) var(--motion-easing-ui), visibility 0s; }
+  .supply:is([data-plan="q"], [data-plan="h"]) .b1 { opacity: 1; transform: translateX(-58%) scale(.9); }
+  .supply:is([data-plan="q"], [data-plan="h"]) .b3 { opacity: 1; transform: translateX(58%) scale(.9); }
+  .supply-cap { display: grid; margin: var(--space-3) 0 0; font: 500 var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .supply-cap span { grid-area: 1 / 1; transition: opacity var(--xfade) var(--motion-easing-ui); }
+  .supply-cap span[aria-hidden="true"] { opacity: 0; }
+
+  /* 11 · FAQ (R-113 accordion: one open at a time, height and opacity 220ms, chevron 180°) */
+  .faq-grid { display: grid; gap: var(--space-6); align-items: start; }
+  .faq details { border-bottom: 1px solid var(--color-line-base); }
+  .faq summary { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); min-height: var(--size-tap-min); padding: var(--space-4) 0; cursor: pointer; list-style: none; font: 600 var(--type-desktop-body-size) / 1.4 var(--font-family-sans); color: var(--color-text-strong); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: ''; flex: none; width: 12px; height: 12px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-3px) rotate(45deg); transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+  .faq details.is-open summary::after { transform: translateY(3px) rotate(225deg); }
+  .faq .ans { overflow: hidden; }
+  .faq .ans p { margin: 0 0 var(--space-5); color: var(--color-text-secondary); max-width: var(--layout-measure); }
+
+  /* 12 · Final call */
+  .final { background: var(--color-category-sexual-health); color: var(--color-text-on-dark); text-align: center; overflow-x: clip; }
+  .final .wrap { display: grid; justify-items: center; }
+  .final-cap { width: 160px; margin-bottom: var(--space-6); overflow: visible; }
+  .final-cap .cap-line { stroke: var(--color-surface-paper); stroke-dasharray: 1; }
+  .final-cap .cap-fill { fill: var(--color-surface-wash-blue); transform-box: fill-box; transform-origin: left center; }
+  .js .final-cap .cap-line { stroke-dashoffset: 1; }
+  .js .final-cap .cap-fill { transform: scaleX(0); }
+  .js .final-cap.is-in .cap-line { stroke-dashoffset: 0; transition: stroke-dashoffset calc(var(--motion-duration-shape) + var(--motion-duration-reveal)) var(--motion-easing-enter); }
+  .js .final-cap.is-in .cap-fill { transform: none; transition: transform var(--motion-duration-shape) var(--motion-easing-enter) var(--motion-duration-reveal); }
+  .final h2 { max-width: 16ch; }
+  .final .actions { justify-content: center; }
+  .final-shape { left: -170px; top: var(--space-2); width: 260px; height: auto; aspect-ratio: 612 / 227; opacity: var(--opacity-capsule-soft); }
+  .final-shape .cap-line { stroke: var(--color-surface-wash-blue); }
+
+  /* 13 · Important safety information (R-66: always fully open) */
+  .isi { border-top: 1px solid var(--color-line-base); }
+  .isi .lead-ph { margin: var(--space-3) 0 0; color: var(--color-text-secondary); max-width: 80ch; }
+  .isi-prod { margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--color-line-base); }
+  .isi-prod > h3 { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .isi-prod > p { margin: var(--space-2) 0 0; color: var(--color-text-secondary); }
+  .isi-grid { display: grid; gap: var(--space-5) var(--space-8); margin-top: var(--space-5); }
+  .isi-grid h4 { font: 600 var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .isi-grid .urgent h4 { display: flex; align-items: center; gap: var(--space-2); }
+  .isi-grid .urgent h4::before { content: ''; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-pill); background: var(--color-brand-coral); flex: none; }
+  .isi-grid p { margin: var(--space-1) 0 0; font: 400 var(--type-desktop-caption-size) / 1.6 var(--font-family-sans); color: var(--color-text-secondary); }
+  .isi-end { margin-top: var(--space-8); padding-top: var(--space-5); border-top: 1px solid var(--color-line-base); display: grid; gap: var(--space-2); }
+  .isi-end p { margin: 0; color: var(--color-text-secondary); font-size: var(--type-desktop-small-size); }
+
+  /* 14 · Footer: the one footer from components.css (.ft3, R-48, R-114), full width on the page */
+  .ft3 { border-radius: 0; }
+  .ft3__in { max-width: calc(var(--layout-content-max) + 2 * var(--layout-margin-desktop)); margin-inline: auto; }
+  @media (min-width: 1024px) { .ft3__in { padding-inline: var(--layout-margin-desktop); } } /* lines up with the page wrap */
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    html { scroll-padding-top: calc(var(--size-header-desktop) + var(--space-4)); }
+    body { font: var(--type-desktop-body-weight) var(--type-desktop-body-size) / var(--type-desktop-body-line) var(--font-family-sans); }
+    .wrap { max-width: calc(var(--layout-content-max) + 2 * var(--layout-margin-tablet)); padding: 0 var(--layout-margin-tablet); }
+    .sec { padding: calc(var(--space-8) * 2) 0; }
+    .sec-head { margin-bottom: var(--space-6); }
+    .eyebrow { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+    h1 { font: var(--type-desktop-hero-weight) var(--type-desktop-hero-size) / var(--type-desktop-hero-line) var(--type-desktop-hero-family); }
+    h2 { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--type-desktop-section-family); }
+    h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); }
+    .sub { font: var(--type-desktop-subhead-weight) var(--type-desktop-subhead-size) / var(--type-desktop-subhead-line) var(--font-family-sans); }
+    .lp-header .bar { height: var(--size-header-desktop); }
+    .lp-header .logo img { height: var(--size-logo-header-desktop); }
+    .trust-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-5) var(--space-12); }
+    .trust-grid li { flex-direction: row; text-align: left; gap: var(--space-3); }
+    .trust-grid .slot { justify-items: start; }
+    .trust-grid .slot .ph-tag { justify-self: start; text-align: left; }
+    .tx-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto 1fr auto; }
+    .tx { grid-row: span 4; grid-template-rows: subgrid; }
+    .rv { grid-auto-columns: calc((100% - 2 * var(--space-4)) / 2); }
+    .supply { height: 280px; }
+    .how-shape { right: -44px; bottom: -150px; width: 112px; }
+    .pv-shape { right: -250px; bottom: -82px; width: 440px; }
+    .final-shape { left: -300px; top: 50%; margin-top: -90px; width: 480px; }
+    .isi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stamp { width: var(--space-12); }
+  }
+
+  /* Hover devices, tablet and up: the detail opens under the bottle inside the label box on hover or keyboard focus */
+  @media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+    .tx-more { display: none; }
+    .tx-media { position: relative; }
+    .tx .label { aspect-ratio: 4 / 5; }
+    .js .tx-detail, .tx-detail { position: absolute; left: 0; right: 0; bottom: 0; top: auto; display: block; visibility: visible; padding: 0 var(--space-4) var(--space-4); opacity: 0; transform: translateY(var(--space-2)); transition: opacity var(--motion-duration-open) var(--motion-easing-ui), transform var(--motion-duration-open) var(--motion-easing-enter); }
+    .tx-detail-in { overflow: visible; }
+    .tx-facts { padding: 0; }
+    .tx:hover .tx-detail, .tx:focus-within .tx-detail { opacity: 1; transform: none; transition-delay: var(--motion-intent-delay); }
+    .tx:hover .label img, .tx:focus-within .label img { transform: translateY(calc(var(--space-2) * -1)) scale(.38); }
+  }
+  @media (hover: hover) and (pointer: fine) and (min-width: 1280px) { .tx .label { aspect-ratio: 1; } .tx:hover .label img, .tx:focus-within .label img { transform: translateY(calc(var(--space-2) * -1)) scale(.54); } }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .wrap { max-width: calc(var(--layout-content-max) + 2 * var(--layout-margin-desktop)); padding: 0 var(--layout-margin-desktop); }
+    .lp-header .anchors { display: flex; gap: var(--space-5); }
+    .lp-header .btn { margin-left: var(--space-4); }
+    .hero { padding: var(--space-10) 0 var(--space-12); }
+    .hero-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-14); }
+    .hero-media { aspect-ratio: 6 / 5; }
+    .hero-cap { left: 5%; height: 78%; }
+    .how-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-14); align-items: start; }
+    .how-cap-col { top: calc(50vh - 120px); flex-direction: column; align-items: flex-start; gap: var(--space-6); padding: 0; border: 0; background: none; }
+    .how-cap { width: 100%; max-width: 380px; }
+    .how-count b { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--font-family-serif); }
+    .how-steps { gap: var(--space-5); padding: var(--space-2) 0 var(--space-6); }
+    .how-steps li { padding: var(--space-6) var(--space-8); }
+    .how-steps li::before { top: var(--space-6); }
+    .video-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--space-14); }
+    .video-frame { aspect-ratio: 16 / 9; }
+    .ways-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-14); }
+    .ways-panel { padding: var(--space-8); }
+    .ways-shape { width: 120px; top: calc(var(--space-14) * -1); right: calc(var(--space-8) * -1); }
+    .rv { grid-auto-columns: calc((100% - 2 * var(--space-5)) / 3); gap: var(--space-5); }
+    .provider-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--space-14); }
+    .provider-photo { aspect-ratio: 1; max-width: 340px; }
+    .plan-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-14); }
+    .plan-card { padding: var(--space-8); }
+    .supply { height: 300px; }
+    .faq-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--space-14); }
+    .faq-grid .sec-head { position: sticky; top: calc(var(--size-header-desktop) + var(--space-8)); }
+    .final-cap { width: 220px; }
+    .final h2 { font: var(--type-desktop-h2-weight) var(--type-desktop-h2-size) / var(--type-desktop-h2-line) var(--type-desktop-h2-family); }
+    .isi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="demo-note"><div class="wrap">Prototype · Option A, "The guided story". Copy, prices, times, the provider and the reviews are placeholders. Products: Tadalafil, Sildenafil and Combo; bottles carry the unifiedmeds label. Legal and operations approve every line before launch.</div></div>
+
+<header class="lp-header" id="top">
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="unifiedmeds, back to top"><picture><source media="(min-width: 768px)" srcset="../assets/brand/logo-horizontal.svg" width="321" height="52"><img src="../assets/brand/logo-seal.svg" alt="unifiedmeds" width="137" height="50"></picture></a>
+    <nav class="anchors" aria-label="On this page"><a href="#how">How it works</a><a href="#treatments">Treatments</a><a href="#faq">FAQ</a></nav>
+    <a class="btn btn--header" href="../assessment.html#demo" data-cta="header">Get started</a>
+  </div>
+</header>
+
+<main>
+  <!-- 2 · Hero -->
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow rise">Sexual health</p>
+        <h1 id="hero-h" class="rise" style="--i:1">A private next step, on your schedule.</h1>
+        <p class="sub rise" style="--i:2">A short online assessment, reviewed by a licensed U.S. provider. If treatment is right for you, it ships to your door in plain packaging.</p>
+        <div class="actions"><a class="btn btn--yellow" href="../assessment.html#demo" data-cta="hero">Get started</a><a class="btn btn--outline" href="#how">How it works</a></div>
+        <p class="fine charge">[charge line · operations]</p>
+        <p class="fine">Assessment only. Not a diagnosis.</p>
+        <ul class="facts-inline"><li>Online assessment</li><li>Licensed U.S. providers</li><li>Discreet delivery</li></ul>
+      </div>
+      <figure class="hero-media">
+        <img src="../assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" alt="A man reading at home by a window. Stand-in photo, not approved, to replace" width="2048" height="1365" fetchpriority="high">
+        <svg class="fs hero-cap" viewBox="0 0 115.5 308" data-len="300" data-drift="y" aria-hidden="true"><path class="cap-fill" d="M104.06 165.3L104.06 54.14A46.31 46.31 0 0 0 11.44 54.14L11.44 165.3Z"/><path class="cap-line" d="M107.89 169.12L107.89 54.14A50.14 50.14 0 0 0 7.61 54.14L7.61 169.12M111.5 169.12L111.5 250.25A53.75 53.75 0 0 1 4 250.25L4 169.12Z" stroke-width="2.55" pathLength="1"/></svg>
+        <img class="stamp" src="../assets/shapes/logo-stamp-teal.svg" alt="" width="48" height="17">
+      </figure>
+    </div>
+  </section>
+
+  <!-- 3 · Trust strip -->
+  <section class="trust" aria-label="Why men choose unifiedmeds">
+    <ul class="trust-grid">
+      <li><img src="../assets/icons/icon-provider-reviewed.svg" alt="">Licensed U.S. providers</li>
+      <li><img src="../assets/icons/icon-discreet.svg" alt="">Discreet packaging</li>
+      <li><img src="../assets/icons/icon-online-assessment.svg" alt="">No insurance needed</li>
+      <!-- Member rating slot: stays hidden until legal approves real, verified data (R-67, q136) -->
+      <li hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.75L14.5 8.85L20.1 9.65L16.05 13.6L17 19.2L12 16.55L7 19.2L7.95 13.6L3.9 9.65L9.5 8.85Z"/></svg><span class="slot">[Member rating]<span class="ph-tag">Hidden until legal approves · R-67</span></span></li>
+    </ul>
+  </section>
+
+  <!-- 4 · How it works · the "wow" -->
+  <section class="sec how" id="how" aria-labelledby="how-h">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-h">From your phone to your door.</h2>
+        <p class="sub">Four steps, and a licensed provider is part of every one that matters.</p>
+      </header>
+      <div class="how-grid">
+        <div class="how-cap-col">
+          <svg class="how-cap" viewBox="0 0 320 124.93" data-len="304" role="img" aria-label="Progress capsule">
+            <defs><clipPath id="how-clip"><path d="M171.45 15.54L58.81 15.54A46.93 46.93 0 0 0 58.81 109.4L171.45 109.4ZM179.2 11.88L257.53 11.88A50.59 50.59 0 0 1 257.53 113.06L179.2 113.06Z"/></clipPath></defs>
+            <g clip-path="url(#how-clip)"><rect class="fill" x="8" y="0" width="304" height="124.93"/></g>
+            <path class="cap-line" d="M175.32 11.66L58.81 11.66A50.81 50.81 0 0 0 58.81 113.27L175.32 113.27M175.32 8L257.53 8A54.47 54.47 0 0 1 257.53 116.93L175.32 116.93Z" stroke-width="2.58"/>
+          </svg>
+          <p class="how-count" aria-live="polite"><b><span id="how-n">1</span> of 4</b><span id="how-t">Assessment</span></p>
+        </div>
+        <ol class="how-steps">
+          <li data-t="Assessment"><span class="n"><span class="num">1</span><svg class="ok" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><div><h3>Tell us what's changed.</h3><p>Complete a private online assessment covering your health, symptoms, and goals.</p><span class="tag">[about N minutes · O-12]</span></div></li>
+          <li data-t="Provider review"><span class="n"><span class="num">2</span><svg class="ok" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><div><h3>A licensed provider reviews your information.</h3><p>Labs may be requested when clinically appropriate.</p><span class="tag">[Review time · operations, R-68]</span></div></li>
+          <li data-t="Care plan"><span class="n"><span class="num">3</span><svg class="ok" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><div><h3>Receive a personalized care plan.</h3><p>If treatment is appropriate, your provider will explain the recommended options.</p></div></li>
+          <li data-t="Ongoing care"><span class="n"><span class="num">4</span><svg class="ok" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><div><h3>Stay supported.</h3><p>Access ongoing guidance, follow-up, and adjustments based on your care plan.</p></div></li>
+        </ol>
+      </div>
+      <div class="center-cta"><a class="btn" href="../assessment.html#demo" data-cta="how">Get started</a><p class="fine">Assessment only. Not a diagnosis.</p></div>
+    </div>
+    <!-- R-111: straddles How it works and the video fold -->
+    <svg class="fs how-shape" viewBox="0 0 115.5 308" data-len="300" data-drift="y" aria-hidden="true"><path class="cap-line" d="M107.89 169.12L107.89 54.14A50.14 50.14 0 0 0 7.61 54.14L7.61 169.12M111.5 169.12L111.5 250.25A53.75 53.75 0 0 1 4 250.25L4 169.12Z" stroke-width="2.55"/></svg>
+  </section>
+
+  <!-- 5 · Video -->
+  <section class="sec" aria-labelledby="video-h">
+    <div class="wrap video-grid">
+      <div>
+        <p class="eyebrow">See it</p>
+        <h2 id="video-h">The assessment, in one minute.</h2>
+        <p class="sub">What the online assessment looks like on a phone, and what arrives at the door.</p>
+        <p class="fine">Captions on. Sound plays only when you choose.</p>
+      </div>
+      <button class="video-frame" type="button" aria-label="Play the video: the assessment in one minute">
+        <img src="../assets/photos/man-kitchen-coffee-pexels-6269909.jpg" alt="" loading="lazy">
+        <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg></span>
+        <span class="len">1:00</span>
+        <span class="ph-tag">Placeholder · film not shot yet</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- 6 · Two ways (interactive) -->
+  <section class="sec ways" aria-labelledby="ways-h">
+    <div class="wrap ways-grid">
+      <header class="sec-head" style="margin:0">
+        <p class="eyebrow">Two ways to take it</p>
+        <h2 id="ways-h">Daily, or only when you need it.</h2>
+        <p class="sub">Some treatments are taken once a day, others ahead of time on the days you choose. Here is how each fits a week.</p>
+        <span class="ph-tag">Wording from the clinical team</span>
+      </header>
+      <div class="ways-box" data-way="daily">
+        <svg class="fs ways-shape" viewBox="0 0 115.5 308" data-len="300" data-drift="r" aria-hidden="true"><path class="cap-fill" d="M104.06 165.3L104.06 54.14A46.31 46.31 0 0 0 11.44 54.14L11.44 165.3Z"/><path class="cap-line" d="M107.89 169.12L107.89 54.14A50.14 50.14 0 0 0 7.61 54.14L7.61 169.12M111.5 169.12L111.5 250.25A53.75 53.75 0 0 1 4 250.25L4 169.12Z" stroke-width="2.55"/></svg>
+        <div class="ways-panel">
+          <div class="seg" role="radiogroup" aria-label="Way of taking treatment">
+            <span class="seg-thumb" aria-hidden="true"></span>
+            <button type="button" role="radio" aria-checked="true" data-way="daily"><span class="key key--daily" aria-hidden="true"></span>Daily</button>
+            <button type="button" role="radio" aria-checked="false" data-way="needed"><span class="key key--needed" aria-hidden="true"></span>As needed</button>
+          </div>
+          <ol class="week" aria-label="A sample week">
+            <li><span class="dot"></span>Mon</li><li><span class="dot"></span>Tue</li><li><span class="dot"></span>Wed</li><li><span class="dot"></span>Thu</li><li><span class="dot"></span>Fri</li><li><span class="dot"></span>Sat</li><li><span class="dot"></span>Sun</li>
+          </ol>
+          <div class="way-texts">
+            <p class="way-text" data-for="daily">One dose at the same time each day, so there is nothing to plan around.</p>
+            <p class="way-text" data-for="needed" aria-hidden="true">Taken ahead of time, only on the days you choose.</p>
+          </div>
+          <p class="fine" style="margin:0">A licensed provider decides which option, if any, fits you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Treatments -->
+  <section class="sec" id="treatments" aria-labelledby="tx-h">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Treatments</p>
+        <h2 id="tx-h">Options a provider may consider.</h2>
+        <p class="sub">Prescription only. After your assessment, a licensed provider decides whether treatment is right for you, and which.</p>
+      </header>
+      <div class="tx-grid">
+        <article class="tx rise">
+          <div class="tx-media">
+            <div class="label"><img src="../assets/packaging/bottle-tadalafil.png" alt="Tadalafil bottle" loading="lazy" width="496" height="800"></div>
+            <button class="tx-more" type="button" aria-expanded="false" aria-controls="tx-d-tadalafil">Learn more<span class="sr-only"> about Tadalafil</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5"/></svg></button>
+            <div class="tx-detail" id="tx-d-tadalafil"><div class="tx-detail-in"><ul class="tx-facts" aria-label="About Tadalafil">
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10.73 7.58L5.17 7.58A2.42 2.42 0 0 0 5.17 12.42L10.73 12.42M10.73 7.4L14.65 7.4A2.6 2.6 0 0 1 14.65 12.6L10.73 12.6Z"/></svg><span><b>Taken:</b> [Dose · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg><span><b>Timing:</b> [Onset and schedule · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.75L16 5V9.5C16 13.1 13.4 15.9 10 17.25C6.6 15.9 4 13.1 4 9.5V5L10 2.75ZM7.25 10L9.25 12L12.75 8.25"/></svg><span><b>Provider checks:</b> [Checks · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg><a href="#safety-tadalafil">Safety information for Tadalafil</a></li>
+            </ul></div></div>
+          </div>
+          <div><h3>Tadalafil</h3><p class="meta">[DOSE] tablets</p></div>
+          <p>The generic form of a brand-name treatment.</p>
+          <div class="bottom"><a class="link" href="#safety-tadalafil">Important safety information</a><a class="btn" href="../assessment.html#demo" data-cta="tx-tadalafil">Get started</a></div>
+        </article>
+        <article class="tx rise" style="--i:1">
+          <div class="tx-media">
+            <div class="label"><img src="../assets/packaging/bottle-sildenafil.png" alt="Sildenafil bottle" loading="lazy" width="496" height="800"></div>
+            <button class="tx-more" type="button" aria-expanded="false" aria-controls="tx-d-sildenafil">Learn more<span class="sr-only"> about Sildenafil</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5"/></svg></button>
+            <div class="tx-detail" id="tx-d-sildenafil"><div class="tx-detail-in"><ul class="tx-facts" aria-label="About Sildenafil">
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10.73 7.58L5.17 7.58A2.42 2.42 0 0 0 5.17 12.42L10.73 12.42M10.73 7.4L14.65 7.4A2.6 2.6 0 0 1 14.65 12.6L10.73 12.6Z"/></svg><span><b>Taken:</b> [Dose · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg><span><b>Timing:</b> [Onset and schedule · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.75L16 5V9.5C16 13.1 13.4 15.9 10 17.25C6.6 15.9 4 13.1 4 9.5V5L10 2.75ZM7.25 10L9.25 12L12.75 8.25"/></svg><span><b>Provider checks:</b> [Checks · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg><a href="#safety-sildenafil">Safety information for Sildenafil</a></li>
+            </ul></div></div>
+          </div>
+          <div><h3>Sildenafil</h3><p class="meta">[DOSE] tablets</p></div>
+          <p>The generic form of a brand-name treatment.</p>
+          <div class="bottom"><a class="link" href="#safety-sildenafil">Important safety information</a><a class="btn" href="../assessment.html#demo" data-cta="tx-sildenafil">Get started</a></div>
+        </article>
+        <article class="tx rise" style="--i:2">
+          <div class="tx-media">
+            <div class="label"><img src="../assets/packaging/bottle-combo.png" alt="Combo bottle" loading="lazy" width="496" height="800"></div>
+            <button class="tx-more" type="button" aria-expanded="false" aria-controls="tx-d-combo">Learn more<span class="sr-only"> about Combo</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5"/></svg></button>
+            <div class="tx-detail" id="tx-d-combo"><div class="tx-detail-in"><ul class="tx-facts" aria-label="About Combo">
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10.73 7.58L5.17 7.58A2.42 2.42 0 0 0 5.17 12.42L10.73 12.42M10.73 7.4L14.65 7.4A2.6 2.6 0 0 1 14.65 12.6L10.73 12.6Z"/></svg><span><b>Taken:</b> [Dose · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg><span><b>Timing:</b> [Onset and schedule · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.75L16 5V9.5C16 13.1 13.4 15.9 10 17.25C6.6 15.9 4 13.1 4 9.5V5L10 2.75ZM7.25 10L9.25 12L12.75 8.25"/></svg><span><b>Provider checks:</b> [Checks · clinical]</span></li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg><a href="#safety-combo">Safety information for Combo</a></li>
+            </ul></div></div>
+          </div>
+          <div><h3>Combo</h3><p class="meta">[DOSE] tablets</p></div>
+          <p>[What Combo contains, in one line · clinical]</p>
+          <div class="bottom"><a class="link" href="#safety-combo">Important safety information</a><a class="btn" href="../assessment.html#demo" data-cta="tx-combo">Get started</a></div>
+        </article>
+      </div>
+      <p class="fine tx-approval">Prescription treatment is subject to provider approval. Results vary.</p>
+    </div>
+  </section>
+
+  <!-- 8 · Reviews -->
+  <section class="sec alt" id="reviews" aria-labelledby="rv-h">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Reviews</p>
+        <h2 id="rv-h">What members say.</h2>
+        <span class="ph-tag demo-only">DEMO ONLY · illustrative quotes, not real members. The live page shows no reviews until legal approves real, consented ones (R-67)</span>
+      </header>
+      <div class="rv-wrap">
+        <ul class="rv" aria-label="Member reviews">
+          <li tabindex="0"><figure class="ph"><img src="../assets/photos/man-selfie-avatar-pexels-23224714.jpg" alt="Placeholder photo of a member" loading="lazy"><img class="stamp tr" src="../assets/shapes/logo-stamp-teal.svg" alt="" width="48" height="17" loading="lazy"></figure><span class="rv-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M6.5 9H13.5A2 2 0 0 1 15.5 11V14.5A2 2 0 0 1 13.5 16.5H6.5A2 2 0 0 1 4.5 14.5V11A2 2 0 0 1 6.5 9ZM7 9V6.5A3 3 0 0 1 13 6.5V9M10 12V13.5"/></svg></span><blockquote>"The questions were simple, and nobody else needed to know."</blockquote><span class="who">Member · [age]</span><span class="ph-tag demo-only">DEMO ONLY</span></li>
+          <li tabindex="0"><figure class="ph"><img src="../assets/photos/man-phone-avatar-pexels-7793677.jpg" alt="Placeholder photo of a member" loading="lazy"><svg class="fs ph-cap" viewBox="0 0 206 77.67" data-len="200" aria-hidden="true"><path class="cap-fill" d="M110.53 7.96L36.42 7.96A30.87 30.87 0 0 0 36.42 69.71L110.53 69.71Z"/><path class="cap-line" d="M113.08 5.41L36.42 5.41A33.42 33.42 0 0 0 36.42 72.26L113.08 72.26M113.08 3.01L167.17 3.01A35.83 35.83 0 0 1 167.17 74.67L113.08 74.67Z" stroke-width="1.7"/></svg></figure><span class="rv-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 5.6C4 5.06954 4.21071 4.56083 4.58579 4.18576C4.96086 3.81069 5.46957 3.6 6 3.6H14C14.5304 3.6 15.0391 3.81069 15.4142 4.18576C15.7893 4.56083 16 5.06954 16 5.6V11.4C16 11.9304 15.7893 12.4391 15.4142 12.8142C15.0391 13.1893 14.5304 13.4 14 13.4H9.2L5.8 16.2V13.4H6C5.46957 13.4 4.96086 13.1893 4.58579 12.8142C4.21071 12.4391 4 11.9304 4 11.4V5.6Z"/></svg></span><blockquote>"I had a question for the provider and got a clear answer."</blockquote><span class="who">Member · [age]</span><span class="ph-tag demo-only">DEMO ONLY</span></li>
+          <li tabindex="0"><figure class="ph"><img src="../assets/photos/man-beard-profile-vertical-9x16-pexels-6973179.jpg" alt="Placeholder photo of a member" loading="lazy"><img class="stamp tr" src="../assets/shapes/logo-stamp-teal.svg" alt="" width="48" height="17" loading="lazy"></figure><span class="rv-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M3.5 6.75L10 3.5L16.5 6.75V13.25L10 16.5L3.5 13.25V6.75ZM3.5 6.75L10 10L16.5 6.75M10 10V16.5"/></svg></span><blockquote>"The package was plain. That mattered to me."</blockquote><span class="who">Member · [age]</span><span class="ph-tag demo-only">DEMO ONLY</span></li>
+          <li tabindex="0"><figure class="ph"><img src="../assets/photos/man-warm-light-vertical-9x16-pexels-40409561.jpg" alt="Placeholder photo of a member" loading="lazy"><svg class="fs ph-cap" viewBox="0 0 206 77.67" data-len="200" aria-hidden="true"><path class="cap-fill" d="M110.53 7.96L36.42 7.96A30.87 30.87 0 0 0 36.42 69.71L110.53 69.71Z"/><path class="cap-line" d="M113.08 5.41L36.42 5.41A33.42 33.42 0 0 0 36.42 72.26L113.08 72.26M113.08 3.01L167.17 3.01A35.83 35.83 0 0 1 167.17 74.67L113.08 74.67Z" stroke-width="1.7"/></svg></figure><span class="rv-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M2.75 10A7.25 7.25 0 1 0 17.25 10A7.25 7.25 0 1 0 2.75 10ZM10 6.25V10L12.75 11.75"/></svg></span><blockquote>"Easier than finding time for a clinic visit."</blockquote><span class="who">Member · [age]</span><span class="ph-tag demo-only">DEMO ONLY</span></li>
+          <li tabindex="0"><figure class="ph"><img src="../assets/photos/man-home-office-pexels-8055837.jpg" alt="Placeholder photo of a member" loading="lazy"><img class="stamp bl" src="../assets/shapes/logo-stamp-teal.svg" alt="" width="48" height="17" loading="lazy"></figure><span class="rv-ic" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4.75 4.75H15.25A2 2 0 0 1 17.25 6.75V13.25A2 2 0 0 1 15.25 15.25H4.75A2 2 0 0 1 2.75 13.25V6.75A2 2 0 0 1 4.75 4.75ZM2.75 8.25H17.25M5.5 12.25H8"/></svg></span><blockquote>"I knew the price before I started."</blockquote><span class="who">Member · [age]</span><span class="ph-tag demo-only">DEMO ONLY</span></li>
+        </ul>
+        <div class="rv-nav">
+          <div class="rv-dots" aria-hidden="true"></div>
+          <div class="rv-btns">
+            <button class="icon-btn prev" type="button" aria-label="Previous reviews"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="icon-btn next" type="button" aria-label="Next reviews"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · Provider -->
+  <section class="sec provider on-dark" aria-labelledby="pv-h">
+    <div class="wrap provider-grid">
+      <figure class="provider-photo"><img src="../assets/photos/provider-standin-pexels-6481906.jpg" width="1600" height="1068" alt="Stand-in photo for the provider: a smiling man in his fifties in a white shirt" loading="lazy" style="object-position:49% 30%"></figure>
+      <div>
+        <span class="pv-rule" aria-hidden="true"></span>
+        <p class="eyebrow pv-eyebrow"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.75L16 5V9.5C16 13.1 13.4 15.9 10 17.25C6.6 15.9 4 13.1 4 9.5V5L10 2.75ZM7.25 10L9.25 12L12.75 8.25"/></svg>Your provider</p>
+        <h2 id="pv-h">A licensed provider reads every assessment.</h2>
+        <p class="sub">Before anything is prescribed, a provider licensed in your state reviews your answers. If treatment isn't right for you, they explain their reasons and the options you have.</p>
+        <p class="who">[Provider name], [credentials] · Licensed in [states]</p>
+        <span class="ph-tag">Not approved · stand-in for a real consenting provider</span>
+      </div>
+    </div>
+    <!-- R-111 + R-115: same-hue Green shape, straddles the provider band and the plan fold -->
+    <svg class="fs pv-shape" viewBox="0 0 612 227" data-len="600" data-drift="r" aria-hidden="true"><path class="cap-fill" d="M328.6 20.88L106.27 20.88A92.62 92.62 0 0 0 106.27 206.12L328.6 206.12Z"/><path class="cap-line" d="M336.25 13.23L106.27 13.23A100.27 100.27 0 0 0 106.27 213.77L336.25 213.77M336.25 6L498.5 6A107.5 107.5 0 0 1 498.5 221L336.25 221Z" stroke-width="5.1"/></svg>
+  </section>
+
+  <!-- 10 · Plan and price -->
+  <section class="sec" id="plan" aria-labelledby="plan-h">
+    <div class="wrap plan-grid">
+      <header class="sec-head" style="margin:0">
+        <p class="eyebrow">Plan and price</p>
+        <h2 id="plan-h">One clear price.</h2>
+        <p class="sub">You see the full price before you start, with no insurance needed and no surprise fees.</p>
+        <span class="ph-tag">Prices, plans and terms from operations · R-61, R-62</span>
+        <div class="supply" data-plan="m" aria-hidden="true"><img class="b1" src="../assets/packaging/bottle-tadalafil.png" alt=""><img class="b3" src="../assets/packaging/bottle-tadalafil.png" alt=""><img class="b2" src="../assets/packaging/bottle-tadalafil.png" alt=""></div>
+        <p class="supply-cap"><span data-for="m">1 month in each order. [quantity · clinical]</span><span data-for="q" aria-hidden="true">3 months in each order. [quantity · clinical]</span><span data-for="h" aria-hidden="true">6 months in each order. [quantity · clinical] [deliveries · operations]</span></p>
+      </header>
+      <div class="plan-card">
+        <div class="seg seg--3" role="radiogroup" aria-label="Plan length">
+          <span class="seg-thumb" aria-hidden="true"></span>
+          <button type="button" role="radio" aria-checked="true" data-plan="m">1 month</button>
+          <button type="button" role="radio" aria-checked="false" data-plan="q">3 months</button>
+          <button type="button" role="radio" aria-checked="false" data-plan="h">6 months</button>
+        </div>
+        <div class="price"><b id="price">$XX</b><span>per order</span></div>
+        <p class="billed" id="billed">Billed for each 1-month order.</p>
+        <ul class="check-list">
+          <li>Online assessment, reviewed by a licensed provider</li>
+          <li>Medication, if prescribed</li>
+          <li>Discreet shipping</li>
+          <li>Messaging with your care team</li>
+        </ul>
+        <p class="assure">[charge line · operations]</p>
+        <a class="btn" href="../assessment.html#demo" data-cta="plan">Get started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · FAQ -->
+  <section class="sec faq" id="faq" aria-labelledby="faq-h" style="background:var(--color-surface-mist)">
+    <div class="wrap faq-grid">
+      <header class="sec-head" style="margin:0">
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-h">Questions, answered.</h2>
+        <div class="actions"><a class="btn" href="../assessment.html#demo" data-cta="faq">Get started</a></div>
+      </header>
+      <div>
+        <details open class="is-open"><summary>Is this right for me?</summary><div class="ans"><p>Only a licensed provider can decide. The online assessment asks about your health, your medicines and your history so they can.</p></div></details>
+        <details><summary>How private is it?</summary><div class="ans"><p>Your answers are seen by your care team only. Packages are plain, with nothing on the outside about what is inside. [Operations to confirm]</p></div></details>
+        <details><summary>What if I'm not approved?</summary><div class="ans"><p>The provider explains why and what you can do next. [charge line · operations] [Refund terms from operations]</p></div></details>
+        <details><summary>Do I need insurance?</summary><div class="ans"><p>You don't need insurance. The price is shown before you start.</p></div></details>
+        <details><summary>Can I cancel?</summary><div class="ans"><p>[Cancellation terms exactly as operations confirm]</p></div></details>
+        <details><summary>How fast does it arrive?</summary><div class="ans"><p>[Shipping time once operations confirm a service level · R-68]</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · Final call -->
+  <section class="sec final on-dark" aria-labelledby="final-h">
+    <svg class="fs final-shape" viewBox="0 0 612 227" data-len="600" data-drift="y" aria-hidden="true"><path class="cap-line" d="M336.25 13.23L106.27 13.23A100.27 100.27 0 0 0 106.27 213.77L336.25 213.77M336.25 6L498.5 6A107.5 107.5 0 0 1 498.5 221L336.25 221Z" stroke-width="5.1"/></svg>
+    <div class="wrap">
+      <svg class="final-cap" viewBox="0 0 320 124.93" data-len="304" aria-hidden="true"><path class="cap-fill" d="M171.45 15.54L58.81 15.54A46.93 46.93 0 0 0 58.81 109.4L171.45 109.4Z"/><path class="cap-line" d="M175.32 11.66L58.81 11.66A50.81 50.81 0 0 0 58.81 113.27L175.32 113.27M175.32 8L257.53 8A54.47 54.47 0 0 1 257.53 116.93L175.32 116.93Z" stroke-width="2.58" pathLength="1"/></svg>
+      <h2 id="final-h">Take the next step, privately.</h2>
+      <p class="sub">A short online assessment, reviewed by a licensed provider.</p>
+      <div class="actions"><a class="btn btn--yellow" href="../assessment.html#demo" data-cta="final">Get started</a></div>
+      <p class="fine" style="color:var(--color-text-on-dark-muted)">Assessment only. Not a diagnosis.</p>
+    </div>
+  </section>
+
+  <!-- 13 · Safety -->
+  <section class="sec isi" id="safety" aria-labelledby="isi-h">
+    <div class="wrap">
+      <h2 id="isi-h">Important safety information.</h2>
+      <span class="ph-tag">Draft structure · clinical and legal write the final text</span>
+      <p class="lead-ph">[One short paragraph: what this information covers, that it does not include everything, and that it does not replace talking with your provider or pharmacist · legal]</p>
+      <div class="isi-prod" id="safety-tadalafil">
+        <h3>Tadalafil</h3>
+        <div class="isi-grid">
+          <div><h4>Who should not take it</h4><p>[Who should not take Tadalafil: the health conditions and medicines that rule it out. 2 to 4 short lines · clinical]</p></div>
+          <div><h4>Before you start</h4><p>[What to tell your provider first: your health history, other medicines and supplements, and anything that changed since your assessment. 2 to 3 lines · clinical]</p></div>
+          <div><h4>Possible side effects</h4><p>[The most common side effects of Tadalafil, in plain words, and what to do if they bother you. 3 to 5 items · clinical]</p></div>
+          <div class="urgent"><h4>Serious side effects: get help now</h4><p>[The rare but serious effects that need emergency care right away, each in one line, and the instruction to call 911 · clinical]</p></div>
+          <div><h4>Interactions</h4><p>[Medicines, supplements, food or alcohol that do not mix with Tadalafil, and why to tell your provider about every medicine you take. 2 to 4 lines · clinical]</p></div>
+          <div><h4>How to store</h4><p>[Storage temperature, keeping it in the original bottle, and out of reach of children. 1 to 2 lines · pharmacy]</p></div>
+        </div>
+      </div>
+      <div class="isi-prod" id="safety-sildenafil">
+        <h3>Sildenafil</h3>
+        <div class="isi-grid">
+          <div><h4>Who should not take it</h4><p>[Who should not take Sildenafil: the health conditions and medicines that rule it out. 2 to 4 short lines · clinical]</p></div>
+          <div><h4>Before you start</h4><p>[What to tell your provider first: your health history, other medicines and supplements, and anything that changed since your assessment. 2 to 3 lines · clinical]</p></div>
+          <div><h4>Possible side effects</h4><p>[The most common side effects of Sildenafil, in plain words, and what to do if they bother you. 3 to 5 items · clinical]</p></div>
+          <div class="urgent"><h4>Serious side effects: get help now</h4><p>[The rare but serious effects that need emergency care right away, each in one line, and the instruction to call 911 · clinical]</p></div>
+          <div><h4>Interactions</h4><p>[Medicines, supplements, food or alcohol that do not mix with Sildenafil, and why to tell your provider about every medicine you take. 2 to 4 lines · clinical]</p></div>
+          <div><h4>How to store</h4><p>[Storage temperature, keeping it in the original bottle, and out of reach of children. 1 to 2 lines · pharmacy]</p></div>
+        </div>
+      </div>
+      <div class="isi-prod" id="safety-combo">
+        <h3>Combo</h3><p>[What Combo contains, and that the safety information for each ingredient applies · clinical]</p>
+        <div class="isi-grid">
+          <div><h4>Who should not take it</h4><p>[Who should not take Combo: the health conditions and medicines that rule it out. 2 to 4 short lines · clinical]</p></div>
+          <div><h4>Before you start</h4><p>[What to tell your provider first: your health history, other medicines and supplements, and anything that changed since your assessment. 2 to 3 lines · clinical]</p></div>
+          <div><h4>Possible side effects</h4><p>[The most common side effects of Combo, in plain words, and what to do if they bother you. 3 to 5 items · clinical]</p></div>
+          <div class="urgent"><h4>Serious side effects: get help now</h4><p>[The rare but serious effects that need emergency care right away, each in one line, and the instruction to call 911 · clinical]</p></div>
+          <div><h4>Interactions</h4><p>[Medicines, supplements, food or alcohol that do not mix with Combo, and why to tell your provider about every medicine you take. 2 to 4 lines · clinical]</p></div>
+          <div><h4>How to store</h4><p>[Storage temperature, keeping it in the original bottle, and out of reach of children. 1 to 2 lines · pharmacy]</p></div>
+        </div>
+      </div>
+      <div class="isi-end">
+        <p>[How to report side effects: the FDA MedWatch phone number and web address, in one line · legal]</p>
+        <p>[Links to the full prescribing information and the patient information for each product · clinical]</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ft3" aria-label="Footer">
+  <div class="ft3__in">
+    <div class="ft3__brand">
+      <a href="#top" aria-label="unifiedmeds home"><img class="ft3__logo" src="../assets/brand/logo-horizontal.svg" width="185" height="30" alt=""></a>
+      <p class="ft3__line">Men's health, handled privately. A licensed provider reviews every assessment.</p>
+      <p class="ft3__contact">[support email · legal, O-01]</p>
+    </div>
+    <nav class="ft3__cols" aria-label="Footer links" data-acc><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="lpf-c0" id="lpf-b0">Care<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="lpf-c0" role="region" aria-labelledby="lpf-b0"><div><ul class="ft3__links"><li><a href="#top">Sexual health</a></li><li><a href="#how">How it works</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="lpf-c1" id="lpf-b1">Company<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="lpf-c1" role="region" aria-labelledby="lpf-b1"><div><ul class="ft3__links"><li><a href="#top">About unifiedmeds</a></li><li><a href="#top">Our providers</a></li><li><a href="#top">Press</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="lpf-c2" id="lpf-b2">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="lpf-c2" role="region" aria-labelledby="lpf-b2"><div><ul class="ft3__links"><li><a href="#faq">FAQ</a></li><li><a href="#top">Contact us</a></li><li><a href="#top">Shipping and delivery</a></li><li><a href="#top">Billing and refunds</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="lpf-c3" id="lpf-b3">Legal<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="lpf-c3" role="region" aria-labelledby="lpf-b3"><div><ul class="ft3__links"><li><a href="#top">Privacy policy</a></li><li><a href="#top">Terms of service</a></li><li><a href="#top">Telehealth notice</a></li><li><a href="#top">Notice of privacy practices</a></li><li><a href="#safety">Safety information</a></li><li><a href="#top">Accessibility</a></li></ul></div></div></div></nav>
+    <form class="ft3__news" novalidate data-news3>
+      <p class="ft3__newsh" id="lpf-nl">Notes on care, now and then.</p>
+      <div class="ft3__newsrow">
+        <label class="sr-only" for="lpf-em">Email address</label>
+        <input class="ft3__field" id="lpf-em" type="email" autocomplete="email" placeholder="Your email address" aria-describedby="lpf-nl lpf-st">
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <label class="check-row ft3__consent"><input class="check" type="checkbox" name="newsletter-consent" aria-describedby="lpf-st"><span>Send me the unifiedmeds newsletter: one short email about men's health, [frequency]. We count opens and clicks to learn what is useful. Unsubscribe in one click at any time. <a href="#top">Privacy notice</a>.</span></label>
+      <p class="ft3__fine ft3__status" id="lpf-st" role="status" aria-live="polite"></p>
+      <p class="ft3__promise"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg>No product names in our emails.</p>
+    </form>
+    <ul class="ft3__social" aria-label="unifiedmeds on social media"><li><a href="#top" aria-label="Facebook (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.0833 7.08333H13.75V4.16667H11.6667C10.8931 4.16667 10.1513 4.47396 9.60427 5.02094C9.05729 5.56792 8.75 6.30979 8.75 7.08333V9.16667H6.66667V12.0833H8.75V17.5H11.6667V12.0833H13.6667L14.1667 9.16667H11.6667V7.5C11.6667 7.38949 11.7106 7.28351 11.7887 7.20537C11.8668 7.12723 11.9728 7.08333 12.0833 7.08333Z"/></svg></a></li><li><a href="#top" aria-label="Instagram (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.9167 2.91667H7.08333C4.78215 2.91667 2.91667 4.78215 2.91667 7.08333V12.9167C2.91667 15.2179 4.78215 17.0833 7.08333 17.0833H12.9167C15.2179 17.0833 17.0833 15.2179 17.0833 12.9167V7.08333C17.0833 4.78215 15.2179 2.91667 12.9167 2.91667Z"/><path d="M10 13.3333C11.8409 13.3333 13.3333 11.8409 13.3333 10C13.3333 8.15905 11.8409 6.66667 10 6.66667C8.15905 6.66667 6.66667 8.15905 6.66667 10C6.66667 11.8409 8.15905 13.3333 10 13.3333Z"/><path d="M14.3333 6.16667C14.6095 6.16667 14.8333 5.94281 14.8333 5.66667C14.8333 5.39052 14.6095 5.16667 14.3333 5.16667C14.0572 5.16667 13.8333 5.39052 13.8333 5.66667C13.8333 5.94281 14.0572 6.16667 14.3333 6.16667Z"/></svg></a></li><li><a href="#top" aria-label="TikTok (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 3.33333V12.0833C11.25 12.5778 11.1034 13.0611 10.8287 13.4723C10.554 13.8834 10.1635 14.2038 9.70671 14.393C9.24989 14.5823 8.74723 14.6318 8.26227 14.5353C7.77732 14.4388 7.33186 14.2007 6.98223 13.8511C6.6326 13.5015 6.3945 13.056 6.29804 12.5711C6.20157 12.0861 6.25108 11.5834 6.4403 11.1266C6.62952 10.6698 6.94995 10.2794 7.36107 10.0047C7.7722 9.72996 8.25555 9.58333 8.75 9.58333"/><path d="M11.25 3.33333C11.25 4.3279 11.6451 5.28172 12.3483 5.98498C13.0516 6.68825 14.0054 7.08333 15 7.08333"/></svg></a></li><li><a href="#top" aria-label="YouTube (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 4.58333H5.41667C3.57572 4.58333 2.08333 6.07572 2.08333 7.91667V12.0833C2.08333 13.9243 3.57572 15.4167 5.41667 15.4167H14.5833C16.4243 15.4167 17.9167 13.9243 17.9167 12.0833V7.91667C17.9167 6.07572 16.4243 4.58333 14.5833 4.58333Z"/><path d="M8.75 7.91667V12.0833L12.25 10L8.75 7.91667Z"/></svg></a></li><li><a href="#top" aria-label="LinkedIn (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 2.91667H5.41667C4.03595 2.91667 2.91667 4.03595 2.91667 5.41667V14.5833C2.91667 15.964 4.03595 17.0833 5.41667 17.0833H14.5833C15.964 17.0833 17.0833 15.964 17.0833 14.5833V5.41667C17.0833 4.03595 15.964 2.91667 14.5833 2.91667Z"/><path d="M6.66667 8.75V13.3333M6.66667 6.5V6.58333M9.58333 13.3333V8.75M9.58333 10.8333C9.58333 10.2808 9.80283 9.75089 10.1935 9.36019C10.5842 8.96949 11.1141 8.75 11.6667 8.75C12.2192 8.75 12.7491 8.96949 13.1398 9.36019C13.5305 9.75089 13.75 10.2808 13.75 10.8333V13.3333"/></svg></a></li><li><a href="#top" aria-label="X (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5L15 15M15 5L5 15"/></svg></a></li></ul>
+    <div class="ft3__legal">
+      <ul class="ft3__compliance">
+        <li>Assessment only. Not a diagnosis.</li>
+        <li>[Telehealth notice: who provides care, in which states · legal, O-01]</li>
+        <li>[Any treatment is decided by the treating provider · legal wording, O-01]</li>
+      </ul>
+      <div class="ft3__bar">
+        <p class="ft3__fine">© 2026 unifiedmeds</p>
+        <span class="ft3__seal">[LegitScript seal · placeholder, O-01]</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  root.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cssMs = name => parseFloat(getComputedStyle(root).getPropertyValue(name)) || 0;
+  const cssVal = name => getComputedStyle(root).getPropertyValue(name).trim();
+
+  // R-109 · capsule stroke = 0.85% of the rendered length, never under 1.5px
+  const caps = [...document.querySelectorAll('svg[data-len]')];
+  const fitStroke = svg => {
+    const w = svg.getBoundingClientRect().width; if (!w) return;
+    const vb = svg.viewBox.baseVal, vertical = vb.height > vb.width;
+    const scale = w / vb.width, len = +svg.dataset.len;
+    const sw = Math.max(len * 0.0085, 1.5 / scale);
+    svg.querySelectorAll('.cap-line').forEach(p => p.setAttribute('stroke-width', sw.toFixed(2)));
+  };
+  const ro = new ResizeObserver(es => es.forEach(e => fitStroke(e.target)));
+  caps.forEach(c => ro.observe(c));
+
+  // 1 · Header border after the scroll threshold
+  const header = document.querySelector('.lp-header');
+  const onHeader = () => header.classList.toggle('is-scrolled', scrollY > 8);
+  addEventListener('scroll', onHeader, { passive: true }); onHeader();
+
+  // 2 · Hero: capsule draws once, copy rises
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelector('.hero-cap').classList.add('is-drawn');
+    document.querySelectorAll('.hero .rise').forEach(el => el.classList.add('is-in'));
+  }));
+
+  // Rise on enter, once (three items at most per group)
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('main > section:not(.hero) .rise').forEach(el => io.observe(el));
+
+  // R-111 · fold shapes drift at most 24px or turn at most 6° across their scroll; reduced motion: static
+  const drifters = [...document.querySelectorAll('[data-drift]')];
+  const onDrift = () => {
+    if (reduce) return;
+    drifters.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      const p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height))) - 0.5;
+      el.style.transform = el.dataset.drift === 'r' ? `rotate(${(p * 6).toFixed(2)}deg)` : `translateY(${(p * -24).toFixed(1)}px)`;
+    });
+  };
+  addEventListener('scroll', () => requestAnimationFrame(onDrift), { passive: true }); onDrift();
+
+  // 4 · How it works (R-113): not reached faded, active marked, passed checked; the capsule fills step by step
+  const steps = [...document.querySelectorAll('.how-steps li')];
+  const fill = document.querySelector('.how-cap .fill');
+  const nEl = document.getElementById('how-n'), tEl = document.getElementById('how-t');
+  let current = -1;
+  const setStep = i => {
+    if (i === current) return; current = i;
+    steps.forEach((s, k) => { s.classList.toggle('is-active', k === i); s.classList.toggle('is-done', k < i); s.setAttribute('aria-current', k === i ? 'step' : 'false'); });
+    fill.style.setProperty('--p', String((i + 1) / steps.length));
+    nEl.textContent = i + 1; tEl.textContent = steps[i].dataset.t;
+  };
+  const onHow = () => {
+    const line = innerHeight * 0.55; let i = 0;
+    steps.forEach((s, k) => { if (s.getBoundingClientRect().top < line) i = k; });
+    setStep(i);
+  };
+  addEventListener('scroll', () => requestAnimationFrame(onHow), { passive: true }); onHow();
+
+  // 5 · Video placeholder
+  document.querySelector('.video-frame').addEventListener('click', e => { e.currentTarget.querySelector('.ph-tag').textContent = 'The film plays here, with captions'; });
+
+  // Segmented control (R-113): the thumb slides; arrows move the choice
+  const seg = (group, onPick) => {
+    const btns = [...group.querySelectorAll('[role="radio"]')];
+    const pick = (b, focus) => {
+      btns.forEach(o => { const on = o === b; o.setAttribute('aria-checked', String(on)); o.tabIndex = on ? 0 : -1; });
+      group.dataset.pos = String(btns.indexOf(b)); if (focus) b.focus(); onPick(b);
+    };
+    btns.forEach((b, i) => {
+      b.addEventListener('click', () => pick(b));
+      b.addEventListener('keydown', e => {
+        const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (d) { e.preventDefault(); pick(btns[(i + d + btns.length) % btns.length], true); }
+      });
+    });
+    pick(btns.find(b => b.getAttribute('aria-checked') === 'true') || btns[0]);
+  };
+  const xfade = (els, key) => els.forEach(el => el.setAttribute('aria-hidden', String(el.dataset.for !== key)));
+
+  // 6 · Two ways: Daily Green, As needed Blue; dots fill with a short stagger (40ms each, 180ms cap)
+  const waysBox = document.querySelector('.ways-box');
+  const days = [...document.querySelectorAll('.week li')];
+  const names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const wayTexts = [...document.querySelectorAll('.way-text')];
+  const showWay = w => {
+    waysBox.dataset.way = w;
+    const on = days.map((d, k) => w === 'daily' || k === 4 || k === 5);
+    const n = on.filter(Boolean).length;
+    const step = reduce ? 0 : Math.min(40, 180 / Math.max(n - 1, 1));
+    let j = 0;
+    days.forEach((d, k) => {
+      d.classList.toggle('on', on[k]);
+      d.style.setProperty('--d', on[k] ? `${Math.round(j++ * step)}ms` : '0ms');
+      d.setAttribute('aria-label', `${names[k]}: ${on[k] ? 'dose day' : 'no dose'}`);
+    });
+    xfade(wayTexts, w);
+  };
+  seg(document.querySelector('.ways-panel .seg'), b => showWay(b.dataset.way));
+
+  // 10 · Plan: the thumb slides, the billed line and the supply picture follow the choice
+  const supply = document.querySelector('.supply'), billed = document.getElementById('billed');
+  const supplyCaps = [...document.querySelectorAll('.supply-cap span')];
+  let firstPlan = true;
+  seg(document.querySelector('.plan-card .seg'), b => {
+    supply.dataset.plan = b.dataset.plan; xfade(supplyCaps, b.dataset.plan);
+    // Q100: plans of 1, 3 and 6 months; the saving is dollars per order (R-61); 3 and 6 months carry the renewal slot
+    const text = { m: 'Billed for each 1-month order.', q: 'Billed $XXX every 3 months. Save $[amount] per order. [renewal line · legal]', h: 'Billed $XXX every 6 months. Save $[amount] per order. [renewal line · legal]' }[b.dataset.plan];
+    if (firstPlan || reduce) { billed.textContent = text; firstPlan = false; return; }
+    billed.classList.add('is-swap');
+    setTimeout(() => { billed.textContent = text; billed.classList.remove('is-swap'); }, cssMs('--motion-duration-open') * 0.82);
+  });
+
+  // 7 · Treatments: tap mode toggles the detail under the bottle (hover mode is CSS only)
+  document.querySelectorAll('.tx-more').forEach(b => b.addEventListener('click', () => {
+    const open = b.getAttribute('aria-expanded') !== 'true';
+    b.setAttribute('aria-expanded', String(open)); b.closest('.tx').classList.toggle('is-open', open);
+  }));
+
+  // 8 · Reviews carousel
+  const rv = document.querySelector('.rv'), cards = [...rv.children], dots = document.querySelector('.rv-dots');
+  cards.forEach(() => dots.appendChild(document.createElement('span')));
+  const step = () => cards[0].getBoundingClientRect().width + parseFloat(getComputedStyle(rv).columnGap);
+  const onRv = () => { const k = Math.round(rv.scrollLeft / step()); [...dots.children].forEach((d, j) => d.classList.toggle('on', j === k)); };
+  rv.addEventListener('scroll', () => requestAnimationFrame(onRv), { passive: true }); onRv();
+  document.querySelector('.rv-btns .prev').addEventListener('click', () => rv.scrollBy({ left: -step(), behavior: reduce ? 'auto' : 'smooth' }));
+  document.querySelector('.rv-btns .next').addEventListener('click', () => rv.scrollBy({ left: step(), behavior: reduce ? 'auto' : 'smooth' }));
+
+  // 9 · Provider parallax, desktop only (0.85x)
+  const pImg = document.querySelector('.provider-photo img');
+  const wide = matchMedia('(min-width: 1024px)');
+  const onPar = () => {
+    if (reduce || !wide.matches) { pImg.style.transform = ''; return; }
+    const r = pImg.parentElement.getBoundingClientRect();
+    const t = (r.top + r.height / 2 - innerHeight / 2) * 0.15;
+    pImg.style.transform = `translateY(${Math.max(-60, Math.min(0, -30 - t))}px)`;
+  };
+  addEventListener('scroll', () => requestAnimationFrame(onPar), { passive: true }); onPar();
+
+  // 11 · FAQ (R-113): one answer open at a time; height and opacity animate
+  const faqs = [...document.querySelectorAll('.faq details')];
+  const ease = () => cssVal('--motion-easing-ui') || 'ease-out';
+  const setFaq = (d, open) => {
+    const a = d.querySelector('.ans'), ms = cssMs('--motion-duration-open');
+    if (d._anim) { d._anim.cancel(); d._anim = null; }
+    d.classList.toggle('is-open', open);
+    if (open) {
+      d.open = true;
+      if (!ms) return;
+      d._anim = a.animate([{ height: '0px', opacity: 0 }, { height: `${a.scrollHeight}px`, opacity: 1 }], { duration: ms, easing: ease() });
+      d._anim.onfinish = () => { d._anim = null; };
+    } else {
+      if (!ms) { d.open = false; return; }
+      d._anim = a.animate([{ height: `${a.offsetHeight}px`, opacity: 1 }, { height: '0px', opacity: 0 }], { duration: ms, easing: ease() });
+      d._anim.onfinish = () => { d.open = false; d._anim = null; };
+    }
+  };
+  faqs.forEach(d => d.querySelector('summary').addEventListener('click', e => {
+    e.preventDefault();
+    const willOpen = !d.classList.contains('is-open');
+    if (willOpen) faqs.forEach(o => { if (o !== d && o.classList.contains('is-open')) setFaq(o, false); });
+    setFaq(d, willOpen);
+  }));
+
+  // 12 · Final call: the outline draws once, then the long half fills
+  const fc = document.querySelector('.final-cap');
+  const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { fc.classList.add('is-in'); io2.disconnect(); } }), { threshold: 0.6 });
+  io2.observe(fc);
+
+  // 14 · Footer (.ft3): on a narrow footer the columns are a one-open accordion; the consent box must be ticked
+  const ftCols = [...document.querySelectorAll('.ft3__col')];
+  ftCols.forEach(c => c.querySelector('.ft3__colbtn').addEventListener('click', () => {
+    const open = !c.classList.contains('is-open');
+    ftCols.forEach(o => { const on = o === c && open; o.classList.toggle('is-open', on); o.querySelector('.ft3__colbtn').setAttribute('aria-expanded', String(on)); });
+  }));
+  document.querySelectorAll('[data-news3]').forEach(f => f.addEventListener('submit', e => {
+    e.preventDefault();
+    const box = f.querySelector('.check'), st = f.querySelector('.ft3__status');
+    if (!box.checked) { box.setAttribute('aria-invalid', 'true'); st.textContent = 'Tick the box to subscribe.'; return; }
+    box.removeAttribute('aria-invalid');
+    st.textContent = 'Demo only. On the live page a confirmation email follows (double opt-in).';
+  }));
+
+  // Measurement hook: every CTA reports its place
+  document.querySelectorAll('[data-cta]').forEach(a => a.addEventListener('click', () => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'cta_click', placement: a.dataset.cta }); }));
+})();
+</script>
+</body>
+</html>
