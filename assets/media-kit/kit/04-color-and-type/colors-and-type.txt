@@ -1,0 +1,26 @@
+unifiedmeds · COLORS AND TYPE
+Brand Edition 04 · November 18, 2026 · values from tokens/tokens.json
+
+CMYK and Pantone values are not set yet: [CMYK · printer proof, to confirm]. Do not convert by eye.
+
+
+LOGO COLORS (LOGO, APP ICON AND FAVICON ONLY)
+Navy          #0F2E57   RGB  15  46  87   CMYK [to confirm]   Main logo color on light grounds; app icon ground
+Ink           #031D2C   RGB   3  29  44   CMYK [to confirm]   "meds" on light; darkest logo ground
+Sky           #C9DDEA   RGB 201 221 234   CMYK [to confirm]   Reversed logo outline and wordmark
+Logo Blue     #3976C6   RGB  57 118 198   CMYK [to confirm]   Filled half of the reversed seal
+Cream         #F1ECE0   RGB 241 236 224   CMYK [to confirm]   Light ground for the logo
+
+BRAND COLORS (WEBSITE AND PRINT)
+Deep Teal     #264653   RGB  38  70  83   CMYK [to confirm]   Primary ink, dark sections, the ground behind the reversed logo
+Teal Deep     #1C3742   RGB  28  55  66   CMYK [to confirm]   Headlines
+Paper         #FEFCF6   RGB 254 252 246   CMYK [to confirm]   The page
+Mist          #E8E7E1   RGB 232 231 225   CMYK [to confirm]   Alternate band
+Yellow        #FFBE0B   RGB 255 190  11   CMYK [to confirm]   One accent at a time; never a background, never text
+Pastel Blue   #6E8B97   RGB 110 139 151   CMYK [to confirm]   Shapes and surfaces
+Pastel Green  #6A8670   RGB 106 134 112   CMYK [to confirm]   Shapes and icons
+
+TYPE
+DM Serif Display, Regular only: headlines. Google Fonts, SIL Open Font License.
+Inter, 400 to 700: text, labels, buttons. Google Fonts, SIL Open Font License.
+The logo wordmark is artwork (drawn in Outfit Medium). Never retype the logo in any font.
