@@ -1,0 +1,31 @@
+<style>
+  .sections { display: grid; gap: var(--space-12); }
+  .sections figure { margin: 0; display: grid; gap: var(--space-3); }
+  .sections img { width: 100%; height: auto; display: block; border-radius: var(--radius-small); border: 1px solid var(--color-line-base); }
+  .sections figcaption { display: grid; grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr); gap: var(--space-6); }
+  .sections figcaption b { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  @media (max-width: 767px) { .sections figcaption { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); } }
+  .hiw { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--space-3); counter-reset: hiw; }
+  .hiw li { counter-increment: hiw; display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-3); }
+  .hiw li::before { content: counter(hiw, decimal-leading-zero); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-body-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .hiw b { display: block; color: var(--color-text-strong); font-weight: 600; }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Website</span>
+        <h1>Home section library.</h1>
+        <p class="lead">The seven sections of the unifiedmeds homepage, in order, from the designer's Figma (homepage 2673-209). Category and inner pages reuse these sections; no new section types per category. Mobile (390): every section stacks in one column in the same order; the notes say what changes.</p>
+        <nav class="toc" aria-label="On this page"><a href="#sections">Sections</a></nav>
+      </header>
+
+      <section class="sec" id="sections" aria-labelledby="sections-h">
+        <div class="sec-head"><h2 id="sections-h">Sections, top to bottom.</h2></div>
+        <div class="sections">
+          <figure><img src="assets/sections/home-hero.jpg" alt="Hero section" loading="lazy"><figcaption><b>01 · Hero</b><div class="prose"><p>Headline 70/60 (homepage only; 34/40 on mobile), one subhead, Dark and Outline buttons, then under the buttons the consultation slot "[charge line · operations]" (R-62) and "Assessment only. Not a diagnosis." (R-63). A large outline capsule crops the photo at the bottom right. Copy never sits on the face or on the shape (R-110). Mobile: the photo sits above the copy; the buttons stack full width.</p><p class="from">Figma 2673-211</p></div></figcaption></figure>
+          <figure><img src="assets/sections/home-category-gateway.jpg" alt="Category gateway section" loading="lazy"><figcaption><b>02 · Category gateway</b><div class="prose"><p>One category at a time on a dark photo band, with product cards. At launch only Sexual health. A vertical outline capsule crops the right edge.</p><p>Under the product cards: "Prescription treatment is subject to provider approval. Results vary." Product colours mark each card with a dot or an edge, never a ground for text (R-85). Card action "Learn more".</p><p class="from">Figma 2673-228 · product names here: legal to confirm (R-65)</p></div></figcaption></figure>
+          <figure><img src="assets/sections/home-trust-strip.jpg" alt="Trust strip" loading="lazy"><figcaption><b>03 · Trust strip</b><div class="prose"><p>Four short facts with small icons. Facts only; no ratings, reviews or press logos (R-67).</p><p class="from">Figma 2673-384</p></div></figcaption></figure>
+          <figure id="how-it-works"><img src="assets/sections/home-how-it-works.jpg" alt="How it works section" loading="lazy"><figcaption><b>04 · How it works</b><div class="prose"><p>Deep Teal section, four numbered steps; the step circle fills Yellow on hover (R-44). One Yellow button, the only Yellow element in view. Mobile: the steps stack in one column.</p><p><span class="status status--current">Current · q132</span> <b>The one How it works wording</b>, reused word for word on the website, the landing pages and the ads (Figma shows "Start Your Assessment": the button is "Get started", R-55):</p><ol class="hiw"><li><span><b>Tell us what's changed.</b>Complete a private online assessment covering your health, symptoms, and goals.</span></li><li><span><b>A licensed provider reviews your information.</b>Labs may be requested when clinically appropriate.</span></li><li><span><b>Receive a personalized care plan.</b>If treatment is appropriate, your provider will explain the recommended options.</span></li><li><span><b>Stay supported.</b>Access ongoing guidance, follow-up, and adjustments based on your care plan.</span></li></ol><p class="from">Figma 2673-646 · specimens: <a class="link" href="components.html#interactive">Components · Stepper</a></p></div></figcaption></figure>
+          <figure><img src="assets/sections/home-why-unifiedmeds.jpg" alt="Why unifiedmeds section" loading="lazy"><figcaption><b>05 · Why unifiedmeds</b><div class="prose"><p>Four feature icons from the capsule set with a title and one sentence each.</p><p>Icons in Deep Teal, 64 on desktop and 48 on mobile, from the capsule set (R-35; O-06 closed).</p><p class="from">Figma 2673-682</p></div></figcaption></figure>
+          <figure><img src="assets/sections/home-care-support.jpg" alt="Care support section" loading="lazy"><figcaption><b>06 · Care support</b><div class="prose"><p>Three photo cards on Pastel Green: support, delivery, refills. One small Quadrant piece per card.</p><p>Casting: a balanced mix of people of all genders in service and support sections (R-37). Mobile: the cards stack.</p><p class="from">Figma 2817-344</p></div></figcaption></figure>
+          <figure><img src="assets/sections/home-faq.jpg" alt="FAQ section" loading="lazy"><figcaption><b>07 · FAQ</b><div class="prose"><p>Accordion rows, opening in 220ms; a large outline capsule crops the top right corner.</p><p class="from">Figma 2673-784</p></div></figcaption></figure>
+        </div>
+      </section>

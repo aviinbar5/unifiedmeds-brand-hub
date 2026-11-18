@@ -1,0 +1,668 @@
+<style>
+  /* rows: every row holds one aspect ratio, so frames, buttons and captions share one line */
+  .ad-row { display: grid; gap: var(--space-6); align-items: start; margin-bottom: var(--space-8); }
+  .ad-row--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ad-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ad-row--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ad-row--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ad-row--wide { grid-template-columns: minmax(0, 760px); }
+  .ad-row figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .ad-row figcaption { min-height: calc(var(--space-6) * 3); }
+  .row-title { margin: 0 0 var(--space-3); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); text-transform: uppercase; color: var(--color-text-secondary); }
+
+  /* the creative: sizes scale with its own width (container units), so every frame keeps true proportions */
+  .ad { container-type: inline-size; position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-mist); color: var(--color-text-strong); display: flex; flex-direction: column; min-height: 0; }
+  .r-11 { aspect-ratio: 1 / 1; } .r-45 { aspect-ratio: 4 / 5; } .r-916 { aspect-ratio: 9 / 16; } .r-191 { aspect-ratio: 1.91 / 1; } .r-169 { aspect-ratio: 16 / 9; }
+  .ad--dark { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+  .ad--paper { background: var(--color-surface-paper); box-shadow: inset 0 0 0 1px var(--color-line-base); }
+  .ad--wash { background: var(--color-surface-wash-blue); }
+  .pad { padding: 7.4cqw; display: flex; flex-direction: column; gap: 3cqw; flex: 1; position: relative; z-index: 1; }
+  .ad .logo { width: 34cqw; height: auto; display: block; }
+  .ad .hl { margin: 0; font: 400 9.6cqw / 1.08 var(--font-family-serif); color: inherit; max-width: 16ch; }
+  .ad .sub { margin: 0; font: 400 3.8cqw / 1.4 var(--font-family-sans); color: var(--color-text-secondary-on-mist); max-width: 34ch; }
+  .ad--dark .sub { color: var(--color-text-on-dark-muted); }
+  .ad .eyebrow-ad { font: 600 3.2cqw / 1.2 var(--font-family-sans); letter-spacing: 0.06em; text-transform: uppercase; padding-bottom: 1.6cqw; border-bottom: 0.5cqw solid currentColor; align-self: flex-start; }
+  .ad .foot { margin-top: auto; display: flex; flex-direction: column; gap: 2.6cqw; align-items: flex-start; }
+  .ad .cta { display: inline-flex; align-items: center; justify-content: center; height: 9.4cqw; padding: 0 5.6cqw; border-radius: var(--radius-button); background: var(--color-brand-yellow); color: var(--color-brand-deep-teal); font: 500 3.6cqw / 1 var(--font-family-sans); white-space: nowrap; }
+  .ad .legal { font: 400 2.6cqw / 1.35 var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+  .ad--dark .legal { color: var(--color-text-on-dark-muted); }
+
+  /* the capsule: true logo shape (R-105), R-109 line (the two halves with the divider at every size, as in the seal; stroke 0.85% of its length, min 1.5px),
+     R-110 on photos (Paper line plus the long half at the soft opacity). Paths live once in the <defs> below. */
+  .adcap { position: absolute; display: block; overflow: visible; pointer-events: none; color: var(--color-surface-wash-blue); opacity: var(--opacity-capsule); }
+  .adcap--h { width: var(--len); height: auto; aspect-ratio: 1000 / 358.33; }
+  .adcap--v { height: var(--len); width: auto; aspect-ratio: 358.33 / 1000; }
+  .adcap .ln { fill: none; stroke: currentColor; stroke-width: max(var(--size-capsule-stroke-min, 1.5px), calc(var(--len) * var(--size-capsule-stroke-ratio, 0.0085))); }
+  .adcap .lh { fill: currentColor; opacity: var(--opacity-capsule-soft); }
+  .adcap--photo { color: var(--color-surface-paper); opacity: 1; }
+  .adcap--green { color: var(--color-brand-green); }
+  .adcap--blue { color: var(--color-brand-blue); opacity: 1; }
+  .stamp { position: absolute; z-index: 3; width: 10cqw; height: auto; pointer-events: none; }
+
+  /* photo templates: copy sits on a solid panel, never on the face */
+  .ad .photo { position: relative; flex: none; background: var(--color-surface-mist); }
+  .ad .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ad .ph { position: absolute; left: 3cqw; top: 3cqw; z-index: 2; padding: 0.8cqw 1.8cqw; border-radius: var(--radius-button); background: var(--color-surface-paper); color: var(--color-text-strong); font: 600 2.4cqw / 1.3 var(--font-family-sans); letter-spacing: 0.02em; }
+  .ad .panel { background: var(--color-brand-deep-teal); border-radius: var(--radius-small); padding: 5cqw; display: flex; flex-direction: column; gap: 3cqw; }
+
+  /* 9:16 frames: wider type, safe-zone guides */
+  .r-916 .pad { padding: 7cqw 7cqw 0; }
+  .r-916 .hl { font-size: 10.4cqw; }
+  .r-916 .sub { font-size: 4.6cqw; }
+  .r-916 .cta { height: 11cqw; font-size: 4.4cqw; padding: 0 7cqw; }
+  .r-916 .legal { font-size: 3.4cqw; }
+  .zone { position: absolute; left: 0; right: 0; z-index: 3; pointer-events: none; border: 1px dashed var(--color-text-on-dark-muted); background: color-mix(in srgb, var(--color-surface-paper) 14%, transparent); display: grid; place-items: center; font: 600 2.8cqw / 1 var(--font-family-sans); letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-text-on-dark); }
+  .ad--paper .zone, .ad:not(.ad--dark) .zone { border-color: var(--color-text-secondary); background: color-mix(in srgb, var(--color-brand-deep-teal) 7%, transparent); color: var(--color-text-secondary); }
+  .zone--top { top: 0; height: 14%; }
+  .zone--story-bottom { bottom: 0; height: 14%; }
+  .zone--reels-bottom { bottom: 0; height: 35%; }
+  .zone--rail { top: 14%; bottom: 35%; left: auto; width: 13%; }
+  .zone--tt-bottom { bottom: 0; height: 24%; }
+  .zone--tt-top { top: 0; height: 8%; }
+  .zone--skip { top: auto; left: auto; right: 0; bottom: 6%; width: 24%; height: 16%; }
+  .zone--info { top: auto; right: auto; left: 0; bottom: 0; width: 46%; height: 18%; }
+  .in-safe-reels { position: absolute; left: 7cqw; right: 7cqw; top: 15%; bottom: 36%; display: flex; flex-direction: column; gap: 3cqw; z-index: 2; }
+  .in-safe-story { position: absolute; left: 7cqw; right: 7cqw; top: 15%; bottom: 15%; display: flex; flex-direction: column; gap: 3cqw; z-index: 2; }
+  .in-safe-tt { position: absolute; left: 7cqw; right: 16cqw; top: 10%; bottom: 26%; display: flex; flex-direction: column; gap: 3cqw; z-index: 2; }
+  .time { position: absolute; right: 3cqw; top: 3cqw; z-index: 4; padding: 0.8cqw 2cqw; border-radius: var(--radius-button); background: var(--color-brand-teal-deep); color: var(--color-text-on-dark); font: 600 3cqw / 1.2 var(--font-family-sans); }
+  .r-169 .time { font-size: 1.8cqw; }
+
+  /* captions burned into video and UGC: Paper boxes, 5px corners, Deep Teal text */
+  .capbar { align-self: flex-start; max-width: 100%; padding: 1.6cqw 2.8cqw; border-radius: var(--radius-button); background: var(--color-surface-paper); color: var(--color-brand-deep-teal); font: 600 4.6cqw / 1.3 var(--font-family-sans); }
+  .handle { display: inline-flex; align-items: center; gap: 2cqw; font: 600 3.6cqw / 1 var(--font-family-sans); color: var(--color-text-on-dark); }
+  .handle i { width: 8cqw; height: 8cqw; border-radius: 50%; background: var(--color-surface-wash-blue); display: block; overflow: hidden; }
+  .handle i img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ui-card { background: var(--color-surface-paper); border-radius: var(--radius-small); padding: 4cqw; display: grid; gap: 2.4cqw; color: var(--color-text-strong); }
+  .ui-card b { font: 600 4cqw / 1.3 var(--font-family-sans); }
+  .ui-opt { border: 1px solid var(--color-line-base); border-radius: var(--radius-button); padding: 2.4cqw 3cqw; font: 400 3.6cqw / 1.3 var(--font-family-sans); }
+  .ui-opt.on { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); }
+  .ad .mini { width: 26cqw; height: auto; display: block; }
+  .seal-end { position: absolute; inset: 0; display: grid; place-items: center; background: var(--color-logo-cream); }
+  .seal-end img { width: 62cqw; height: auto; }
+
+  /* carousel: one capsule outline runs across the cards */
+  .carousel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+  .carousel figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  /* story carousel: progress segments at the top of each frame */
+  .segs { position: absolute; left: 3cqw; right: 3cqw; top: 3cqw; z-index: 5; display: flex; gap: 1.2cqw; }
+  .segs i { flex: 1; height: 0.9cqw; border-radius: var(--radius-xs); background: color-mix(in srgb, var(--color-surface-paper) 40%, transparent); }
+  .segs i.on { background: var(--color-surface-paper); }
+  .ad:not(.ad--dark) .segs i { background: color-mix(in srgb, var(--color-brand-deep-teal) 25%, transparent); }
+  .ad:not(.ad--dark) .segs i.on { background: var(--color-brand-deep-teal); }
+
+  /* channel chips: neutral glyphs, the channel name always written out (no platform logos) */
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .ch { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--space-8); padding: 0 var(--space-2) 0 var(--space-1); border: 1px solid var(--color-line-base); border-radius: var(--radius-xs); background: var(--color-surface-card); font: 500 var(--type-desktop-compact-size) / 1.2 var(--font-family-sans); color: var(--color-text-primary); }
+  .ch i { display: inline-grid; place-items: center; width: var(--space-6); height: var(--space-6); border: 1.5px solid var(--color-text-primary); border-radius: var(--radius-xs); font: 700 10px / 1 var(--font-family-sans); font-style: normal; letter-spacing: 0.02em; }
+
+  /* format catalogue */
+  .fmt { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .fmt-card { display: grid; grid-template-columns: var(--space-14) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); align-items: start; }
+  .fmt-card h3 { margin: 0; font: 600 var(--type-desktop-body-size) / 1.3 var(--font-family-sans); color: var(--color-text-strong); }
+  .fmt-card p { margin: var(--space-1) 0 var(--space-3); color: var(--color-text-secondary); font-size: var(--type-desktop-compact-size); }
+  .fmt-card a.link { font-size: var(--type-desktop-compact-size); }
+  .ratio { display: grid; place-items: center; width: var(--space-14); height: var(--space-14); }
+  .ratio span { display: block; background: var(--color-surface-mist); border: 1.5px solid var(--color-brand-deep-teal); border-radius: 2px; max-width: 100%; max-height: 100%; }
+
+  /* tabs (R-113): the selected thumb slides, the panel cross-fades */
+  .page > .sec, .page > .sec > * { min-width: 0; }
+  .ad-tabs { position: relative; display: inline-flex; gap: 0; padding: var(--space-1); border-radius: var(--radius-small); background: var(--color-surface-mist); max-width: 100%; flex-wrap: wrap; }
+  .ad-tabs button { position: relative; z-index: 1; min-height: var(--size-tap-min); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-xs); background: none; color: var(--color-text-primary); font: 500 var(--type-desktop-compact-size) / 1 var(--font-family-sans); cursor: pointer; white-space: nowrap; transition: color var(--motion-duration-open) var(--motion-easing-ui); }
+  .ad-tabs button[aria-selected="true"] { color: var(--color-text-on-dark); }
+  .ad-tabs button:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+  .ad-tabs .thumb { position: absolute; z-index: 0; top: 0; left: 0; width: 0; height: 0; border-radius: var(--radius-xs); background: var(--color-brand-deep-teal); }
+  .ad-tabs.ready .thumb { transition: transform var(--motion-duration-open) var(--motion-easing-ui), width var(--motion-duration-open) var(--motion-easing-ui), height var(--motion-duration-open) var(--motion-easing-ui); }
+  .tabpanel { margin-top: var(--space-5); }
+  .tabpanel.in { animation: ad-fade 180ms var(--motion-easing-ui); }
+  .tabpanel[hidden] { display: none; }
+  @keyframes ad-fade { from { opacity: 0; } to { opacity: 1; } }
+  .chk { font-weight: 600; color: var(--color-text-secondary); white-space: nowrap; }
+  .bp td:first-child { min-width: calc(var(--space-24) * 1.3); }
+  .bp td { vertical-align: top; }
+
+  /* colour pairings */
+  .pairs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .pairs--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pairs figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .sw { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  .sw span { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--type-desktop-caption-size); color: var(--color-text-secondary); }
+  .sw span::before { content: ""; width: var(--space-3); height: var(--space-3); border-radius: 2px; border: 1px solid var(--color-line-mid); background: var(--c); }
+  .ex-tag { justify-self: start; display: inline-flex; align-items: center; gap: var(--space-1); padding: 0 var(--space-2); border-radius: var(--radius-xs); font: 600 var(--type-desktop-caption-size) / 1.8 var(--font-family-sans); }
+  .ex-tag--right { background: var(--color-surface-wash-green); color: var(--color-brand-teal-deep); }
+  .ex-tag--wrong { background: var(--color-surface-mist); color: var(--color-brand-coral); border: 1px solid var(--color-brand-coral); }
+  .hl-yellow { background: var(--color-brand-yellow); color: var(--color-brand-deep-teal); padding: 0 1cqw; }
+  .ad .hl.weak-green { color: var(--color-brand-green); }
+
+  /* display banners: exact IAB ratios, scaled to the column */
+  .banners { display: grid; gap: var(--space-6); max-width: 760px; }
+  .banners figure { margin: 0; display: grid; gap: var(--space-2); align-content: start; }
+  .bn { container-type: inline-size; position: relative; overflow: hidden; border: 1px solid var(--color-line-base); border-radius: 2px; background: var(--color-surface-paper); color: var(--color-text-strong); }
+  .bi { position: absolute; inset: 0; display: flex; align-items: center; }
+  .bn .logo { height: auto; display: block; }
+  .bn .hl { margin: 0; font-family: var(--font-family-serif); font-weight: 400; line-height: 1.1; }
+  .bn .cta { display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-button); background: var(--color-brand-yellow); color: var(--color-brand-deep-teal); font-family: var(--font-family-sans); font-weight: 500; white-space: nowrap; }
+  .bn .legal { font-family: var(--font-family-sans); color: var(--color-text-secondary); line-height: 1.3; }
+  .bn--dark { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); border-color: var(--color-brand-deep-teal); }
+  .bn--dark .legal { color: var(--color-text-on-dark-muted); }
+  .b-728 { aspect-ratio: 728 / 90; } .b-728 .bi { padding: 0 2.4cqw; gap: 3cqw; }
+  .b-728 .logo { width: 17cqw; } .b-728 .hl { font-size: 3.2cqw; flex: 1; } .b-728 .cta { height: 6.4cqw; padding: 0 2.6cqw; font-size: 1.9cqw; } .b-728 .legal { font-size: 1.15cqw; width: 12cqw; }
+  .b-320 { aspect-ratio: 320 / 50; } .b-320 .bi { padding: 0 3cqw; gap: 3cqw; }
+  .b-320 .logo { width: 30cqw; } .b-320 .hl { display: none; } .b-320 .cta { height: 9.4cqw; padding: 0 4cqw; font-size: 4.2cqw; margin-left: auto; } .b-320 .legal { font-size: 2.4cqw; width: 22cqw; }
+  .b-300 { aspect-ratio: 300 / 250; } .b-300 .bi { flex-direction: column; align-items: flex-start; padding: 7cqw; gap: 4cqw; }
+  .b-300 .logo { width: 44cqw; } .b-300 .hl { font-size: 10cqw; } .b-300 .cta { height: 12cqw; padding: 0 6cqw; font-size: 5cqw; margin-top: auto; } .b-300 .legal { font-size: 3.4cqw; }
+  .b-600 { aspect-ratio: 300 / 600; } .b-600 .bi { flex-direction: column; align-items: flex-start; padding: 8cqw; gap: 6cqw; }
+  .b-600 .logo { width: 60cqw; } .b-600 .hl { font-size: 13cqw; } .b-600 .cta { height: 14cqw; padding: 0 7cqw; font-size: 5.6cqw; margin-top: auto; } .b-600 .legal { font-size: 4cqw; }
+  .b-160 { aspect-ratio: 160 / 600; } .b-160 .bi { flex-direction: column; align-items: flex-start; padding: 10cqw; gap: 8cqw; }
+  .b-160 .logo { width: 80cqw; } .b-160 .hl { font-size: 16cqw; } .b-160 .cta { height: 22cqw; padding: 0 8cqw; font-size: 9cqw; margin-top: auto; } .b-160 .legal { font-size: 6.4cqw; }
+  .bn-stack { display: grid; grid-template-columns: minmax(0, 300fr) minmax(0, 300fr) minmax(0, 160fr); gap: var(--space-4); align-items: start; }
+
+  /* LinkedIn document pages */
+  .doc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+  .doc figure { margin: 0; display: grid; gap: var(--space-2); }
+  .pg { position: absolute; right: 4cqw; bottom: 4cqw; font: 600 3cqw / 1 var(--font-family-sans); color: inherit; opacity: 0.7; }
+
+  /* device mockups: generic UI only, never a real platform screen */
+  .mx { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: var(--space-6); align-items: center; margin: 0 0 var(--space-10); }
+  .mx > figcaption { grid-column: 1 / -1; }
+  .mx-desk { border: 1px solid var(--color-line-strong); border-radius: var(--radius-small); overflow: hidden; background: var(--color-surface-card); }
+  .mx-bar { display: flex; align-items: center; gap: var(--space-2); height: var(--space-8); padding: 0 var(--space-3); background: var(--color-surface-mist); border-bottom: 1px solid var(--color-line-base); }
+  .mx-bar i { width: var(--space-2); height: var(--space-2); border-radius: 50%; background: var(--color-line-mid); }
+  .mx-bar span { flex: 1; height: var(--space-4); margin-left: var(--space-3); border-radius: var(--radius-xs); background: var(--color-surface-card); }
+  .mx-screen { position: relative; aspect-ratio: 16 / 10; background: var(--color-surface-mist); overflow: hidden; display: grid; grid-template-columns: 1fr minmax(0, 2fr) 1fr; gap: 3%; padding: 3% 4% 0; }
+  .mx-screen--stage { display: grid; place-items: center; grid-template-columns: 1fr; padding: 3%; background: var(--color-brand-teal-deep); }
+  .mx-screen--stage .ad { height: 100%; width: auto; }
+  .mx-screen--video { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); padding: 3%; background: var(--color-surface-paper); }
+  .mx-screen--article { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); padding: 3%; background: var(--color-surface-paper); align-content: start; }
+  .mx-col { display: grid; gap: var(--space-2); align-content: start; }
+  .mx-line { display: block; height: var(--space-2); border-radius: 2px; background: var(--color-line-strong); }
+  .mx-line.s { width: 60%; } .mx-line.t { height: var(--space-4); width: 80%; background: var(--color-line-mid); }
+  .mx-post { background: var(--color-surface-card); border-radius: var(--radius-xs); padding: 3%; display: grid; gap: 6px; align-content: start; }
+  .mx-head { display: flex; gap: 6px; align-items: center; }
+  .mx-head b { width: 18px; height: 18px; border-radius: 50%; background: var(--color-brand-deep-teal); flex: none; }
+  .mx-head span { font: 600 10px / 1.2 var(--font-family-sans); color: var(--color-text-strong); }
+  .mx-head em { font: 400 9px / 1.2 var(--font-family-sans); font-style: normal; color: var(--color-text-secondary); }
+  .mx-acts { display: flex; gap: 8px; } .mx-acts i { height: 6px; width: 22%; border-radius: 2px; background: var(--color-line-base); }
+  .mx-phone { justify-self: center; width: min(100%, 260px); aspect-ratio: 9 / 19.5; border: 6px solid var(--color-brand-teal-deep); border-radius: calc(var(--radius-card) * 2); overflow: hidden; background: var(--color-surface-mist); position: relative; display: flex; flex-direction: column; }
+  .mx-status { flex: none; height: 22px; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; font: 600 9px / 1 var(--font-family-sans); color: var(--color-text-strong); background: var(--color-surface-card); }
+  .mx-phone .mx-feed { flex: 1; display: grid; gap: 6px; align-content: start; padding: 6px; overflow: hidden; }
+  .mx-phone--full .mx-feed { padding: 0; }
+  .mx-phone--full .ad { position: absolute; inset: 0; aspect-ratio: auto; border-radius: 0; }
+  .mx-player { position: relative; aspect-ratio: 16 / 9; background: var(--color-brand-teal-deep); overflow: hidden; border-radius: var(--radius-xs); }
+  .mx-player .ad { position: absolute; inset: 0; border-radius: 0; }
+  .mx-skip { position: absolute; z-index: 6; right: 0; bottom: 14%; padding: 4px 8px; background: color-mix(in srgb, var(--color-brand-teal-deep) 80%, transparent); color: var(--color-text-on-dark); font: 600 9px / 1.2 var(--font-family-sans); border: 1px solid var(--color-text-on-dark-muted); border-right: 0; }
+  .mx-adlabel { position: absolute; z-index: 6; left: 6px; bottom: 6px; padding: 2px 6px; border-radius: 2px; background: var(--color-surface-paper); color: var(--color-brand-teal-deep); font: 700 8px / 1.3 var(--font-family-sans); }
+  .mx-rail { position: absolute; z-index: 6; right: 6px; bottom: 26%; display: grid; gap: 10px; }
+  .mx-rail i { width: 18px; height: 18px; border-radius: 50%; background: color-mix(in srgb, var(--color-surface-paper) 70%, transparent); }
+  .mx-under { position: absolute; z-index: 6; left: 8px; right: 34px; bottom: 8%; display: grid; gap: 4px; }
+  .mx-under i { height: 5px; border-radius: 2px; background: color-mix(in srgb, var(--color-surface-paper) 70%, transparent); }
+  .mx-under b { height: 22px; border-radius: var(--radius-xs); background: var(--color-surface-paper); }
+  .mx-dots { display: flex; gap: 4px; justify-content: center; } .mx-dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--color-line-mid); } .mx-dots i.on { background: var(--color-brand-deep-teal); }
+  .mx-car { display: grid; grid-template-columns: 82% 82%; gap: 4px; overflow: hidden; }
+  .mx-sticky { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; padding: 4px; background: var(--color-surface-card); border-top: 1px solid var(--color-line-base); }
+
+  /* motion demos */
+  .mo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .mo figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .mo .stage { position: relative; }
+  .mo-bar { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; margin-bottom: var(--space-5); }
+  .mo-bar label { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--size-tap-min); font-size: var(--type-desktop-compact-size); color: var(--color-text-primary); cursor: pointer; }
+  .mo-bar input { width: 20px; height: 20px; accent-color: var(--color-brand-deep-teal); }
+  .fr { position: absolute; inset: 0; display: flex; flex-direction: column; }
+  .mo-frames .fr2, .mo-frames .fr3 { opacity: 0; }
+  .mo-frames.is-playing .fr1 { animation: fr-out var(--motion-duration-wipe) var(--motion-easing-ui) 1.6s both; }
+  .mo-frames.is-playing .fr2 { animation: fr-in var(--motion-duration-wipe) var(--motion-easing-ui) 1.6s both, fr-push var(--motion-duration-shape) var(--motion-easing-enter) 3.4s forwards; }
+  .mo-frames.is-playing .fr3 { animation: fr-push-in var(--motion-duration-shape) var(--motion-easing-enter) 3.4s both; }
+  @keyframes fr-out { to { opacity: 0; } }
+  @keyframes fr-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fr-push { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+  @keyframes fr-push-in { from { opacity: 1; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+  .mo-head .ln-a { display: block; }
+  .mo-head.is-playing .ln-a { animation: rise var(--motion-duration-reveal) var(--motion-easing-enter) both; animation-delay: calc(var(--i) * var(--motion-stagger) + 300ms); }
+  .mo-head.is-playing .sub, .mo-head.is-playing .foot { animation: rise var(--motion-duration-reveal) var(--motion-easing-enter) both; animation-delay: calc(3 * var(--motion-stagger) + 300ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(var(--motion-distance-rise)); } to { opacity: 1; transform: none; } }
+  .mo-icon .ic { width: 34cqw; height: auto; display: block; }
+  .mo-icon.is-playing .ic { animation: rise var(--motion-duration-reveal) var(--motion-easing-enter) 300ms both; }
+  .mo-icon.is-playing .adcap .ln { stroke-dasharray: 1; animation: draw var(--motion-duration-shape) var(--motion-easing-ui) 700ms both; }
+  @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  .mo-cta .cta { opacity: 1; }
+  .mo-cta.is-playing .cta, .mo-cta.is-playing .legal { animation: rise var(--motion-duration-reveal) var(--motion-easing-enter) 2.2s both; }
+  .mo-cta.is-playing .capbar { animation: fr-out var(--motion-duration-open) var(--motion-easing-ui) 2s both; }
+  .mo-end .seal-end img { width: 56cqw; }
+  .mo-end.is-playing .seal-end { animation: fr-in var(--motion-duration-wipe) var(--motion-easing-ui) 600ms both; }
+  .mo-end.is-playing .seal-end img { animation: rise var(--motion-duration-shape) var(--motion-easing-enter) 900ms both; }
+  /* reduced motion: the end state at once, nothing moves (also the preview checkbox) */
+  @media (prefers-reduced-motion: reduce) {
+    .mo .is-playing *, .mo .is-playing .adcap .ln { animation: none !important; }
+    .mo-frames .fr1, .mo-frames .fr2 { opacity: 0; } .mo-frames .fr3 { opacity: 1; }
+    .ad-tabs.ready .thumb, .ad-tabs button { transition: none; } .tabpanel.in { animation: none; }
+  }
+  .rm .mo .is-playing *, .rm .mo .is-playing .adcap .ln { animation: none !important; }
+  .rm .mo-frames .fr1, .rm .mo-frames .fr2 { opacity: 0; } .rm .mo-frames .fr3 { opacity: 1; }
+
+  @media (max-width: 1023px) {
+    .ad-row--4, .ad-row--5, .carousel, .pairs--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ad-row--3, .pairs, .mo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fmt { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 767px) {
+    .mx { grid-template-columns: minmax(0, 1fr); }
+    .mx .mx-phone { order: -1; }
+    .doc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 599px) {
+    .ad-row--2, .ad-row--3, .pairs, .mo { grid-template-columns: minmax(0, 1fr); }
+    .ad-row figcaption { min-height: 0; }
+    .fmt-card { grid-template-columns: minmax(0, 1fr); }
+    .bn-stack { grid-template-columns: minmax(0, 300fr) minmax(0, 160fr); }
+    .bn-stack figure:nth-child(2) { grid-column: 1; }
+    .ad-tabs button { padding: 0 var(--space-3); }
+  }
+  .rule > .status { justify-self: start; }
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><path id="ad-line-h" d="M550.41 12.04L167.12 12.04A167.12 167.12 0 0 0 167.12 346.29L550.41 346.29M550.41 0L820.83 0A179.17 179.17 0 0 1 820.83 358.33L550.41 358.33Z" vector-effect="non-scaling-stroke" pathLength="1"/><path id="ad-line-v" d="M346.29 550.41L346.29 167.12A167.12 167.12 0 0 0 12.04 167.12L12.04 550.41M358.33 550.41L358.33 820.83A179.17 179.17 0 0 1 0 820.83L0 550.41Z" vector-effect="non-scaling-stroke" pathLength="1"/><path id="ad-half-h" d="M537.66 24.79L167.12 24.79A154.37 154.37 0 0 0 167.12 333.54L537.66 333.54"/><path id="ad-half-v" d="M333.54 537.66L333.54 167.12A154.37 154.37 0 0 0 24.79 167.12L24.79 537.66"/></defs></svg>
+      <header class="page-head">
+        <span class="eyebrow">Marketing</span>
+        <h1>Ads.</h1>
+        <p class="lead">Paid ad templates for Meta, TikTok, YouTube and Google, LinkedIn and X: every format, the channels it runs on, each channel's own best practice, the ads in context on a phone and a desktop, and how they move. Paid formats face a hostile audience and platforms that crop, so they carry stricter rules than the website. Every line is a candidate for legal review.</p>
+        <nav class="toc" aria-label="On this page"><a href="#rules">Paid rules</a><a href="#policy">Health ad policy</a><a href="#formats">Formats and channels</a><a href="#practice">Best practice by channel</a><a href="#colour">Colour</a><a href="#static">Static</a><a href="#photo">Photo</a><a href="#video">Vertical video</a><a href="#ugc">Creator-style</a><a href="#carousel">Carousel</a><a href="#story-carousel">Story carousel</a><a href="#landscape">16:9 video</a><a href="#display">Display</a><a href="#linkedin">LinkedIn</a><a href="#context">In context</a><a href="#motion">Animation</a><a href="#before">Before a campaign</a></nav>
+      </header>
+
+      <div class="grid-2"><div class="rule"><span class="status status--current">Current</span><p>Approved by Avi, with every format and channel, best practice per channel, device mockups, an animation section and colour pairings. Every ad is approved by legal before it runs (R-121); How it works uses the four steps of the website, word for word. Specs marked <span class="chk">[check]</span> change often: confirm them in each platform's ad specs before a campaign. Capsules follow R-109 (both halves and the divider, stroke 0.85% of the length) and R-110 on photos; two shapes per surface at most (R-106).</p></div>
+      <div class="rule"><span class="status status--proposed">To confirm</span><p>Every headline and line is a candidate until legal approves it. Health ad certification on each channel is the first blocker (see Health ad policy). Photos are Pexels stand-ins, not approved, to replace (R-39, O-13); the assessment length stays "[about N minutes · O-12]" wherever a length is shown.</p></div></div>
+
+      <section class="sec" id="rules" aria-labelledby="rules-h">
+        <div class="sec-head"><h2 id="rules-h">Paid rules.</h2><p>The rules on <a class="link" href="content.html">Voice and compliance</a>, applied to paid media.</p></div>
+        <div class="grid-2">
+          <div class="rule rule--do"><b>Headline of nine words or fewer.</b><p>It must work without the image and with the sound off.</p></div>
+          <div class="rule rule--do"><b>Everything critical inside the safe area.</b><p>Platforms crop and lay their own buttons over the creative. The dashed areas below mark what stays clear, per channel.</p></div>
+          <div class="rule rule--do"><b>The legal line lives in the creative.</b><p>"Assessment only. Not a diagnosis." inside the ad or the video's end card, never only in the caption (R-63).</p></div>
+          <div class="rule rule--do"><b>One CTA: "Get started".</b><p>Yellow, the only Yellow in the unit, a rectangle with 5px corners (R-11, R-55).</p></div>
+          <div class="rule rule--do"><b>Two shapes per surface, at most.</b><p>The capsule (true shape, both halves and the divider, like the seal) or Quadrant pieces; on a photo the logo icon counts as one of the two (R-106, R-110).</p></div>
+          <div class="rule rule--do"><b>The capsule on a photo.</b><p>Paper line on a dark or busy photo, Deep Teal on a light one, the long half filled at the soft opacity. It enters from an edge, toward the subject, never over a face or under text (R-110).</p></div>
+          <div class="rule rule--dont"><b>No drug names, no claims.</b><p>No prescription name, benefit, price, statistic, review, result or before/after in any ad (R-58, R-61, R-65, R-67).</p></div>
+          <div class="rule rule--dont"><b>No personal attributes.</b><p>Never "Do you have…", "your condition" or anything that says what the viewer has. Meta and Google reject it, and it breaks discretion.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="policy" aria-labelledby="policy-h">
+        <div class="sec-head"><h2 id="policy-h">Health ad policy.</h2><p>Prescription treatment and telehealth are restricted categories on every paid channel. Nothing runs until the account is certified and legal has signed the creative.</p></div>
+        <div class="rule"><span class="status status--proposed">Blocker · legal</span><p>Meta and Google both require LegitScript certification (and their own approval) before ads for prescription treatment or telehealth can run. This is the first item before any campaign. Policies differ by country and change; every line below is <span class="chk">[check]</span> with legal.</p></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Channel</th><th>What it means for unifiedmeds</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><b>Meta</b> (Facebook, Instagram, Threads)</td><td>LegitScript certification plus Meta's written permission for prescription drug and telehealth ads. Audience 18+. No personal attributes in copy. The landing page must match the ad. No targeting by health condition.</td><td><span class="status status--proposed">Required</span></td></tr>
+            <tr><td><b>Google and YouTube</b></td><td>Healthcare and medicines policy: online pharmacy and telehealth advertisers apply for certification (LegitScript in the US) before ads show. Prescription drug terms in ads and keywords are restricted. <span class="chk">[check]</span></td><td><span class="status status--proposed">Required</span></td></tr>
+            <tr><td><b>TikTok</b></td><td>Prescription drug ads are not allowed in most markets; telehealth is restricted by region. Organic TikTok carries every content type after legal review (U-27, <a class="link" href="social-tiktok.html">TikTok kit</a>); paid TikTok keeps these stricter limits until legal confirms what may run. <span class="chk">[check]</span></td><td><span class="status">Likely not allowed</span></td></tr>
+            <tr><td><b>LinkedIn</b></td><td>Prescription drugs are a restricted or prohibited category; brand and hiring messages only until legal confirms. <span class="chk">[check]</span></td><td><span class="status">To confirm</span></td></tr>
+            <tr><td><b>X</b></td><td>Healthcare ads need prior approval; prescription drug ads are limited to approved advertisers in some countries. <span class="chk">[check]</span></td><td><span class="status">To confirm</span></td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="formats" aria-labelledby="formats-h">
+        <div class="sec-head"><h2 id="formats-h">Formats and channels.</h2><p>Every ad format we use, its size and the channels where it runs. The glyphs are neutral labels, never the platforms' own logos. Make the master at the largest size; every other size is a recomposition, never a stretch.</p></div>
+        <div class="fmt"><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:56px;height:56px"></span></span><div><h3>Feed square <span class="from">· 1:1 · 1080 × 1080</span></h3><p>Image or video. The format that fits the most placements.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">IG</i>Instagram</li><li class="ch"><i aria-hidden="true">TH</i>Threads</li><li class="ch"><i aria-hidden="true">LI</i>LinkedIn</li><li class="ch"><i aria-hidden="true">X</i>X</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#static">See Static</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:45px;height:56px"></span></span><div><h3>Feed portrait <span class="from">· 4:5 · 1080 × 1350</span></h3><p>The feed default on a phone: the most screen per post.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">IG</i>Instagram</li><li class="ch"><i aria-hidden="true">TH</i>Threads</li><li class="ch"><i aria-hidden="true">LI</i>LinkedIn</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#static">See Static</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:56px;height:29px"></span></span><div><h3>Landscape image <span class="from">· 1.91:1 · 1200 × 628</span></h3><p>Link ads, LinkedIn single image, X cards, Google responsive display.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">LI</i>LinkedIn</li><li class="ch"><i aria-hidden="true">X</i>X</li><li class="ch"><i aria-hidden="true">GD</i>Google Display</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#linkedin">See LinkedIn</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:32px;height:56px"></span></span><div><h3>Story <span class="from">· 9:16 · 1080 × 1920</span></h3><p>Full screen, between friends' stories; tap to skip.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">IG</i>Instagram</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#photo">See Photo</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:32px;height:56px"></span></span><div><h3>Story carousel <span class="from">· 9:16 · 2 or 3 frames</span></h3><p>Several story frames in one ad, read in sequence. Up to 3 frames in Stories [check].</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">IG</i>Instagram</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#story-carousel">See Story carousel</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:32px;height:56px"></span></span><div><h3>Vertical video <span class="from">· 9:16 · 1080 × 1920</span></h3><p>Reels, TikTok in-feed and YouTube Shorts: sound on, a right-hand rail and a caption block.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">IG</i>Instagram</li><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">TT</i>TikTok</li><li class="ch"><i aria-hidden="true">YT</i>YouTube</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#video">See Vertical video</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:56px;height:56px"></span></span><div><h3>Carousel <span class="from">· 1:1 or 4:5 · 2 to 10 cards</span></h3><p>One idea per card, read left to right. X allows 2 to 6 [check].</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">FB</i>Facebook</li><li class="ch"><i aria-hidden="true">IG</i>Instagram</li><li class="ch"><i aria-hidden="true">LI</i>LinkedIn</li><li class="ch"><i aria-hidden="true">X</i>X</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#carousel">See Carousel</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:56px;height:32px"></span></span><div><h3>Landscape video <span class="from">· 16:9 · 1920 × 1080</span></h3><p>YouTube in-stream (skippable after 5 s) and bumper (6 s); video on X, LinkedIn and desktop feeds.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">YT</i>YouTube</li><li class="ch"><i aria-hidden="true">X</i>X</li><li class="ch"><i aria-hidden="true">LI</i>LinkedIn</li><li class="ch"><i aria-hidden="true">FB</i>Facebook</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#landscape">See 16:9 video</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:56px;height:47px"></span></span><div><h3>Display banners <span class="from">· 300 × 250 · 728 × 90 · 320 × 50 · 300 × 600 · 160 × 600</span></h3><p>Google Display Network. Prefer responsive display, built from our image, logo and lines.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">GD</i>Google Display</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#display">See Display</a></p></div></article><article class="fmt-card"><span class="ratio" aria-hidden="true"><span style="width:45px;height:56px"></span></span><div><h3>Document <span class="from">· 1:1 or 4:5 pages · PDF</span></h3><p>A short PDF read in the feed, page by page. LinkedIn only.</p><ul class="chips" aria-label="Runs on"><li class="ch"><i aria-hidden="true">LI</i>LinkedIn</li></ul><p style="margin:var(--space-3) 0 0"><a class="link" href="#linkedin">See LinkedIn</a></p></div></article></div>
+      </section>
+
+      <section class="sec" id="practice" aria-labelledby="practice-h">
+        <div class="sec-head"><h2 id="practice-h">Best practice by channel.</h2><p>Each channel's own rules for every format it runs. Pick a channel. Sources: each platform's ad specs and creative guides; limits marked [check] change often.</p></div>
+        <div class="ad-tabs" role="tablist" aria-label="Channel"><span class="thumb" aria-hidden="true"></span><button type="button" role="tab" id="tab-meta" aria-controls="pan-meta" aria-selected="true" tabindex="0">Meta</button><button type="button" role="tab" id="tab-tiktok" aria-controls="pan-tiktok" aria-selected="false" tabindex="-1">TikTok</button><button type="button" role="tab" id="tab-google" aria-controls="pan-google" aria-selected="false" tabindex="-1">YouTube and Google</button><button type="button" role="tab" id="tab-linkedin" aria-controls="pan-linkedin" aria-selected="false" tabindex="-1">LinkedIn</button><button type="button" role="tab" id="tab-x" aria-controls="pan-x" aria-selected="false" tabindex="-1">X</button></div>
+        <div class="tabpanel" role="tabpanel" id="pan-meta" aria-labelledby="tab-meta"><p class="from">Meta: Facebook, Instagram, Threads.</p><div class="table-wrap"><table class="bp"><thead><tr><th>Format</th><th>Size (px)</th><th>Safe zone</th><th>Text</th><th>First 3 seconds</th><th>Sound and captions</th><th>Length</th><th>File limit</th></tr></thead><tbody><tr><td><b>Feed image 1:1 and 4:5</b></td><td>1080 × 1080, 1080 × 1350</td><td>Keep copy inside the centre 1:1 of a 4:5; nothing critical at the edges</td><td>Headline ≤ 9 words on the image; primary text shows about 125 characters before "more" <span class="chk">[check]</span></td><td>Static: the headline is the hook</td><td>None</td><td>None</td><td>JPG or PNG, up to 30 MB <span class="chk">[check]</span></td></tr><tr><td><b>Feed video 4:5 and 1:1</b></td><td>1080 × 1350</td><td>Same as feed image</td><td>One line per beat</td><td>Brand and message in the first 3 s; start on a face or a line, never a logo wall</td><td>Burned-in captions, sound off by default</td><td>15 s or less</td><td>MP4 or MOV, up to 4 GB <span class="chk">[check]</span></td></tr><tr><td><b>Stories 9:16</b></td><td>1080 × 1920</td><td>Top 14% and bottom 14% (about 250 px) clear</td><td>One line plus the button</td><td>First 2 s decide the tap</td><td>Sound often on; caption anyway</td><td>Up to 15 s per frame</td><td>Image 30 MB, video 4 GB <span class="chk">[check]</span></td></tr><tr><td><b>Story carousel</b></td><td>1080 × 1920 × 2 or 3</td><td>As Stories, on every frame</td><td>One idea per frame</td><td>Frame 1 is the hook</td><td>As Stories</td><td>Up to 15 s per frame</td><td>As Stories <span class="chk">[check]</span></td></tr><tr><td><b>Reels 9:16</b></td><td>1080 × 1920</td><td>Top 14%, bottom 35%, 6% each side</td><td>Captions inside the safe area</td><td>Hook 0 to 3 s, movement in the first second</td><td>Captions on every spoken line</td><td>15 s or less</td><td>MP4 or MOV, up to 4 GB <span class="chk">[check]</span></td></tr><tr><td><b>Carousel</b></td><td>1080 × 1080 (or 1080 × 1350)</td><td>As feed</td><td>One idea per card; the last card carries the button and the legal line</td><td>Card 1 is the hook</td><td>Video cards: captions</td><td>2 to 10 cards</td><td>Per card: image 30 MB, video 4 GB <span class="chk">[check]</span></td></tr><tr><td><b>Link ad 1.91:1</b></td><td>1200 × 628</td><td>Copy inside the centre square</td><td>Headline only</td><td>None</td><td>None</td><td>None</td><td>JPG or PNG, 30 MB <span class="chk">[check]</span></td></tr></tbody></table></div></div><div class="tabpanel" role="tabpanel" id="pan-tiktok" aria-labelledby="tab-tiktok" hidden><p class="from">TikTok: In-feed and creator (Spark) ads.</p><div class="table-wrap"><table class="bp"><thead><tr><th>Format</th><th>Size (px)</th><th>Safe zone</th><th>Text</th><th>First 3 seconds</th><th>Sound and captions</th><th>Length</th><th>File limit</th></tr></thead><tbody><tr><td><b>In-feed video 9:16</b></td><td>1080 × 1920 (min 540 × 960)</td><td>Top 8%, bottom 24%, right 13% (the rail) clear <span class="chk">[check]</span></td><td>Ad text 1 to 100 characters <span class="chk">[check]</span>; on-screen lines short and high</td><td>Hook in the first 2 s; start mid-action, native look</td><td>Sound on: voice or music; captions anyway</td><td>9 to 15 s works best; 5 to 60 s allowed <span class="chk">[check]</span></td><td>MP4 or MOV, up to 500 MB <span class="chk">[check]</span></td></tr><tr><td><b>Creator-style</b></td><td>1080 × 1920</td><td>As in-feed</td><td>Captions as the creator would write them</td><td>A real person, first line in the first second</td><td>Native voice; captions on</td><td>15 to 30 s</td><td>As in-feed</td></tr><tr><td><b>Carousel (images)</b></td><td>1080 × 1920 or 1:1 <span class="chk">[check]</span></td><td>As in-feed</td><td>One line per image</td><td>Image 1 is the hook</td><td>Music bed</td><td>2 to 35 images <span class="chk">[check]</span></td><td>JPG or PNG <span class="chk">[check]</span></td></tr></tbody></table></div></div><div class="tabpanel" role="tabpanel" id="pan-google" aria-labelledby="tab-google" hidden><p class="from">YouTube and Google: In-stream, bumper, Shorts, Display.</p><div class="table-wrap"><table class="bp"><thead><tr><th>Format</th><th>Size (px)</th><th>Safe zone</th><th>Text</th><th>First 3 seconds</th><th>Sound and captions</th><th>Length</th><th>File limit</th></tr></thead><tbody><tr><td><b>In-stream, skippable 16:9</b></td><td>1920 × 1080</td><td>Bottom left (ad info, CTA overlay) and bottom right (skip button) clear</td><td>One line at a time</td><td>Brand and message before the skip at 5 s</td><td>Captions on; most watch with sound</td><td>15 to 30 s</td><td>Uploaded to YouTube; file up to 256 GB <span class="chk">[check]</span></td></tr><tr><td><b>Bumper 16:9</b></td><td>1920 × 1080</td><td>As in-stream</td><td>One line</td><td>The whole ad is the hook</td><td>Captions on</td><td>6 s, cannot be skipped</td><td>As in-stream</td></tr><tr><td><b>Shorts 9:16</b></td><td>1080 × 1920</td><td>Bottom 25% and right rail clear <span class="chk">[check]</span></td><td>Captions inside the safe area</td><td>Hook in the first 2 s</td><td>Sound on; captions anyway</td><td>Up to 60 s <span class="chk">[check]</span></td><td>As in-stream</td></tr><tr><td><b>Responsive display</b></td><td>1200 × 628, 1200 × 1200; logo 1200 × 1200 and 1200 × 300 <span class="chk">[check]</span></td><td>Google crops: no text in the images</td><td>Headline 30, long headline 90, description 90 characters <span class="chk">[check]</span></td><td>None</td><td>None</td><td>None</td><td>Each image up to 5120 KB <span class="chk">[check]</span></td></tr><tr><td><b>Image banners</b></td><td>300 × 250, 728 × 90, 320 × 50, 300 × 600, 160 × 600</td><td>Logo, line and button inside a 4px inner margin</td><td>Logo, one line, the button, the legal line</td><td>None (static)</td><td>None</td><td>Animated HTML5 up to 30 s <span class="chk">[check]</span></td><td>Up to 150 KB each <span class="chk">[check]</span></td></tr></tbody></table></div></div><div class="tabpanel" role="tabpanel" id="pan-linkedin" aria-labelledby="tab-linkedin" hidden><p class="from">LinkedIn: Single image, video, document, carousel.</p><div class="table-wrap"><table class="bp"><thead><tr><th>Format</th><th>Size (px)</th><th>Safe zone</th><th>Text</th><th>First 3 seconds</th><th>Sound and captions</th><th>Length</th><th>File limit</th></tr></thead><tbody><tr><td><b>Single image</b></td><td>1200 × 627, 1200 × 1200, 720 × 900 <span class="chk">[check]</span></td><td>Nothing critical in the outer 5%</td><td>Intro text shows about 150 characters before "see more"; headline up to 70 <span class="chk">[check]</span></td><td>The image carries one idea</td><td>None</td><td>None</td><td>JPG, PNG or GIF, up to 5 MB <span class="chk">[check]</span></td></tr><tr><td><b>Video</b></td><td>1:1, 16:9 or 9:16</td><td>As image</td><td>One line per beat</td><td>Hook in the first 3 s</td><td>Captions (SRT) on; sound off by default</td><td>15 to 30 s</td><td>MP4, up to 200 MB <span class="chk">[check]</span></td></tr><tr><td><b>Document</b></td><td>1080 × 1080 or 1080 × 1350 pages</td><td>Page number bottom right</td><td>One idea per page, large type</td><td>Page 1 is the hook</td><td>None</td><td>3 to 10 pages</td><td>PDF, up to 100 MB and 300 pages <span class="chk">[check]</span></td></tr><tr><td><b>Carousel</b></td><td>1080 × 1080</td><td>As feed</td><td>One idea per card</td><td>Card 1 is the hook</td><td>None</td><td>2 to 10 cards</td><td>Up to 10 MB per card <span class="chk">[check]</span></td></tr></tbody></table></div></div><div class="tabpanel" role="tabpanel" id="pan-x" aria-labelledby="tab-x" hidden><p class="from">X: Image, video, carousel.</p><div class="table-wrap"><table class="bp"><thead><tr><th>Format</th><th>Size (px)</th><th>Safe zone</th><th>Text</th><th>First 3 seconds</th><th>Sound and captions</th><th>Length</th><th>File limit</th></tr></thead><tbody><tr><td><b>Image</b></td><td>1200 × 1200 or 1200 × 628 <span class="chk">[check]</span></td><td>Nothing critical at the edges; the timeline crops tall images</td><td>Post text up to 280 characters; little text in the image</td><td>None</td><td>None</td><td>None</td><td>PNG or JPG, up to 5 MB <span class="chk">[check]</span></td></tr><tr><td><b>Video</b></td><td>16:9, 1:1 or 9:16</td><td>Bottom left (timer) clear</td><td>One line per beat</td><td>Hook in the first 2 s; autoplay is silent</td><td>Captions on</td><td>15 s or less</td><td>MP4 or MOV, up to 1 GB <span class="chk">[check]</span></td></tr><tr><td><b>Carousel</b></td><td>1:1 or 1.91:1</td><td>As image</td><td>One idea per card</td><td>Card 1 is the hook</td><td>None</td><td>2 to 6 cards <span class="chk">[check]</span></td><td>As image</td></tr></tbody></table></div></div>
+        <div class="grid-2" style="margin-top:var(--space-6)">
+          <div class="rule rule--do"><b>The same five beats everywhere.</b><p>Hook, the assessment, the provider, the button with the legal line, the end card. Each channel changes the frame, the safe zone and the length, never the message.</p></div>
+          <div class="rule rule--do"><b>Captions on, always.</b><p>Burned-in Paper caption boxes (5px corners, Deep Teal type) inside the channel's safe zone, on every spoken line, even where sound is usually on.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="colour" aria-labelledby="colour-h">
+        <div class="sec-head"><h2 id="colour-h">Colour in ads.</h2><p>Six sanctioned pairings, each with its contrast. One ground, one type colour, at most one accent (Green or Blue) and the Yellow button. Rotate pairings across a campaign so a series feels varied without leaving the brand.</p></div>
+        <div class="pairs"><figure><div class="ad ad--dark r-45"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:64cqw;right:-30%;top:-13%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care that keeps showing up.</p><p class="sub">Tell us what’s changed.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--right">Sanctioned</span><figcaption class="cap"><b>Deep Teal and Paper</b> The house dark. Wash Blue for the sub line (5.2:1) and the capsule.</figcaption><div class="sw"><span style="--c:var(--color-brand-deep-teal)">Deep Teal ground</span><span style="--c:var(--color-surface-paper)">Paper type 9.8:1</span><span style="--c:var(--color-surface-wash-blue)">Wash Blue line</span><span style="--c:var(--color-brand-yellow)">Yellow CTA</span></div></figure><figure><div class="ad ad--paper r-45"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:64cqw;left:-34%;bottom:30%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Nothing is looked at alone.</p><p class="sub">An online assessment, reviewed by a licensed provider.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--right">Sanctioned</span><figcaption class="cap"><b>Paper and Teal Deep</b> The house light. Calm, for warm audiences and retargeting.</figcaption><div class="sw"><span style="--c:var(--color-surface-paper)">Paper ground</span><span style="--c:var(--color-brand-teal-deep)">Teal Deep type 12.2:1</span><span style="--c:var(--color-surface-wash-blue)">Wash Blue line</span><span style="--c:var(--color-brand-yellow)">Yellow CTA</span></div></figure><figure><div class="ad  r-45"><svg class="adcap adcap--h adcap--green" viewBox="0 0 1000 358.33" style="--len:60cqw;right:-26%;top:-6%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><span class="eyebrow-ad" style="color:var(--color-brand-green)">Online assessment</span><p class="hl">A private next step.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--right">Sanctioned</span><figcaption class="cap"><b>Mist with a Green accent</b> One accent per surface (R-115). Green never carries body text (3.9:1 on Paper).</figcaption><div class="sw"><span style="--c:var(--color-surface-mist)">Mist ground</span><span style="--c:var(--color-brand-deep-teal)">Deep Teal type 8.1:1</span><span style="--c:var(--color-brand-green)">Green eyebrow, rule, line</span><span style="--c:var(--color-brand-yellow)">Yellow CTA</span></div></figure><figure><div class="ad ad--wash r-45"><svg class="adcap adcap--h adcap--photo" viewBox="0 0 1000 358.33" style="--len:58cqw;left:-30%;bottom:28%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care from home.</p><p class="sub" style="color:var(--color-brand-teal-deep)">A licensed provider reviews every assessment.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--right">Sanctioned</span><figcaption class="cap"><b>Wash Blue and Teal Deep</b> A softer colour ground for a series. Type stays Teal Deep, never Paper (1.9:1).</figcaption><div class="sw"><span style="--c:var(--color-surface-wash-blue)">Wash Blue ground</span><span style="--c:var(--color-brand-teal-deep)">Teal Deep type 6.5:1</span><span style="--c:var(--color-surface-paper)">Paper line</span><span style="--c:var(--color-brand-yellow)">Yellow CTA</span></div></figure><figure><div class="ad ad--dark r-45"><svg class="adcap adcap--h adcap--blue" viewBox="0 0 1000 358.33" style="--len:70cqw;right:-36%;bottom:24%" aria-hidden="true" focusable="false"><use class="lh" href="#ad-half-h"/><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><span class="eyebrow-ad" style="color:var(--color-surface-wash-blue)">How it works</span><p class="hl">Answer online. A provider reviews.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--right">Sanctioned</span><figcaption class="cap"><b>Deep Teal with a Blue accent</b> Blue as a shape only (2.8:1 on Deep Teal): never for type.</figcaption><div class="sw"><span style="--c:var(--color-brand-deep-teal)">Deep Teal ground</span><span style="--c:var(--color-surface-wash-blue)">Wash Blue eyebrow 5.2:1</span><span style="--c:var(--color-brand-blue)">Blue shape, long half filled</span><span style="--c:var(--color-brand-yellow)">Yellow CTA</span></div></figure><figure><div class="ad ad--dark r-45"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/friends-talking-outdoors-pexels-13335592.jpg" alt="Stand-in photo, not approved, to replace: two men talking outdoors" loading="lazy"></div><svg class="adcap adcap--h adcap--photo" viewBox="0 0 1000 358.33" style="--len:62cqw;left:-30%;top:-4%" aria-hidden="true" focusable="false"><use class="lh" href="#ad-half-h"/><use class="ln" href="#ad-line-h"/></svg><div class="pad" style="justify-content:flex-end;padding-bottom:4cqw"><div class="panel"><p class="hl" style="font-size:7cqw">Care that fits your life.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div></div><span class="ex-tag ex-tag--right">Sanctioned</span><figcaption class="cap"><b>Photo and a Deep Teal panel</b> R-110: Paper line, the long half at the soft opacity, entering from the corner, away from faces.</figcaption><div class="sw"><span style="--c:var(--color-surface-paper)">Paper line on the photo</span><span style="--c:var(--color-brand-deep-teal)">Deep Teal panel</span><span style="--c:var(--color-surface-paper)">Paper type</span><span style="--c:var(--color-brand-yellow)">Yellow CTA</span></div></figure></div>
+        <h3 class="row-title" style="margin-top:var(--space-8)">Don't</h3>
+        <div class="pairs pairs--4"><figure><div class="ad r-45" style="background:var(--color-brand-yellow)"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">A private next step.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--wrong">Don't</span><figcaption class="cap"><b>Yellow as a ground</b> Yellow is the button and the single result moment only (R-11).</figcaption></figure><figure><div class="ad ad--paper r-45"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care, <span class="hl-yellow">quietly</span>.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--wrong">Don't</span><figcaption class="cap"><b>Two Yellows</b> A highlighted word plus the button: the CTA stops being the one Yellow thing.</figcaption></figure><figure><div class="ad ad--dark r-45"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl weak-green">Care that keeps showing up.</p><p class="sub" style="color:var(--color-brand-blue)">Tell us what’s changed.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--wrong">Don't</span><figcaption class="cap"><b>Green or Blue type on Deep Teal</b> 2.5:1 and 2.8:1: unreadable on a phone in sunlight. Accents stay shapes and rules.</figcaption></figure><figure><div class="ad ad--wash r-45"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl" style="color:var(--color-surface-paper)">Care from home.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><span class="ex-tag ex-tag--wrong">Don't</span><figcaption class="cap"><b>Paper type on Wash Blue</b> 1.9:1. On Wash Blue, type is Teal Deep.</figcaption></figure></div>
+      </section>
+<section class="sec" id="static" aria-labelledby="static-h">
+        <div class="sec-head"><h2 id="static-h">Static.</h2><p>Type-led units for feed and link placements on Meta, LinkedIn and X. True proportions, built from the tokens. Headlines are candidates from the line bank.</p></div>
+        <p class="row-title">Feed · 1:1</p>
+        <div class="ad-row ad-row--2">
+          <figure>
+            <div class="ad r-11"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:70cqw;right:-24%;top:-12%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Discretion is part of the treatment.</p><p class="sub">An online assessment, reviewed by a licensed provider.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>Square · light · 1080 × 1080</b> · the volume format</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-11"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:70cqw;right:-24%;top:-12%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">The whole chart, read by one person.</p><p class="sub">An online assessment, reviewed by a licensed provider.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>Square · type only · 1080 × 1080</b> · cheapest to make, for warm audiences</figcaption>
+          </figure>
+        </div>
+        <p class="row-title">Feed · 4:5 (default)</p>
+        <div class="ad-row ad-row--2">
+          <figure>
+            <div class="ad ad--paper r-45"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:56cqw;left:-28%;bottom:26%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Nothing is looked at alone.</p><p class="sub">Tell us what’s changed. A licensed provider reviews your information.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>Portrait · light · 1080 × 1350</b> · the feed default</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-45"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:56cqw;left:-28%;bottom:26%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care that keeps showing up.</p><p class="sub">Tell us what’s changed. A licensed provider reviews your information.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>Portrait · dark · 1080 × 1350</b> · the feed default, dark ground</figcaption>
+          </figure>
+        </div>
+        <p class="row-title">Link ad · 1.91:1</p>
+        <div class="ad-row ad-row--wide">
+          <figure>
+            <div class="ad ad--dark r-191"><span class="zone" style="left:23.8%;right:23.8%;top:0;bottom:0;background:none">Centre square</span><div class="pad" style="padding:0 23.8%;justify-content:center;gap:1.6cqw"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds" style="width:18cqw"><p class="hl" style="font-size:4.6cqw">Care that keeps showing up.</p><span class="legal" style="font-size:1.5cqw">Assessment only. Not a diagnosis.</span></div></div>
+            <figcaption class="cap"><b>Link ad · 1200 × 628</b> · the copy sits inside the centre square (dashed), so a 1:1 crop keeps it whole</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="sec" id="photo" aria-labelledby="photo-h">
+        <div class="sec-head"><h2 id="photo-h">Photo.</h2><p>A photo carries the warmth. The words sit beside the photo, on a solid colour panel, or directly on the photo with the legibility rules of <a class="link" href="images.html">Imagery</a> (R-120). On photos the capsule follows R-110. Photos are Pexels stand-ins, not approved, to replace until a licensed shoot exists (R-39, O-13); casting and light follow <a class="link" href="images.html">Imagery</a>.</p></div>
+        <p class="row-title">Feed · 4:5 and 1:1</p>
+        <div class="ad-row ad-row--3">
+          <figure>
+            <div class="ad ad--dark r-45"><div class="photo" style="height:56%"><span class="ph">Placeholder photo</span><img src="assets/photos/man-kitchen-coffee-pexels-6269909.jpg" alt="Stand-in photo, not approved, to replace: a man at his kitchen table with a coffee" loading="lazy"></div><div class="pad" style="padding-top:5cqw"><p class="hl" style="font-size:7cqw">A private next step, on your schedule.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>Photo over panel · 4:5</b> · photo top 56%, Deep Teal panel below</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-45"><div class="photo" style="height:56%"><span class="ph">Placeholder photo</span><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" alt="Stand-in photo, not approved, to replace: a couple at breakfast at home" loading="lazy"></div><div class="pad" style="padding-top:5cqw"><p class="hl" style="font-size:7cqw">Discretion is part of the treatment.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>Photo over panel · light · 4:5</b> · partners may appear in Sexual health (R-37)</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-45"><div class="photo" style="height:100%;position:absolute;inset:0"><span class="ph">Placeholder photo</span><img src="assets/photos/friends-talking-outdoors-pexels-13335592.jpg" alt="Stand-in photo, not approved, to replace: two men talking outdoors" loading="lazy"></div><svg class="adcap adcap--h adcap--photo" viewBox="0 0 1000 358.33" style="--len:52cqw;left:-30%;top:34%;z-index:1" aria-hidden="true" focusable="false"><use class="lh" href="#ad-half-h"/><use class="ln" href="#ad-line-h"/></svg><img class="stamp" src="assets/ads/logo-icon-paper.svg" width="250" height="91" alt="" style="right:4cqw;top:4cqw"><div class="pad" style="justify-content:flex-end;padding-bottom:2.4cqw"><div style="background:var(--color-brand-deep-teal);border-radius:var(--radius-small);padding:5cqw;display:flex;flex-direction:column;gap:3cqw"><p class="hl" style="font-size:7cqw">Care that keeps showing up.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div></div>
+            <figcaption class="cap"><b>Full-bleed photo with a card · 4:5</b> · the card sits where no face is; R-110 capsule from the corner and the logo icon as the second shape</figcaption>
+          </figure>
+        </div>
+        <p class="row-title">Stories · 9:16</p>
+        <div class="ad-row ad-row--4">
+          <figure>
+            <div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><span class="ph" style="top:16%">Placeholder photo</span><img src="assets/photos/man-home-office-pexels-8055837.jpg" alt="Stand-in photo, not approved, to replace: a man in a brown sweater at home" loading="lazy" style="object-position:50% 20%"></div><svg class="adcap adcap--v adcap--photo" viewBox="0 0 358.33 1000" style="--len:100cqw;right:-16%;top:30%;z-index:1" aria-hidden="true" focusable="false"><use class="lh" href="#ad-half-v"/><use class="ln" href="#ad-line-v"/></svg><span class="zone zone--top">Keep clear · 14%</span><span class="zone zone--story-bottom">Keep clear · 14%</span><div class="in-safe-story" style="justify-content:flex-end;bottom:calc(15% - 5cqw)"><div style="background:var(--color-brand-deep-teal);border-radius:var(--radius-small);padding:5cqw;display:flex;flex-direction:column;gap:3cqw"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl" style="font-size:8.4cqw">Nothing is looked at alone.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div></div>
+            <figcaption class="cap"><b>Photo story · 1080 × 1920</b> · card above the bottom 14%; a standing capsule enters from the right edge (R-110)</figcaption>
+          </figure>
+          <figure>
+            <div class="ad r-916"><span class="zone zone--top">Keep clear · 14%</span><span class="zone zone--story-bottom">Keep clear · 14%</span><div class="in-safe-story"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Nothing is looked at alone.</p><p class="sub">An online assessment, reviewed by a licensed provider.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:80cqw;right:-12%;top:44%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div>
+            <figcaption class="cap"><b>Type story · 1080 × 1920</b> · the static type story</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="sec" id="video" aria-labelledby="video-h">
+        <div class="sec-head"><h2 id="video-h">Vertical video: Reels, TikTok and Shorts.</h2><p>A 15-second Reels storyboard, built for sound off. Every spoken line has a caption; the seal is in the corner from the first frame; the video ends on a logo sting from the <a class="link" href="videos.html">Videos</a> page. The dashed areas are Meta's Reels safe zone.</p></div>
+        <p class="row-title">Reels · 9:16 · 15 seconds</p>
+        <div class="ad-row ad-row--5">
+          <figure>
+            <div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-kitchen-coffee-pexels-6269909.jpg" alt="Stand-in photo, not approved, to replace: a man at his kitchen table with a coffee" loading="lazy" style="object-position:30% 50%"></div><span class="time">0 to 3 s</span><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:space-between"><img class="mini" src="assets/brand/logo-seal-reversed.svg" width="250" height="91" alt="unifiedmeds"><span class="capbar">A private next step, on your schedule.</span></div></div>
+            <figcaption class="cap"><b>01 · Hook</b> · placeholder photo, one line, no logo wall</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><span class="time">3 to 7 s</span><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:space-between"><img class="mini" src="assets/brand/logo-seal-reversed.svg" width="250" height="91" alt="unifiedmeds"><div class="ui-card"><b>Which state are you in right now?</b><span class="ui-opt">California</span><span class="ui-opt on">New York</span><span class="ui-opt">Texas</span></div><span class="capbar">Tell us what’s changed.</span><span></span></div></div>
+            <figcaption class="cap"><b>02 · The assessment</b> · a screen of the form, DEMO ONLY (R-69)</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><span class="ph" style="top:3cqw;z-index:4">Not approved · stand-in for a real consenting provider</span><img src="assets/photos/provider-standin-pexels-6481906.jpg" width="1600" height="1068" alt="Stand-in photo: a smiling man in his fifties in a white shirt, in front of a warm wooden wall" loading="lazy" style="object-position:49% 30%"></div><span class="time">7 to 11 s</span><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:space-between"><img class="mini" src="assets/brand/logo-seal-reversed.svg" width="250" height="91" alt="unifiedmeds"><span class="capbar">A licensed provider reviews your answers.</span></div></div>
+            <figcaption class="cap"><b>03 · The provider</b> · a real, consenting provider only, or no face. Photo: stand-in, Pexels, Kampus Production</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><span class="time">11 to 13 s</span><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds" style="width:44cqw"><p class="hl">Discretion is part of the treatment.</p><div class="foot" style="margin-top:2cqw"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>04 · Call to action</b> · the one Yellow element, legal line on screen</figcaption>
+          </figure>
+          <figure>
+            <div class="ad r-916"><div class="seal-end"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds seal"></div><span class="time">13 to 15 s</span></div>
+            <figcaption class="cap"><b>05 · End card</b> · the last 2 seconds of sting B, C1 or C2</figcaption>
+          </figure>
+        </div>
+        <p class="row-title">TikTok in-feed and YouTube Shorts · 9:16</p>
+        <div class="ad-row ad-row--4">
+          <figure>
+            <div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-warm-light-vertical-9x16-pexels-40409561.jpg" alt="Placeholder photo, a man in warm light at home" loading="lazy" style="object-position:50% 30%"></div><span class="zone zone--tt-top">8%</span><span class="zone zone--rail">Rail</span><span class="zone zone--tt-bottom">Caption and CTA · 24%</span><div class="in-safe-tt" style="justify-content:flex-end"><span class="capbar">Step one: tell us what’s changed.</span></div></div>
+            <figcaption class="cap"><b>TikTok · hook</b> · native look, the line high enough to clear the caption block and the rail <span class="chk">[check]</span></figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-916"><span class="zone zone--tt-top">8%</span><span class="zone zone--rail">Rail</span><span class="zone zone--tt-bottom">Caption and CTA · 24%</span><div class="in-safe-tt" style="justify-content:center"><p class="hl" style="font-size:9cqw">Things I didn't have to do:</p><span class="capbar" style="background:var(--color-surface-card);border:1px solid var(--color-line-base)">Sit in a waiting room.</span><span class="capbar" style="background:var(--color-surface-card);border:1px solid var(--color-line-base)">Explain it out loud.</span></div></div>
+            <figcaption class="cap"><b>TikTok · text on screen</b> · list post inside the TikTok safe zone</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><span class="zone zone--tt-top">8%</span><span class="zone zone--rail">Rail</span><span class="zone zone--tt-bottom">Shorts UI · 24%</span><div class="in-safe-tt" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds" style="width:44cqw"><p class="hl" style="font-size:9cqw">An online assessment, reviewed by a licensed provider.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:84cqw;right:-12%;top:72%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div>
+            <figcaption class="cap"><b>Shorts · end beat</b> · the button sits inside the safe area; Shorts adds its own link sticker below</figcaption>
+          </figure>
+          <figure>
+            <div class="ad r-916"><div class="seal-end"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds seal"></div></div>
+            <figcaption class="cap"><b>End card</b> · the same sting as Reels</figcaption>
+          </figure>
+        </div>
+
+        <div class="grid-2">
+          <div class="rule"><b>Feed versions: 4:5 and 1:1.</b><p>The same five beats, recomposed: captions inside the centre, the seal in the top left corner, the end card centred. Cut to 6 seconds (beats 01, 04, 05) for a short version.</p></div>
+          <div class="rule"><b>Sound.</b><p>Music bed and the sting sound from the Videos page. A voice-over repeats the captions word for word; it never adds a claim the captions do not show.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="ugc" aria-labelledby="ugc-h">
+        <div class="sec-head"><h2 id="ugc-h">Creator-style (UGC).</h2><p>Phone-native ads that look like a person's own post, still on brand: Paper caption boxes with 5px corners, the seal small, one Yellow button at the end.</p></div>
+        <div class="rule"><span class="status status--proposed">Legal review</span><p>Only with a real creator, written consent and a disclosed paid partnership (Meta adds the "Paid partnership" label). Creators talk about the process, never about results, symptoms or a product name. No testimonial runs until legal approves it (R-67).</p></div>
+        <p class="row-title">Reels and Stories · 9:16</p>
+        <div class="ad-row ad-row--4">
+          <figure>
+            <div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><span class="ph" style="top:3cqw;z-index:4">Not approved · to replace · Pexels, Vitaly Gariev</span><img src="assets/photos/man-selfie-sofa-pexels-23224714.jpg" width="1600" height="900" alt="A smiling man films himself on his phone, sitting on a sofa at home" loading="lazy" style="object-position:52% 50%"></div><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:space-between"><span class="handle"><i><img src="assets/photos/man-selfie-avatar-pexels-23224714.jpg" width="400" height="400" alt="" loading="lazy"></i>creator name</span><div style="display:flex;flex-direction:column;gap:2cqw"><span class="capbar">It started with a short online form.</span><span class="capbar">A licensed provider read my answers.</span></div></div></div>
+            <figcaption class="cap"><b>Talking head</b> · selfie framing, captions under the face, never over it</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-916"><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:center;gap:3.4cqw"><span class="handle" style="color:var(--color-text-strong)"><i><img src="assets/photos/man-phone-avatar-pexels-7793677.jpg" width="400" height="400" alt="" loading="lazy"></i>creator name</span><p class="hl" style="font-size:8.6cqw">Things I didn't have to do:</p><span class="capbar" style="background:var(--color-surface-card);border:1px solid var(--color-line-base)">Sit in a waiting room.</span><span class="capbar" style="background:var(--color-surface-card);border:1px solid var(--color-line-base)">Explain it out loud.</span><span class="capbar" style="background:var(--color-surface-card);border:1px solid var(--color-line-base)">Make it a whole thing.</span></div></div>
+            <figcaption class="cap"><b>Text on screen</b> · a list post, no face needed</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><span class="ph" style="top:16%">Not approved · to replace · Pexels, Kaboompics</span><img src="assets/photos/hands-mailer-pexels-4464482.jpg" width="1600" height="1066" alt="Hands open a plain white mailer lined with kraft paper on a table" loading="lazy" style="object-position:55% 50%"></div><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:flex-end"><span class="capbar">Nothing on the outside says what's inside.</span></div></div>
+            <figcaption class="cap"><b>Unboxing</b> · only once operations confirm plain packaging (R-68)</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Meta UI · 35%</span><div class="in-safe-reels" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds" style="width:44cqw"><p class="hl" style="font-size:9cqw">An online assessment, reviewed by a licensed provider.</p><div class="foot" style="margin-top:2cqw"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>End card</b> · the brand closes every creator video</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="sec" id="carousel" aria-labelledby="carousel-h">
+        <div class="sec-head"><h2 id="carousel-h">Carousel.</h2><p>Four 1:1 cards, one step each: the four steps of How it works, in the same words as the website and the landing page. One capsule outline runs across the cards so the set reads as one piece. The last card carries the button and the legal line.</p></div>
+        <div class="carousel">
+          <figure><div class="ad ad--dark r-11"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:120cqw;left:40%;top:58%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><span class="legal" style="font-size:4cqw">01</span><p class="hl" style="font-size:10cqw">Tell us what’s changed.</p></div></div><figcaption class="cap"><b>Card 1</b> · the logo and step one</figcaption></figure>
+          <figure><div class="ad ad--dark r-11"><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:120cqw;left:-60%;top:58%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg><div class="pad"><span class="legal" style="font-size:4cqw">02</span><p class="hl" style="font-size:9cqw">A licensed provider reviews your information.</p></div></div><figcaption class="cap"><b>Card 2</b> · step two</figcaption></figure>
+          <figure><div class="ad ad--dark r-11"><div class="pad"><span class="legal" style="font-size:4cqw">03</span><p class="hl" style="font-size:9.6cqw">Receive a personalized care plan.</p></div></div><figcaption class="cap"><b>Card 3</b> · step three</figcaption></figure>
+          <figure><div class="ad r-11"><div class="pad"><span class="legal" style="font-size:4cqw">04</span><p class="hl" style="font-size:9.6cqw">Stay supported.</p><div class="foot"><span class="cta" style="height:11cqw;font-size:4.4cqw">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div><figcaption class="cap"><b>Card 4</b> · step four, the button, the only Yellow</figcaption></figure>
+        </div>
+      </section>
+      <section class="sec" id="story-carousel" aria-labelledby="sc-h">
+        <div class="sec-head"><h2 id="sc-h">Story carousel.</h2><p>Up to three story frames in one ad on Facebook and Instagram <span class="chk">[check]</span>. Each frame stands alone (people tap away), but the set tells the steps in order. The button and the legal line are on every frame; the shapes stay the same across the set.</p></div>
+        <div class="ad-row ad-row--3">
+          <figure>
+            <div class="ad ad--dark r-916"><span class="segs" aria-hidden="true"><i class="on"></i><i></i><i></i></span><span class="zone zone--top">14%</span><span class="zone zone--story-bottom">14%</span><div class="in-safe-story" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><span class="legal" style="font-size:4cqw">01</span><p class="hl">Tell us what’s changed.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:92cqw;right:-14%;top:68%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div>
+            <figcaption class="cap"><b>Frame 1</b> · the hook and step one</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916"><span class="segs" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span><span class="zone zone--top">14%</span><span class="zone zone--story-bottom">14%</span><div class="in-safe-story" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><span class="legal" style="font-size:4cqw">02</span><p class="hl">A licensed provider reviews your information.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:92cqw;right:-14%;top:68%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div>
+            <figcaption class="cap"><b>Frame 2</b> · the capsule holds its place, so the set reads as one</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-916"><span class="segs" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="zone zone--top">14%</span><span class="zone zone--story-bottom">14%</span><div class="in-safe-story" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><span class="legal" style="font-size:4cqw">03 · 04</span><p class="hl">Receive a personalized care plan. Stay supported.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:92cqw;right:-14%;top:68%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div>
+            <figcaption class="cap"><b>Frame 3</b> · steps 03 and 04; Paper closes the set, the same button</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="sec" id="landscape" aria-labelledby="ls-h">
+        <div class="sec-head"><h2 id="ls-h">16:9 video: YouTube in-stream and bumper.</h2><p>Skippable in-stream ads must land the brand and the message before the skip button at 5 seconds. A 6 second bumper is one beat. The bottom corners belong to YouTube (ad info and skip). The same frames serve X, LinkedIn and desktop feeds.</p></div>
+        <p class="row-title">In-stream · 16:9 · 15 seconds</p>
+        <div class="ad-row ad-row--3">
+          <figure>
+            <div class="ad ad--dark r-169"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" alt="Placeholder photo, a man reading by a window" loading="lazy" style="object-position:50% 40%"></div><span class="time">0 to 5 s</span><span class="zone zone--info">Ad info</span><span class="zone zone--skip">Skip</span><img class="stamp" src="assets/ads/logo-icon-paper.svg" width="250" height="91" alt="" style="left:3cqw;top:3cqw;width:7cqw"><div class="pad" style="padding:5cqw;justify-content:center;align-items:flex-end"><span class="capbar" style="font-size:2.6cqw;align-self:flex-end">A private next step, on your schedule.</span></div></div>
+            <figcaption class="cap"><b>01 · Before the skip</b> · the logo icon from frame one, the line by 2 s</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-169"><span class="time">5 to 11 s</span><span class="zone zone--info">Ad info</span><span class="zone zone--skip">Skip</span><div class="pad" style="padding:5cqw 6cqw;justify-content:center"><p class="hl" style="font-size:5cqw;max-width:20ch">Tell us what’s changed. A licensed provider reviews your information.</p></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:54cqw;right:-18%;top:-14%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div>
+            <figcaption class="cap"><b>02 · The process</b> · type on Paper, one capsule from the corner</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-169"><span class="time">11 to 15 s</span><span class="zone zone--info">Ad info</span><span class="zone zone--skip">Skip</span><div class="pad" style="padding:5cqw 6cqw;justify-content:center;gap:2cqw"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds" style="width:22cqw"><p class="hl" style="font-size:4.6cqw">Discretion is part of the treatment.</p><div class="foot" style="margin-top:1cqw;gap:1.4cqw"><span class="cta" style="height:5cqw;font-size:1.9cqw;padding:0 3cqw">Get started</span><span class="legal" style="font-size:1.4cqw">Assessment only. Not a diagnosis.</span></div></div></div>
+            <figcaption class="cap"><b>03 · Button and end card</b> · then 2 s of the sting; YouTube adds its own button overlay</figcaption>
+          </figure>
+        </div>
+        <div class="grid-2">
+          <div class="rule"><b>Bumper · 6 seconds.</b><p>One frame of copy over a photo or Deep Teal, the logo icon in the corner, ending on the seal. No button inside the creative: YouTube's overlay carries it.</p></div>
+          <div class="rule"><b>Mobile.</b><p>Most YouTube views are on a phone: type at least 50px on the 1080 high master, lines aligned left, nothing in the bottom 18%.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="display" aria-labelledby="dp-h">
+        <div class="sec-head"><h2 id="dp-h">Display banners.</h2><p>Google Display Network. Prefer responsive display (Google assembles our image, logo and lines); keep these fixed sizes for direct buys. Logo, one line, the button and the legal line; no photo below 300 wide. Shown scaled to the column; exact sizes in the captions.</p></div>
+        <div class="banners">
+          <div style="display:grid;gap:var(--space-5)">
+            <figure><div class="bn b-728"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care, from home.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><figcaption class="cap"><b>Leaderboard · 728 × 90</b> · desktop only</figcaption></figure>
+            <figure><div class="bn b-728 bn--dark"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Discretion is part of the treatment.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><figcaption class="cap"><b>Leaderboard, dark · 728 × 90</b></figcaption></figure>
+            <figure style="max-width:320px"><div class="bn b-320"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care, from home.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><figcaption class="cap"><b>Mobile banner · 320 × 50</b> · logo, button and legal line only: no room for a headline</figcaption></figure>
+          </div>
+          <div class="bn-stack">
+            <figure><div class="bn b-300 bn--dark"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">A private next step.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><figcaption class="cap"><b>Medium rectangle · 300 × 250</b> · the one size that runs everywhere</figcaption></figure>
+            <figure><div class="bn b-600"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Nothing is looked at alone.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><figcaption class="cap"><b>Half page · 300 × 600</b></figcaption></figure>
+            <figure><div class="bn b-160 bn--dark"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care, from home.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><figcaption class="cap"><b>Skyscraper · 160 × 600</b></figcaption></figure>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:var(--space-6)">
+          <div class="rule rule--do"><b>Weight.</b><p>Each file under 150 KB <span class="chk">[check]</span>. Animated HTML5 runs once, 15 s at most, and ends on the button frame; never a loop.</p></div>
+          <div class="rule rule--dont"><b>No shapes under 300 wide.</b><p>At banner size the capsule's step cannot read (R-109); the logo is the only capsule.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="linkedin" aria-labelledby="li-h">
+        <div class="sec-head"><h2 id="li-h">LinkedIn: single image and document.</h2><p>A professional feed: calm, type-led, no faces needed. Use LinkedIn for brand, provider recruiting and partnerships until legal confirms health advertising there <span class="chk">[check]</span>.</p></div>
+        <p class="row-title">Single image · 1.91:1 and 1:1</p>
+        <div class="ad-row ad-row--2">
+          <figure>
+            <div class="ad ad--paper r-191"><div class="pad" style="padding:5cqw 6cqw;justify-content:center;gap:2cqw"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds" style="width:20cqw"><p class="hl" style="font-size:5cqw;max-width:18ch">Telehealth built around a licensed provider.</p><span class="legal" style="font-size:1.6cqw">Assessment only. Not a diagnosis.</span></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:50cqw;right:-14%;bottom:-16%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div>
+            <figcaption class="cap"><b>1200 × 627</b> · LinkedIn adds its own headline and button below the image</figcaption>
+          </figure>
+          <figure style="max-width:420px">
+            <div class="ad ad--dark r-11"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><span class="eyebrow-ad" style="color:var(--color-surface-wash-blue)">We're hiring</span><p class="hl">Providers who listen first.</p><span class="legal" style="margin-top:auto">[Careers line · legal, O-01]</span></div><svg class="adcap adcap--h adcap--blue" viewBox="0 0 1000 358.33" style="--len:70cqw;right:-30%;bottom:20%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div>
+            <figcaption class="cap"><b>1200 × 1200</b> · recruiting, Blue as the one accent</figcaption>
+          </figure>
+        </div>
+        <p class="row-title">Document ad · PDF · 1:1 pages</p>
+        <div class="doc">
+          <figure><div class="ad ad--dark r-11"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">How online care works, in three pages.</p></div><span class="pg">1 / 3</span></div><figcaption class="cap"><b>Page 1</b></figcaption></figure>
+          <figure><div class="ad ad--paper r-11"><div class="pad"><span class="legal" style="font-size:4cqw">01 · 02</span><p class="hl" style="font-size:8.4cqw">Tell us what’s changed. A licensed provider reviews your information.</p></div><span class="pg">2 / 3</span></div><figcaption class="cap"><b>Page 2</b></figcaption></figure>
+          <figure><div class="ad ad--paper r-11"><div class="pad"><span class="legal" style="font-size:4cqw">03 · 04</span><p class="hl" style="font-size:8.4cqw">Receive a personalized care plan. Stay supported.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><span class="pg">3 / 3</span></div><figcaption class="cap"><b>Page 3</b></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="sec" id="context" aria-labelledby="ctx-h">
+        <div class="sec-head"><h2 id="ctx-h">In context.</h2><p>One representative ad per category, in a desktop browser and on a phone. The surrounding interface is generic and grey on purpose: it is not any platform's real screen. Check the real placement preview in each ads manager before launch.</p></div>
+        <figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen "><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Sponsored</em></span></div><span class="mx-line s"></span><div class="ad ad--dark r-45"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care that keeps showing up.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:56cqw;right:-28%;top:-11%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div><div class="mx-acts"><i></i><i></i><i></i></div></div><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div></div></div><div class="mx-phone" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Sponsored</em></span></div><span class="mx-line s"></span><div class="ad ad--dark r-45"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">Care that keeps showing up.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:56cqw;right:-28%;top:-11%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div><div class="mx-acts"><i></i><i></i><i></i></div></div><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Sponsored</em></span></div><span class="mx-line s"></span><span class="mx-line t"></span><div class="mx-acts"><i></i><i></i><i></i></div></div></div></div><figcaption class="cap"><b>Feed · 4:5</b> · Desktop feed column and phone feed. On desktop the 4:5 shows at about 500 px wide; on a phone it fills the width.</figcaption></figure><figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen mx-screen--stage"><div class="ad ad--dark r-916"><span class="segs" aria-hidden="true"><i class="on"></i><i></i><i></i></span><div class="in-safe-story" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt=""><p class="hl">Tell us what’s changed.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:92cqw;right:-14%;top:68%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div></div></div><div class="mx-phone mx-phone--full" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><div class="ad ad--dark r-916"><span class="segs" aria-hidden="true"><i class="on"></i><i></i><i></i></span><div class="in-safe-story" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt=""><p class="hl">Tell us what’s changed.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:92cqw;right:-14%;top:68%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div></div></div><figcaption class="cap"><b>Story and story carousel · 9:16</b> · Desktop opens stories in a dark viewer, centred; the phone shows them full screen with the progress segments on top.</figcaption></figure><figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen mx-screen--stage"><div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-warm-light-vertical-9x16-pexels-40409561.jpg" alt="" loading="lazy" style="object-position:50% 30%"></div><div class="in-safe-tt" style="justify-content:flex-end"><span class="capbar">Step one: tell us what’s changed.</span></div></div></div></div><div class="mx-phone mx-phone--full" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><div class="ad ad--dark r-916"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-warm-light-vertical-9x16-pexels-40409561.jpg" alt="" loading="lazy" style="object-position:50% 30%"></div><div class="in-safe-tt" style="justify-content:flex-end"><span class="capbar">Step one: tell us what’s changed.</span></div></div><div class="mx-rail"><i></i><i></i><i></i><i></i></div><div class="mx-under"><i style="width:40%"></i><i></i><b></b></div></div></div><figcaption class="cap"><b>Vertical video · Reels, TikTok, Shorts</b> · The phone adds a right-hand rail and a caption block with the platform's own button: our line sits above both.</figcaption></figure><figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen "><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Sponsored</em></span></div><span class="mx-line s"></span><div class="mx-car"><div class="ad ad--dark r-11"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl" style="font-size:11cqw">One private next step.</p></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:120cqw;left:40%;top:58%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div><div class="ad ad--dark r-11"><div class="pad"><span class="legal" style="font-size:4cqw">01</span><p class="hl" style="font-size:11cqw">Tell us what’s changed.</p></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:120cqw;left:-60%;top:58%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div></div><div class="mx-dots"><i class="on"></i><i></i><i></i><i></i></div><div class="mx-acts"><i></i><i></i><i></i></div></div><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div></div></div><div class="mx-phone" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Sponsored</em></span></div><span class="mx-line s"></span><div class="mx-car"><div class="ad ad--dark r-11"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl" style="font-size:11cqw">One private next step.</p></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:120cqw;left:40%;top:58%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div><div class="ad ad--dark r-11"><div class="pad"><span class="legal" style="font-size:4cqw">01</span><p class="hl" style="font-size:11cqw">Tell us what’s changed.</p></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:120cqw;left:-60%;top:58%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div></div><div class="mx-dots"><i class="on"></i><i></i><i></i><i></i></div><div class="mx-acts"><i></i><i></i><i></i></div></div></div></div><figcaption class="cap"><b>Carousel · 1:1</b> · The next card peeks in from the right; the capsule line crossing into it invites the swipe.</figcaption></figure><figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen mx-screen--video"><div class="mx-col"><div class="mx-player"><div class="ad ad--dark r-169"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" alt="" loading="lazy" style="object-position:50% 40%"></div><img class="stamp" src="assets/ads/logo-icon-paper.svg" width="250" height="91" alt="" style="left:3cqw;top:3cqw;width:7cqw"><div class="pad" style="padding:5cqw;justify-content:center;align-items:flex-end"><span class="capbar" style="font-size:2.6cqw;align-self:flex-end">A private next step, on your schedule.</span></div></div><span class="mx-adlabel">Ad · 0:05</span><span class="mx-skip">Skip</span></div><span class="mx-line t"></span><span class="mx-line s"></span></div><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div></div></div><div class="mx-phone" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><div class="mx-player"><div class="ad ad--dark r-169"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" alt="" loading="lazy" style="object-position:50% 40%"></div><img class="stamp" src="assets/ads/logo-icon-paper.svg" width="250" height="91" alt="" style="left:3cqw;top:3cqw;width:7cqw"><div class="pad" style="padding:5cqw;justify-content:center;align-items:flex-end"><span class="capbar" style="font-size:2.6cqw;align-self:flex-end">A private next step, on your schedule.</span></div></div><span class="mx-adlabel">Ad</span><span class="mx-skip">Skip</span></div><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span></div></div><figcaption class="cap"><b>Landscape video · in-stream 16:9</b> · The player takes the top of the phone; the skip button and the ad label cover the bottom corners.</figcaption></figure><figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen mx-screen--article"><div class="mx-col"><div class="bn b-728"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt=""><p class="hl">Care, from home.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div><div class="mx-col"><div class="bn b-300 bn--dark"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt=""><p class="hl">A private next step.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><span class="mx-line"></span></div></div></div><div class="mx-phone" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><div class="bn b-300 bn--dark"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt=""><p class="hl">A private next step.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div><span class="mx-line"></span><span class="mx-line s"></span><div class="mx-sticky"><div class="bn b-320"><div class="bi"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt=""><p class="hl">Care, from home.</p><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div></div></div><figcaption class="cap"><b>Display banners</b> · Desktop: leaderboard above the article, a rectangle in the side column. Phone: a rectangle in the text and the sticky 320 × 50.</figcaption></figure><figure class="mx"><div class="mx-desk" aria-hidden="true"><div class="mx-bar"><i></i><i></i><i></i><span></span></div><div class="mx-screen "><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Promoted</em></span></div><span class="mx-line s"></span><div class="ad ad--paper r-191"><div class="pad" style="padding:5cqw 6cqw;justify-content:center;gap:2cqw"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="" style="width:20cqw"><p class="hl" style="font-size:5cqw;max-width:18ch">Telehealth built around a licensed provider.</p><span class="legal" style="font-size:1.6cqw">Assessment only. Not a diagnosis.</span></div><svg class="adcap adcap--h" viewBox="0 0 1000 358.33" style="--len:50cqw;right:-14%;bottom:-16%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-h"/></svg></div><div class="mx-acts"><i></i><i></i><i></i></div></div><div class="mx-col"><span class="mx-line t"></span><span class="mx-line"></span><span class="mx-line s"></span><span class="mx-line"></span></div></div></div><div class="mx-phone" aria-hidden="true"><div class="mx-status"><span>9:41</span><span>●●●</span></div><div class="mx-feed" style="position:relative"><div class="mx-post"><div class="mx-head"><b></b><span>unifiedmeds<br><em>Promoted</em></span></div><span class="mx-line s"></span><div class="ad ad--dark r-11"><div class="pad"><img class="logo" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="unifiedmeds"><p class="hl">How online care works, in three pages.</p></div><span class="pg">1 / 3</span></div><div class="mx-acts"><i></i><i></i><i></i></div></div></div></div><figcaption class="cap"><b>LinkedIn · single image and document</b> · Desktop: single image in the feed. Phone: the document ad, swiped page by page.</figcaption></figure>
+      </section>
+
+      <section class="sec" id="motion" aria-labelledby="mo-h">
+        <div class="sec-head"><h2 id="mo-h">Animation.</h2><p>How an ad moves: between frames, in the headline, with icons, the button and the end card. Every value is a motion token. Press Play on a demo; tick the box to see the reduced-motion version.</p></div>
+        <div class="mo-bar"><label><input type="checkbox" id="rm-toggle"> Preview reduced motion</label></div>
+        <div class="mo" id="mo-root">
+          <figure>
+            <div class="ad ad--dark r-916 mo-frames" id="mo-f">
+              <div class="fr fr1"><div class="in-safe-story" style="justify-content:center"><span class="legal" style="font-size:4cqw">01</span><p class="hl">Tell us what’s changed.</p></div></div>
+              <div class="fr fr2" style="background:var(--color-brand-deep-teal)"><div class="in-safe-story" style="justify-content:center"><span class="legal" style="font-size:4cqw">02</span><p class="hl">A licensed provider reviews your information.</p></div></div>
+              <div class="fr fr3" style="background:var(--color-surface-paper);color:var(--color-text-strong)"><div class="in-safe-story" style="justify-content:center"><span class="legal" style="font-size:4cqw">03 · 04</span><p class="hl">Receive a personalized care plan. Stay supported.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            </div>
+            <button class="btn btn--outline" type="button" data-play="mo-f">Play</button>
+            <figcaption class="cap"><b>Frame to frame</b> · 01 to 02: cross-fade, <code>--motion-duration-wipe</code> 420ms. 02 to 03: push left, <code>--motion-duration-shape</code> 520ms, <code>--motion-easing-enter</code>. Hold each frame at least 1.5 s. Never spin, zoom or bounce.</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-916 mo-head" id="mo-h2"><div class="in-safe-story" style="justify-content:center"><img class="logo" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="unifiedmeds"><p class="hl"><span class="ln-a" style="--i:0">Discretion</span><span class="ln-a" style="--i:1">is part of</span><span class="ln-a" style="--i:2">the treatment.</span></p><p class="sub">An online assessment, reviewed by a licensed provider.</p><div class="foot"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div>
+            <button class="btn btn--outline" type="button" data-play="mo-h2">Play</button>
+            <figcaption class="cap"><b>Headline</b> · line by line, rise <code>--motion-distance-rise</code> 12px and fade, <code>--motion-duration-reveal</code> 320ms, <code>--motion-stagger</code> 90ms between lines. Whole lines only: no letter by letter, no typewriter.</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--paper r-916 mo-icon" id="mo-i"><div class="in-safe-story" style="justify-content:center"><img class="ic" src="assets/icons-capsule/online-assessment-a-horizontal-line.svg" width="64" height="32" alt=""><p class="hl">Tell us what’s changed.</p></div><svg class="adcap adcap--v" viewBox="0 0 358.33 1000" style="--len:92cqw;right:-14%;top:68%" aria-hidden="true" focusable="false"><use class="ln" href="#ad-line-v"/></svg></div>
+            <button class="btn btn--outline" type="button" data-play="mo-i">Play</button>
+            <figcaption class="cap"><b>Icon and shape</b> · one capsule feature icon rises with the line (320ms); the capsule draws its outline once (<code>--motion-duration-shape</code> 520ms) and then stays still. One icon per frame; icons never loop.</figcaption>
+          </figure>
+          <figure>
+            <div class="ad ad--dark r-916 mo-cta" id="mo-c"><div class="photo" style="position:absolute;inset:0"><img src="assets/photos/man-paperwork-vertical-9x16-pexels-8124229.jpg" alt="Placeholder photo, a man at a table at home" loading="lazy"></div><span class="zone zone--top">14%</span><span class="zone zone--reels-bottom">Platform UI · 35%</span><div class="in-safe-reels" style="justify-content:flex-end"><span class="capbar">Tell us what’s changed.</span><div class="panel"><div class="foot" style="margin-top:0"><span class="cta">Get started</span><span class="legal">Assessment only. Not a diagnosis.</span></div></div></div></div>
+            <button class="btn btn--outline" type="button" data-play="mo-c">Play</button>
+            <figcaption class="cap"><b>The button</b> · arrives once, in the last beat, inside the safe area (rise 320ms); it never pulses, shakes or loops. Static formats show it from the start.</figcaption>
+          </figure>
+          <figure>
+            <div class="ad r-916 mo-end" id="mo-e"><div class="seal-end"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds seal"></div></div>
+            <button class="btn btn--outline" type="button" data-play="mo-e">Play</button>
+            <figcaption class="cap"><b>End card</b> · Logo Cream fades in (420ms), the seal rises (520ms) and holds 2 s; or the last 2 s of sting B, C1 or C2 from the <a class="link" href="videos.html">Videos</a> page.</figcaption>
+          </figure>
+        </div>
+        <h3 class="row-title" style="margin-top:var(--space-8)">Where the button sits, and when it appears</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Format</th><th>Button position</th><th>When</th></tr></thead>
+          <tbody>
+            <tr><td>Feed image, carousel, banners</td><td>Bottom left of the copy block, above the legal line</td><td>From the start (static)</td></tr>
+            <tr><td>Story and story carousel</td><td>Above the bottom 14%</td><td>Frame 1 at once; on video, the last 4 s</td></tr>
+            <tr><td>Reels, TikTok, Shorts</td><td>Above the bottom 35% (Meta) or 24% (TikTok, Shorts), left of the rail</td><td>The last beat (about 11 s of 15); the platform adds its own button below</td></tr>
+            <tr><td>YouTube in-stream</td><td>Centre left, clear of the bottom 18%</td><td>The last 4 s; YouTube's overlay shows from 0 s</td></tr>
+            <tr><td>Bumper 6 s</td><td>None in the creative</td><td>YouTube's overlay only</td></tr>
+          </tbody>
+        </table></div>
+        <h3 class="row-title" style="margin-top:var(--space-8)">Durations and tokens</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Move</th><th>Token</th><th>Value</th><th>Reduced motion</th></tr></thead>
+          <tbody>
+            <tr><td>Cross-fade between frames</td><td><code>--motion-duration-wipe</code>, <code>--motion-easing-ui</code></td><td>420ms</td><td>Cut</td></tr>
+            <tr><td>Push between frames, end card rise</td><td><code>--motion-duration-shape</code>, <code>--motion-easing-enter</code></td><td>520ms</td><td>Cut</td></tr>
+            <tr><td>Line, icon and button rise</td><td><code>--motion-duration-reveal</code>, <code>--motion-distance-rise</code></td><td>320ms, 12px</td><td>Shown at once</td></tr>
+            <tr><td>Between lines</td><td><code>--motion-stagger</code></td><td>90ms</td><td>None</td></tr>
+            <tr><td>Capsule draws its line</td><td><code>--motion-duration-shape</code></td><td>520ms, once</td><td>Drawn</td></tr>
+            <tr><td>Caption change</td><td><code>--motion-duration-open</code></td><td>220ms</td><td>Cut</td></tr>
+          </tbody>
+        </table></div>
+        <div class="grid-2" style="margin-top:var(--space-6)">
+          <div class="rule rule--do"><b>Reduced motion.</b><p>Where a platform or the viewer asks for less motion (banners, our own site), every frame cuts and every element is already in place. Video ads keep their cuts and drop the moves.</p></div>
+          <div class="rule rule--dont"><b>Never.</b><p>Spinning or bouncing logos, a pulsing button, a shimmer, flashing more than 3 times a second, or text that moves while it is read.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="before" aria-labelledby="before-h">
+        <div class="sec-head"><h2 id="before-h">Before a campaign.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Check</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td>LegitScript certification for prescription telehealth ads on Meta and Google</td><td>Legal and marketing ops</td></tr>
+            <tr><td>Every headline, caption and voice-over line approved by legal</td><td>Legal</td></tr>
+            <tr><td>Creators: written consent, disclosed paid partnership, script approved, no results</td><td>Legal and marketing</td></tr>
+            <tr><td>Photos licensed; placeholders replaced (O-13)</td><td>Design</td></tr>
+            <tr><td>Current specs, safe zones and file limits checked again on every channel (every [check] on this page)</td><td>Marketing ops</td></tr><tr><td>Channel health ad policy cleared: Meta, Google, TikTok, LinkedIn, X</td><td>Legal</td></tr><tr><td>Ad account age gate 18+; no targeting by health condition</td><td>Marketing ops</td></tr>
+            <tr><td>Landing page matches the ad (same claim level, same CTA)</td><td>Design</td></tr>
+            <tr><td>No tracking pixels on condition or product pages (R-71)</td><td>Development</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-play]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var s = document.getElementById(b.getAttribute('data-play'));
+        s.classList.remove('is-playing'); void s.offsetWidth; s.classList.add('is-playing');
+      });
+    });
+    var rm = document.getElementById('rm-toggle'), sec = document.getElementById('motion');
+    if (rm) rm.addEventListener('change', function () { sec.classList.toggle('rm', rm.checked); });
+    var list = document.querySelector('#practice [role="tablist"]');
+    if (!list) return;
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]')), thumb = list.querySelector('.thumb');
+    function place(t) { thumb.style.width = t.offsetWidth + 'px'; thumb.style.height = t.offsetHeight + 'px'; thumb.style.transform = 'translate(' + t.offsetLeft + 'px, ' + t.offsetTop + 'px)'; }
+    function select(t) {
+      tabs.forEach(function (o) {
+        var on = o === t; o.setAttribute('aria-selected', on); o.tabIndex = on ? 0 : -1;
+        var pn = document.getElementById(o.getAttribute('aria-controls')); pn.hidden = !on; pn.classList.toggle('in', on);
+      });
+      place(t);
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(t); });
+      t.addEventListener('keydown', function (e) {
+        var k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (k) { var n = tabs[(i + k + tabs.length) % tabs.length]; select(n); n.focus(); e.preventDefault(); }
+      });
+    });
+    function again() { place(list.querySelector('[aria-selected="true"]')); }
+    again(); requestAnimationFrame(function () { list.classList.add('ready'); }); window.addEventListener('load', again); window.addEventListener('resize', again);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(again);
+  })();
+</script>

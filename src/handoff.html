@@ -1,0 +1,143 @@
+<style>
+.sources { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); counter-reset: src; }
+.sources li { counter-increment: src; display: grid; grid-template-columns: var(--size-tap-min) minmax(0, 1fr); gap: var(--space-4); align-items: start; padding: var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+.sources li::before { content: counter(src); display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border: 1px solid var(--color-brand-deep-teal); border-radius: 50%; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / 1 var(--font-family-serif); color: var(--color-text-strong); }
+.sources b { display: block; color: var(--color-text-strong); font-weight: 600; }
+.sources p { color: var(--color-text-secondary); }
+.flow { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: step; border-top: 1px solid var(--color-line-soft); }
+.flow li { counter-increment: step; display: grid; grid-template-columns: var(--space-12) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-line-soft); }
+.flow li::before { content: counter(step, decimal-leading-zero); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-body-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-strong); }
+.flow b { color: var(--color-text-strong); font-weight: 600; }
+td.nowrap, th.nowrap { white-space: nowrap; }
+td.wide { min-width: 28ch; }
+.label-tag { display: inline-flex; align-items: center; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+</style>
+
+      <header class="page-head">
+        <span class="eyebrow">Build</span>
+        <h1>Developer handoff.</h1>
+        <p class="lead">What the unifiedmeds website, the assessment, the product screens, the emails and the landing pages are built from, which pages are in scope, how to use the tokens and where the release checklist and the change path live.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#sources">Build from</a>
+          <a href="#frames">Figma frames</a>
+          <a href="#scope">Page scope</a>
+          <a href="#tokens">Tokens</a>
+          <a href="#checklist">Before a release</a>
+          <a href="#feedback">Feedback labels</a>
+          <a href="#changes">How changes arrive</a>
+        </nav>
+      </header>
+
+      <section class="sec" id="sources" aria-labelledby="sources-h">
+        <div class="sec-head"><h2 id="sources-h">What you build from.</h2><p>Five sources. Decided rules and tokens win (<a href="rulebook.html#r-01">R-01</a>); the designer's Figma is the source only for what is not decided yet, and our own Figma files follow the rules. If the build, this hub and a Figma file disagree, raise a QUESTION.</p></div>
+        <ol class="sources">
+          <li><div><b><a href="tokens/tokens.json">tokens/tokens.json</a> and <a href="brand.css">brand.css</a></b><p>Every colour, size, space, radius, shadow, duration and easing. <code>brand.css</code> is generated from <code>tokens.json</code>. Link it first, never edit it, never hard-code a value it holds.</p></div></li>
+          <li><div><b><a href="components.css">components.css</a> · reference components</b><p>Buttons and their hover matrix, links, fields, checkboxes, answer options and choice cards, the capsule progress and loader, cards, chips, step numbers, the header, the footer, feedback states and interactive states. Port the rules, not necessarily the class names. Specimens: <a href="components.html">Components</a>.</p></div></li>
+          <li><div><b>The rulebook</b><p><a href="rulebook.html">Rulebook &amp; decisions</a> (same text as <a href="brand-rules.md">brand-rules.md</a>): every rule, decision and exception in the rulebook, and the open items. Cite rules by ID in tickets.</p></div></li>
+          <li><div><b>Figma frames</b><p>Layout, content and hierarchy for each page, where a rule does not already decide it. The one frame list: <a href="website-pages.html#frames">Website pages · Figma frames</a>. Read with Dev Mode.</p></div></li>
+          <li><div><b>Motion on <a href="motion.html">Motion</a></b><p>The M-set (M-001 to M-024) is the only motion reference (R-54). Every card uses <code>--motion-*</code> tokens.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="sec" id="frames" aria-labelledby="frames-h">
+        <div class="sec-head"><h2 id="frames-h">Figma frames.</h2><p>One frame list for the whole site, with the notes where a frame differs from a rule: <a class="link" href="website-pages.html#frames">Website pages · Figma frames</a>. Two frames are already overruled: the header logo is 52 on desktop and the Primary seal 50 on mobile (R-103, not 30 / 26), and the footer is the one on Mist (R-48, R-114), not the Deep Teal footer the designer's file still shows. Build both from <a class="link" href="components.html#header">Components</a>.</p></div>
+        <p class="cap">Never use links to the three Figma files moved to trash on 08.10.2026 (keys starting Csrbx…, ILQVN… and yimfrn…).</p>
+      </section>
+
+      <section class="sec" id="scope" aria-labelledby="scope-h">
+        <div class="sec-head"><h2 id="scope-h">Page scope.</h2><p>The launch: Sexual health with Tadalafil, Sildenafil and Combo, the assessment, the product screens, the emails and the landing pages. Longevity and Hair loss are designed and follow after launch (Phase 2, U-04). Every new page starts from the <a class="link" href="templates.html#spec">page spec</a> in Templates, with its Mobile (390) differences and its approvers. An earlier site build in Astro (October 2026) exists as a reference; ask Avi for it and decide whether to reuse it (U-09).</p></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Page</th><th>Status</th><th>Design</th><th>Notes</th></tr></thead><tbody><tr><td>Home</td><td><span class="status status--current">Launch</span></td><td>Desktop + mobile</td><td>Hero 70/60, the only one. CTAs in sentence case even where Figma shows Title Case.</td></tr><tr><td>Sexual health category</td><td><span class="status status--current">Launch</span></td><td>Desktop + mobile</td><td>Category template; hero band and dark sections in Deep Teal (R-117).</td></tr><tr><td>Tadalafil · Sildenafil</td><td><span class="status status--current">Launch</span></td><td>Desktop + mobile</td><td>Product template. The product page title is not a hero: 46/54 at most, 34/40 on mobile (R-20). Safety information fully expanded (R-66).</td></tr><tr><td>Combo</td><td><span class="status status--current">Launch</span></td><td><span class="status status--proposed">To confirm</span></td><td>No Figma frame yet. Use the Tadalafil template; the name is always "Combo", ingredients under it (R-108).</td></tr><tr><td>How it works · FAQ · Contact</td><td><span class="status status--current">Launch</span></td><td>Desktop + mobile</td><td>How it works uses the one four-step wording (<a class="link" href="section-library.html#how-it-works">Home section library</a>).</td></tr><tr><td>Telehealth notice · Terms of service · Privacy policy</td><td><span class="status status--current">Launch</span></td><td>Desktop (Privacy policy: no frame yet)</td><td>Legal copy needs approval. Mobile: adapt from the desktop frame.</td></tr><tr><td>Footer pages: About unifiedmeds, Our providers, Press, Shipping and delivery, Billing and refunds, Notice of privacy practices, Safety information, Accessibility</td><td><span class="status status--current">Launch</span></td><td><span class="status status--proposed">To confirm</span></td><td>Linked from the footer (<a class="link" href="components.html#footer">Components · Footer</a>). No Figma frames yet; legal names the legal pages.</td></tr><tr><td>Assessment (Get started)</td><td><span class="status status--current">Launch</span></td><td><a class="link" href="assessment.html">Assessment</a></td><td>The online assessment on its own clinical intake domain: patterns, flow, screens, states, validation (on Continue, Q95) and build rules. The marketing site never collects health data (R-70).</td></tr><tr><td>Recommendation, checkout and the member portal (Sign in)</td><td><span class="status status--current">Launch</span></td><td><a class="link" href="product-screens.html">Product screens</a></td><td>After the assessment: the recommendation, the plan, checkout and the portal. Logo in app screens: Horizontal 30 desktop, Primary seal 40 mobile (U-29).</td></tr><tr><td>Emails and the newsletter</td><td><span class="status status--current">Launch</span></td><td><a class="link" href="emails.html">Emails</a> · <a class="link" href="newsletter.html">Newsletter</a></td><td>System emails and the marketing newsletter: templates, subject lines, consent (double opt-in, U-28).</td></tr><tr><td>Landing pages</td><td><span class="status status--current">Launch</span></td><td><a class="link" href="landing-pages.html">Landing pages</a></td><td>Campaign pages outside the menu: the header logo rule (R-103), up to three brand moments (R-104), the same footer as the website.</td></tr><tr><td>Longevity (category + NAD+ Capsules, NAD+ injection, Metformin)</td><td><span class="status status--planned">Phase 2</span></td><td><a class="link" href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/?node-id=2076-9857">2076-9857</a> desktop</td><td>Legal review required before build (R-87). Phase 2 menu. Not linked before launch.</td></tr><tr><td>Hair loss (category + Finasteride, Hair Growth Spray)</td><td><span class="status status--planned">Phase 2</span></td><td><a class="link" href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/?node-id=2076-10934">2076-10934</a> desktop</td><td>Legal review required before build (R-87). Phase 2 menu. Not linked before launch.</td></tr></tbody></table>
+        </div>
+        <p class="cap">Mobile (390) gets equal treatment on every page in scope (R-107): check every page at 1440 and 390, and website pages at 768 and 1024 too.</p>
+      </section>
+
+      <section class="sec" id="tokens" aria-labelledby="tokens-h">
+        <div class="sec-head"><h2 id="tokens-h">How to use the tokens.</h2><p>Each token path in <code>tokens.json</code> becomes one CSS custom property in <code>brand.css</code>. Dots become dashes, and a short prefix names the group.</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Token path</th><th scope="col">CSS custom property</th><th scope="col">Value</th></tr></thead>
+            <tbody>
+              <tr><td><code>color.surface.paper</code></td><td><code>--color-surface-paper</code></td><td>#FEFCF6 · the page</td></tr>
+              <tr><td><code>color.brand.deep-teal</code></td><td><code>--color-brand-deep-teal</code></td><td>#264653 · primary ink, dark sections (the footer is on Mist, R-48)</td></tr>
+              <tr><td><code>color.text.secondary</code></td><td><code>--color-text-secondary</code></td><td>#55747F · Slate, captions and labels</td></tr>
+              <tr><td><code>color.line.field</code></td><td><code>--color-line-field</code></td><td>#55747F · field boundary</td></tr>
+              <tr><td><code>typography.desktop.hero</code></td><td><code>--type-desktop-hero-family</code>, <code>-size</code>, <code>-weight</code>, <code>-line</code>, <code>-tracking</code></td><td>DM Serif Display 46 / 54</td></tr>
+              <tr><td><code>typography.mobile.label</code></td><td><code>--type-mobile-label-*</code></td><td>Inter SemiBold 11 / 16, +2%</td></tr>
+              <tr><td><code>space.4</code></td><td><code>--space-4</code></td><td>16px</td></tr>
+              <tr><td><code>layout.content-max</code></td><td><code>--layout-content-max</code></td><td>1240px</td></tr>
+              <tr><td><code>radius.small</code></td><td><code>--radius-small</code></td><td>12px</td></tr>
+              <tr><td><code>size.control</code></td><td><code>--size-control</code></td><td>50px · every button and field</td></tr>
+              <tr><td><code>shadow.overlay</code></td><td><code>--shadow-overlay</code></td><td>The only shadow: dropdowns and dialogs</td></tr>
+              <tr><td><code>motion.duration.open</code></td><td><code>--motion-duration-open</code></td><td>220ms</td></tr>
+              <tr><td><code>motion.easing.ui</code></td><td><code>--motion-easing-ui</code></td><td>cubic-bezier(0, 0, 0.58, 1) · ease-out</td></tr>
+              <tr><td><code>motion.distance.lift</code></td><td><code>--motion-distance-lift</code></td><td>2px · button hover lift (R-41); Pressed, cards and menu rows never lift (R-99, R-43)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <pre><code>&lt;link rel="stylesheet" href="brand.css"&gt;
+
+.hero h1 {
+  font: var(--type-desktop-hero-weight) var(--type-desktop-hero-size) / var(--type-desktop-hero-line) var(--type-desktop-hero-family);
+  color: var(--color-text-strong);
+}
+.btn {
+  height: var(--size-control);
+  padding: 0 var(--size-button-padding-x);    /* 24px */
+  border-radius: var(--radius-button);         /* 5px: rounded rectangle, never a pill */
+  transition: transform var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.btn:hover { transform: translateY(calc(var(--motion-distance-lift) * -1)); }
+
+/* Custom properties cannot be used inside @media: write the token value (768 = --layout-breakpoint-tablet) */
+@media (max-width: 767px) {
+  .hero h1 { font: var(--type-mobile-hero-weight) var(--type-mobile-hero-size) / var(--type-mobile-hero-line) var(--type-mobile-hero-family); }
+}</code></pre>
+        <div class="specimen">
+          <div class="specimen-row sc">
+            <button class="btn" type="button">Get started</button>
+            <button class="btn btn--outline" type="button">How it works</button>
+            <button class="btn btn--header" type="button">Get started</button>
+            <a class="link" href="#tokens">View all Sexual health</a>
+          </div>
+          <p class="cap">Live from components.css: Dark and Outline at <code>--size-control</code> (50px), the header CTA at <code>--size-control-exception-header</code> (44px, E-02), and a text link. Hover or focus each one.</p>
+        </div>
+        <div class="grid-2">
+          <div class="rule"><b>Prefer semantic tokens.</b><p>Use <code>--color-text-*</code>, <code>--color-surface-*</code> and <code>--color-line-*</code> where they exist. Use <code>--color-brand-*</code> only for brand surfaces, shapes and button fills.</p></div>
+          <div class="rule"><b>Reduced motion comes with the tokens.</b><p><code>brand.css</code> sets every <code>--motion-duration-*</code> and distance to 0 under <code>prefers-reduced-motion: reduce</code>. Script-driven motion must check the same media query.</p></div>
+          <div class="rule"><b>Fonts.</b><p>DM Serif Display and Inter 400 to 700 from Google Fonts, with <code>display=swap</code>. No other face, except a monospace on internal screens.</p></div>
+          <div class="rule"><b>A value is missing.</b><p>Do not invent it. Raise a QUESTION. The answer becomes a decision and a token before it is built.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="checklist" aria-labelledby="checklist-h">
+        <div class="sec-head"><h2 id="checklist-h">Before a release.</h2><p>One coded checklist for everything that ships (R-123): <a class="link" href="how-we-work.html#checklist">How we work · The pre-publish checklist</a>. Developers run the Brand, Compliance, Accessibility and Discretion blocks on every page they change, plus the Dev block (Dev1 to Dev9), and write the codes in the approval log.</p></div>
+        <div class="grid-2">
+          <div class="rule"><b>What the Dev block covers.</b><p><code>tools/check.py</code> at 0 problems; widths 1440, 1024, 768 and 390; values from tokens only; only logged exceptions (E-02 header button 44, E-03 mobile bar 48, E-04 and E-05); focus; keyboard and touch; reduced motion; no link to Phase 2 pages before launch; no stand-in photo.</p></div>
+          <div class="rule"><b>Required lines.</b><p>"Assessment only. Not a diagnosis." next to every assessment CTA above the fold and in the mobile bar (R-63); a licensed provider named wherever a next step is offered (R-64); the consultation line under a hero button (R-62); "Prescription treatment is subject to provider approval. Results vary." under every treatment list; safety information fully expanded (R-66); DEMO ONLY on any demo screen (R-69).</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="feedback" aria-labelledby="feedback-h">
+        <div class="sec-head"><h2 id="feedback-h">Feedback labels.</h2><p>Start every review comment with one label. The label decides where it goes and who acts. The same four labels are used in every review (<a class="link" href="how-we-work.html#feedback">How we work</a>).</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Label</th><th scope="col">Use it when</th><th scope="col">Where it goes</th><th scope="col">What happens</th></tr></thead>
+            <tbody>
+              <tr><td><span class="label-tag">BUG</span></td><td class="wide">The build does not match the rules, the tokens or our Figma files.</td><td class="wide">Website backlog, with the page, breakpoint, Figma node and rule ID.</td><td class="wide">The developer fixes the code. No rule or token changes.</td></tr>
+              <tr><td><span class="label-tag">CHANGE</span></td><td class="wide">Someone wants a value or a rule to be different.</td><td class="wide">A proposed decision for Avi in the <a href="rulebook.html#decisions">decision log</a>.</td><td class="wide">Build to the current rule until Avi decides. If approved, it takes <a href="how-we-work.html#changes">change path 1</a>.</td></tr>
+              <tr><td><span class="label-tag">ADOPT</span></td><td class="wide">Something built works better than the spec and should become the rule.</td><td class="wide">A proposed decision for Avi in the <a href="rulebook.html#decisions">decision log</a>, with a link to the built example.</td><td class="wide">If approved, it takes change path 1 and our Figma files follow. Until then it is not the rule.</td></tr>
+              <tr><td><span class="label-tag">QUESTION</span></td><td class="wide">The spec is missing or unclear, or two sources disagree.</td><td class="wide"><a href="rulebook.html#open">Open items</a>, with one owner.</td><td class="wide">The owner answers. Keep building everything the question does not block.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cap">Website backlog tool: <span class="status status--proposed">To confirm</span></p>
+      </section>
+
+      <section class="sec" id="changes" aria-labelledby="changes-h">
+        <div class="sec-head"><h2 id="changes-h">How a change reaches developers.</h2><p>A rule or a value changes on one path, always in the same order: decision, <code>brand-rules.md</code>, tokens, changelog, release. The full path, and the second path for approving a finished asset, are on <a class="link" href="how-we-work.html#changes">How we work · Two change paths</a>.</p></div>
+        <div class="grid-2">
+          <div class="rule"><b>What you pull.</b><p>The new <code>tokens/tokens.json</code> and <code>brand.css</code>, and <code>components.css</code> if a component changed. The <a href="changelog.html">changelog</a> lists the date, the decision and rule IDs, the tokens that changed and the pages affected. Then run the checklist on those pages.</p></div>
+          <div class="rule"><b>No silent mismatches.</b><p>If a Figma file, the hub and the build disagree, raise a QUESTION the same day. Never copy a value from Figma by eye when a token exists, and never build a value that has no token.</p></div>
+        </div>
+      </section>

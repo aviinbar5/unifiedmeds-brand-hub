@@ -1,0 +1,554 @@
+<style>
+  /* Data in the member portal. Tokens only; every class starts with dv-. */
+  .dv-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .dv-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .dv-card { display: grid; gap: var(--space-5); align-content: start; min-width: 0; padding: var(--space-6); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .dv-head { display: grid; gap: var(--space-1); }
+  .dv-title { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .dv-sub { font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .dv-meta { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+  .dv-demo { display: inline-flex; padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-mist); color: var(--color-text-secondary-on-mist); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+  .dv-note { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  figure.dv-card { margin: 0; }
+  .dv-fig { font: 600 var(--type-desktop-h3-size) / var(--type-desktop-card-serif-line) var(--font-family-sans); color: var(--color-text-strong); }
+
+  /* Palette */
+  .dv-sw { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .dv-sw li { display: grid; grid-template-columns: var(--space-12) minmax(0, 1fr); gap: var(--space-3); align-items: center; font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+  .dv-sw li b { font-weight: 600; color: var(--color-text-strong); }
+  .dv-sw li span { display: block; color: var(--color-text-secondary); }
+  .dv-chip { height: var(--space-8); border-radius: var(--radius-xs); background: var(--chip); }
+  .dv-chip--light { border: 1px solid var(--color-line-base); }
+  .dv-chip--line { background: linear-gradient(var(--chip), var(--chip)) center / 100% 1px no-repeat, var(--color-surface-card); border: 1px solid var(--color-line-soft); }
+  .dv-chip--ring { background: var(--color-surface-card); border: 2px solid var(--color-brand-deep-teal); }
+  .c-deep { --chip: var(--color-brand-deep-teal); } .c-blue { --chip: var(--color-brand-blue); } .c-bluedark { --chip: var(--color-brand-blue-dark); }
+  .c-green { --chip: var(--color-brand-green); } .c-coral { --chip: var(--color-brand-coral); } .c-yellow { --chip: var(--color-brand-yellow); }
+  .c-mist { --chip: var(--color-surface-mist); } .c-soft { --chip: var(--color-line-soft); } .c-base { --chip: var(--color-line-base); }
+  .c-wgreen { --chip: var(--color-surface-wash-green); } .c-tealdeep { --chip: var(--color-brand-teal-deep); }
+  .c-tadalafil { --chip: var(--color-product-tadalafil); }
+  .dv-ramp { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+  .dv-ramp span { height: var(--space-8); background: var(--chip); }
+  .dv-ramp span:first-child { border-radius: var(--radius-xs) 0 0 var(--radius-xs); } .dv-ramp span:last-child { border-radius: 0 var(--radius-xs) var(--radius-xs) 0; }
+  .dv-never { display: flex; gap: var(--space-2); }
+  .dv-never .dv-chip { width: var(--space-8); }
+
+  /* 1 · Plan timeline */
+  .dv-tl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .dv-tl li { position: relative; display: grid; justify-items: center; align-content: start; gap: var(--space-1); padding: 0 var(--space-1); text-align: center; }
+  .dv-tl li::after { content: ''; position: absolute; top: calc(var(--space-3) - 1px); left: 50%; width: 100%; height: 2px; background: var(--color-line-base); }
+  .dv-tl li:last-child::after { display: none; }
+  .dv-tl li:has(+ .is-done)::after, .dv-tl li:has(+ .is-next)::after { background: var(--color-brand-deep-teal); }
+  .dv-mark { position: relative; z-index: 1; display: grid; place-items: center; box-sizing: border-box; width: var(--space-6); height: var(--space-6); margin-bottom: var(--space-2); border-radius: var(--radius-pill); border: 1.5px solid var(--color-text-secondary); background: var(--color-surface-card); color: var(--color-text-on-dark); }
+  .dv-mark svg { width: var(--space-4); height: var(--space-4); }
+  .is-done .dv-mark { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); }
+  .is-next .dv-mark { background: var(--color-brand-yellow); border: 2px solid var(--color-brand-deep-teal); }
+  .dv-tl b { font: 600 var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .dv-tl .d { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .dv-tl .is-next .d { color: var(--color-text-primary); font-weight: 600; }
+  .dv-tl--v { grid-template-columns: minmax(0, 1fr); }
+  .dv-tl--v li { grid-template-columns: var(--space-6) minmax(0, 1fr); justify-items: start; column-gap: var(--space-3); row-gap: 0; padding: 0 0 var(--space-4); text-align: left; }
+  .dv-tl--v li::after { top: var(--space-6); bottom: 0; left: calc(var(--space-3) - 1px); width: 2px; height: auto; }
+  .dv-tl--v .dv-mark { grid-row: span 2; margin: 0; }
+  .dv-tl--v li:last-child { padding-bottom: 0; }
+
+  /* 2 · Refill countdown */
+  .dv-ringbox { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-6); align-items: center; }
+  .dv-ring { position: relative; width: calc(var(--space-24) + var(--space-6)); aspect-ratio: 1; }
+  .dv-ring svg { display: block; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .dv-ring .trk { fill: none; stroke: var(--color-surface-mist); stroke-width: 8; }
+  .dv-ring .arc { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: var(--off); transition: stroke-dashoffset var(--motion-duration-reveal) var(--motion-easing-ui); }
+  .dv-ring-in { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .dv-ring-in span { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .dv-bar { height: var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-mist); overflow: hidden; }
+  .dv-bar > span { display: block; height: 100%; width: var(--w); border-radius: var(--radius-pill); background: var(--color-brand-deep-teal); transform-origin: left center; transition: transform var(--motion-duration-reveal) var(--motion-easing-ui); }
+  .dv-bar-labels { display: flex; justify-content: space-between; gap: var(--space-3); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .dv-bar-labels b { font-weight: 600; color: var(--color-text-primary); }
+
+  /* 3 · Week dots */
+  .dv-week { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-2); }
+  .dv-week li { display: grid; justify-items: center; gap: var(--space-2); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .dv-dot { display: grid; place-items: center; box-sizing: border-box; width: var(--space-8); height: var(--space-8); border-radius: var(--radius-pill); border: 1.5px solid var(--color-line-deep); background: var(--color-surface-card); color: var(--color-text-on-dark); }
+  .dv-dot svg { width: var(--space-4); height: var(--space-4); }
+  .dv-week .is-on .dv-dot { background: var(--color-brand-green); border-color: var(--color-brand-green); color: var(--color-text-strong); }
+  .dv-week--asneeded .is-on .dv-dot { background: var(--color-brand-blue); border-color: var(--color-brand-blue); }
+  .dv-week .is-quiet .dv-dot { background: var(--color-surface-mist); border-color: var(--color-surface-mist); }
+  .dv-week .is-today { color: var(--color-text-primary); }
+  .dv-week .is-today .dv-dot { outline: 2px solid var(--color-brand-deep-teal); outline-offset: 2px; }
+
+  /* 4 · Check-in line chart (drawn by the script below) */
+  .dv-line { position: relative; min-height: calc(var(--space-24) * 2 + var(--space-2)); border-radius: var(--radius-xs); touch-action: pan-y; }
+  .dv-line--m { min-height: calc(var(--space-24) + var(--space-14) + var(--space-2)); }
+  .dv-line svg { display: block; overflow: visible; }
+  .dv-line .grid { stroke: var(--color-line-soft); stroke-width: 1; shape-rendering: crispEdges; }
+  .dv-line .base { stroke: var(--color-line-base); stroke-width: 1; shape-rendering: crispEdges; }
+  .dv-line .tick { fill: var(--color-text-secondary); font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / 1 var(--font-family-sans); font-variant-numeric: tabular-nums; }
+  .dv-line .ln { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset var(--motion-duration-reveal) var(--motion-easing-ui); }
+  .dv-line .pt { fill: var(--color-brand-deep-teal); stroke: var(--color-surface-card); stroke-width: 2; transition: opacity var(--motion-duration-reveal) var(--motion-easing-ui); }
+  .dv-line .pt.is-hot { stroke: var(--color-brand-deep-teal); fill: var(--color-surface-card); }
+  .dv-line .end { fill: var(--color-text-primary); font: 600 var(--type-desktop-compact-size) / 1 var(--font-family-sans); }
+  .dv-line .cross { stroke: var(--color-line-mid); stroke-width: 1; shape-rendering: crispEdges; }
+  .dv-tip { position: absolute; z-index: 2; pointer-events: none; display: grid; padding: var(--space-2) var(--space-3); border-radius: var(--radius-xs); background: var(--color-brand-teal-deep); color: var(--color-text-on-dark); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); white-space: nowrap; transform: translate(-50%, calc(-100% - var(--space-3))); }
+  .dv-tip[hidden] { display: none; }
+  .dv-tip b { font: 600 var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+  .dv-tip span { color: var(--color-text-on-dark-muted); }
+  .dv-details summary { display: inline-flex; align-items: center; min-height: var(--size-tap-min); cursor: pointer; color: var(--color-text-link); text-decoration: underline; text-underline-offset: 3px; font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+  .dv-details[open] summary { margin-bottom: var(--space-2); }
+
+  /* Draw once (script adds dv-pending, then is-drawn when the chart scrolls into view) */
+  .dv-pending:not(.is-drawn) .ln { stroke-dashoffset: 1; }
+  .dv-pending:not(.is-drawn) .pt { opacity: 0; }
+  .dv-pending:not(.is-drawn) .arc { stroke-dashoffset: 100; }
+  .dv-pending:not(.is-drawn) .dv-bar > span { transform: scaleX(0); }
+
+  /* 5 · Stat tiles (R-98: one height, the action on one line) */
+  .dv-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .dv-tile { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--space-2); padding: var(--space-5) var(--space-6); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .dv-tile .lbl { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+  .dv-tile .ctx { font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .dv-tile a { align-self: end; justify-self: start; display: inline-flex; align-items: center; min-height: var(--size-tap-min); font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+
+  /* 6 · Value against its range (Phase 2) */
+  .dv-range { display: grid; gap: var(--space-2); }
+  .dv-range-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2) var(--space-4); }
+  .dv-range-head b { font: 600 var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .dv-range-head .v { font: 600 var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .dv-scale { position: relative; height: var(--space-2); margin: var(--space-3) 0 var(--space-1); border-radius: var(--radius-pill); background: var(--color-surface-mist); }
+  .dv-band { position: absolute; top: 0; bottom: 0; left: var(--a); width: calc(var(--b) - var(--a)); background: var(--color-surface-wash-green); }
+  .dv-band::before, .dv-band::after { content: ''; position: absolute; top: calc(var(--space-1) * -1); bottom: calc(var(--space-1) * -1); width: 2px; background: var(--color-text-secondary); }
+  .dv-band::before { left: -1px; } .dv-band::after { right: -1px; }
+  .dv-pin { position: absolute; top: 50%; left: var(--v); box-sizing: border-box; width: var(--space-4); height: var(--space-4); border-radius: var(--radius-pill); border: 2px solid var(--color-surface-card); background: var(--color-brand-green); transform: translate(-50%, -50%); }
+  .dv-pin.is-out { background: var(--color-brand-coral); }
+  .dv-ticks { position: relative; height: var(--space-5); font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); font-variant-numeric: tabular-nums; color: var(--color-text-secondary); }
+  .dv-ticks span { position: absolute; left: var(--p); transform: translateX(-50%); }
+  .dv-ticks span:first-child { transform: none; } .dv-ticks span:last-child { transform: translateX(-100%); }
+  .dv-state { display: flex; gap: var(--space-2); align-items: flex-start; font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-primary); }
+  .dv-state svg { flex: none; width: var(--space-5); height: var(--space-5); margin-top: calc(var(--space-1) / 2); }
+  .dv-state.is-in svg { color: var(--color-brand-green); } .dv-state.is-out svg { color: var(--color-brand-coral); }
+  .dv-split { height: 1px; background: var(--color-line-soft); }
+
+  /* 7 · Empty and loading */
+  .dv-ghost { position: relative; display: grid; place-items: center; min-height: calc(var(--space-24) + var(--space-14)); border-bottom: 1px solid var(--color-line-base); background: linear-gradient(var(--color-line-soft) 1px, transparent 1px) 0 0 / 100% 25%; }
+  .dv-ghost p { max-width: 34ch; padding: var(--space-3) var(--space-4); background: var(--color-surface-card); text-align: center; color: var(--color-text-secondary); font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); }
+  .dv-skel { display: grid; gap: var(--space-2); }
+  .dv-skel span { height: var(--space-3); border-radius: var(--radius-xs); background: var(--color-surface-mist); }
+  .dv-skel span:first-child { width: 70%; height: var(--space-4); } .dv-skel span:last-child { width: 45%; }
+  .dv-loader { width: calc(var(--space-14) + var(--space-2)); height: auto; opacity: 0; animation: dv-show 1ms linear var(--motion-loader-delay) forwards; }
+  .dv-loader .ll { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 1.5; } /* stroke_for(64) = 1.5 (R-109) */
+  .dv-loader .lf { fill: var(--color-brand-deep-teal); transform-box: fill-box; transform-origin: left center; animation: dv-fill var(--motion-duration-loader) var(--motion-easing-ui) infinite; }
+  @keyframes dv-show { to { opacity: 1; } }
+  @keyframes dv-fill { 0% { transform: scaleX(0); opacity: 1; } 60%, 100% { transform: scaleX(1); opacity: var(--opacity-capsule-soft); } }
+  @media (prefers-reduced-motion: reduce) { .dv-loader .lf { animation: none; transform: scaleX(0.5); } }
+
+  /* 8 · Mobile view */
+  .dv-phone { box-sizing: border-box; width: 100%; max-width: var(--layout-frame-mobile); margin: 0 auto; display: grid; gap: var(--space-4); padding: var(--space-6) var(--layout-margin-mobile); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper); }
+  .dv-phone h3 { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .dv-phone .dv-card { padding: var(--space-4); gap: var(--space-4); }
+  .dv-phone .dv-title { font-size: var(--type-mobile-card-size); line-height: var(--type-mobile-card-line); }
+  .dv-phone .dv-fig { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); }
+  .dv-phone .dv-dot { width: calc(var(--space-6) + var(--space-1)); height: calc(var(--space-6) + var(--space-1)); }
+
+  @media (max-width: 1023px) { .dv-tiles { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 767px) {
+    .dv-row { grid-template-columns: minmax(0, 1fr); }
+    .dv-card { padding: var(--space-4); }
+    .dv-tl:not(.dv-tl--v) { grid-template-columns: minmax(0, 1fr); }
+    .dv-tl:not(.dv-tl--v) li { grid-template-columns: var(--space-6) minmax(0, 1fr); justify-items: start; column-gap: var(--space-3); row-gap: 0; padding: 0 0 var(--space-4); text-align: left; }
+    .dv-tl:not(.dv-tl--v) li::after { top: var(--space-6); bottom: 0; left: calc(var(--space-3) - 1px); width: 2px; height: auto; }
+    .dv-tl:not(.dv-tl--v) .dv-mark { grid-row: span 2; margin: 0; }
+    .dv-tl:not(.dv-tl--v) li:last-child { padding-bottom: 0; }
+    .dv-ringbox { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
+    .dv-ring { width: var(--space-24); }
+    .dv-fig { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); }
+    .dv-dot { width: calc(var(--space-6) + var(--space-1)); height: calc(var(--space-6) + var(--space-1)); }
+    .dv-line { min-height: calc(var(--space-24) + var(--space-14) + var(--space-2)); }
+  }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Care journey</span>
+        <h1>Data in the member portal.</h1>
+        <p class="lead">How the portal shows a member his own plan: the timeline, the next refill, his week, his check-in answers and, later, lab values. Calm, plain and private. Every chart answers one question and says the answer in words.</p>
+        <nav class="toc" aria-label="On this page"><a href="#principles">Principles</a><a href="#palette">Palette</a><a href="#components">Components</a><a href="#mobile">Mobile</a><a href="#spec">Spec</a><a href="#open">Open items</a></nav>
+      </header>
+
+      <div class="rule"><span class="status status--current">Current · U-30</span><p>The patterns on this page are decided (U-30, R-113). Every number, date and chart on this page is DEMO ONLY: invented to show the pattern, not real member data and not a clinical rule. The lab value pattern is Phase 2 and needs legal and clinical review before it ships (R-69, R-87).</p></div>
+
+      <div class="rule"><span class="status status--current">Current · U-30</span><p><b>Yellow</b> marks only the next step on the timeline, once per screen; never a series, a band or a tile. <b>Dose marking</b> is a reminder from his plan with an optional check he can tap; no streaks and no scores. <b>Second chart colour:</b> Pastel Blue, two series at most. <b>Big numbers:</b> Inter SemiBold, never DM Serif. <b>Dose dots:</b> Green for a Daily plan, Blue for an As-needed plan (R-113), in the portal and on the landing page alike.</p></div>
+
+      <section class="sec" id="principles" aria-labelledby="principles-h">
+        <div class="sec-head"><h2 id="principles-h">Principles.</h2><p>Eight rules that hold for every chart, tile and number in the portal.</p></div>
+        <div class="grid-2">
+          <div class="rule rule--do"><b>One question per chart.</b><p>The title gives the answer in a plain sentence ("Your next refill is in 12 days"). The subtitle says what is measured and in what unit.</p></div>
+          <div class="rule rule--do"><b>Unit and range, always.</b><p>A number never stands alone: it carries its unit, and a result carries its range (R-60). "12 days", "4 of 5", "42 units, range 30 to 60".</p></div>
+          <div class="rule rule--do"><b>His data only.</b><p>A member sees his own data. Never a comparison with other members, an average, a percentile or "most men".</p></div>
+          <div class="rule rule--do"><b>His answers are his answers.</b><p>Check-in answers are labelled as self-reported, on the scale he answered. Never framed as a clinical result, an improvement or a score.</p></div>
+          <div class="rule rule--do"><b>Words before colour.</b><p>Every state is said in words and shown with an icon or a shape. Colour only repeats it. Each chart has a table or a sentence for screen readers.</p></div>
+          <div class="rule rule--dont"><b>No scary red.</b><p>Coral marks an out-of-range value only, with an icon and words (R-15). A day without a log is an empty dot, not a red one.</p></div>
+          <div class="rule rule--dont"><b>No games.</b><p>No streaks, scores, grades, badges or confetti. The portal informs; it never rewards or blames.</p></div>
+          <div class="rule rule--dont"><b>No data outside the portal.</b><p>Notifications, emails and lock screens never carry a number, a chart, a dose or a result. They say "You have an update" and link to sign-in.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="palette" aria-labelledby="palette-h">
+        <div class="sec-head"><h2 id="palette-h">A quiet palette from the brand tokens.</h2><p>The brand colours are muted on purpose, so the chart palette is small: one ink for data, one hue ramp for amounts, two reserved status colours. Checked with the data-viz palette validator against Paper (16.11.2026).</p></div>
+        <div class="dv-row">
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">Data ink.</span><span class="dv-sub">Most portal charts have one series. It is Deep Teal.</span></div>
+            <ul class="dv-sw">
+              <li><span class="dv-chip c-deep"></span><div><b>Series 1 · Deep Teal</b><span><code>--color-brand-deep-teal</code> · 9.82:1 on Paper</span></div></li>
+              <li><span class="dv-chip c-blue"></span><div><b>Series 2 · Pastel Blue</b><span><code>--color-brand-blue</code> · 3.53:1 · only beside Deep Teal, two series at most</span></div></li>
+            </ul>
+            <p class="dv-note">Deep Teal and Pastel Blue stay apart under red-green colour blindness (difference 24, target 8). Both sit below the validator's colourfulness floor, which the brand accepts: a second series always carries a direct label and a second marker shape, so colour is never the only key.</p>
+          </div>
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">Amounts: one hue, light to dark.</span><span class="dv-sub">Three steps for ordered or growing values. Passes the ordinal check: one hue, clear steps, the light end at 3.53:1.</span></div>
+            <div class="dv-ramp" aria-hidden="true"><span class="c-blue"></span><span class="c-bluedark"></span><span class="c-deep"></span></div>
+            <p class="dv-note"><code>--color-brand-blue</code> → <code>--color-brand-blue-dark</code> → <code>--color-brand-deep-teal</code>. Wash Blue and Teal Deep are left out: Wash Blue is too faint for a mark (1.89:1) and Teal Deep is too close to Deep Teal to read as a step.</p>
+          </div>
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">Status: reserved, with icon and words.</span><span class="dv-sub">Used only when a value has a range. Never for a series.</span></div>
+            <ul class="dv-sw">
+              <li><span class="dv-chip c-green"></span><div><b>In range · Pastel Green</b><span><code>--color-brand-green</code> · 3.89:1 · check icon and "In range" (R-16)</span></div></li>
+              <li><span class="dv-chip c-coral"></span><div><b>Out of range · Coral</b><span><code>--color-brand-coral</code> · 3.01:1 · alert icon and words, never text colour (R-15)</span></div></li>
+              <li><span class="dv-chip dv-chip--light c-wgreen"></span><div><b>Range band · Wash Green</b><span><code>--color-surface-wash-green</code> · a surface behind the marker; its edges are drawn in Slate</span></div></li>
+            </ul>
+          </div>
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">Structure, highlight and never.</span><span class="dv-sub">The frame stays quiet so the data can speak.</span></div>
+            <ul class="dv-sw">
+              <li><span class="dv-chip dv-chip--line c-soft"></span><div><b>Gridline · Line Soft</b><span><code>--color-line-soft</code> · 1px, horizontal only</span></div></li>
+              <li><span class="dv-chip dv-chip--line c-base"></span><div><b>Baseline · Line Base</b><span><code>--color-line-base</code> · 1px</span></div></li>
+              <li><span class="dv-chip dv-chip--light c-mist"></span><div><b>Track · Mist</b><span><code>--color-surface-mist</code> · the unfilled part of a ring or bar</span></div></li>
+              <li><span class="dv-chip c-yellow"></span><div><b>Next step · Yellow</b><span><code>--color-brand-yellow</code> · once per screen, the next step on the plan, never a series (R-11)</span></div></li>
+              <li><span class="dv-never" aria-hidden="true"><span class="dv-chip c-tadalafil"></span></span><div><b>Never · product, logo and wash colours</b><span>Product colours (<code>--color-product-*</code>) name a product on packaging. They never encode data, not even for "your Tadalafil".</span></div></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="components" aria-labelledby="components-h">
+        <div class="sec-head"><h2 id="components-h">Components.</h2><p>Built with HTML, CSS and inline SVG, no chart library. Hover a chart, tap it, or tab to it and use the arrow keys. All data is DEMO ONLY.</p></div>
+
+        <div class="sub">
+          <h3>1 · Treatment plan timeline.</h3>
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">Next: your provider reviews your refill on Dec 2.</span><span class="dv-sub">Your plan so far. A licensed provider reviews every refill before it ships (R-64).</span></div>
+            <ol class="dv-tl" aria-label="Your treatment plan">
+              <li class="is-done"><span class="dv-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><b>Assessment</b><span class="d">Oct 3<span class="dv-sr">, done</span></span></li>
+              <li class="is-done"><span class="dv-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><b>Provider review</b><span class="d">Oct 4<span class="dv-sr">, done</span></span></li>
+              <li class="is-done"><span class="dv-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><b>First shipment</b><span class="d">Delivered Oct 8<span class="dv-sr">, done</span></span></li>
+              <li class="is-done"><span class="dv-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><b>Check-in</b><span class="d">Nov 1<span class="dv-sr">, done</span></span></li>
+              <li class="is-next" aria-current="step"><span class="dv-mark" aria-hidden="true"></span><b>Refill review</b><span class="d">Next · Dec 2</span></li>
+              <li><span class="dv-mark" aria-hidden="true"></span><b>Second shipment</b><span class="d">After the review<span class="dv-sr">, upcoming</span></span></li>
+            </ol>
+            <div class="dv-meta"><span class="dv-demo">DEMO ONLY</span><span class="dv-note">Done: Deep Teal with a check. Next: the one Yellow mark on the screen. Upcoming: an empty ring. Under 768 the list turns vertical.</span></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>2 · Refill countdown.</h3>
+          <div class="dv-row">
+            <div class="dv-card dv-draw">
+              <div class="dv-head"><span class="dv-title">Your next refill is in 12 days.</span><span class="dv-sub">Days left in your current 30-day supply.</span></div>
+              <div class="dv-ringbox">
+                <div class="dv-ring" role="img" aria-label="12 of 30 days left in your current supply. Refill review on Dec 2.">
+                  <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="52"/><circle class="arc" cx="60" cy="60" r="52" pathLength="100" style="--off: 60"/></svg>
+                  <div class="dv-ring-in" aria-hidden="true"><span class="dv-fig">12 days</span><span>of 30 left</span></div>
+                </div>
+                <p class="dv-sub">Your provider reviews the refill on Dec 2. Nothing ships without that review.</p>
+              </div>
+              <div class="dv-meta"><span class="dv-demo">DEMO ONLY</span><span class="dv-note">Ring: the dashboard hero. The filled arc is what is left.</span></div>
+            </div>
+            <div class="dv-card dv-draw">
+              <div class="dv-head"><span class="dv-title">Your next refill is in 12 days.</span><span class="dv-sub">The same fact as a bar, for lists and small cards.</span></div>
+              <div class="dv-fig">12 days</div>
+              <div class="dv-bar" role="img" aria-label="12 of 30 days left in your current supply."><span style="--w: 40%"></span></div>
+              <div class="dv-bar-labels" aria-hidden="true"><span><b>12 of 30 days</b> left</span><span>Review Dec 2</span></div>
+              <div class="dv-meta"><span class="dv-demo">DEMO ONLY</span><span class="dv-note">Bar: 8 high, pill ends, Mist track.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>3 · Week of doses.</h3>
+          <div class="dv-row">
+            <div class="dv-card">
+              <div class="dv-head"><span class="dv-title">You checked 4 of 5 days so far this week.</span><span class="dv-sub">Daily plan. A reminder from your plan; the check is optional, never a score.</span></div>
+              <ol class="dv-week" aria-label="This week, daily plan">
+                <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span>Mon<span class="dv-sr">: logged</span></li>
+                <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span>Tue<span class="dv-sr">: logged</span></li>
+                <li><span class="dv-dot" aria-hidden="true"></span>Wed<span class="dv-sr">: not logged</span></li>
+                <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span>Thu<span class="dv-sr">: logged</span></li>
+                <li class="is-on is-today" aria-current="date"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span>Today<span class="dv-sr">, Friday: logged</span></li>
+                <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span>Sat<span class="dv-sr">: later this week</span></li>
+                <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span>Sun<span class="dv-sr">: later this week</span></li>
+              </ol>
+              <div class="dv-meta"><span class="dv-demo">DEMO ONLY</span><span class="dv-note">Daily plan: a logged day fills Green with a Deep Teal check (R-113). Not logged: an empty ring. Later: Mist. Today: a ring around the dot.</span></div>
+            </div>
+            <div class="dv-card">
+              <div class="dv-head"><span class="dv-title">You logged 2 doses this week.</span><span class="dv-sub">As-needed plan. There is no "missed" day on this plan.</span></div>
+              <ol class="dv-week dv-week--asneeded" aria-label="This week, as-needed plan">
+                <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span>Mon<span class="dv-sr">: no dose logged</span></li>
+                <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span>Tue<span class="dv-sr">: dose logged</span></li>
+                <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span>Wed<span class="dv-sr">: no dose logged</span></li>
+                <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span>Thu<span class="dv-sr">: no dose logged</span></li>
+                <li class="is-quiet is-today" aria-current="date"><span class="dv-dot" aria-hidden="true"></span>Today<span class="dv-sr">, Friday: no dose logged</span></li>
+                <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span>Sat<span class="dv-sr">: dose planned and logged ahead</span></li>
+                <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span>Sun<span class="dv-sr">: no dose logged</span></li>
+              </ol>
+              <div class="dv-meta"><span class="dv-demo">DEMO ONLY</span><span class="dv-note">As-needed plan: a logged dose fills Blue with a Deep Teal check (R-113). Days without a dose are plain Mist: nothing to catch up on.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>4 · Check-in answers over time.</h3>
+          <figure class="dv-card dv-draw">
+            <div class="dv-head"><span class="dv-title" id="ci-title">Your answers rose from 2 to 4 since June.</span><span class="dv-sub" id="ci-sub">Your own answers to "How satisfied are you with your plan?", from 1 (not at all) to 5 (very). Not a medical measure.</span></div>
+            <div class="dv-line" data-chart="checkins" tabindex="0" role="group" aria-labelledby="ci-title" aria-describedby="ci-sub ci-keys">
+              <div class="dv-tip" hidden><b></b><span></span></div>
+              <span class="dv-sr" aria-live="polite"></span>
+            </div>
+            <span class="dv-sr" id="ci-keys">Use the left and right arrow keys to read each check-in. The full list is in the table below the chart.</span>
+            <details class="dv-details">
+              <summary>Show the numbers</summary>
+              <div class="table-wrap"><table>
+                <caption class="dv-sr">Your check-in answers, 1 to 5</caption>
+                <thead><tr><th scope="col">Check-in</th><th scope="col">Your answer (1 to 5)</th></tr></thead>
+                <tbody><tr><td>Jun 1</td><td>2 of 5</td></tr><tr><td>Jul 1</td><td>3 of 5</td></tr><tr><td>Aug 1</td><td>3 of 5</td></tr><tr><td>Sep 1</td><td>4 of 5</td></tr><tr><td>Oct 1</td><td>3 of 5</td></tr><tr><td>Nov 1</td><td>4 of 5</td></tr></tbody>
+              </table></div>
+            </details>
+            <figcaption class="dv-meta"><span class="dv-demo">DEMO ONLY</span><span class="dv-note">One series, so no legend: the title names it. Only the latest answer is labelled; the tooltip and the table carry the rest.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="sub">
+          <h3>5 · Stat tiles.</h3>
+          <div class="dv-tiles">
+            <div class="dv-tile"><span class="lbl">Next refill</span><span class="dv-fig">12 days</span><span class="ctx">Provider review on Dec 2</span><a class="link" href="#components">See your plan</a></div>
+            <div class="dv-tile"><span class="lbl">Orders</span><span class="dv-fig">3 delivered</span><span class="ctx">The latest on Nov 3</span><a class="link" href="#components">View orders</a></div>
+            <div class="dv-tile"><span class="lbl">Messages</span><span class="dv-fig">1 new</span><span class="ctx">From your provider. Open it to read.</span><a class="link" href="#components">Open messages</a></div>
+          </div>
+          <p class="cap">DEMO ONLY. Label, one figure with its unit, one line of context, one action on the same line in every tile (R-98). No up or down arrows: nothing here is a performance. The message tile never previews the message.</p>
+        </div>
+
+        <div class="sub">
+          <h3>6 · A value against its range.</h3>
+          <div class="dv-card">
+            <div class="dv-meta"><span class="status status--planned">Phase 2</span><span class="status">Legal and clinical review required</span><span class="dv-demo">DEMO ONLY</span></div>
+            <div class="dv-head"><span class="dv-title">One of your two example markers is above its range.</span><span class="dv-sub">Lab results from your last test, each against its reference range. Your provider sees every result.</span></div>
+            <div class="dv-range">
+              <div class="dv-range-head"><b>Example marker A</b><span class="v">42 units</span></div>
+              <div class="dv-scale" role="img" aria-label="Example marker A: 42 units. Reference range 30 to 60 units. In range." style="--a: 30%; --b: 60%; --v: 42%"><span class="dv-band"></span><span class="dv-pin"></span></div>
+              <div class="dv-ticks" aria-hidden="true"><span style="--p: 0%">0</span><span style="--p: 30%">30</span><span style="--p: 60%">60</span><span style="--p: 100%">100 units</span></div>
+              <p class="dv-state is-in"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.75 10A7.25 7.25 0 1 0 17.25 10A7.25 7.25 0 1 0 2.75 10ZM6.75 10.25L9 12.5L13.25 7.75"/></svg><span><b>In range.</b> Reference range 30 to 60 units.</span></p>
+            </div>
+            <div class="dv-split" aria-hidden="true"></div>
+            <div class="dv-range">
+              <div class="dv-range-head"><b>Example marker B</b><span class="v">78 units</span></div>
+              <div class="dv-scale" role="img" aria-label="Example marker B: 78 units. Reference range 20 to 70 units. Above the range." style="--a: 20%; --b: 70%; --v: 78%"><span class="dv-band"></span><span class="dv-pin is-out"></span></div>
+              <div class="dv-ticks" aria-hidden="true"><span style="--p: 0%">0</span><span style="--p: 20%">20</span><span style="--p: 70%">70</span><span style="--p: 100%">100 units</span></div>
+              <p class="dv-state is-out"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.7 4.25C9.28 3.25 10.72 3.25 11.3 4.25L16.8 13.75C17.38 14.75 16.66 16 15.5 16H4.5C3.34 16 2.62 14.75 3.2 13.75L8.7 4.25ZM10 8V11.25M10 13.6V13.7"/></svg><span><b>Above the range.</b> Reference range 20 to 70 units. Your provider has this result, and you can message them about it.</span></p>
+            </div>
+            <p class="dv-note">Marker names, units and ranges are placeholders. The real markers, ranges, their source and the wording come from the clinical team. The marker is Green in range and Coral out of range, always with the icon and the words; the text stays Deep Teal.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>7 · Empty and loading.</h3>
+          <div class="dv-row">
+            <div class="dv-card">
+              <div class="dv-head"><span class="dv-title">No check-ins yet.</span><span class="dv-sub">Empty state.</span></div>
+              <div class="dv-ghost"><p>Your first check-in opens on Dec 1. Your answers will show here.</p></div>
+              <p class="dv-note">Gridlines only, never invented sample data. One sentence: what will appear and when.</p>
+            </div>
+            <div class="dv-card" aria-busy="true">
+              <div class="dv-skel" aria-hidden="true"><span></span><span></span></div>
+              <div class="dv-ghost"><svg class="dv-loader" viewBox="0 0 64 25.5" role="img" aria-label="Loading your check-ins"><path class="lf" d="M32.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L32.02 22.78ZM35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z"/><path class="ll" d="M35.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L35.02 22.78"/><path class="ll" d="M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z"/></svg></div>
+              <p class="dv-note">Loading: a static skeleton at once, the capsule loader after 400ms, never a shimmer loop (R-53). The loader keeps the thin gap at the divider when its long half fills (U-28) and draws its outline at 1.5, the stroke <code>stroke_for(64)</code> gives (R-109). On a refresh, the last chart stays in place at 50% opacity instead.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="mobile" aria-labelledby="mobile-h">
+        <div class="sec-head"><h2 id="mobile-h">Mobile view.</h2><p>The portal dashboard at 390 wide. One column, every chart full width, the timeline vertical. Tooltips open on tap and close on a second tap outside.</p></div>
+        <div class="dv-phone">
+          <h3>Your plan.</h3>
+          <div class="dv-card dv-draw">
+            <div class="dv-head"><span class="dv-title">Your next refill is in 12 days.</span><span class="dv-sub">Your provider reviews it on Dec 2.</span></div>
+            <div class="dv-bar" role="img" aria-label="12 of 30 days left in your current supply."><span style="--w: 40%"></span></div>
+            <div class="dv-bar-labels" aria-hidden="true"><span><b>12 of 30 days</b> left</span><span>Review Dec 2</span></div>
+          </div>
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">Next: refill review on Dec 2.</span></div>
+            <ol class="dv-tl dv-tl--v" aria-label="Your treatment plan">
+              <li class="is-done"><span class="dv-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><b>First shipment</b><span class="d">Delivered Oct 8<span class="dv-sr">, done</span></span></li>
+              <li class="is-done"><span class="dv-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><b>Check-in</b><span class="d">Nov 1<span class="dv-sr">, done</span></span></li>
+              <li class="is-next" aria-current="step"><span class="dv-mark" aria-hidden="true"></span><b>Refill review</b><span class="d">Next · Dec 2</span></li>
+              <li><span class="dv-mark" aria-hidden="true"></span><b>Second shipment</b><span class="d">After the review<span class="dv-sr">, upcoming</span></span></li>
+            </ol>
+          </div>
+          <div class="dv-card">
+            <div class="dv-head"><span class="dv-title">You logged 4 of 5 days so far.</span></div>
+            <ol class="dv-week" aria-label="This week, daily plan">
+              <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><span aria-hidden="true">M</span><span class="dv-sr">Monday: logged</span></li>
+              <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><span aria-hidden="true">T</span><span class="dv-sr">Tuesday: logged</span></li>
+              <li><span class="dv-dot" aria-hidden="true"></span><span aria-hidden="true">W</span><span class="dv-sr">Wednesday: not logged</span></li>
+              <li class="is-on"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><span aria-hidden="true">T</span><span class="dv-sr">Thursday: logged</span></li>
+              <li class="is-on is-today" aria-current="date"><span class="dv-dot" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L8 14.5L16 5.5"/></svg></span><span aria-hidden="true">F</span><span class="dv-sr">Friday, today: logged</span></li>
+              <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span><span aria-hidden="true">S</span><span class="dv-sr">Saturday: later this week</span></li>
+              <li class="is-quiet"><span class="dv-dot" aria-hidden="true"></span><span aria-hidden="true">S</span><span class="dv-sr">Sunday: later this week</span></li>
+            </ol>
+          </div>
+          <div class="dv-card dv-draw">
+            <div class="dv-head"><span class="dv-title" id="cim-title">Your answers rose from 2 to 4.</span><span class="dv-sub" id="cim-sub">Satisfaction with your plan, 1 to 5. Your answers, not a medical measure.</span></div>
+            <div class="dv-line dv-line--m" data-chart="checkins" data-h="160" tabindex="0" role="group" aria-labelledby="cim-title" aria-describedby="cim-sub ci-keys">
+              <div class="dv-tip" hidden><b></b><span></span></div>
+              <span class="dv-sr" aria-live="polite"></span>
+            </div>
+          </div>
+          <span class="dv-demo">DEMO ONLY</span>
+        </div>
+      </section>
+
+      <section class="sec" id="spec" aria-labelledby="spec-h">
+        <div class="sec-head"><h2 id="spec-h">Spec for the developer.</h2><p>Every value is a token from brand.css. Values marked "token pending" keep their number until the chart token group lands in tokens.json (R-03).</p></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Part</th><th scope="col">Rule</th><th scope="col">Token</th></tr></thead>
+          <tbody>
+            <tr><td>Chart card</td><td>Card surface, 1px border, radius 16, padding 24 (16 on mobile)</td><td><code>--color-surface-card</code>, <code>--color-line-base</code>, <code>--radius-card</code></td></tr>
+            <tr><td>Title</td><td>The takeaway as a sentence, ending with a full stop. Inter SemiBold 17/24 (16/22 mobile)</td><td><code>--type-desktop-card-*</code>, <code>--type-mobile-card-*</code></td></tr>
+            <tr><td>Subtitle</td><td>What is measured, the unit and the scale. Inter 15, Slate</td><td><code>--type-desktop-small-*</code>, <code>--color-text-secondary</code></td></tr>
+            <tr><td>Figures</td><td>Inter SemiBold 26 (21 mobile), proportional figures. Never DM Serif</td><td><code>--type-desktop-h3-size</code>, <code>--type-mobile-card-serif-size</code> (token pending: <code>chart.figure</code>)</td></tr>
+            <tr><td>Axis and tick labels</td><td>Inter 12/18, Slate, tabular figures. Whole steps only (1 to 5, never 2.5)</td><td><code>--type-desktop-fine-*</code></td></tr>
+            <tr><td>Direct label</td><td>Inter SemiBold 14, Deep Teal. The latest value only</td><td><code>--type-desktop-compact-size</code>, <code>--color-text-primary</code></td></tr>
+            <tr><td>Plot height</td><td>200 desktop, 160 mobile, axis labels included in that height</td><td>Token pending: <code>chart.plot-height</code></td></tr>
+            <tr><td>Gridlines</td><td>1px solid, horizontal only, one per whole step; never dashed</td><td><code>--color-line-soft</code></td></tr>
+            <tr><td>Baseline</td><td>1px solid</td><td><code>--color-line-base</code></td></tr>
+            <tr><td>Line</td><td>2px, round caps and joins</td><td><code>--color-brand-deep-teal</code>; 2px is token pending: <code>chart.line-width</code></td></tr>
+            <tr><td>Markers</td><td>8px (r 4) with a 2px ring in the card colour; hover turns the marker hollow</td><td><code>--color-surface-card</code>; token pending: <code>chart.marker-radius</code>, <code>chart.marker-ring</code></td></tr>
+            <tr><td>Bars (if used)</td><td>At most 24 thick, 2px gap, rounded data end, square at the baseline</td><td><code>--radius-xs</code> (R-30 allows no 4px radius)</td></tr>
+            <tr><td>Ring</td><td>120 (96 mobile), stroke 8, round cap, starts at 12 o'clock and runs clockwise; the filled arc is what is left</td><td><code>--color-surface-mist</code> track; token pending: <code>chart.ring-stroke</code></td></tr>
+            <tr><td>Progress bar</td><td>8 high, pill ends, Mist track</td><td><code>--space-2</code>, <code>--radius-pill</code></td></tr>
+            <tr><td>Week dot</td><td>32 (28 mobile), 1.5px border. Logged: Green on a Daily plan, Blue on an As-needed plan (R-113). When a dot logs a day, its tap target is 44 × 44</td><td><code>--space-8</code>, <code>--size-tap-min</code>, <code>--color-brand-green</code>, <code>--color-brand-blue</code>; border <code>--color-line-deep</code>, 1.5px token pending: <code>chart.dot-border</code></td></tr>
+            <tr><td>Timeline mark</td><td>24 circle; done fills Deep Teal with a check, next fills Yellow with a 2px Deep Teal ring, upcoming is a 1.5px Slate ring</td><td><code>--space-6</code>, <code>--color-brand-yellow</code></td></tr>
+            <tr><td>Tooltip</td><td>Teal Deep, Paper text, radius 8, no shadow (R-36). Value first, then the date. Opens on hover, tap and keyboard focus; arrow keys step, Esc closes. Text set with <code>textContent</code>. Never the only way to read a value</td><td><code>--color-brand-teal-deep</code>, <code>--radius-xs</code></td></tr>
+            <tr><td>Hit area</td><td>At least 24 around each point; the crosshair snaps to the nearest check-in</td><td>Token pending: <code>chart.hit-area</code></td></tr>
+            <tr><td>Motion</td><td>Lines, rings and bars draw once in 320ms ease-out when they first scroll into view. No loop, no replay on resize or refresh. Tooltips appear without animation</td><td><code>--motion-duration-reveal</code>, <code>--motion-easing-ui</code></td></tr>
+            <tr><td>Reduced motion</td><td>The final state at once</td><td>Duration tokens drop to 0ms</td></tr>
+            <tr><td>Loading</td><td>Static skeleton at once; capsule loader after 400ms; refresh keeps the last chart at 50% opacity</td><td><code>--motion-loader-delay</code>, <code>--motion-duration-loader</code> (token pending: <code>chart.refetch-opacity</code>)</td></tr>
+            <tr><td>Text alternative</td><td>A chart: title, subtitle and a "Show the numbers" table. A single figure: one <code>aria-label</code> sentence with value, unit and range</td><td>Not a token</td></tr>
+            <tr><td>Privacy</td><td>No chart, number, dose or result in a notification, email, page title or URL</td><td>Not a token</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="open" aria-labelledby="open-h">
+        <div class="sec-head"><h2 id="open-h">Open items.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Item</th><th scope="col">Owner</th></tr></thead>
+          <tbody>
+            <tr><td>Dose marking at launch: a reminder from the plan plus an optional check; no streaks, no scores</td><td><span class="status status--current">Current · U-30</span></td></tr>
+<tr><td>Check-ins at launch: shown or not</td><td>Avi and product</td></tr>
+            <tr><td>The check-in question, its 1 to 5 scale and how often it opens; confirm it is not a clinical measure</td><td>Clinical and legal</td></tr>
+            <tr><td>Refill timing words ("in 12 days", "review on Dec 2") before operations confirm a service level (R-68)</td><td>Operations</td></tr>
+            <tr><td>Lab values (Phase 2): which markers, the source of each range, the wording, and whether the provider sees a result first</td><td>Clinical and legal (R-87)</td></tr>
+            <tr><td>Yellow only for the next step on the timeline, once per screen</td><td><span class="status status--current">Current · U-30</span></td></tr>
+<tr><td>Second chart colour Pastel Blue, two series at most; big numbers in Inter SemiBold</td><td><span class="status status--current">Current · U-30</span></td></tr>
+<tr><td>Week dots: Green for Daily, Blue for As needed (R-113), in the portal and on the landing page; never a product colour. The Combo-colour item is closed</td><td><span class="status status--current">Current · U-31</span></td></tr>
+            <tr><td>Chart token group in <code>tokens.json</code>: line width, ring stroke, marker radius and ring, dot border, plot height, hit area, data figure, refetch opacity. The values on this page stay until then</td><td><span class="status status--proposed">Token pending</span></td></tr>
+            <tr><td>No dark mode (R-17): every chart is checked on Paper and Card only</td><td>Design</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+<script>
+(() => {
+  /* DEMO ONLY data. Labels are set with textContent, never innerHTML. */
+  const DATA = [
+    { m: 'Jun', d: 'Jun 1', v: 2 }, { m: 'Jul', d: 'Jul 1', v: 3 }, { m: 'Aug', d: 'Aug 1', v: 3 },
+    { m: 'Sep', d: 'Sep 1', v: 4 }, { m: 'Oct', d: 'Oct 1', v: 3 }, { m: 'Nov', d: 'Nov 1', v: 4 }
+  ];
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mk = (n, a, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+
+  function draw(box) {
+    const W = box.clientWidth, H = +box.dataset.h || 200, m = { l: 24, r: 56, t: 12, b: 28 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b, n = DATA.length;
+    const x = i => m.l + i * pw / (n - 1), y = v => m.t + (5 - v) * ph / 4;
+    const old = box.querySelector('svg'); if (old) old.remove();
+    const svg = mk('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true', focusable: 'false' });
+    for (let v = 1; v <= 5; v++) {
+      mk('line', { x1: m.l, x2: W - m.r + 8, y1: y(v), y2: y(v), class: v === 1 ? 'base' : 'grid' }, svg);
+      mk('text', { x: 0, y: y(v), dy: '0.35em', class: 'tick' }, svg).textContent = v;
+    }
+    DATA.forEach((d, i) => { mk('text', { x: x(i), y: H - 6, 'text-anchor': 'middle', class: 'tick' }, svg).textContent = d.m; });
+    const cross = mk('line', { x1: 0, x2: 0, y1: m.t, y2: m.t + ph, class: 'cross', visibility: 'hidden' }, svg);
+    mk('path', { d: DATA.map((d, i) => (i ? 'L' : 'M') + x(i) + ' ' + y(d.v)).join(''), pathLength: 1, class: 'ln' }, svg);
+    const pts = DATA.map((d, i) => mk('circle', { cx: x(i), cy: y(d.v), r: 4, class: 'pt' }, svg));
+    const last = DATA[n - 1];
+    mk('text', { x: x(n - 1) + 10, y: y(last.v), dy: '0.35em', class: 'end' }, svg).textContent = last.v + ' of 5';
+    box.prepend(svg);
+    Object.assign(box, { _x: x, _y: y, _m: m, _pw: pw, _cross: cross, _pts: pts, _W: W });
+  }
+
+  function show(box, i) {
+    const d = DATA[i], tip = box.querySelector('.dv-tip'), live = box.querySelector('[aria-live]');
+    tip.querySelector('b').textContent = d.v + ' of 5';
+    tip.querySelector('span').textContent = d.d + ' check-in';
+    tip.hidden = false;
+    const w = tip.offsetWidth, cx = box._x(i);
+    tip.style.left = Math.min(Math.max(cx, w / 2), box._W - w / 2) + 'px';
+    tip.style.top = box._y(d.v) + 'px';
+    box._cross.setAttribute('x1', cx); box._cross.setAttribute('x2', cx); box._cross.setAttribute('visibility', 'visible');
+    box._pts.forEach((p, j) => p.classList.toggle('is-hot', j === i));
+    if (box._i !== i) live.textContent = d.d + ' check-in: ' + d.v + ' of 5';
+    box._i = i;
+  }
+  function hide(box) {
+    box.querySelector('.dv-tip').hidden = true;
+    if (box._cross) box._cross.setAttribute('visibility', 'hidden');
+    if (box._pts) box._pts.forEach(p => p.classList.remove('is-hot'));
+    box._i = null;
+  }
+  const nearest = (box, e) => {
+    const r = box.getBoundingClientRect(), px = e.clientX - r.left;
+    return Math.max(0, Math.min(DATA.length - 1, Math.round((px - box._m.l) / (box._pw / (DATA.length - 1)))));
+  };
+
+  document.querySelectorAll('.dv-line[data-chart="checkins"]').forEach(box => {
+    draw(box);
+    box.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') show(box, nearest(box, e)); });
+    box.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hide(box); });
+    box.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') show(box, nearest(box, e)); });
+    box.addEventListener('focus', () => show(box, box._i != null ? box._i : DATA.length - 1));
+    box.addEventListener('blur', () => hide(box));
+    box.addEventListener('keydown', e => {
+      const i = box._i != null ? box._i : DATA.length - 1, n = DATA.length;
+      const k = { ArrowLeft: Math.max(0, i - 1), ArrowRight: Math.min(n - 1, i + 1), Home: 0, End: n - 1 }[e.key];
+      if (k != null) { e.preventDefault(); show(box, k); }
+      if (e.key === 'Escape') hide(box);
+    });
+    if ('ResizeObserver' in window) {
+      let w = box.clientWidth;
+      new ResizeObserver(() => { if (box.clientWidth === w) return; w = box.clientWidth; const i = box._i; draw(box); if (i != null) show(box, i); }).observe(box);
+    }
+  });
+  document.addEventListener('pointerdown', e => {
+    document.querySelectorAll('.dv-line').forEach(box => { if (!box.contains(e.target)) hide(box); });
+  });
+
+  /* Draw once: 320ms when the chart first scrolls into view; reduced motion shows the end state. */
+  const drawn = document.querySelectorAll('.dv-draw');
+  if (!reduce && 'IntersectionObserver' in window) {
+    drawn.forEach(el => el.classList.add('dv-pending'));
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      requestAnimationFrame(() => requestAnimationFrame(() => en.target.classList.add('is-drawn')));
+    }), { threshold: 0.4 });
+    drawn.forEach(el => io.observe(el));
+  }
+})();
+</script>

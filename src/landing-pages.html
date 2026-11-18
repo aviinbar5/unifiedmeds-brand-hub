@@ -1,0 +1,76 @@
+<style>
+  .pages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .pages figure { margin: 0; display: grid; gap: var(--space-2); align-content: start; }
+  .pages a.shot { display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-small); border: 1px solid var(--color-line-base); background: var(--color-surface-mist); }
+  .pages a.shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .pages a.shot.contain img { object-fit: contain; }
+  .pages figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  @media (max-width: 1023px) { .pages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) { .pages { grid-template-columns: minmax(0, 1fr); } }
+  .lp-feature { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-8); align-items: center; padding: var(--space-6); border-radius: var(--radius-card); border: 1px solid var(--color-line-base); background: var(--color-surface-card); }
+  .lp-feature > a { display: block; min-width: 0; }
+  .lp-feature img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-small); display: block; }
+  .lp-feature div { display: grid; gap: var(--space-3); justify-items: start; }
+  .lp-feature ul { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-1); }
+  @media (max-width: 767px) { .lp-feature { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); padding: var(--space-4); } }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Website</span>
+        <h1>Landing pages.</h1>
+        <p class="lead">The Sexual health landing page (Option A, approved by Avi), then LP 01: a landing page for a Meta (Facebook and Instagram) campaign for Combo, in two concepts with different marketing strategies, being rebuilt for unifiedmeds as part of the Sexual health landing-page work. Every landing page uses the website's header rule, components and footer.</p>
+        <nav class="toc" aria-label="On this page"><a href="#sexual-health">Sexual health</a><a href="#lp01">LP 01 concepts</a><a href="#compliance">Compliance status</a><a href="#rebrand">What changes for unifiedmeds</a></nav>
+      </header>
+
+      <section class="sec" id="sexual-health" aria-labelledby="sh-h">
+        <div class="sec-head"><h2 id="sh-h">Sexual health · Option A, "The guided story".</h2><p>The first unifiedmeds landing page, for the Sexual health campaign. Mobile first, built only from the tokens and components, with the landing-page motion rule (R-104), the header logo rule (R-103) and the one footer (R-114).</p></div>
+        <div class="lp-feature">
+          <a href="lp/sexual-health.html"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" alt="The hero photo of the Sexual health landing page (stand-in, not approved)" width="2048" height="1365" loading="lazy"></a>
+          <div>
+            <span class="status status--current">Approved by Avi</span>
+            <ul>
+              <li>Sticky header with Get started; the capsule draws once in the hero; "[charge line · operations]" under the hero button (R-62).</li>
+              <li>How it works: the one four-step wording (q132); the capsule fills step by step as you scroll.</li>
+              <li>Daily or As needed switch, a video slot, treatments with the provider-approval line, reviews in the prototype format (DEMO ONLY, "Member · age", R-67), provider, plan and price, FAQ, safety.</li>
+              <li>No Hair loss, Longevity or Reviews links in the header or footer until they launch and legal approves.</li>
+              <li>Copy, prices, provider and reviews are placeholders until legal and operations approve them.</li>
+            </ul>
+            <a class="btn" href="lp/sexual-health.html">Open the landing page</a>
+          </div>
+        </div>
+        <div class="rule"><span class="status status--current">Current · R-117</span><p><b>A category's landing page takes its category colour for its dark bands</b>: Sexual health Deep Teal, Longevity Forest, Hair loss Sky (with Deep Teal text and buttons). On the Sexual health page both dark bands, the provider band and the closing call, are Deep Teal, and they never touch (R-119). See <a class="link" href="templates.html#category-colours">Category colours</a>.</p></div>
+      </section>
+
+      <section class="sec" id="lp01" aria-labelledby="lp01-h">
+        <div class="sec-head"><h2 id="lp01-h">LP 01 · Combo · two concepts.</h2><p>Source: Figma file LP_01_Cl (stage 2) and the brief in the LP_01 folder. One goal per page: a visitor from an ad gets what he needs and starts the assessment.</p></div>
+        <div class="rule"><span class="status status--proposed">Being rebuilt</span><p>The two concepts are rebuilt in the unifiedmeds look (name, capsule seal, rounded-rectangle buttons, the current tokens) before they are shown here. The structure, the strategy of each concept and the compliance work below carry over.</p></div>
+      </section>
+
+      <section class="sec" id="compliance" aria-labelledby="compliance-h">
+        <div class="sec-head"><h2 id="compliance-h">Compliance status.</h2><p>From the stage 2 claims check. A craft check, not legal advice.</p></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Severity</th><th>Item</th><th>What it needs</th></tr></thead>
+          <tbody>
+            <tr><td><span class="status status--proposed">Blocker</span></td><td>Reviews, star rating, "As seen in" logos</td><td>Live: none until real, consented reviews and approved press exist (R-67). Prototypes: illustrative quotes with the DEMO ONLY marker and "Member · age", never "Verified"; no star rating</td></tr>
+            <tr><td><span class="status status--proposed">Blocker</span></td><td>Provider quote and name</td><td>A real provider with written consent, and a true statement</td></tr>
+            <tr><td><span class="status status--proposed">Blocker</span></td><td>Oxytocin safety information</td><td>Supplied by the clinical team</td></tr>
+            <tr><td><span class="status status--proposed">Blocker</span></td><td>Meta advertising for prescription telehealth</td><td>LegitScript certification confirmed before the campaign</td></tr>
+            <tr><td>Fix first</td><td>Pricing lines, "Cancel anytime", the charge line, plan length</td><td>Must match operations exactly; until then "[charge line · operations]" (R-61, R-62)</td></tr>
+            <tr><td>Fix first</td><td>"Licensed U.S. providers", "Plain packaging", assessment length</td><td>Verify with operations; length shows "[about N minutes · O-12]" (R-60, R-68)</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="rebrand" aria-labelledby="rebrand-h">
+        <div class="sec-head"><h2 id="rebrand-h">What changes for unifiedmeds.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Element</th><th>From</th><th>To</th></tr></thead>
+          <tbody>
+            <tr><td>Name and logo</td><td>An earlier name and symbol</td><td>unifiedmeds, the capsule seal (R-07, R-90)</td></tr>
+            <tr><td>Buttons</td><td>Pills</td><td>Rounded rectangles, 5px corners (U-11)</td></tr>
+            <tr><td>Shapes</td><td>Quadrant pieces only</td><td>Quadrant Kit and the capsule (U-03)</td></tr>
+            <tr><td>Product name</td><td>Tadalafil combo / Trio</td><td>Combo (U-05)</td></tr>
+            <tr><td>Primary CTA</td><td>As designed</td><td>"Get started", sentence case (R-55)</td></tr>
+            <tr><td>Footer</td><td>As designed</td><td>The one footer on Mist (R-48, R-114)</td></tr>
+          </tbody>
+        </table></div>
+      </section>

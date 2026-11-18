@@ -1,0 +1,72 @@
+<style>
+  .mails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8) var(--space-6); }
+  .mails figure { margin: 0; display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: var(--space-3); }
+  .mails iframe { width: 100%; height: calc(var(--space-24) * 8); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-mist); }
+  .mails figcaption { display: grid; gap: var(--space-1); }
+  .mails figcaption b { color: var(--color-text-strong); }
+  .mail-meta { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-1) var(--space-3); font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .mail-meta dt { font-weight: 600; color: var(--color-text-primary); }
+  .mail-meta dd { margin: 0; }
+  @media (max-width: 1023px) { .mails { grid-template-columns: minmax(0, 1fr); } }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Care journey</span>
+        <h1>System emails.</h1>
+        <p class="lead">The emails the service sends on its own: order, provider reply, shipping and refill. Discreet first: nothing in a subject line, preview or body says what a member is treated for. Every line waits for legal and operations.</p>
+        <nav class="toc" aria-label="On this page"><a href="#rules">Rules</a><a href="#templates">Templates</a><a href="#build">Build notes</a><a href="#open">Open items</a></nav>
+      </header>
+
+      <div class="rule"><span class="status status--proposed">Proposed</span><p>Square brackets mark values operations and legal fill in: order IDs, times, carrier, the charge line (<code>[charge line · operations]</code>, U-31), the legal entity and the sender address (O-01). Marketing emails live on <a class="link" href="newsletter.html">Newsletter</a>.</p></div>
+
+      <section class="sec" id="rules" aria-labelledby="rules-h">
+        <div class="sec-head"><h2 id="rules-h">Rules.</h2></div>
+        <div class="grid-2">
+          <div class="rule rule--do"><b>The inbox is not private.</b><p>Subject, preview text and body never name a condition, a medicine, a symptom or a result. Details stay behind sign-in.</p></div>
+          <div class="rule rule--do"><b>One email, one job.</b><p>One headline, one or two lines, one button. Tell him what happened and what comes next.</p></div>
+          <div class="rule rule--do"><b>Sender: unifiedmeds.</b><p>From name "unifiedmeds", from address on the brand domain (O-01). Replies reach a person.</p></div>
+          <div class="rule rule--do"><b>The provider decides.</b><p>Every email that touches treatment says a licensed provider reviews it; nothing renews or ships without that review.</p></div>
+          <div class="rule rule--dont"><b>No pressure.</b><p>No countdowns, discounts, "last chance" or exclamation marks in system emails (R-61, R-62).</p></div>
+          <div class="rule rule--dont"><b>No health data by email.</b><p>No answers, notes, prescriptions or lab values in an email, ever. The account holds them.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="templates" aria-labelledby="templates-h">
+        <div class="sec-head"><h2 id="templates-h">Templates.</h2><p>True email HTML at 600 wide. Open one on its own, or download it as a starting point for the email platform. Subject lines follow the same rules as the <a class="link" href="newsletter.html#subjects">newsletter subject bank</a>: no condition, medicine or result.</p></div>
+        <div class="mails">
+          <figure><iframe src="assets/email/order-confirmation.html" title="Order confirmation email" loading="lazy"></iframe><figcaption><b>Order confirmation</b><dl class="mail-meta"><dt>Subject</dt><dd>We received your order</dd><dt>Preview</dt><dd>Your provider reviews it next.</dd><dt>File</dt><dd><a class="link" href="assets/email/order-confirmation.html" download>order-confirmation.html</a></dd></dl></figcaption></figure>
+          <figure><iframe src="assets/email/provider-reply.html" title="Provider reply email" loading="lazy"></iframe><figcaption><b>Provider reply</b><dl class="mail-meta"><dt>Subject</dt><dd>Your provider has replied</dd><dt>Preview</dt><dd>Sign in to read the note.</dd><dt>File</dt><dd><a class="link" href="assets/email/provider-reply.html" download>provider-reply.html</a></dd></dl></figcaption></figure>
+          <figure><iframe src="assets/email/shipping.html" title="Shipping email" loading="lazy"></iframe><figcaption><b>Shipping</b><dl class="mail-meta"><dt>Subject</dt><dd>Your order is on its way</dd><dt>Preview</dt><dd>Track it any time.</dd><dt>File</dt><dd><a class="link" href="assets/email/shipping.html" download>shipping.html</a></dd></dl></figcaption></figure>
+          <figure><iframe src="assets/email/refill-reminder.html" title="Refill reminder email" loading="lazy"></iframe><figcaption><b>Refill reminder</b><dl class="mail-meta"><dt>Subject</dt><dd>Time to plan your next month</dd><dt>Preview</dt><dd>A short check-in keeps your care on track.</dd><dt>File</dt><dd><a class="link" href="assets/email/refill-reminder.html" download>refill-reminder.html</a></dd></dl></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="sec" id="build" aria-labelledby="build-h">
+        <div class="sec-head"><h2 id="build-h">Build notes.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Part</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Layout</td><td>Tables, inline styles, 600 wide, Mist page and a Paper card with radius 16; fluid on phones</td></tr>
+            <tr><td>Logo</td><td>PNG at 2x, 200 × 33 shown (<a class="link" href="assets/email/logo-horizontal@2x.png" download>logo-horizontal@2x.png</a>); alt text "unifiedmeds". Host it on the brand domain when it exists</td></tr>
+            <tr><td>Type</td><td>Headline DM Serif Display 32/38 with Georgia as the fallback; text Inter 16/24 with Helvetica and Arial as fallbacks</td></tr>
+            <tr><td>Button</td><td>The Dark button: Teal-deep, Paper label, radius 5, 50 high, built as a table cell so every client draws it</td></tr>
+            <tr><td>Colour</td><td>Light only (<code>color-scheme: light only</code>); every text pair passes AA on Paper</td></tr>
+            <tr><td>Plain text</td><td>Every email ships with a plain-text version carrying the same words and the link</td></tr>
+            <tr><td>Packaging line</td><td>An email that talks about delivery quotes the outside line of the box, "Packed with care, just for you.", which is printed with a small outline capsule before it (U-29). Nothing else about the box</td></tr>
+            <tr><td>Charge line</td><td>One placeholder, <code>[charge line · operations]</code>, until operations decide when and what a member pays (U-31). Never "$25" and never "only charged if approved"</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="open" aria-labelledby="open-h">
+        <div class="sec-head"><h2 id="open-h">Open items.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Item</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td>Legal entity, address and sender domain in the footer (O-01)</td><td>Legal</td></tr>
+            <tr><td>Review times, carrier and refill timing (R-68). The outside of the box is decided (U-29): only the carrier and operations checks stay open</td><td>Operations</td></tr>
+            <tr><td>The charge line in the order email: when and what a member pays</td><td>Operations</td></tr>
+            <tr><td>Whether an emergency line ("If this is an emergency, call 911") belongs in care emails</td><td>Clinical and legal</td></tr>
+            <tr><td>The marketing newsletter: done, with both templates, double opt-in and the unsubscribe link on <a class="link" href="newsletter.html">Newsletter</a></td><td><span class="status status--current">Closed</span></td></tr>
+          </tbody>
+        </table></div>
+      </section>

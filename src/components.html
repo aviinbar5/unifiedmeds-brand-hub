@@ -1,0 +1,1674 @@
+<style>
+/* Components page: tokens only. 1px hairlines and the 1.5px button border are the only literal widths. */
+
+/* ---------- Shared helpers ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.on-dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); align-content: start; min-width: 0; }
+.kv { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: center; }
+td code, th code { white-space: nowrap; }
+.toolbar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+/* Disabled buttons never take a hover colour or lift (components.css only resets the rest colours). */
+.btn:disabled, .btn[aria-disabled="true"] {
+  --btn-bg-hover: var(--color-line-base);
+  --btn-fg-hover: var(--color-text-secondary);
+  --btn-border-hover: var(--color-line-base);
+}
+.btn:disabled:hover, .btn[aria-disabled="true"]:hover { transform: none; }
+/* Forced states for documentation (the same values the live :hover / :active use) */
+.btn.is-hover, .force-hover .btn:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--btn-bg-hover); color: var(--btn-fg-hover); border-color: var(--btn-border-hover);
+  transform: translateY(calc(var(--motion-distance-lift) * -1));
+}
+.btn.is-active { background: var(--btn-bg-hover); color: var(--btn-fg-hover); border-color: var(--btn-border-hover); transform: none; }
+.btn.is-focus { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.on-dark .btn.is-focus { outline-color: var(--color-focus-ring-on-dark); }
+
+/* ---------- Surfaces ---------- */
+.surfaces { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.surfaces > .surface { grid-row: span 3; grid-template-rows: subgrid; }
+.surfaces > .surface:has(+ .stack) { grid-row: auto; grid-template-rows: none; }
+.surface-title--spacer { visibility: hidden; }
+.surfaces .specimen-row { align-content: flex-start; align-self: start; }
+.grid-2 > :has(> .specimen-row:first-child + .cap:last-child) { display: grid; grid-row: span 2; grid-template-rows: subgrid; align-content: start; }
+.surface { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border-radius: var(--radius-card); min-width: 0; }
+.surface .specimen-row { gap: var(--space-3); }
+.surface--paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
+.surface--dark { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.surface--dark .cap { color: var(--color-text-on-dark-muted); }
+.surface--wash-blue { background: var(--color-surface-wash-blue); }
+.surface--wash-yellow { background: var(--color-surface-wash-yellow); }
+.surface--blue { background: var(--color-brand-blue); color: var(--color-text-on-dark); }
+.surface--wash-blue .cap, .surface--wash-yellow .cap { color: var(--color-text-primary); }
+.surface-title { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+/* stand-in photo behind the on-photo button (17.11.2026): not approved, to replace */
+.photo-stage { position: relative; overflow: hidden; min-height: calc(var(--space-24) * 2); align-items: flex-start; align-content: flex-start; padding: var(--space-4); border-radius: var(--radius-small); }
+.photo-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 65%; display: block; }
+.photo-stage .btn { position: relative; z-index: 1; }
+.surface .ph-tag { display: inline-flex; flex-wrap: wrap; max-width: 100%; margin-bottom: var(--space-1); padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-wash-yellow); color: var(--color-brand-teal-deep); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); }
+
+/* ---------- Button width diagram ---------- */
+.measures { display: flex; flex-wrap: wrap; gap: var(--space-10) var(--space-12); align-items: start; }
+.measure { display: inline-grid; gap: var(--space-2); }
+.measure .btn { position: relative; pointer-events: none; justify-self: start; }
+.measure .btn::before, .measure .btn::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 0;
+  border-left: 1px dashed var(--color-text-on-dark-muted);
+}
+.measure .btn::before { left: var(--size-button-padding-x); }
+.measure .btn::after { right: var(--size-button-padding-x); }
+.measure__label { outline: 1px dashed var(--color-text-on-dark-muted); outline-offset: 0; }
+.ruler { display: grid; grid-template-columns: var(--size-button-padding-x) minmax(0, 1fr) var(--size-button-padding-x); }
+.ruler span {
+  display: grid; justify-items: center; gap: var(--space-1);
+  font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans);
+  color: var(--color-text-secondary);
+}
+.ruler span::before { content: ''; justify-self: stretch; height: var(--space-2); border: 1px solid var(--color-line-field); border-top: 0; }
+.ruler span + span::before { border-left: 0; }
+.measure__out { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-primary); font-variant-numeric: tabular-nums; }
+.heights { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: end; }
+.heights figure { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
+.heights figure.wide { width: min(var(--layout-frame-mobile), 100%); justify-items: stretch; }
+.states { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: start; }
+.state { display: grid; gap: var(--space-3); justify-items: start; }
+
+/* ---------- Links ---------- */
+.on-dark .link { color: var(--color-text-on-dark); }
+.link--forced { text-decoration-thickness: 2px; }
+.focus-demo { display: inline-block; padding: var(--space-1) var(--space-2); border-radius: var(--radius-xs); outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.on-dark .focus-demo { outline-color: var(--color-focus-ring-on-dark); }
+
+/* ---------- Fields ---------- */
+.field__input { width: 100%; }
+.field__input::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.question { font: var(--type-desktop-h3-weight) var(--type-desktop-h3-size) / var(--type-desktop-h3-line) var(--type-desktop-h3-family); color: var(--color-text-strong); }
+.options { display: grid; gap: var(--space-3); border: 0; padding: 0; margin: 0; min-width: 0; }
+.options legend { padding: 0; margin-bottom: var(--space-4); }
+.option { font: var(--type-desktop-body-weight) var(--type-desktop-body-size) / var(--type-desktop-body-line) var(--font-family-sans); color: var(--color-text-primary); }
+.option:has(:focus-visible) { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.option input:focus-visible { outline: none; }
+
+/* Checkbox and radio: the spec lives in components.css (.check, .check-row) */
+.check-group { display: grid; gap: var(--space-1); border: 0; margin: 0; padding: 0; min-width: 0; }
+.check-group legend { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); padding: 0; margin-bottom: var(--space-2); }
+
+/* Progress: the capsule (components.css .cap-prog) */
+.progress { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); }
+.progress-demo { display: grid; grid-template-columns: minmax(0, 1fr) var(--layout-frame-mobile); gap: var(--space-6); align-items: start; }
+@media (max-width: 1023px) { .progress-demo { grid-template-columns: minmax(0, 1fr); } }
+.answer-demo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); align-items: start; }
+@media (max-width: 1023px) { .answer-demo { grid-template-columns: minmax(0, 1fr); } }
+.answer-demo .options { gap: var(--space-2); }
+
+.progress__text { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+
+/* ---------- Cards ---------- */
+.card { display: grid; gap: var(--space-2); align-content: start; }
+.card h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: inherit; }
+.card p { color: var(--color-text-secondary); transition: color var(--motion-duration-fast) var(--motion-easing-ui); }
+a.card:hover p { color: var(--color-text-on-dark-muted); }
+.card__go { font: var(--type-desktop-nav-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); text-decoration: underline; text-underline-offset: 3px; }
+.radii { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+.radii figure { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
+.radius-box { width: var(--space-24); height: var(--space-14); border: 1px solid var(--color-line-field); background: var(--color-surface-card); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip:hover { border-color: var(--color-brand-deep-teal); }
+.steps { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); }
+.step-tab {
+  display: inline-flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min);
+  margin: 0; padding: 0 var(--space-2) 0 0; border: 0; border-radius: var(--radius-pill); background: none;
+  color: var(--color-text-primary); cursor: pointer; text-align: left;
+  font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans);
+}
+.step-tab[aria-selected="true"] .step-num { background: var(--color-brand-yellow); border-color: var(--color-brand-yellow); color: var(--color-brand-teal-deep); }
+.step-panel { padding: var(--space-5) var(--space-6); border-radius: var(--radius-small); background: var(--color-surface-mist); color: var(--color-text-primary); }
+
+/* Accordion (FAQ) */
+.acc { border-top: 1px solid var(--color-line-base); }
+.acc__row { border-bottom: 1px solid var(--color-line-base); }
+.acc__btn {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  width: 100%; min-height: var(--space-14); padding: var(--space-3) 0; margin: 0;
+  border: 0; background: none; color: var(--color-text-strong); text-align: left; cursor: pointer;
+  font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans);
+}
+.pm { position: relative; flex: none; width: var(--size-icon); height: var(--size-icon); color: var(--color-brand-deep-teal); }
+.pm::before, .pm::after { content: ''; position: absolute; left: 50%; top: 50%; background: currentColor; border-radius: var(--radius-pill); transform: translate(-50%, -50%); }
+.pm::before { width: var(--space-4); height: var(--size-icon-stroke); }
+.pm::after { width: var(--size-icon-stroke); height: var(--space-4); transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
+.acc__btn[aria-expanded="true"] .pm::after { transform: translate(-50%, -50%) scaleY(0); }
+.acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui); }
+.acc__panel > div { min-height: 0; overflow: hidden; visibility: hidden; opacity: 0; transition: opacity var(--motion-duration-open) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-open); }
+.acc__row.is-open .acc__panel { grid-template-rows: 1fr; }
+.acc__row.is-open .acc__panel > div { visibility: visible; opacity: 1; transition-delay: 0s; }
+.acc__panel p { padding: 0 var(--space-10) var(--space-5) 0; color: var(--color-text-primary); max-width: 68ch; }
+
+/* ---------- Header & main menu v3 specimen ---------- */
+.hdr-demo {
+  height: calc(var(--space-24) * 4); overflow: auto; overscroll-behavior: contain;
+  border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper);
+}
+.hdr-demo__inner { min-width: calc(var(--space-24) * 10); }
+.mh__signin, .mh__pill { white-space: nowrap; }
+.mh {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+  height: var(--size-header-desktop); padding: 0 var(--layout-header-inset);
+  background: var(--color-surface-paper);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mh.is-scrolled { border-bottom-color: var(--color-line-soft); }
+.logo-lockup { display: inline-flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min); color: var(--color-brand-deep-teal); text-decoration: none; border-radius: var(--radius-xs); }
+.logo-lockup img { display: block; width: auto; }
+.mh .logo-lockup, .mm__head .logo-lockup { flex: none; }
+.mh .logo-lockup img { height: var(--size-logo-header-desktop); }
+.mm__head .logo-lockup img { height: var(--size-logo-header-mobile); }
+.mh__list { display: flex; align-items: center; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+.mh__item { position: relative; }
+.mh__link {
+  position: relative; display: flex; align-items: center; min-height: var(--size-tap-min);
+  margin: 0; padding: 0; border: 0; background: none; cursor: pointer; text-decoration: none;
+  border-radius: var(--radius-pill); color: var(--color-brand-deep-teal);
+}
+.mh__pill {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3); border-radius: var(--radius-pill);
+  font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--type-desktop-nav-family);
+  white-space: nowrap;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__link:hover .mh__pill, .mh__link[aria-expanded="true"] .mh__pill { background: var(--color-line-soft); }
+.mh__chev { color: var(--color-text-secondary); transition: transform var(--motion-duration-fast) var(--motion-easing-ui); }
+.mh__link[aria-expanded="true"] .mh__chev { transform: rotate(180deg); }
+.mh__ind {
+  position: absolute; left: 50%; bottom: 0; width: var(--space-6); height: calc(var(--space-1) / 2);
+  border-radius: var(--radius-pill); background: var(--color-brand-deep-teal);
+  transform: translateX(-50%); opacity: 0; transition: opacity var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__link[aria-expanded="true"] .mh__ind { opacity: 1; }
+.mh__dd {
+  --dd-gap: calc((var(--size-header-desktop) - var(--size-tap-min)) / 2 + var(--space-2));
+  position: absolute; top: calc(100% + var(--dd-gap)); left: 50%; z-index: 3;
+  width: max-content; padding: var(--space-1);
+  opacity: 0; transform: translate(-50%, var(--motion-distance-dropdown));
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-ui), transform var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__dd::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--dd-gap); }
+.mh__dd.is-open {
+  opacity: 1; transform: translate(-50%, 0);
+  transition: opacity var(--motion-duration-open) var(--motion-easing-ui), transform var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mh__dd ul { margin: 0; padding: 0; list-style: none; }
+.mrow {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+  min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs);
+  color: var(--color-brand-deep-teal); text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mrow:hover { background: var(--color-line-soft); }
+.mrow:focus-visible { outline: none; box-shadow: inset 0 0 0 var(--size-focus-width) var(--color-focus-ring); }
+.mrow__left { display: inline-flex; align-items: center; gap: var(--space-3); }
+.mrow__label { font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); white-space: nowrap; }
+.mrow__meta { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary); white-space: nowrap; }
+.mthumb { flex: none; display: block; border-radius: var(--radius-xs); object-fit: cover; object-position: center top; background: var(--color-surface-mist); color: var(--color-surface-mist); }
+.mdiv { height: 1px; margin: var(--space-1); background: var(--color-line-base); border: 0; }
+.mall {
+  display: inline-flex; align-items: center; min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs);
+  font: var(--type-desktop-nav-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans);
+}
+.mh__actions { display: flex; align-items: center; gap: var(--space-5); }
+.mh__signin {
+  display: inline-flex; align-items: center; min-height: var(--size-tap-min); border-radius: var(--radius-xs);
+  font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans);
+  color: var(--color-text-secondary); text-decoration: none;
+  transition: color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.mh__signin:hover { color: var(--color-brand-deep-teal); }
+.page-fill { display: grid; gap: var(--space-4); padding: var(--space-10) var(--layout-header-inset) var(--space-24); }
+.page-fill i { display: block; height: var(--space-14); border-radius: var(--radius-small); background: var(--color-surface-mist); }
+.page-fill i:nth-child(odd) { height: var(--space-24); }
+.page-fill p { color: var(--color-text-secondary); }
+
+/* Mobile specimen */
+.mm {
+  position: relative; display: flex; flex-direction: column;
+  width: var(--layout-frame-mobile); max-width: 100%; height: calc(var(--space-24) * 7);
+  overflow: hidden; border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper);
+}
+.mm__head {
+  position: relative; z-index: 3; flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--size-header-mobile); padding: 0 var(--space-3) 0 var(--layout-margin-mobile);
+  background: var(--color-surface-paper); border-bottom: 1px solid transparent;
+  transition: border-color var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mm.is-open .mm__head { border-bottom-color: var(--color-line-soft); }
+.mm__toggle {
+  display: inline-grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min);
+  margin: 0; padding: 0; border: 0; border-radius: var(--radius-pill); background: none; color: var(--color-brand-deep-teal); cursor: pointer;
+}
+.mm__toggle .i-close, .mm__toggle[aria-expanded="true"] .i-menu { display: none; }
+.mm__toggle[aria-expanded="true"] .i-close { display: block; }
+.mm__page { flex: 1; overflow-y: auto; }
+.mm__page .page-fill { padding: var(--space-6) var(--layout-margin-mobile) var(--space-24); }
+.mm.is-open .mm__page { overflow: hidden; }
+.mm__panel {
+  position: absolute; z-index: 2; left: 0; right: 0; top: var(--size-header-mobile); bottom: 0;
+  display: flex; flex-direction: column; background: var(--color-surface-paper);
+  transform: translateY(-100%); transition: transform var(--motion-duration-open) var(--motion-easing-ui);
+}
+.mm__panel[hidden] { display: none; }
+.mm__panel.is-open { transform: none; }
+.mm__nav { flex: 1; overflow-y: auto; padding: var(--space-2) var(--layout-margin-mobile) var(--space-6); }
+.mm__nav > ul { margin: 0; padding: 0; list-style: none; }
+.mm-row { border-bottom: 1px solid var(--color-line-soft); }
+.mm-row__head, .mm-row__link {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  height: var(--space-14); margin: 0; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; text-decoration: none;
+  font: var(--type-desktop-nav-weight) var(--type-mobile-subhead-size) / var(--type-mobile-subhead-line) var(--font-family-sans);
+  color: var(--color-brand-deep-teal); border-radius: var(--radius-xs);
+}
+.mm-row__head .mh__chev { transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+.mm-row__head[aria-expanded="true"] .mh__chev { transform: rotate(180deg); }
+.mm-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-open) var(--motion-easing-ui); }
+.mm-sub > div { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s linear var(--motion-duration-open); }
+.mm-row.is-expanded .mm-sub { grid-template-rows: 1fr; }
+.mm-row.is-expanded .mm-sub > div { visibility: visible; transition-delay: 0s; }
+.mm-card { margin: 0 0 var(--space-3); padding: var(--space-1); list-style: none; background: var(--color-surface-card); border: 1px solid var(--color-line-soft); border-radius: var(--radius-small); }
+.mm-card .mrow, .mm-card .mall { min-height: var(--space-12); }
+.mm__bar {
+  flex: none; display: grid; justify-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--layout-margin-mobile) calc(var(--space-5) + env(safe-area-inset-bottom));
+  background: var(--color-surface-paper); border-top: 1px solid var(--color-line-soft);
+}
+.mm__note { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary); }
+
+/* ---------- Overlay ---------- */
+.overlay-demo { display: grid; gap: var(--space-2); padding: var(--space-5); max-width: 100%; }
+.overlay-demo p { color: var(--color-text-secondary); }
+.dlg { width: min(100% - var(--space-10), calc(var(--space-24) * 5)); padding: var(--space-8); color: var(--color-text-primary); }
+.dlg[open] { animation: dlg-in var(--motion-duration-open) var(--motion-easing-ui); }
+.dlg::backdrop { background: transparent; }
+.dlg h3 { font: var(--type-desktop-h3-weight) var(--type-desktop-h3-size) / var(--type-desktop-h3-line) var(--type-desktop-h3-family); margin-bottom: var(--space-3); }
+.dlg form { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+@keyframes dlg-in { from { opacity: 0; transform: translateY(var(--motion-distance-dropdown)); } }
+
+@media (max-width: 767px) {
+  .surfaces { grid-template-columns: minmax(0, 1fr); }
+  .dlg { padding: var(--space-6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dlg[open] { animation: none; }
+}
+
+/* ---- Page-only styles: button pairs, interactive states, footer ---- */
+.acc__btn .chev { flex: none; width: var(--size-icon); height: var(--size-icon); color: var(--color-brand-deep-teal); transition: transform var(--motion-duration-open) var(--motion-easing-ui); }
+.acc__btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.pair-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.pair-cell { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-6); border-radius: var(--radius-small); background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); }
+.pair-cell.on-dark { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); }
+.pair-cell.on-dark .cap { color: var(--color-text-on-dark-muted); }
+.pair-cell .cap b { display: block; color: var(--color-text-strong); font-weight: 600; }
+.pair-cell.on-dark .cap b { color: var(--color-text-on-dark); }
+.pair-dont .btn--outline.is-hover { --btn-bg-hover: var(--color-brand-yellow); --btn-fg-hover: var(--color-brand-deep-teal); --btn-border-hover: var(--color-brand-yellow); }
+.verdict { display: flex; gap: var(--space-2); align-items: flex-start; }
+.verdict > svg { flex: none; width: var(--space-5); height: var(--space-5); }
+.ic-ok { color: var(--color-brand-green); } .ic-no { color: var(--color-brand-coral); }
+.ix-grid { display: grid; grid-template-columns: minmax(0, 1fr) var(--layout-frame-mobile); gap: var(--space-6); align-items: start; }
+.ix-card { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+.ix-card--mob { padding: var(--space-5) var(--layout-margin-mobile); }
+.ix-card .eyebrow { justify-self: start; }
+.price-panel { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-5); align-items: center; padding: var(--space-5); border-radius: var(--radius-small); background: var(--color-surface-mist); }
+.price-panel .packs { display: flex; gap: var(--space-1); align-items: end; min-height: calc(var(--space-24) + var(--space-6)); }
+.price-panel img { display: block; width: calc(var(--space-12) + var(--space-4)); height: auto; }
+.price-panel b { display: block; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+.price-panel p { color: var(--color-text-secondary-on-mist); }
+.ix-card--mob .price-panel { grid-template-columns: minmax(0, 1fr); }
+.ix-keys { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
+.ix-keys .cap { margin: 0; }
+.ix-note { color: var(--color-text-secondary); }
+.ix-ctrl { display: flex; gap: var(--space-3); }
+.ftr3-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+.ftr3-mobile { width: var(--layout-frame-mobile); max-width: 100%; }
+@media (max-width: 1023px) { .ix-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 767px) { .pair-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+      <header class="page-head">
+        <span class="eyebrow">System</span>
+        <h1>Components.</h1>
+        <p class="lead">The interface parts of the unifiedmeds website, live and in every state. Every specimen is built from components.css and the tokens in tokens.json. Hover, tap and tab through them.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#buttons">Buttons</a>
+          <a href="#links">Links &amp; focus</a>
+          <a href="#fields">Form fields</a>
+          <a href="#cards">Cards, chips &amp; steps</a>
+          <a href="#header">Header &amp; main menu</a>
+          <a href="#footer">Footer</a>
+          <a href="#overlay">Overlay</a>
+          <a href="#states">Feedback &amp; states</a>
+          <a href="#interactive">Interactive states</a>
+          <a href="#changes">Changes from Figma</a>
+        </nav>
+      </header>
+
+      <div class="rule" id="authority">
+        <b>Authority.</b>
+        <p>Decided rules and tokens win (<a href="rulebook.html#r-01">R-01</a>). The designer's Figma (website file <code>h7D0eRszARBaWdJT1NWrpZ</code>) is the source only for what is not decided yet, and our own Figma files are kept in sync with the rules. Every specimen here is built from <code>components.css</code> and the tokens. Every place the hub differs from a value in the designer's Figma is listed in <a href="#changes">Changes from Figma</a>, so Figma can be updated.</p>
+      </div>
+
+      <!-- =========================================================== 1 · BUTTONS -->
+      <section class="sec" id="buttons" aria-labelledby="buttons-h">
+        <div class="sec-head">
+          <h2 id="buttons-h">Buttons.</h2>
+          <p>Five types, one height, one shape, one motion. Source: Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2676-309">Buttons, Hover Rules 2676-309</a> (board <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2719-4438">2719-4438</a>) and the button rules <a href="rulebook.html#r-40">R-40</a> and <a href="rulebook.html#r-41">R-41</a>.</p>
+        </div>
+        <div class="asset-actions" data-figma="8-23"></div>
+
+        <div class="sub">
+          <h3>Rounded rectangle, fixed padding.</h3>
+          <div class="prose">
+            <p>Buttons are rounded rectangles with 5px corners (<code>--radius-button</code>), never pills: the capsule belongs to the logo (decision U-11). Height 50px (<code>--size-control</code>), side padding 24px (<code>--size-button-padding-x</code>), so <b>width = label width + 48</b>. The dashed lines mark the padding; the dashed box is the label. Source: Figma Button set 2676-310.</p>
+          </div>
+          <div class="specimen">
+            <div class="measures">
+              <div class="measure" data-measure>
+                <span class="btn" aria-hidden="true"><span class="measure__label">Get started</span></span>
+                <div class="ruler" aria-hidden="true"><span>24</span><span>label</span><span>24</span></div>
+                <p class="measure__out" data-measure-out>Label + 48 = width</p>
+              </div>
+              <div class="measure" data-measure>
+                <span class="btn" aria-hidden="true"><span class="measure__label">Explore treatments</span></span>
+                <div class="ruler" aria-hidden="true"><span>24</span><span>label</span><span>24</span></div>
+                <p class="measure__out" data-measure-out>Label + 48 = width</p>
+              </div>
+              <div class="measure" data-measure>
+                <span class="btn" aria-hidden="true"><span class="measure__label">Start your assessment</span></span>
+                <div class="ruler" aria-hidden="true"><span>24</span><span>label</span><span>24</span></div>
+                <p class="measure__out" data-measure-out>Label + 48 = width</p>
+              </div>
+            </div>
+            <p class="cap">Measured live in your browser. Label Inter Medium 15/20 (<code>--type-desktop-button-*</code>; mobile <code>--type-mobile-button-*</code>, same values). Labels never wrap. The 1.5px border is drawn inside the padding, as Figma draws strokes, so it never moves the label.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>One height, two logged exceptions.</h3>
+          <div class="specimen">
+            <div class="heights">
+              <figure><a class="btn" href="#buttons">Get started</a><figcaption class="cap">Every button · 50px · <code>--size-control</code></figcaption></figure>
+              <figure><a class="btn btn--header" href="#buttons">Get started</a><figcaption class="cap">E-02 header CTA · 44px · label 14</figcaption></figure>
+              <figure class="wide"><a class="btn btn--bar" href="#buttons">Get started</a><figcaption class="cap">E-03 mobile menu bottom bar · 48px, full width</figcaption></figure>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Exception</th><th>Where</th><th>Value</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td><a href="rulebook.html#e-02">E-02</a></td><td>Header CTA “Get started”</td><td>44px (<code>--size-control-exception-header</code>), label 14 (<code>--type-desktop-nav-size</code>), side padding 22</td><td>Figma menu v3 draws 43px; rounded up to the 44px tap target.</td></tr>
+                <tr><td><a href="rulebook.html#e-03">E-03</a></td><td>Mobile menu bottom bar</td><td>48px (<code>--size-control-exception-mobile-bar</code>), full width</td><td>Figma menu v3 mobile bar (archive copy 4046-911).</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">No other size exists: no “small” button, no 40px variant, no sticky-bar button below 50px.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Four types on their surfaces.</h3>
+          <div class="toolbar">
+            <button class="chip" type="button" aria-pressed="false" data-force-hover="#surfaces">Show every hover state</button>
+            <span class="cap">Or hover, tap and tab the buttons.</span>
+          </div>
+          <div class="surfaces" id="surfaces">
+            <div class="surface surface--paper">
+              <span class="surface-title">Standard surface · Paper, Mist, Card</span>
+              <div class="specimen-row">
+                <a class="btn btn--yellow" href="#buttons">Get started</a>
+                <a class="btn" href="#buttons">Explore treatments</a>
+                <a class="btn btn--outline" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Yellow → Blue-dark · Dark → Yellow · Outline → Yellow. One Yellow element per viewport.</p>
+            </div>
+            <div class="surface surface--dark on-dark">
+              <span class="surface-title">Deep Teal surface</span>
+              <div class="specimen-row">
+                <a class="btn btn--yellow" href="#buttons">Get started</a>
+                <a class="btn btn--outline-light" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Outline Light (Paper border and label) → Yellow.</p>
+            </div>
+            <div class="surface surface--dark on-dark">
+              <span class="surface-title">Photo · shown on a stand-in photo</span>
+              <div class="specimen-row photo-stage">
+                <img src="assets/photos/father-son-autumn-pexels-35688949.jpg" width="1600" height="1095" alt="A father crouches on a forest path to zip up his young son's jacket" loading="lazy">
+                <a class="btn btn--outline-light btn--on-photo" href="#buttons">Explore treatments</a>
+              </div>
+              <p class="cap"><span class="ph-tag">Not approved · to replace · Pexels, Filip Rankovic Grobgaard</span><br>Outline Light on a photo fills Blue-dark with a Paper label (R-41). Class <code>.btn--on-photo</code>.</p>
+            </div>
+            <div class="surface surface--wash-blue surface-accent">
+              <span class="surface-title">Wash Blue surface</span>
+              <div class="specimen-row">
+                <a class="btn" href="#buttons">Get started</a>
+                <a class="btn btn--outline" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Rule 03: on a Yellow, Blue or Wash surface every button hovers to White. Class <code>.surface-accent</code> on the surface.</p>
+            </div>
+            <div class="surface surface--wash-yellow surface-accent">
+              <span class="surface-title">Wash Yellow surface</span>
+              <div class="specimen-row">
+                <a class="btn" href="#buttons">Get started</a>
+                <a class="btn btn--outline" href="#buttons">Learn more</a>
+              </div>
+              <p class="cap">Wash Yellow counts as a Yellow surface. Yellow itself is never a section background.</p>
+            </div>
+            <div class="stack">
+              <div class="surface surface--blue surface-accent on-dark">
+                <span class="surface-title surface-title--spacer" aria-hidden="true">Pastel Blue surface</span>
+                <div class="specimen-row">
+                  <a class="btn" href="#buttons">Get started</a>
+                </div>
+              </div>
+              <p class="cap"><span class="surface-title">Pastel Blue surface.</span> Pastel Blue #6E8B97 is for shapes and surfaces, never a button fill. Small text does not sit on it (Paper is 3.53:1), so this caption sits outside.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Hover matrix.</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Type</th><th>Surface</th><th>Rest</th><th>Hover (150ms ease-out, lift 2px)</th><th>Label contrast</th><th>Class</th></tr></thead>
+              <tbody>
+                <tr><td>Dark</td><td>Standard</td><td>Teal-deep #1C3742 (<code>--color-brand-teal-deep</code>), Paper label</td><td>Yellow #FFBE0B (<code>--color-brand-yellow</code>), Deep Teal #264653 label</td><td>12.22 → 6.06</td><td><code>.btn</code></td></tr>
+                <tr><td>Yellow</td><td>Standard, Deep Teal</td><td>Yellow #FFBE0B, Deep Teal label</td><td>Blue-dark #4E6873 (<code>--color-brand-blue-dark</code>), Paper label (R-41). Figma's Pastel Blue #6E8B97 fails AA (3.53:1)</td><td>6.06 → 5.76</td><td><code>.btn--yellow</code></td></tr>
+                <tr><td>Outline</td><td>Standard</td><td>Transparent, Teal-deep border, Deep Teal label</td><td>Yellow fill and border, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--outline</code></td></tr>
+                <tr><td>Outline Light</td><td>Deep Teal</td><td>Transparent, Paper #FEFCF6 border and label</td><td>Yellow fill and border, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--outline-light</code></td></tr>
+                <tr><td>Outline Light</td><td>Photo</td><td>Transparent, Paper border and label</td><td>Blue-dark #4E6873 fill, Paper label</td><td>→ 5.76</td><td><code>.btn--outline-light.btn--on-photo</code></td></tr>
+                <tr><td>Light</td><td>Standard</td><td>Paper fill, Deep Teal label</td><td>Yellow fill, Deep Teal label</td><td>9.82 → 6.06</td><td><code>.btn--light</code></td></tr>
+                <tr><td>Outline, Outline Light, Light</td><td>Next to a Yellow button (R-112)</td><td>The type’s rest colours</td><td>Deep Teal #264653 fill and border, Paper label. On a Deep Teal surface: Paper fill, Deep Teal label</td><td>→ 9.82</td><td>automatic (<code>:has()</code>), layout <code>.btn-pair</code></td></tr>
+                <tr><td>Dark</td><td>Next to a Yellow button (R-112)</td><td>Teal-deep, Paper label</td><td>Blue-dark #4E6873, Paper label</td><td>→ 5.76</td><td>automatic (<code>:has()</code>)</td></tr>
+                <tr><td>Any type</td><td>Yellow, Blue or Wash</td><td>The type’s rest colours</td><td>Paper #FEFCF6 (<code>--color-surface-paper</code>), Deep Teal label. Light hovers to Deep Teal with a Paper label</td><td>→ 9.82</td><td><code>.surface-accent .btn</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">Contrast is label against fill (AA needs 4.5:1 for a 15px label). Figma’s Yellow hover is Pastel Blue #6E8B97 at 3.53:1; the hub uses Blue-dark (see <a href="#changes">Changes from Figma</a>).</p>
+        </div>
+
+
+        <div class="sub" id="button-pairs">
+          <h3>Side by side, never the same colour.</h3>
+          <div class="rule"><span class="status status--current">Current · R-112</span><p><b>Two buttons side by side never show the same colour, at rest or on hover, press or focus.</b> An Outline, Outline Light or Light button next to a Yellow button hovers to Deep Teal with a Paper label, never to Yellow. A Dark button next to Yellow hovers to Blue-dark. On a Deep Teal surface the outline button hovers to Paper. components.css applies this to any two buttons that share a parent (<code>:has(&gt; .btn--yellow)</code>); <code>.btn-pair</code> adds the row layout and stacks the pair full width on mobile.</p></div>
+          <div class="pair-grid">
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline" aria-hidden="true">How it works</span></div><p class="cap"><b>Rest</b>Yellow and Outline.</p></div>
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow is-hover" aria-hidden="true">Get started</span><span class="btn btn--outline" aria-hidden="true">How it works</span></div><p class="cap"><b>Yellow hovered</b>Blue-dark, Paper label. The Outline stays at rest.</p></div>
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline is-hover" aria-hidden="true">How it works</span></div><p class="cap"><b>Outline hovered</b>Deep Teal, Paper label, next to the Yellow at rest.</p></div>
+            <div class="pair-cell on-dark"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline-light is-hover" aria-hidden="true">How it works</span></div><p class="cap"><b>On Deep Teal, Outline Light hovered</b>Paper, Deep Teal label: Deep Teal would vanish into the surface.</p></div>
+            <div class="pair-cell"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn is-hover" aria-hidden="true">Sign in</span></div><p class="cap"><b>Dark hovered next to Yellow</b>Blue-dark, Paper label.</p></div>
+            <div class="pair-cell pair-dont"><div class="btn-pair"><span class="btn btn--yellow" aria-hidden="true">Get started</span><span class="btn btn--outline is-hover" aria-hidden="true">How it works</span></div><p class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don’t</b>The Outline hovers to Yellow: two Yellow buttons side by side.</span></p></div>
+          </div>
+          <p class="cap">Hover states are shown here statically. Mobile has no hover: the tap shows Pressed in the same colours for 150ms. On mobile the pair stacks, each button full width, and the rule still holds.</p>
+        </div>
+
+        <div class="sub">
+          <h3>States.</h3>
+          <div class="specimen">
+            <div class="states">
+              <div class="state"><span class="btn" aria-hidden="true">Get started</span><span class="cap">Default</span></div>
+              <div class="state"><span class="btn is-hover" aria-hidden="true">Get started</span><span class="cap">Hover · Yellow, lift 2px</span></div>
+              <div class="state"><span class="btn is-focus" aria-hidden="true">Get started</span><span class="cap">Focus · 2px ring, 3px offset</span></div>
+              <div class="state"><span class="btn is-active" aria-hidden="true">Get started</span><span class="cap">Pressed · hover colour, no lift</span></div>
+              <div class="state"><button class="btn" type="button" disabled>Get started</button><span class="cap">Disabled <span class="status status--current">Approved</span></span></div>
+              <div class="state"><button class="btn is-loading" type="button" aria-busy="true"><span class="btn-label">Get started</span><svg class="cap-loader" viewBox="0 0 64 24.47" aria-hidden="true"><path class="cap-loader-fill" d="M33.11 3.94L11.49 3.94A8.29 8.29 0 0 0 11.49 20.53L33.11 20.53ZM37.11 3.2L51.76 3.2A9.04 9.04 0 0 1 51.76 21.27L37.11 21.27Z"/><path class="cap-loader-line" d="M35.11 1.94L11.49 1.94A10.29 10.29 0 0 0 11.49 22.53L35.11 22.53"/><path class="cap-loader-line" d="M35.11 1.2L51.76 1.2A11.04 11.04 0 0 1 51.76 23.27L35.11 23.27Z"/></svg></button><span class="cap">Loading <span class="status status--current">R-42</span></span></div>
+            </div>
+            <p class="cap">Disabled (R-42): the button keeps its own colours at 40% opacity (<code>--opacity-disabled</code>), no hover, no lift, <code>cursor: not-allowed</code>; always say why it is disabled nearby. Loading (R-42): same width and shape, the label hidden, the small capsule loader inside (40 wide, the same on mobile), not clickable; see <a class="link" href="#state-loading">Loading</a>. The designer's Figma has no Disabled or Loading variant yet; both are on the Figma list.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Motion.</h3>
+          <div class="grid-3">
+            <div class="rule"><b>150ms ease-out.</b><p>Colour, border and lift share one transition: <code>--motion-duration-fast</code> with <code>--motion-easing-ui</code>. Press = hover = 150ms.</p></div>
+            <div class="rule"><b>Lift 2px.</b><p>Every button rises <code>--motion-distance-lift</code> on hover and settles back on press. No shadow, no scale.</p></div>
+            <div class="rule"><b>Reduced motion.</b><p>With <code>prefers-reduced-motion</code> the colour changes instantly and nothing lifts (brand.css sets both tokens to 0).</p></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Desktop and mobile.</h3>
+          <div class="grid-2">
+            <div class="rule"><b>One spec on both.</b><p>Inter Medium 15/20, height 50, padding 24, radius 5, 1.5 border drawn inside, labels never wrap. Exceptions: Header 44 and the mobile bottom bar 48, full width. Tap target at least 44 (<a class="link" href="rulebook.html">R-99</a>).</p></div>
+            <div class="rule"><b>Mobile has no hover.</b><p>A tap shows Pressed (hover colours, no lift) for 150ms, then the page reacts. Focus with a keyboard looks like hover plus the 2px ring, on every device.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="icon-buttons">
+          <h3>Buttons with an icon.</h3>
+          <p class="cap">A second family, never a replacement for the text buttons: same five types, colours, states and height. One 20px icon on the right of the label, in the label colour, 8px from it; padding 24 on the label side and 20 on the icon side. On hover the icon moves 2px in its direction, together with the lift; with reduced motion it stays still (<a class="link" href="rulebook.html">R-100</a>). Figma: our file, component set “Button / Icon”.</p>
+          <div class="specimen">
+            <div class="specimen-row">
+                <a class="btn btn--icon" href="#icon-buttons">Watch how it works<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.2L15 10L7 14.8V5.2Z"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Learn more<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg></a>
+                <a class="btn btn--icon btn--yellow" href="#icon-buttons">Get started<svg class="btn-icon" data-dir="right" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10H16M11 15L16 10L11 5"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Download PDF<svg class="btn-icon" data-dir="down" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5V12.5M14 8.5L10 12.5L6 8.5M4 16.25H16"/></svg></a>
+                <a class="btn btn--icon" href="#icon-buttons">Start your assessment<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Message your provider<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6C4 5.06954 4.21071 4.56083 4.58579 4.18576C4.96086 3.81069 5.46957 3.6 6 3.6H14C14.5304 3.6 15.0391 3.81069 15.4142 4.18576C15.7893 4.56083 16 5.06954 16 5.6V11.4C16 11.9304 15.7893 12.4391 15.4142 12.8142C15.0391 13.1893 14.5304 13.4 14 13.4H9.2L5.8 16.2V13.4H6C5.46957 13.4 4.96086 13.1893 4.58579 12.8142C4.21071 12.4391 4 11.9304 4 11.4V5.6Z"/></svg></a>
+                <a class="btn btn--icon btn--outline" href="#icon-buttons">Open the full study<svg class="btn-icon" data-dir="out" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16.2 8.8V3.8H11.2M16.2 3.8L9.6 10.4M14.2 12V15C14.2 15.3978 14.042 15.7793 13.7606 16.0606C13.4793 16.3419 13.0978 16.5 12.7 16.5H5.3C4.90216 16.5 4.52063 16.3419 4.23933 16.0606C3.95802 15.7793 3.8 15.3978 3.8 15V7.6C3.8 7.20215 3.95802 6.82062 4.23933 6.53932C4.52063 6.25801 4.90216 6.1 5.3 6.1H8.2"/></svg></a>
+                <a class="btn btn--icon" href="#icon-buttons">Buy now<svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 7.2V6C7.6 5.36346 7.85283 4.75301 8.30292 4.30292C8.75301 3.85283 9.36346 3.6 10 3.6C10.6365 3.6 11.2469 3.85283 11.697 4.30292C12.1471 4.75301 12.4 5.36346 12.4 6V7.2M4.6 7.2H15.4L14.6 16.4H5.4L4.6 7.2Z"/></svg></a>
+            </div>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Action</th><th>Icon</th><th>Example label</th></tr></thead>
+            <tbody>
+                <tr><td>Watch</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5.2L15 10L7 14.8V5.2Z"/></svg> Play</td><td>“Watch how it works”</td></tr>
+                <tr><td>More information</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"/></svg> Info</td><td>“Learn more”</td></tr>
+                <tr><td>Buy</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.6 7.2V6C7.6 5.36346 7.85283 4.75301 8.30292 4.30292C8.75301 3.85283 9.36346 3.6 10 3.6C10.6365 3.6 11.2469 3.85283 11.697 4.30292C12.1471 4.75301 12.4 5.36346 12.4 6V7.2M4.6 7.2H15.4L14.6 16.4H5.4L4.6 7.2Z"/></svg> Bag</td><td>“Buy now”</td></tr>
+                <tr><td>Continue</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10H16M11 15L16 10L11 5"/></svg> Arrow right</td><td>“Get started”</td></tr>
+                <tr><td>Download</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5V12.5M14 8.5L10 12.5L6 8.5M4 16.25H16"/></svg> Download</td><td>“Download PDF”</td></tr>
+                <tr><td>Book</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5H16.5M7 3V6.5M13 3V6.5M5.5 4.75H14.5C15.6046 4.75 16.5 5.64543 16.5 6.75V14.5C16.5 15.6046 15.6046 16.5 14.5 16.5H5.5C4.39543 16.5 3.5 15.6046 3.5 14.5V6.75C3.5 5.64543 4.39543 4.75 5.5 4.75Z"/></svg> Calendar</td><td>“Book a visit”</td></tr>
+                <tr><td>Message</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6C4 5.06954 4.21071 4.56083 4.58579 4.18576C4.96086 3.81069 5.46957 3.6 6 3.6H14C14.5304 3.6 15.0391 3.81069 15.4142 4.18576C15.7893 4.56083 16 5.06954 16 5.6V11.4C16 11.9304 15.7893 12.4391 15.4142 12.8142C15.0391 13.1893 14.5304 13.4 14 13.4H9.2L5.8 16.2V13.4H6C5.46957 13.4 4.96086 13.1893 4.58579 12.8142C4.21071 12.4391 4 11.9304 4 11.4V5.6Z"/></svg> Chat</td><td>“Message your provider”</td></tr>
+                <tr><td>Leave the site</td><td><svg class="btn-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16.2 8.8V3.8H11.2M16.2 3.8L9.6 10.4M14.2 12V15C14.2 15.3978 14.042 15.7793 13.7606 16.0606C13.4793 16.3419 13.0978 16.5 12.7 16.5H5.3C4.90216 16.5 4.52063 16.3419 4.23933 16.0606C3.95802 15.7793 3.8 15.3978 3.8 15V7.6C3.8 7.20215 3.95802 6.82062 4.23933 6.53932C4.52063 6.25801 4.90216 6.1 5.3 6.1H8.2"/></svg> External link</td><td>“Open the full study”</td></tr>
+            </tbody>
+          </table></div>
+          <div class="dodont">
+            <div class="rule rule--do"><b>Do.</b><p>One icon per button, chosen by what the button does. Icon files: <code>assets/icons/ui/</code> (stroke uses <code>currentColor</code>).</p></div>
+            <div class="rule rule--dont"><b>Don’t.</b><p>An icon instead of the label, two icons, an icon on the left, a Yellow icon, or the large capsule icons inside a button.</p></div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Labels and use.</h3>
+          <div class="dodont">
+            <div class="rule rule--do"><b>Do.</b><p>Sentence case: “Get started”, “Explore treatments”, “Start your assessment”, “Learn more”. One primary action per view. One Yellow element per viewport. Full width only for E-03 and the footer CTA on mobile.</p></div>
+            <div class="rule rule--dont"><b>Don’t.</b><p>Title case (“Get Started”), a second size, a shadow, a Pastel Blue fill, Yellow text, a label that wraps, or a Back button in its own style (use Outline).</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================== 2 · LINKS & FOCUS -->
+      <section class="sec" id="links" aria-labelledby="links-h">
+        <div class="sec-head">
+          <h2 id="links-h">Links and focus.</h2>
+          <p>Links are Deep Teal and underlined; the underline thickens on hover. Focus is one ring for the whole system.</p>
+        </div>
+        <div class="grid-2">
+          <div class="specimen">
+            <p>Read the <a class="link" href="#links">telehealth notice</a> before you start. Questions about an order go to <a class="link" href="#links">member support</a>.</p>
+            <div class="kv"><span class="cap">Rest</span> <span class="link">1px underline</span> <span class="cap">Hover</span> <span class="link link--forced">2px underline</span></div>
+            <p class="cap">Deep Teal #264653 (<code>--color-text-link</code>), 9.82:1 on Paper. Underline 1px at rest, 2px on hover, offset 3px, 150ms ease-out. Class <code>.link</code>.</p>
+          </div>
+          <div class="specimen specimen--dark on-dark">
+            <p>On Deep Teal, links are Paper and underlined. <a class="link" href="#links">Privacy policy</a>.</p>
+            <p class="cap">Paper #FEFCF6 (<code>--color-text-on-dark</code>). Never Blue, never Yellow, never without an underline in running text.</p>
+          </div>
+        </div>
+        <div class="sub">
+          <h3>Focus ring.</h3>
+          <div class="grid-2">
+            <div class="specimen">
+              <div class="specimen-row"><span class="focus-demo">Focused link</span><span class="btn is-focus" aria-hidden="true">Get started</span></div>
+              <p class="cap">2px Deep Teal (<code>--size-focus-width</code>, <code>--color-focus-ring</code>), 3px offset (<code>--size-focus-offset</code>). Shown on <code>:focus-visible</code>, never removed.</p>
+            </div>
+            <div class="specimen specimen--dark on-dark">
+              <div class="specimen-row"><span class="focus-demo">Focused link</span><span class="btn btn--outline-light is-focus" aria-hidden="true">Learn more</span></div>
+              <p class="cap">On Deep Teal and photos the ring is Paper (<code>--color-focus-ring-on-dark</code>). Menu rows draw the same ring inside the row.</p>
+            </div>
+          </div>
+          <p class="cap">Press Tab anywhere on this page to see the live ring.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 3 · FIELDS -->
+      <section class="sec" id="fields" aria-labelledby="fields-h">
+        <div class="sec-head">
+          <h2 id="fields-h">Form fields.</h2>
+          <p>Fields are 50px with a 12px radius and a 1px Slate border. The label sits above and never becomes a placeholder.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="specimen">
+            <div class="field">
+              <label class="field__label" for="f-name">First name</label>
+              <input class="field__input" id="f-name" type="text" autocomplete="off" aria-describedby="f-name-help">
+              <p class="field__help" id="f-name-help">As it appears on your ID.</p>
+            </div>
+            <div class="field field--error">
+              <label class="field__label" for="f-email">Email address</label>
+              <input class="field__input" id="f-email" type="email" autocomplete="off" value="name@" aria-invalid="true" aria-describedby="f-email-err">
+              <p class="field__help" id="f-email-err">Enter an email address in the format name@example.com.</p>
+            </div>
+            <div class="field field--disabled">
+              <label class="field__label" for="f-zip">ZIP code</label>
+              <input class="field__input" id="f-zip" type="text" value="Filled from your address" disabled>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Part</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Height</td><td>50px · <code>--size-control</code></td></tr>
+                  <tr><td>Radius</td><td>12px · <code>--radius-small</code></td></tr>
+                  <tr><td>Border</td><td>1px Slate #55747F · <code>--color-line-field</code> (4.88:1, passes 3:1)</td></tr>
+                  <tr><td>Hover</td><td>Border Deep Teal</td></tr>
+                  <tr><td>Focus</td><td>The system ring, 2px Deep Teal, 3px offset</td></tr>
+                  <tr><td>Label</td><td>Above, 12/16 SemiBold +2%, sentence case · <code>--type-desktop-label-*</code></td></tr>
+                  <tr><td>Help text</td><td>Caption 13 Slate · <code>--color-text-secondary</code></td></tr>
+                  <tr><td>Error</td><td>2px Coral #E76F51 border + Coral dot icon; the message stays Deep Teal. Coral is never text.</td></tr>
+                  <tr><td>Disabled</td><td>The field keeps its own colours at 40% opacity (<code>--opacity-disabled</code>), label and help too; no grey fill, no hover <span class="status status--current">R-42</span></td></tr>
+                  <tr><td>Mobile (390)</td><td>The same field, full width; input text 16 so iOS does not zoom; the label never shrinks below 11/16 (<code>--type-mobile-label-*</code>)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">On the website, validate on blur, never on keystroke. The message says what to do. Errors use <code>aria-invalid</code> and <code>aria-describedby</code>.</p>
+            <div class="rule"><b>The flow exception: the assessment checks on Continue.</b><p>Inside the assessment, answers are checked when he presses Continue, never on blur (Q95, pattern 2): the errors appear together, the first one takes focus, and Continue stays enabled. The field looks the same. See <a class="link" href="assessment.html">Assessment</a>.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="answers">
+          <h3>Answer options.</h3>
+          <div class="rule"><span class="status status--current">Current · R-42</span><p><b>One answer fills, several answers frame.</b> A single choice is a choice card: selected, it fills Deep Teal with a Paper label and the Yellow mark (the one Yellow element in view). A multiple choice is a check card: selected, it keeps its Paper ground and takes a Deep Teal border plus a 1px inset, with the square box filled. Never a scale, never a shadow.</p></div>
+          <div class="answer-demo">
+            <div class="specimen">
+              <p class="question" id="q-time">When is the best time for a provider to reach you?</p>
+              <div class="choice-group" role="radiogroup" aria-labelledby="q-time">
+                <label class="choice"><input type="radio" name="q-time" value="morning"><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>Morning</b></span></label>
+                <label class="choice"><input type="radio" name="q-time" value="afternoon" checked><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>Afternoon</b></span></label>
+                <label class="choice"><input type="radio" name="q-time" value="evening"><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>Evening</b></span></label>
+                <label class="choice"><input type="radio" name="q-time" value="not-sure"><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>Not sure</b></span></label>
+              </div>
+              <p class="cap">Single choice · choice cards (<code>.choice</code>). Radius 16, padding 16 / 20, 8 apart.</p>
+            </div>
+            <div class="specimen">
+              <fieldset class="options">
+                <legend class="question">Which of these apply to you?</legend>
+                <label class="option"><input class="check" type="checkbox" checked> <span>I take a medicine every day</span></label>
+                <label class="option"><input class="check" type="checkbox"> <span>I have had heart surgery</span></label>
+                <label class="option"><input class="check" type="checkbox" checked> <span>I have high blood pressure</span></label>
+                <label class="option"><input class="check" type="checkbox"> <span>None of these</span></label>
+              </fieldset>
+              <p class="cap">Multiple choice · check cards (<code>.option</code> with <code>.check</code>). "None of these" clears the others.</p>
+            </div>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Part</th><th>Desktop (1440)</th><th>Mobile (390)</th></tr></thead>
+            <tbody>
+              <tr><td>Question</td><td>DM Serif Display 26/1.3 (<code>--type-desktop-h3-*</code>, R-25); a question may end with a question mark</td><td>The same 26/1.3; wraps to up to 4 lines; never smaller</td></tr>
+              <tr><td>Option</td><td>50px minimum, the whole card is the target</td><td>Full width (350), 50px minimum</td></tr>
+              <tr><td>Selected, one answer</td><td>Deep Teal fill, Paper label, Yellow mark with a Deep Teal check</td><td>The same</td></tr>
+              <tr><td>Selected, several answers</td><td>Deep Teal border plus a 1px inset, Paper ground, box filled Deep Teal</td><td>The same</td></tr>
+              <tr><td>Keyboard</td><td>Arrow keys move between single answers; Space ticks a check card</td><td>Tap anywhere on the card</td></tr>
+            </tbody>
+          </table></div>
+          <p class="cap">"Not sure" is always offered where it is a true answer and is never styled as lesser. Specimen copy, not clinical.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Checkbox and radio.</h3>
+          <div class="grid-2">
+            <div class="specimen">
+              <fieldset class="check-group">
+                <legend>Acknowledgements</legend>
+                <label class="check-row"><input class="check" type="checkbox"> <span>I understand this is an assessment, not a diagnosis.</span></label>
+                <label class="check-row"><input class="check" type="checkbox" checked> <span>Send me order updates by email.</span></label>
+                <label class="check-row"><input class="check" type="checkbox" disabled> <span>Unavailable option</span></label>
+              </fieldset>
+            </div>
+            <div class="specimen">
+              <fieldset class="check-group">
+                <legend>Delivery</legend>
+                <label class="check-row"><input class="check check--radio" type="radio" name="r-ship" checked> <span>Standard</span></label>
+                <label class="check-row"><input class="check check--radio" type="radio" name="r-ship"> <span>Express</span></label>
+                <label class="check-row"><input class="check check--radio" type="radio" name="r-ship" disabled> <span>Pick up</span></label>
+              </fieldset>
+            </div>
+          </div>
+          <p class="cap">One spec, used on the website, the footer and the assessment (<code>components.css</code> <code>.check</code>): 22px, 1.5px Slate border (<code>--color-line-field</code>), radius 5 like buttons (<a class="link" href="rulebook.html#r-30">R-30</a>). The checkbox fills Deep Teal with a Paper tick; the radio is round with a Deep Teal dot. Invalid: 2px Coral border. Disabled: its own colours at 40%. The whole row is the hit area, at least 44px (<code>--size-tap-min</code>). Each acknowledgement is its own box, never pre-ticked. Mobile: the same size; rows stay 44 tall. <span class="status status--current">Current</span></p>
+        </div>
+
+        <div class="sub" id="progress">
+          <h3>Progress is the capsule.</h3>
+          <div class="progress-demo">
+            <div class="specimen">
+              <span class="eyebrow">Desktop · 120 wide</span>
+              <div class="progress">
+                <span class="cap-prog" role="progressbar" aria-label="Assessment progress" aria-valuemin="1" aria-valuemax="7" aria-valuenow="2" aria-valuetext="Step 2 of 7 · Health history" style="--p: 28.6%" data-prog><svg class="cap-prog__line" viewBox="0 0 120 43.96" aria-hidden="true" focusable="false"><path d="M65.97 2.18L20.55 2.18A19.8 19.8 0 0 0 20.55 41.79L65.97 41.79"/><path d="M65.97 0.75L98.02 0.75A21.23 21.23 0 0 1 98.02 43.21L65.97 43.21Z"/></svg><svg class="cap-prog__fill" viewBox="0 0 120 43.96" aria-hidden="true" focusable="false"><path d="M63.72 4.43L20.55 4.43A17.55 17.55 0 0 0 20.55 39.54L63.72 39.54"/><path d="M68.22 3L98.02 3A18.98 18.98 0 0 1 98.02 40.96L68.22 40.96Z"/></svg></span>
+                <span class="progress__text" aria-live="polite" data-prog-text>Step 2 of 7 · Health history</span>
+              </div>
+              <div class="specimen-row">
+                <button class="btn btn--outline" type="button" data-prog-step="-1">Back</button>
+                <button class="btn" type="button" data-prog-step="1">Continue</button>
+              </div>
+            </div>
+            <div class="specimen">
+              <span class="eyebrow">Mobile · 96 wide</span>
+              <div class="progress">
+                <span class="cap-prog cap-prog--m" aria-hidden="true" style="--p: 28.6%" data-prog-m><svg class="cap-prog__line" viewBox="0 0 96 35.36" aria-hidden="true" focusable="false"><path d="M52.76 1.89L16.54 1.89A15.79 15.79 0 0 0 16.54 33.47L52.76 33.47"/><path d="M52.76 0.75L78.32 0.75A16.93 16.93 0 0 1 78.32 34.61L52.76 34.61Z"/></svg><svg class="cap-prog__fill" viewBox="0 0 96 35.36" aria-hidden="true" focusable="false"><path d="M50.51 4.14L16.54 4.14A13.54 13.54 0 0 0 16.54 31.22L50.51 31.22"/><path d="M55.01 3L78.32 3A14.68 14.68 0 0 1 78.32 32.36L55.01 32.36Z"/></svg></span>
+                <span class="progress__text" data-prog-text-m>Step 2 of 7 · Health history</span>
+              </div>
+            </div>
+          </div>
+          <p class="cap">The progress mark is the logo capsule with its divider (<a class="link" href="rulebook.html#r-42">R-42</a>, <a class="link" href="rulebook.html#r-109">R-109</a>; O-09 closed): it fills from the long half, one step at a time, in 220ms ease-out (<code>--motion-duration-open</code>); reduced motion: instant. The fill sits inside the line and stops short of the divider, so a finished capsule keeps the gap. The text always names the step: "Step 2 of 7 · Health history". Desktop: 120 wide beside the label, with the step rail on the left of the assessment. Mobile: 96 wide above the question; tapping the label opens the full step list (Q102). The steps and their order live on <a class="link" href="assessment.html">Assessment</a>. Line stroke 1.5 at every size (<code>--size-capsule-stroke-min</code>).</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 4 · CARDS -->
+      <section class="sec" id="cards" aria-labelledby="cards-h">
+        <div class="sec-head">
+          <h2 id="cards-h">Cards, chips and steps.</h2>
+          <p>UI is flat: borders, not shadows. Cards that are links fill Deep Teal on hover, with no lift. Cards in one row share one height; the action sits at the bottom of every card, on one line across the row, and captions sit on one line (<a class="link" href="rulebook.html">R-98</a>). In CSS: the row is a grid and each card uses <code>grid-template-rows: subgrid</code>.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Cards.</h3>
+          <div class="grid-3">
+            <div class="card">
+              <h3>Information card</h3>
+              <p>Not a link. No hover. Radius 16, 1px Line/Base border, Card white.</p>
+            </div>
+            <a class="card" href="#cards">
+              <h3>Sexual health</h3>
+              <p>Link card. Hover fills Deep Teal with light text, 150ms ease-out.</p>
+              <span class="card__go">Learn more</span>
+            </a>
+            <a class="card" href="#cards">
+              <h3>How it works</h3>
+              <p>The whole card is one link. Never nest a second link or button inside it.</p>
+              <span class="card__go">Learn more</span>
+            </a>
+          </div>
+          <p class="cap">Card radius 16 (<code>--radius-card</code>), padding 24 (<code>--space-6</code>), border <code>--color-line-base</code>, fill <code>--color-surface-card</code>. Title Card Serif 24/30 (21/27 on mobile). Link cards: homepage product cards and product-page benefit cards. The card action is always "Learn more" (q133). A product page title is not a hero: DM Serif 46/54 at most on desktop, 34/40 on mobile; only the homepage hero is 70/60 (<a class="link" href="rulebook.html#r-20">R-20</a>).</p>
+          <div class="radii">
+            <figure><div class="radius-box" style="border-radius: var(--radius-card);"></div><figcaption class="cap">16 · <code>--radius-card</code> · cards, framed media</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-small);"></div><figcaption class="cap">12 · <code>--radius-small</code> · fields, chips, dropdown panel</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-xs);"></div><figcaption class="cap">8 · <code>--radius-xs</code> · menu rows, thumbnails</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-button);"></div><figcaption class="cap">5 · <code>--radius-button</code> · buttons</figcaption></figure>
+            <figure><div class="radius-box" style="border-radius: var(--radius-pill);"></div><figcaption class="cap">999 · <code>--radius-pill</code> · chips, nav pills</figcaption></figure>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Chips.</h3>
+          <div class="specimen">
+            <div class="chips" role="group" aria-label="FAQ topics" data-chips>
+              <button class="chip" type="button" aria-pressed="true">All</button>
+              <button class="chip" type="button" aria-pressed="false">Getting started</button>
+              <button class="chip" type="button" aria-pressed="false">Assessment</button>
+              <button class="chip" type="button" aria-pressed="false">Orders and delivery</button>
+            </div>
+            <p class="cap">Pill, 44px min height (<code>--size-tap-min</code>), 1px Slate border, Compact 14/21. Pressed = Deep Teal fill, Paper label, <code>aria-pressed="true"</code>. One topic at a time in this filter.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Step numbers.</h3>
+          <div class="specimen">
+            <div class="steps" role="tablist" aria-label="How it works" data-steps>
+              <button class="step-tab" type="button" role="tab" id="st-1" aria-selected="true" aria-controls="sp-1"><span class="step-num">1</span>Tell us what's changed.</button>
+              <button class="step-tab" type="button" role="tab" id="st-2" aria-selected="false" aria-controls="sp-2" tabindex="-1"><span class="step-num">2</span>A licensed provider reviews your information.</button>
+              <button class="step-tab" type="button" role="tab" id="st-3" aria-selected="false" aria-controls="sp-3" tabindex="-1"><span class="step-num">3</span>Receive a personalized care plan.</button>
+              <button class="step-tab" type="button" role="tab" id="st-4" aria-selected="false" aria-controls="sp-4" tabindex="-1"><span class="step-num">4</span>Stay supported.</button>
+            </div>
+            <div class="step-panel" role="tabpanel" id="sp-1" aria-labelledby="st-1">Complete a private online assessment covering your health, symptoms, and goals.</div>
+            <div class="step-panel" role="tabpanel" id="sp-2" aria-labelledby="st-2" hidden>Labs may be requested when clinically appropriate.</div>
+            <div class="step-panel" role="tabpanel" id="sp-3" aria-labelledby="st-3" hidden>If treatment is appropriate, your provider will explain the recommended options.</div>
+            <div class="step-panel" role="tabpanel" id="sp-4" aria-labelledby="st-4" hidden>Access ongoing guidance, follow-up, and adjustments based on your care plan.</div>
+            <p class="cap">Circle 44px, 1px border in the text colour, DM Serif digits. Hover, tap or selected → Yellow #FFBE0B fill with Teal-deep digits, 150ms. On How it works the steps are tabs; arrow keys move between them. The selected step is the viewport’s one Yellow element. Mobile: the four steps stack in one column, the panel under the selected step. The wording is the one How it works sequence (q132), the same on the website, landing pages and ads: <a class="link" href="section-library.html#how-it-works">Home section library</a>.</p>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Accordion (FAQ).</h3>
+          <div class="acc" data-acc>
+            <div class="acc__row">
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-1" id="acc-1-b">What is the assessment?<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              <div class="acc__panel" id="acc-1" role="region" aria-labelledby="acc-1-b"><div><p>A short set of questions about your health that a licensed provider reads. Specimen copy.</p></div></div>
+            </div>
+            <div class="acc__row">
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-2" id="acc-2-b">Who reviews my answers?<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              <div class="acc__panel" id="acc-2" role="region" aria-labelledby="acc-2-b"><div><p>A licensed provider. Specimen copy.</p></div></div>
+            </div>
+            <div class="acc__row">
+              <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-3" id="acc-3-b">Can I change my answers?<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              <div class="acc__panel" id="acc-3" role="region" aria-labelledby="acc-3-b"><div><p>Yes, until you submit them. Specimen copy.</p></div></div>
+            </div>
+          </div>
+          <p class="cap">Row min height 56 (<code>--space-14</code>), question Card 17/24 SemiBold, 1px Line/Base dividers. Chevron 24px line, 1.5px stroke, Deep Teal, turns 180° when open. One answer open at a time: opening one closes the other (R-113). Height and opacity animate together in 220ms ease-out (<code>--motion-duration-open</code>); reduced motion: instant. The button carries <code>aria-expanded</code> and <code>aria-controls</code>. FAQ entries may be questions; section headlines may not. Mobile: the same, full width, rows at least 56 high.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Tap targets.</h3>
+          <div class="prose"><p>Every interactive element is at least 44×44 (<code>--size-tap-min</code>, <a href="rulebook.html#r-72">R-72 to R-77</a>). Smaller targets ship only as logged exceptions.</p></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Exception</th><th>Element</th><th>Size</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><a href="rulebook.html#e-01">E-01</a></td><td>Mobile footer links in the earlier Deep Teal footer (Figma <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2741-3169">2741-3169</a>)</td><td>36px rows</td><td><span class="status status--planned">Retired</span> The footer (R-114) uses 44px link rows on mobile; no element is below 44.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">E-02 (header CTA 44px) and E-03 (mobile bar 48px) are exceptions to the button height, not to the tap target: both stay at or above 44.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 5 · HEADER -->
+      <section class="sec" id="header" aria-labelledby="header-h">
+        <div class="sec-head">
+          <h2 id="header-h">Header and main menu v3.</h2>
+          <p>Sexual health ▾ · How it works · FAQ · Sign in · Get started. Structure from the archive copy of Figma <a href="https://www.figma.com/design/aOretSqF3eNZeDp38Urlwv/?node-id=4046-606">Main menu v3 4046-606</a>, behaviour from the <a href="https://www.figma.com/design/aOretSqF3eNZeDp38Urlwv/?node-id=4010-609">interactions spec 4010-609</a>, timings mapped to the motion tokens. Rules R-29, R-45 to R-47, R-103.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Desktop.</h3>
+          <p class="cap">Live specimen. Hover Sexual health, or tab to it and press Enter or ↓. Esc closes and returns focus. Scroll inside the frame: the hairline appears after 8px.</p>
+          <div class="hdr-demo" data-scroll-demo tabindex="0" role="region" aria-label="Desktop header specimen. Scroll inside to see the sticky header.">
+            <div class="hdr-demo__inner">
+              <header class="mh" data-mh>
+                <a class="logo-lockup" href="#header" aria-label="unifiedmeds home (specimen)"><img src="assets/brand/logo-horizontal.svg" width="321" height="52" alt=""></a>
+                <nav aria-label="Main menu specimen">
+                  <ul class="mh__list">
+                    <li class="mh__item" data-dd>
+                      <button class="mh__link" type="button" aria-expanded="false" aria-controls="dd-sh" data-dd-trigger>
+                        <span class="mh__pill">Sexual health <svg class="mh__chev" width="11" height="7" viewBox="0 0 10.5 6.5" fill="none" aria-hidden="true"><path d="M0.75 0.75L5.25 5.75L9.75 0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                        <span class="mh__ind" aria-hidden="true"></span>
+                      </button>
+                      <div class="mh__dd overlay" id="dd-sh" hidden data-dd-panel>
+                        <ul>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.png" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.png" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-combo.png" width="30" height="30" alt=""><span class="mrow__label">Combo</span></span></a></li>
+                        </ul>
+                        <hr class="mdiv">
+                        <a class="link mall" href="#header">View all Sexual health →</a>
+                      </div>
+                    </li>
+                    <li class="mh__item"><a class="mh__link" href="#header"><span class="mh__pill">How it works</span><span class="mh__ind" aria-hidden="true"></span></a></li>
+                    <li class="mh__item"><a class="mh__link" href="#header"><span class="mh__pill">FAQ</span><span class="mh__ind" aria-hidden="true"></span></a></li>
+                  </ul>
+                </nav>
+                <div class="mh__actions">
+                  <a class="mh__signin" href="#header">Sign in</a>
+                  <a class="btn btn--header" href="#header">Get started</a>
+                </div>
+              </header>
+              <div class="page-fill" aria-hidden="true">
+                <p>Page content scrolls under the sticky header.</p>
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+          </div>
+          <p class="cap">On narrow screens the frame scrolls sideways.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Mobile.</h3>
+          <div class="grid-2">
+            <div class="mm" data-mm>
+              <div class="mm__head">
+                <a class="logo-lockup" href="#header" aria-label="unifiedmeds home (mobile specimen)"><img src="assets/brand/logo-seal.svg" width="137" height="50" alt=""></a>
+                <button class="mm__toggle" type="button" aria-expanded="false" aria-controls="mm-panel" aria-label="Open menu" data-mm-toggle>
+                  <svg class="i-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                  <svg class="i-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+              </div>
+              <div class="mm__page">
+                <div class="page-fill" aria-hidden="true"><p>Page content.</p><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="mm__panel" id="mm-panel" hidden data-mm-panel>
+                <nav class="mm__nav" aria-label="Main menu specimen, mobile">
+                  <ul>
+                    <li class="mm-row" data-mm-acc>
+                      <button class="mm-row__head" type="button" aria-expanded="false" aria-controls="mm-sub-sh">Sexual health <svg class="mh__chev" width="12" height="8" viewBox="0 0 10.5 6.5" fill="none" aria-hidden="true"><path d="M0.75 0.75L5.25 5.75L9.75 0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                      <div class="mm-sub" id="mm-sub-sh"><div>
+                        <ul class="mm-card">
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-tadalafil.png" width="30" height="30" alt=""><span class="mrow__label">Tadalafil</span></span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-sildenafil.png" width="30" height="30" alt=""><span class="mrow__label">Sildenafil</span></span></a></li>
+                          <li><a class="mrow" href="#header"><span class="mrow__left"><img class="mthumb" src="assets/packshots/packshot-combo.png" width="30" height="30" alt=""><span class="mrow__label">Combo</span></span></a></li>
+                          <li><hr class="mdiv"></li>
+                          <li><a class="link mall" href="#header">View all Sexual health →</a></li>
+                        </ul>
+                      </div></div>
+                    </li>
+                    <li class="mm-row"><a class="mm-row__link" href="#header">How it works</a></li>
+                    <li class="mm-row"><a class="mm-row__link" href="#header">FAQ</a></li>
+                    <li class="mm-row"><a class="mm-row__link" href="#header">Sign in</a></li>
+                  </ul>
+                </nav>
+                <div class="mm__bar">
+                  <a class="btn btn--bar" href="#header">Get started</a>
+                  <p class="mm__note">Assessment only. Not a diagnosis.</p>
+                </div>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="rule"><b>Open.</b><p>☰ in a 44×44 button opens a full-screen menu that slides down in 220ms; the icon turns to ✕ and the page behind stops scrolling. Esc or ✕ closes it and returns focus to the button. Tab stays inside the menu while it is open.</p></div>
+              <div class="rule"><b>Rows.</b><p>Category rows are 56px, Inter Medium 16/25. Sexual health expands in place (220ms) into a white card, radius 12, with rows of 48px or more. Only one category is open at a time. Tapping a product goes to its page and closes the menu.</p></div>
+              <div class="rule"><b>Bottom bar.</b><p>Get started, Deep Teal, full width, 48px (E-03), then “Assessment only. Not a diagnosis.” in Body Fine Slate, above the device safe area.</p></div>
+              <p class="cap">The frame is 390 wide (<code>--layout-frame-mobile</code>) with the 64px mobile header (<code>--size-header-mobile</code>).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <h3>Spec.</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Part</th><th>Value</th><th>Token</th><th>Figma</th></tr></thead>
+              <tbody>
+                <tr><td>Header height</td><td>80 desktop · 64 mobile, on the website, landing pages and the assessment top bar (R-29, q138)</td><td><code>--size-header-desktop</code> · <code>--size-header-mobile</code></td><td>4046-606</td></tr>
+                <tr><td>Header inset</td><td>56 desktop · 20 mobile</td><td><code>--layout-header-inset</code> · <code>--layout-margin-mobile</code></td><td>4046-606</td></tr>
+                <tr><td>Surface</td><td>Paper #FEFCF6, sticky at top 0</td><td><code>--color-surface-paper</code></td><td>4010-609</td></tr>
+                <tr><td>Hairline</td><td>1px Line/Soft #EDEAE2 after 8px of scroll, 220ms</td><td><code>--color-line-soft</code> · <code>--space-2</code> · <code>--motion-duration-open</code></td><td>4010-609</td></tr>
+                <tr><td>Logo</td><td>Always taller than the header button (R-103): Horizontal lockup 52px on desktop, Primary seal 50px on mobile. Button 44 (E-02)</td><td><code>--size-logo-header-desktop</code>, <code>--size-logo-header-mobile</code></td><td>4046-606 (45)</td></tr>
+                <tr><td>Logo in app screens</td><td>Member portal: Horizontal 30 in the desktop side nav, Primary seal 40 in the mobile top bar; clinical admin: Horizontal reversed 24 (U-29, at the R-118 minimums). Screens on <a class="link" href="product-screens.html">Product screens</a></td><td>R-118</td><td>none</td></tr>
+                <tr><td>Nav item</td><td>Inter Medium 14/1.4 Deep Teal; pill padding 8/12; hit area 44</td><td><code>--type-desktop-nav-*</code> · <code>--space-2</code>/<code>--space-3</code> · <code>--size-tap-min</code></td><td>4046-606</td></tr>
+                <tr><td>Nav hover</td><td>Line/Soft pill, 150ms ease-out</td><td><code>--color-line-soft</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td><td>4010-609 (180 ease)</td></tr>
+                <tr><td>Open</td><td>Hover with 100ms intent, or click, Enter, Space, ↓. One dropdown at a time.</td><td><code>--motion-intent-delay</code></td><td>4010-609</td></tr>
+                <tr><td>Open state</td><td>Pill stays, chevron flips, 24×2 Deep Teal indicator</td><td><code>--space-6</code> · <code>--color-brand-deep-teal</code></td><td>4046-606</td></tr>
+                <tr><td>Dropdown</td><td>Centred under the item, 8px below the header; Card white, radius 12, 1px Line/Soft, overlay shadow; padding 4</td><td><code>--space-2</code> · <code>--color-surface-card</code> · <code>--radius-small</code> · <code>--shadow-overlay</code> · <code>--space-1</code></td><td>4010-609</td></tr>
+                <tr><td>Dropdown enter</td><td>Opacity 0 → 1 and 6px → 0, 220ms ease-out</td><td><code>--motion-distance-dropdown</code> · <code>--motion-duration-open</code></td><td>4010-609 (180 ease)</td></tr>
+                <tr><td>Dropdown exit</td><td>After a 150ms delay, fade 150ms</td><td><code>--motion-close-delay</code> · <code>--motion-duration-fast</code></td><td>4010-609 (fade 140)</td></tr>
+                <tr><td>Rows</td><td>44 min, side padding 12, radius 8; hover Line/Soft; focus 2px Deep Teal inside ring</td><td><code>--size-tap-min</code> · <code>--space-3</code> · <code>--radius-xs</code> · <code>--size-focus-width</code></td><td>4010-609</td></tr>
+                <tr><td>Row content</td><td>30×30 packshot radius 8 · the product name, Inter Medium 14. Name only: no meta line, no benefit, duration or price</td><td><code>--radius-xs</code> · <code>--type-desktop-nav-*</code></td><td>4046-606 (meta lines: removed)</td></tr>
+                <tr><td>Rows listed</td><td>Tadalafil · Sildenafil · Combo, a Line/Base divider, then “View all Sexual health →” in Deep Teal, underlined</td><td><code>--color-line-base</code> · <code>--color-text-link</code></td><td>4046-606</td></tr>
+                <tr><td>Sign in</td><td>Text link, Inter Medium 14, Slate → Deep Teal on hover <span class="status status--proposed">To confirm</span></td><td><code>--color-text-secondary</code></td><td>4046-606</td></tr>
+                <tr><td>Get started</td><td>Dark button (Teal-deep), 44px, label 14 (E-02)</td><td><code>--size-control-exception-header</code></td><td>4046-606 (43)</td></tr>
+                <tr><td>Keyboard</td><td>Trigger is a button with <code>aria-expanded</code> and <code>aria-controls</code>; ↓ and ↑ move through rows; Esc closes and returns focus; tabbing past the last row closes</td><td>none</td><td>4010-609</td></tr>
+                <tr><td>Mobile menu</td><td>☰ 44×44; full screen, slides down 220ms; ✕; scroll lock; rows 56; sub-rows 48 or more; one category open at a time</td><td><code>--size-tap-min</code> · <code>--motion-duration-open</code> · <code>--space-14</code> · <code>--space-12</code></td><td>4046-606</td></tr>
+                <tr><td>Mobile bottom bar</td><td>Get started, Deep Teal, full width, 48 (E-03) + “Assessment only. Not a diagnosis.” + safe area</td><td><code>--size-control-exception-mobile-bar</code></td><td>4046-911</td></tr>
+                <tr><td>Reduced motion</td><td>Open and close instantly; no slide, no fade, no intent delay</td><td>brand.css sets durations to 0</td><td>none</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="cap">Figma column: node in the archive copy <code>aOretSqF3eNZeDp38Urlwv</code>; a value in brackets is what Figma says where the hub differs. Off-scale Figma spacers (panel padding 6, row padding 7, thumbnail gap 10) are snapped to the nearest token; aligning them in Figma is an open layout item.</p>
+          <p class="cap">The dropdown shows product names only (U-31): the Figma meta lines (“Up to 36 hrs”, “Plan ahead”, “3 ingredients”) are left out, because a line next to an Rx name reads as a benefit or duration claim (R-65). Button heights come from this one place: header 44 (E-02) and the mobile bar 48 (E-03); landing pages and the assessment cite them. On the live site, clicking Sexual health opens the category page; this specimen follows the menu spec, where the item is a button.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 6 · FOOTER -->
+      <section class="sec" id="footer" aria-labelledby="footer-h">
+        <div class="sec-head">
+          <h2 id="footer-h">Footer.</h2>
+          <p>One footer for the website and every landing page, on Mist with the Horizontal logo and a Dark Subscribe button (<a class="link" href="rulebook.html#r-48">R-48</a>, <a class="link" href="rulebook.html#r-114">R-114</a>). The link list, the brand line, the newsletter consent and the copyright below are the only versions; the <a class="link" href="lp/sexual-health.html">Sexual health landing page</a> uses the same markup. Built in <code>components.css</code> (<code>.ft3</code>); its layout follows its own width.</p>
+        </div>
+        <div class="sub" id="footer3">
+          <div class="ftr3-wrap">
+            <footer class="ft3" aria-label="Footer specimen, desktop">
+  <div class="ft3__in">
+    <div class="ft3__brand">
+      <a href="#footer" aria-label="unifiedmeds home"><img class="ft3__logo" src="assets/brand/logo-horizontal.svg" width="185" height="30" alt=""></a>
+      <p class="ft3__line">Men's health, handled privately. A licensed provider reviews every assessment.</p>
+      <p class="ft3__contact">[support email · legal, O-01]</p>
+    </div>
+    <nav class="ft3__cols" aria-label="Footer links" data-acc><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c0" id="f3d-b0">Care<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c0" role="region" aria-labelledby="f3d-b0"><div><ul class="ft3__links"><li><a href="#footer">Sexual health</a></li><li><a href="#footer">How it works</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c1" id="f3d-b1">Company<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c1" role="region" aria-labelledby="f3d-b1"><div><ul class="ft3__links"><li><a href="#footer">About unifiedmeds</a></li><li><a href="#footer">Our providers</a></li><li><a href="#footer">Press</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c2" id="f3d-b2">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c2" role="region" aria-labelledby="f3d-b2"><div><ul class="ft3__links"><li><a href="#footer">FAQ</a></li><li><a href="#footer">Contact us</a></li><li><a href="#footer">Shipping and delivery</a></li><li><a href="#footer">Billing and refunds</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3d-c3" id="f3d-b3">Legal<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3d-c3" role="region" aria-labelledby="f3d-b3"><div><ul class="ft3__links"><li><a href="#footer">Privacy policy</a></li><li><a href="#footer">Terms of service</a></li><li><a href="#footer">Telehealth notice</a></li><li><a href="#footer">Notice of privacy practices</a></li><li><a href="#footer">Safety information</a></li><li><a href="#footer">Accessibility</a></li></ul></div></div></div></nav>
+    <form class="ft3__news" novalidate data-news3>
+      <p class="ft3__newsh" id="f3d-nl">Notes on care, now and then.</p>
+      <div class="ft3__newsrow">
+        <label class="sr-only" for="f3d-em">Email address</label>
+        <input class="ft3__field" id="f3d-em" type="email" autocomplete="email" placeholder="Your email address" aria-describedby="f3d-nl f3d-st">
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <label class="check-row ft3__consent"><input class="check" type="checkbox" name="newsletter-consent" aria-describedby="f3d-st"><span>Send me the unifiedmeds newsletter: one short email about men's health, [frequency]. We count opens and clicks to learn what is useful. Unsubscribe in one click at any time. <a href="#footer">Privacy notice</a>.</span></label>
+      <p class="ft3__fine ft3__status" id="f3d-st" role="status" aria-live="polite"></p>
+      <p class="ft3__promise"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg>No product names in our emails.</p>
+    </form>
+    <ul class="ft3__social" aria-label="unifiedmeds on social media"><li><a href="#footer" aria-label="Facebook (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.0833 7.08333H13.75V4.16667H11.6667C10.8931 4.16667 10.1513 4.47396 9.60427 5.02094C9.05729 5.56792 8.75 6.30979 8.75 7.08333V9.16667H6.66667V12.0833H8.75V17.5H11.6667V12.0833H13.6667L14.1667 9.16667H11.6667V7.5C11.6667 7.38949 11.7106 7.28351 11.7887 7.20537C11.8668 7.12723 11.9728 7.08333 12.0833 7.08333Z"/></svg></a></li><li><a href="#footer" aria-label="Instagram (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.9167 2.91667H7.08333C4.78215 2.91667 2.91667 4.78215 2.91667 7.08333V12.9167C2.91667 15.2179 4.78215 17.0833 7.08333 17.0833H12.9167C15.2179 17.0833 17.0833 15.2179 17.0833 12.9167V7.08333C17.0833 4.78215 15.2179 2.91667 12.9167 2.91667Z"/><path d="M10 13.3333C11.8409 13.3333 13.3333 11.8409 13.3333 10C13.3333 8.15905 11.8409 6.66667 10 6.66667C8.15905 6.66667 6.66667 8.15905 6.66667 10C6.66667 11.8409 8.15905 13.3333 10 13.3333Z"/><path d="M14.3333 6.16667C14.6095 6.16667 14.8333 5.94281 14.8333 5.66667C14.8333 5.39052 14.6095 5.16667 14.3333 5.16667C14.0572 5.16667 13.8333 5.39052 13.8333 5.66667C13.8333 5.94281 14.0572 6.16667 14.3333 6.16667Z"/></svg></a></li><li><a href="#footer" aria-label="TikTok (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 3.33333V12.0833C11.25 12.5778 11.1034 13.0611 10.8287 13.4723C10.554 13.8834 10.1635 14.2038 9.70671 14.393C9.24989 14.5823 8.74723 14.6318 8.26227 14.5353C7.77732 14.4388 7.33186 14.2007 6.98223 13.8511C6.6326 13.5015 6.3945 13.056 6.29804 12.5711C6.20157 12.0861 6.25108 11.5834 6.4403 11.1266C6.62952 10.6698 6.94995 10.2794 7.36107 10.0047C7.7722 9.72996 8.25555 9.58333 8.75 9.58333"/><path d="M11.25 3.33333C11.25 4.3279 11.6451 5.28172 12.3483 5.98498C13.0516 6.68825 14.0054 7.08333 15 7.08333"/></svg></a></li><li><a href="#footer" aria-label="YouTube (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 4.58333H5.41667C3.57572 4.58333 2.08333 6.07572 2.08333 7.91667V12.0833C2.08333 13.9243 3.57572 15.4167 5.41667 15.4167H14.5833C16.4243 15.4167 17.9167 13.9243 17.9167 12.0833V7.91667C17.9167 6.07572 16.4243 4.58333 14.5833 4.58333Z"/><path d="M8.75 7.91667V12.0833L12.25 10L8.75 7.91667Z"/></svg></a></li><li><a href="#footer" aria-label="LinkedIn (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 2.91667H5.41667C4.03595 2.91667 2.91667 4.03595 2.91667 5.41667V14.5833C2.91667 15.964 4.03595 17.0833 5.41667 17.0833H14.5833C15.964 17.0833 17.0833 15.964 17.0833 14.5833V5.41667C17.0833 4.03595 15.964 2.91667 14.5833 2.91667Z"/><path d="M6.66667 8.75V13.3333M6.66667 6.5V6.58333M9.58333 13.3333V8.75M9.58333 10.8333C9.58333 10.2808 9.80283 9.75089 10.1935 9.36019C10.5842 8.96949 11.1141 8.75 11.6667 8.75C12.2192 8.75 12.7491 8.96949 13.1398 9.36019C13.5305 9.75089 13.75 10.2808 13.75 10.8333V13.3333"/></svg></a></li><li><a href="#footer" aria-label="X (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5L15 15M15 5L5 15"/></svg></a></li></ul>
+    <div class="ft3__legal">
+      <ul class="ft3__compliance">
+        <li>Assessment only. Not a diagnosis.</li>
+        <li>[Telehealth notice: who provides care, in which states · legal, O-01]</li>
+        <li>[Any treatment is decided by the treating provider · legal wording, O-01]</li>
+      </ul>
+      <div class="ft3__bar">
+        <p class="ft3__fine">© 2026 unifiedmeds</p>
+        <span class="ft3__seal">[LegitScript seal · placeholder, O-01]</span>
+      </div>
+    </div>
+  </div>
+</footer>
+            <div class="ftr3-mobile"><footer class="ft3" aria-label="Footer specimen, mobile">
+  <div class="ft3__in">
+    <div class="ft3__brand">
+      <a href="#footer" aria-label="unifiedmeds home"><img class="ft3__logo" src="assets/brand/logo-horizontal.svg" width="172.7" height="28" alt=""></a>
+      <p class="ft3__line">Men's health, handled privately. A licensed provider reviews every assessment.</p>
+      <p class="ft3__contact">[support email · legal, O-01]</p>
+    </div>
+    <nav class="ft3__cols" aria-label="Footer links" data-acc><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c0" id="f3m-b0">Care<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c0" role="region" aria-labelledby="f3m-b0"><div><ul class="ft3__links"><li><a href="#footer">Sexual health</a></li><li><a href="#footer">How it works</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c1" id="f3m-b1">Company<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c1" role="region" aria-labelledby="f3m-b1"><div><ul class="ft3__links"><li><a href="#footer">About unifiedmeds</a></li><li><a href="#footer">Our providers</a></li><li><a href="#footer">Press</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c2" id="f3m-b2">Help<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c2" role="region" aria-labelledby="f3m-b2"><div><ul class="ft3__links"><li><a href="#footer">FAQ</a></li><li><a href="#footer">Contact us</a></li><li><a href="#footer">Shipping and delivery</a></li><li><a href="#footer">Billing and refunds</a></li></ul></div></div></div><div class="ft3__col"><h3 class="ft3__colh"><button class="ft3__colbtn" type="button" aria-expanded="false" aria-controls="f3m-c3" id="f3m-b3">Legal<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></h3><div class="ft3__panel" id="f3m-c3" role="region" aria-labelledby="f3m-b3"><div><ul class="ft3__links"><li><a href="#footer">Privacy policy</a></li><li><a href="#footer">Terms of service</a></li><li><a href="#footer">Telehealth notice</a></li><li><a href="#footer">Notice of privacy practices</a></li><li><a href="#footer">Safety information</a></li><li><a href="#footer">Accessibility</a></li></ul></div></div></div></nav>
+    <form class="ft3__news" novalidate data-news3>
+      <p class="ft3__newsh" id="f3m-nl">Notes on care, now and then.</p>
+      <div class="ft3__newsrow">
+        <label class="sr-only" for="f3m-em">Email address</label>
+        <input class="ft3__field" id="f3m-em" type="email" autocomplete="email" placeholder="Your email address" aria-describedby="f3m-nl f3m-st">
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <label class="check-row ft3__consent"><input class="check" type="checkbox" name="newsletter-consent" aria-describedby="f3m-st"><span>Send me the unifiedmeds newsletter: one short email about men's health, [frequency]. We count opens and clicks to learn what is useful. Unsubscribe in one click at any time. <a href="#footer">Privacy notice</a>.</span></label>
+      <p class="ft3__fine ft3__status" id="f3m-st" role="status" aria-live="polite"></p>
+      <p class="ft3__promise"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg>No product names in our emails.</p>
+    </form>
+    <ul class="ft3__social" aria-label="unifiedmeds on social media"><li><a href="#footer" aria-label="Facebook (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.0833 7.08333H13.75V4.16667H11.6667C10.8931 4.16667 10.1513 4.47396 9.60427 5.02094C9.05729 5.56792 8.75 6.30979 8.75 7.08333V9.16667H6.66667V12.0833H8.75V17.5H11.6667V12.0833H13.6667L14.1667 9.16667H11.6667V7.5C11.6667 7.38949 11.7106 7.28351 11.7887 7.20537C11.8668 7.12723 11.9728 7.08333 12.0833 7.08333Z"/></svg></a></li><li><a href="#footer" aria-label="Instagram (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.9167 2.91667H7.08333C4.78215 2.91667 2.91667 4.78215 2.91667 7.08333V12.9167C2.91667 15.2179 4.78215 17.0833 7.08333 17.0833H12.9167C15.2179 17.0833 17.0833 15.2179 17.0833 12.9167V7.08333C17.0833 4.78215 15.2179 2.91667 12.9167 2.91667Z"/><path d="M10 13.3333C11.8409 13.3333 13.3333 11.8409 13.3333 10C13.3333 8.15905 11.8409 6.66667 10 6.66667C8.15905 6.66667 6.66667 8.15905 6.66667 10C6.66667 11.8409 8.15905 13.3333 10 13.3333Z"/><path d="M14.3333 6.16667C14.6095 6.16667 14.8333 5.94281 14.8333 5.66667C14.8333 5.39052 14.6095 5.16667 14.3333 5.16667C14.0572 5.16667 13.8333 5.39052 13.8333 5.66667C13.8333 5.94281 14.0572 6.16667 14.3333 6.16667Z"/></svg></a></li><li><a href="#footer" aria-label="TikTok (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 3.33333V12.0833C11.25 12.5778 11.1034 13.0611 10.8287 13.4723C10.554 13.8834 10.1635 14.2038 9.70671 14.393C9.24989 14.5823 8.74723 14.6318 8.26227 14.5353C7.77732 14.4388 7.33186 14.2007 6.98223 13.8511C6.6326 13.5015 6.3945 13.056 6.29804 12.5711C6.20157 12.0861 6.25108 11.5834 6.4403 11.1266C6.62952 10.6698 6.94995 10.2794 7.36107 10.0047C7.7722 9.72996 8.25555 9.58333 8.75 9.58333"/><path d="M11.25 3.33333C11.25 4.3279 11.6451 5.28172 12.3483 5.98498C13.0516 6.68825 14.0054 7.08333 15 7.08333"/></svg></a></li><li><a href="#footer" aria-label="YouTube (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 4.58333H5.41667C3.57572 4.58333 2.08333 6.07572 2.08333 7.91667V12.0833C2.08333 13.9243 3.57572 15.4167 5.41667 15.4167H14.5833C16.4243 15.4167 17.9167 13.9243 17.9167 12.0833V7.91667C17.9167 6.07572 16.4243 4.58333 14.5833 4.58333Z"/><path d="M8.75 7.91667V12.0833L12.25 10L8.75 7.91667Z"/></svg></a></li><li><a href="#footer" aria-label="LinkedIn (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5833 2.91667H5.41667C4.03595 2.91667 2.91667 4.03595 2.91667 5.41667V14.5833C2.91667 15.964 4.03595 17.0833 5.41667 17.0833H14.5833C15.964 17.0833 17.0833 15.964 17.0833 14.5833V5.41667C17.0833 4.03595 15.964 2.91667 14.5833 2.91667Z"/><path d="M6.66667 8.75V13.3333M6.66667 6.5V6.58333M9.58333 13.3333V8.75M9.58333 10.8333C9.58333 10.2808 9.80283 9.75089 10.1935 9.36019C10.5842 8.96949 11.1141 8.75 11.6667 8.75C12.2192 8.75 12.7491 8.96949 13.1398 9.36019C13.5305 9.75089 13.75 10.2808 13.75 10.8333V13.3333"/></svg></a></li><li><a href="#footer" aria-label="X (link pending)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5L15 15M15 5L5 15"/></svg></a></li></ul>
+    <div class="ft3__legal">
+      <ul class="ft3__compliance">
+        <li>Assessment only. Not a diagnosis.</li>
+        <li>[Telehealth notice: who provides care, in which states · legal, O-01]</li>
+        <li>[Any treatment is decided by the treating provider · legal wording, O-01]</li>
+      </ul>
+      <div class="ft3__bar">
+        <p class="ft3__fine">© 2026 unifiedmeds</p>
+        <span class="ft3__seal">[LegitScript seal · placeholder, O-01]</span>
+      </div>
+    </div>
+  </div>
+</footer></div>
+          </div>
+          <p class="cap">Desktop above, mobile (390) below: on mobile the newsletter comes first and the columns become a one-open accordion; tap a column title to open it. Links point to this specimen and the form sends nothing.</p>
+        </div>
+        <div class="sub">
+          <h3>Rules.</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Part</th><th>Desktop (1440)</th><th>Mobile (390)</th></tr></thead>
+              <tbody>
+                <tr><td>Ground</td><td>Mist (<code>--color-surface-mist</code>), always last on the page; rules 1px Line/Base. The CTA band above it keeps its dark ground: the category colour on a category page (R-117); two dark bands never touch (R-119)</td><td>The same</td></tr>
+                <tr><td>Logo</td><td>Horizontal lockup, the main Navy version on a light ground, 30 tall (<code>--size-logo-footer-desktop</code>)</td><td>28 tall (<code>--size-logo-footer-mobile</code>)</td></tr>
+                <tr><td>Brand line</td><td>"Men's health, handled privately. A licensed provider reviews every assessment." body text, Slate on Mist (<code>--color-text-secondary-on-mist</code>)</td><td>The same line, under the logo</td></tr>
+                <tr><td>Columns</td><td>Care (Sexual health, How it works) · Company (About unifiedmeds, Our providers, Press) · Help (FAQ, Contact us, Shipping and delivery, Billing and refunds) · Legal (Privacy policy, Terms of service, Telehealth notice, Notice of privacy practices, Safety information, Accessibility). Titles Label 12/16; links Compact 14/21, underline grows on hover in 150ms. Final wording with legal</td><td>A one-open accordion: title rows 56 tall, link rows 44 tall (R-74; no exception)</td></tr>
+                <tr><td>Not linked yet</td><td colspan="2">Hair loss, Longevity and Reviews stay out of the footer and every header until they launch and legal approves them (R-04, R-06, R-67)</td></tr>
+                <tr><td>Newsletter</td><td>Heading, a 50px email field (radius 12) and the Dark "Subscribe" button; under them the unticked consent box with the decided line (double opt-in, U-28) and the promise "No product names in our emails."</td><td>Comes first; field and button stack full width</td></tr>
+                <tr><td>Social</td><td>Facebook, Instagram, TikTok, YouTube, LinkedIn, X: 24px line icons in 44px targets; links pending</td><td>The same, left aligned</td></tr>
+                <tr><td>Legal</td><td>"Assessment only. Not a diagnosis." first, then the telehealth notice and the provider line (legal wording, O-01), "© 2026 unifiedmeds" (R-88; the entity is added when O-01 closes), the LegitScript seal slot</td><td>Stacked</td></tr>
+                <tr><td>Focus</td><td colspan="2">The 2px Deep Teal ring, 3px offset</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rule"><b>Earlier footer.</b><p>The Deep Teal "Footer v2 compact" (Figma 2738-370, mobile 2741-3169) and its 36px mobile link rows (E-01) are retired. The designer's Figma still shows it; our Figma follows this footer. Archive copy: <code>archive/src-merged/components-footer-v2-and-v3-specimens.html</code>.</p></div>
+          <p class="cap"><span class="status status--proposed">To confirm</span> The newsletter heading ("Notes on care, now and then." here; the landing page earlier said "Care notes, by email.") and the frequency in the consent line wait for Avi; legal approves the consent line, the link names and the compliance lines.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== 7 · OVERLAY -->
+      <section class="sec" id="overlay" aria-labelledby="overlay-h">
+        <div class="sec-head">
+          <h2 id="overlay-h">Overlay surface.</h2>
+          <p>Dropdowns and dialogs are the only raised surfaces and carry the only shadow.</p>
+        </div>
+        <div class="grid-2">
+          <div class="specimen specimen--mist">
+            <div class="overlay overlay-demo">
+              <b>Overlay surface</b>
+              <p>Card white, 1px Line/Soft, radius 12, <code>--shadow-overlay</code>.</p>
+            </div>
+            <div class="specimen-row"><button class="btn btn--outline" type="button" data-dlg-open="dlg">Open a dialog</button></div>
+          </div>
+          <div class="stack">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Part</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Fill</td><td>White #FFFFFF · <code>--color-surface-card</code></td></tr>
+                  <tr><td>Border</td><td>1px Line/Soft #EDEAE2 · <code>--color-line-soft</code></td></tr>
+                  <tr><td>Radius</td><td>12 · <code>--radius-small</code></td></tr>
+                  <tr><td>Shadow</td><td><code>0 24px 60px rgba(38, 70, 83, 0.16), 0 2px 6px rgba(38, 70, 83, 0.06)</code> · <code>--shadow-overlay</code> (Figma menu spec 4010-609)</td></tr>
+                  <tr><td>Enter</td><td>Fade and 6px rise, 220ms ease-out</td></tr>
+                  <tr><td>Class</td><td><code>.overlay</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Nothing else casts a shadow: not cards, not buttons, not the header. Dialogs close with Esc and return focus to the button that opened them. <span class="status status--proposed">To confirm</span> No dialog is drawn in Figma yet, and the backdrop (scrim) colour has no token, so this specimen uses none.</p>
+          </div>
+        </div>
+        <dialog class="overlay dlg" id="dlg" aria-labelledby="dlg-h">
+          <h3 id="dlg-h">Leave this page.</h3>
+          <p>Your answers on this page are not saved yet. Specimen copy.</p>
+          <form method="dialog">
+            <button class="btn" type="submit" value="stay" autofocus>Stay on this page</button>
+            <button class="btn btn--outline" type="submit" value="leave">Leave</button>
+          </form>
+        </dialog>
+      </section>
+
+      <!-- =========================================================== FEEDBACK & STATES -->
+      <section class="sec" id="states" aria-labelledby="states-h">
+        <div class="sec-head">
+          <span class="status status--current">Current · R-42, R-53</span>
+          <h2 id="states-h">Feedback and states.</h2>
+          <p>The pieces the product screens need around the forms and buttons: where the member is, what he chose, what happened, and what to do when there is nothing yet. Built from the Recommendation page in the designer's Figma (3180:1523, read only) and the rules. Items still marked To confirm wait for Avi.</p>
+        </div>
+        <div class="asset-actions" data-figma="24-87"></div>
+
+        <div class="sub" id="state-progress">
+          <h3>Progress steps.</h3>
+          <div class="specimen specimen--dark on-dark">
+            <ol class="steps-bar" aria-label="Your progress">
+              <li class="is-done"><span class="steps-dot"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span>Health assessment</li>
+              <li class="is-current" aria-current="step"><span class="steps-dot">2</span>Choose treatment</li>
+              <li><span class="steps-dot">3</span>Checkout</li>
+              <li><span class="steps-dot">4</span>Provider review</li>
+            </ol>
+          </div>
+          <p class="cap">Teal-deep bar, 46 high. Done: Paper dot with a Deep Teal check, Wash Blue label. Current: the one Yellow dot, Paper label. Next: outline dot, Wash Blue label. On mobile only the current step keeps its label. Figma uses Yellow for done steps too; here Yellow marks only the current step (R-11).</p>
+        </div>
+
+        <div class="sub" id="state-choice">
+          <h3>Choice cards.</h3>
+          <div class="grid-2">
+            <div class="choice-group" role="radiogroup" aria-label="Plan length">
+              <label class="choice"><input type="radio" name="supply-demo"><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>1 month</b><span>[price] per order · [quantity · clinical]</span></span></label>
+              <label class="choice"><input type="radio" name="supply-demo" checked><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>3 months</b><span>[price] per order · Save $[amount] per order · [renewal line · legal]</span></span></label>
+              <label class="choice"><input type="radio" name="supply-demo"><span class="choice-radio"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><span class="choice-text"><b>6 months</b><span>[price] per order · Save $[amount] per order · [renewal line · legal]</span></span></label>
+            </div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>State</th><th>Look</th></tr></thead>
+              <tbody>
+                <tr><td>Default</td><td>Paper, 1px Line/Base, radius 16, padding 16 / 20, radio outline Wash Blue</td></tr>
+                <tr><td>Hover</td><td>Border Slate (Line/Field), 150ms</td></tr>
+                <tr><td>Selected</td><td>Deep Teal fill, Paper title, Wash Blue line two, Yellow radio with a Deep Teal check (R-42)</td></tr>
+                <tr><td>Focus</td><td>2px focus ring, 3px offset</td></tr>
+                <tr><td>Badge</td><td>None: no “Most popular” or “Best value” (R-61, R-67)</td></tr>
+                <tr><td>Mobile (390)</td><td>Full width, the same 16 / 20 padding and states</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <p class="cap">One choice card per option, the whole card is the target. Plans are 1, 3 and 6 months (Q100); the saving is a dollar amount per order, never a percentage (R-61); the 3 and 6 month plans carry the renewal slot "[renewal line · legal]"; no tablet counts in the title (use "[quantity · clinical]"). Figma draws radius 14; the card rule is 16 (R-43). A single choice fills, never scales (R-42); several answers use the check card under <a class="link" href="#answers">Answer options</a>.</p>
+        </div>
+
+        <div class="sub" id="state-segmented">
+          <h3>Segmented control and tabs.</h3>
+          <div class="grid-2">
+            <div class="specimen">
+              <div class="segmented" role="radiogroup" aria-label="How often">
+                <button type="button" role="radio" aria-checked="true">As needed</button>
+                <button type="button" role="radio" aria-checked="false">Daily</button>
+              </div>
+              <p class="cap">Mist track, radius 12, 4px inset; the chosen option is Paper, Deep Teal label; the other is Slate. For two or three short options only.</p>
+            </div>
+            <div class="specimen">
+              <div class="tabs" role="tablist" aria-label="Treatment details">
+                <button type="button" role="tab" aria-selected="true">Overview</button>
+                <button type="button" role="tab" aria-selected="false">How to take it</button>
+                <button type="button" role="tab" aria-selected="false">Safety</button>
+              </div>
+              <p class="cap">Tabs switch views of one subject. Active: Deep Teal label and a 2px Deep Teal line under it; the line moves in 220ms. Never hide safety information behind a tab on a product page (R-66).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub" id="state-tags">
+          <h3>Tags.</h3>
+          <div class="specimen">
+            <div class="specimen-row">
+              <span class="tag">Tadalafil, 20 mg tablets</span>
+              <span class="tag tag--highlight">Recommended</span>
+              <span class="tag tag--product" style="--tag-colour: var(--color-product-combo)">Combo</span>
+              <span class="tag tag--quiet">No visit needed</span>
+            </div>
+          </div>
+          <p class="cap">Tags describe, they never act: Inter Regular 13, padding 6 / 14, fully round like the menu pill. Default Line/Base border; Highlight on Wash Yellow; Product: a dot in the product colour beside the name, the colour marks and never carries text or data (R-85, U-28); Quiet: a sentence-case label without a border (R-22). Strengths follow R-108 ("Tadalafil, 20 mg tablets"). On dark grounds the default tag takes a Wash Blue border and Paper text. Mobile: the same; tags wrap, never shrink.</p>
+        </div>
+
+        <div class="sub" id="state-toast">
+          <h3>Messages (toasts).</h3>
+          <div class="grid-3">
+            <div class="toast" role="status"><span class="toast-icon"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><p><b>Answers saved.</b> You can come back to them any time.</p><button class="toast-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+            <div class="toast" role="status"><span class="toast-icon"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.2V14M10 6.3V6.4M17.25 10a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0Z"/></svg></span><p><b>Your provider replied.</b> Open Messages to read it.</p><button class="toast-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+            <div class="toast toast--error" role="alert"><span class="toast-icon"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6.5V11M10 13.9V14M17.25 10a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0Z"/></svg></span><p><b>That didn’t go through.</b> Check your connection and try again.</p><button class="toast-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+          </div>
+          <p class="cap">Overlay surface, radius 12, the only other shadow. Bottom right on desktop, bottom centre on mobile, above the mobile bar. Success and info close after 5 seconds; an error stays until closed. Coral marks the error icon only, never the text (R-15). Never a toast for health results: results open their own page with the provider named.</p>
+        </div>
+
+        <div class="sub" id="state-empty">
+          <h3>Empty states.</h3>
+          <div class="grid-2">
+            <div class="empty">
+              <img src="assets/icons/icon-chat-with-a-provider.svg" width="64" height="64" alt="">
+              <b>No messages yet.</b>
+              <p>When your provider writes to you, the message lands here.</p>
+              <a class="btn btn--outline" href="#state-empty">Start your assessment</a>
+            </div>
+            <div class="empty">
+              <img src="assets/icons/icon-prescription.svg" width="64" height="64" alt="">
+              <b>No orders yet.</b>
+              <p>Your first order appears here once a provider approves your treatment.</p>
+              <a class="btn" href="#state-empty">Explore treatments</a>
+            </div>
+          </div>
+          <p class="cap">An invitation, not an apology: one capsule-set icon, a headline that names the space, one line, one action. Centred in the area it replaces.</p>
+        </div>
+
+        <div class="sub" id="state-errors">
+          <h3>Error pages.</h3>
+          <div class="grid-2">
+            <div class="errpage"><span class="eyebrow">404</span><b class="errpage-title">This page has moved.</b><p>The link may be old. Start again from the home page or ask us.</p><div class="specimen-row"><a class="btn" href="#state-errors">Go to the home page</a><a class="btn btn--outline" href="#state-errors">Contact us</a></div></div>
+            <div class="errpage"><span class="eyebrow">500</span><b class="errpage-title">Something broke on our side.</b><p>Your answers are safe. Try again in a minute.</p><div class="specimen-row"><a class="btn" href="#state-errors">Try again</a><a class="btn btn--outline" href="#state-errors">Contact us</a></div></div>
+          </div>
+          <p class="cap">Header and footer stay. Title in DM Serif Display at section size (the editorial moment of the page), no illustration of a broken object, no humour about health.</p>
+        </div>
+
+        <div class="sub" id="state-loading">
+          <h3>Loading.</h3>
+          <div class="grid-3">
+            <div class="specimen specimen--center"><svg class="cap-loader" viewBox="0 0 64 24.47" role="img" aria-label="Loading"><path class="cap-loader-fill" d="M33.11 3.94L11.49 3.94A8.29 8.29 0 0 0 11.49 20.53L33.11 20.53ZM37.11 3.2L51.76 3.2A9.04 9.04 0 0 1 51.76 21.27L37.11 21.27Z"/><path class="cap-loader-line" d="M35.11 1.94L11.49 1.94A10.29 10.29 0 0 0 11.49 22.53L35.11 22.53"/><path class="cap-loader-line" d="M35.11 1.2L51.76 1.2A11.04 11.04 0 0 1 51.76 23.27L35.11 23.27Z"/></svg><p class="cap">Page loader: the one loader, the logo capsule with its divider (R-42, R-109; O-11 closed). It fills from the long half in 1.4s, the only loop on the site (R-53), shown after 400ms and never for less. The fill stops short of the divider, so a full capsule keeps the thin gap. 64 × 24.5px on desktop and on mobile; line 1.5px (<code>--size-capsule-stroke-min</code>, the R-109 stroke at this size). Geometry from <code>tools/capsule_svg.py</code>.</p></div>
+            <div class="specimen specimen--center"><button class="btn is-loading" type="button" aria-busy="true"><span class="btn-label">Continue to checkout</span><svg class="cap-loader" viewBox="0 0 64 24.47" aria-hidden="true"><path class="cap-loader-fill" d="M33.11 3.94L11.49 3.94A8.29 8.29 0 0 0 11.49 20.53L33.11 20.53ZM37.11 3.2L51.76 3.2A9.04 9.04 0 0 1 51.76 21.27L37.11 21.27Z"/><path class="cap-loader-line" d="M35.11 1.94L11.49 1.94A10.29 10.29 0 0 0 11.49 22.53L35.11 22.53"/><path class="cap-loader-line" d="M35.11 1.2L51.76 1.2A11.04 11.04 0 0 1 51.76 23.27L35.11 23.27Z"/></svg></button><p class="cap">Button loading: same width, label hidden, the same loader at 40 × 15px inside, line still 1.5px; the same on mobile. The button is not clickable.</p></div>
+            <div class="specimen"><div class="skeleton skeleton--title"></div><div class="skeleton"></div><div class="skeleton skeleton--short"></div><p class="cap">Skeleton: Mist blocks in the shape of the content. Static: no shimmer (only the loader loops).</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="state-check">
+          <h3>Included list.</h3>
+          <div class="specimen">
+            <ul class="check-list">
+              <li><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg>A licensed provider reviews your answers before anything is prescribed</li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg>Ships in a plain mailer</li>
+              <li><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg>Messages with your provider in your account</li>
+            </ul>
+          </div>
+          <p class="cap">Deep Teal check in a 20px Wash Blue circle, Inter 14. Figma fills the checks Yellow; with a Yellow button in the same view that breaks R-11, so the proposal is Wash Blue. Facts only, every line checked with operations (R-68): no "free expedited shipping" or any other service promise until operations confirm it. The same three lines as the recommendation on <a class="link" href="product-screens.html">Product screens</a>. Mobile: the same list, lines wrap.</p>
+        </div>
+      </section>
+
+      <!-- =========================================================== CHANGES FROM FIGMA -->
+
+      <!-- =========================================================== INTERACTIVE STATES (R-113) -->
+      <section class="sec" id="interactive" aria-labelledby="interactive-h">
+        <div class="sec-head">
+          <span class="status status--current">Current · R-113</span>
+          <h2 id="interactive-h">Interactive states.</h2>
+          <p>Toggles, two-state accents, steppers and the accordion, from Avi's review of the Sexual health landing page. Working demos, tokens only. Reduced motion makes every change instant and keeps the colours.</p>
+        </div>
+
+        <div class="sub" id="ix-toggle">
+          <h3>Toggle with a sliding thumb.</h3>
+          <div class="rule"><b>The thumb slides, the content cross-fades.</b><p>The Paper thumb slides to the chosen option in 220ms (<code>--motion-duration-open</code>, <code>--motion-easing-ui</code>). Content that depends on the choice, here the price and the picture, cross-fades in 180ms (<code>--motion-duration-crossfade</code>). Options at least 44 high including the track. Arrow keys move the choice.</p></div>
+          <div class="ix-grid">
+            <div class="ix-card"><span class="eyebrow">Desktop</span><div class="segmented segmented--full" role="radiogroup" aria-label="Plan length" data-seg data-seg-panels="#ixp-p">
+                <button type="button" role="radio" aria-checked="true">1 month</button>
+                <button type="button" role="radio" aria-checked="false">3 months</button>
+                <button type="button" role="radio" aria-checked="false">6 months</button>
+              </div>
+              <div class="seg-panels" id="ixp-p" aria-live="polite">
+                <div class="price-panel is-on" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] per order</b><p>1 month. [quantity · clinical]</p></div></div>
+                <div class="price-panel" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] per order</b><p>3 months. Save $[amount] per order. [renewal line · legal]</p></div></div>
+                <div class="price-panel" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] per order</b><p>6 months. Save $[amount] per order. [quantity · clinical] [renewal line · legal]</p></div></div>
+              </div></div>
+            <div class="ix-card ix-card--mob"><span class="eyebrow">Mobile · 390</span><div class="segmented segmented--full" role="radiogroup" aria-label="Plan length" data-seg data-seg-panels="#ixpm-p">
+                <button type="button" role="radio" aria-checked="true">1 month</button>
+                <button type="button" role="radio" aria-checked="false">3 months</button>
+                <button type="button" role="radio" aria-checked="false">6 months</button>
+              </div>
+              <div class="seg-panels" id="ixpm-p" aria-live="polite">
+                <div class="price-panel is-on" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] per order</b><p>1 month. [quantity · clinical]</p></div></div>
+                <div class="price-panel" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] per order</b><p>3 months. Save $[amount] per order. [renewal line · legal]</p></div></div>
+                <div class="price-panel" data-seg-panel><div class="packs"><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""><img src="assets/packshots/packshot-tadalafil.png" width="99" height="160" alt=""></div><div><b>[price] per order</b><p>6 months. Save $[amount] per order. [quantity · clinical] [renewal line · legal]</p></div></div>
+              </div><p class="cap">Full-width track, the picture stacks above the price.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="ix-accent">
+          <h3>Each state has its own accent.</h3>
+          <div class="rule"><b>First state Green, second state Blue.</b><p>Where a multi-state control marks data, each state has its own brand accent: the first Green, the second Blue. Here, as on the Sexual health landing page: Daily (first) Green, As needed (second) Blue. Never product colours, never Yellow (Yellow is the single result moment). The dots fill one after the other, 40ms apart (<code>--motion-stagger-fine</code>), never more than 180ms in total.</p></div>
+          <div class="ix-grid">
+            <div class="ix-card"><span class="eyebrow">Desktop</span><div class="segmented segmented--full" role="radiogroup" aria-label="How you take it" data-seg data-seg-dots="#ixd-d" data-seg-panels="#ixd-t">
+                <button type="button" role="radio" aria-checked="true">Daily</button>
+                <button type="button" role="radio" aria-checked="false">As needed</button>
+              </div>
+              <ul class="dots" id="ixd-d" data-state="0" data-on-0="0,1,2,3,4,5,6" data-on-1="1,5" aria-hidden="true"><li><span class="dot"></span>M</li><li><span class="dot"></span>T</li><li><span class="dot"></span>W</li><li><span class="dot"></span>T</li><li><span class="dot"></span>F</li><li><span class="dot"></span>S</li><li><span class="dot"></span>S</li></ul>
+              <div class="seg-panels" id="ixd-t" aria-live="polite">
+                <p class="ix-note is-on" data-seg-panel>Once a day, every day. [dosing as prescribed by your provider]</p>
+                <p class="ix-note" data-seg-panel>Only on the days you choose. [dosing as prescribed by your provider]</p>
+              </div><div class="ix-keys"><span class="cap state-key" style="--key: var(--color-brand-green)">Daily · Green</span><span class="cap state-key" style="--key: var(--color-brand-blue)">As needed · Blue</span></div></div>
+            <div class="ix-card ix-card--mob"><span class="eyebrow">Mobile · 390</span><div class="segmented segmented--full" role="radiogroup" aria-label="How you take it" data-seg data-seg-dots="#ixdm-d" data-seg-panels="#ixdm-t">
+                <button type="button" role="radio" aria-checked="true">Daily</button>
+                <button type="button" role="radio" aria-checked="false">As needed</button>
+              </div>
+              <ul class="dots" id="ixdm-d" data-state="0" data-on-0="0,1,2,3,4,5,6" data-on-1="1,5" aria-hidden="true"><li><span class="dot"></span>M</li><li><span class="dot"></span>T</li><li><span class="dot"></span>W</li><li><span class="dot"></span>T</li><li><span class="dot"></span>F</li><li><span class="dot"></span>S</li><li><span class="dot"></span>S</li></ul>
+              <div class="seg-panels" id="ixdm-t" aria-live="polite">
+                <p class="ix-note is-on" data-seg-panel>Once a day, every day. [dosing as prescribed by your provider]</p>
+                <p class="ix-note" data-seg-panel>Only on the days you choose. [dosing as prescribed by your provider]</p>
+              </div><p class="cap">Seven 24px dots fit 350; labels stay under the dots.</p></div>
+          </div>
+        </div>
+
+        <div class="sub" id="ix-stepper">
+          <h3>Stepper and scroll story.</h3>
+          <div class="rule"><b>Faded, active, passed.</b><p>Steps not reached sit at 45% (<code>--opacity-step-faded</code>). The active step gets a 2px Deep Teal border, a filled number and a short left accent bar. Passed steps return to full opacity with a small check. Each change takes 220ms. On a scroll story the active step follows the scroll; here Back and Next drive it, or tap a card.</p></div>
+          <ol class="stepper" id="ixs" aria-label="How it works" data-stepper><li class="stp is-active" tabindex="0" data-stp="0" aria-current="step"><span class="stp__num"><span>1</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>Tell us what's changed.</b><p>Complete a private online assessment covering your health, symptoms, and goals.</p></li><li class="stp" tabindex="0" data-stp="1"><span class="stp__num"><span>2</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>A licensed provider reviews your information.</b><p>Labs may be requested when clinically appropriate.</p></li><li class="stp" tabindex="0" data-stp="2"><span class="stp__num"><span>3</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>Receive a personalized care plan.</b><p>If treatment is appropriate, your provider will explain the recommended options.</p></li><li class="stp" tabindex="0" data-stp="3"><span class="stp__num"><span>4</span><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5l3 3 7-7"/></svg></span><b>Stay supported.</b><p>Access ongoing guidance, follow-up, and adjustments based on your care plan.</p></li></ol>
+            <div class="ix-ctrl"><button class="btn btn--outline" type="button" data-stp-go="-1" data-for="ixs">Back</button><button class="btn" type="button" data-stp-go="1" data-for="ixs">Next step</button></div>
+          <p class="cap">Desktop: four cards in a row. Mobile: one column, number on the left, every card a full-width tap target. The copy is the one How it works wording (q132), the same as the step numbers above and the landing page.</p>
+        </div>
+
+        <div class="sub">
+          <h3>Accordion.</h3>
+          <div class="prose"><p>One answer open at a time, height and opacity in 220ms, the chevron turns 180°. The live demo is the FAQ accordion under <a class="link" href="#cards">Cards, chips and steps</a>; the footer columns on mobile use the same pattern.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="changes" aria-labelledby="changes-h">
+        <div class="sec-head">
+          <h2 id="changes-h">Changes from Figma.</h2>
+          <p>Every place this page differs from a value in the designer's Figma, so Figma can be updated. Decided rules and tokens win (R-01); rows marked To confirm wait for Avi, and until then the designer's Figma is the source for them.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Item</th><th>Figma value (node)</th><th>Hub value</th><th>Why</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Yellow button hover</td><td>Blue #6E8B97, light label (2676-309)</td><td>Blue-dark #4E6873, Paper label · <code>--color-brand-blue-dark</code></td><td>3.53:1 fails AA; 5.76:1 passes</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Outline Light on photo hover</td><td>Blue #6E8B97 fill (2676-309)</td><td>Blue-dark #4E6873 fill, Paper label</td><td>Same contrast fix</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Button labels</td><td>Title case: “Get Started”, “Explore Treatments”, “Start Your Assessment”, “Learn More” (homepage 2673-209)</td><td>Sentence case: “Get started” and so on</td><td>Decision 6</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Header CTA height</td><td>43 (4046-606)</td><td>44 · <code>--size-control-exception-header</code></td><td>Tap target (E-02)</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Nav item hover</td><td>Line/Soft pill, 180ms ease (4010-609)</td><td>150ms ease-out · <code>--motion-duration-fast</code></td><td>One hover timing</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Dropdown enter</td><td>180ms ease (4010-609)</td><td>220ms ease-out · <code>--motion-duration-open</code></td><td>Open and close timing</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Dropdown exit fade</td><td>140ms (4010-609)</td><td>150ms · <code>--motion-duration-fast</code></td><td>No 140 token</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Dropdown meta text</td><td>Slate Light #7E9AA6 (4046-606)</td><td>Slate #55747F · <code>--color-text-secondary</code></td><td>Slate Light fails AA on light surfaces</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Wordmark</td><td>“Unifiedmeds” (nav and footer)</td><td>“unifiedmeds”</td><td>U-01</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer column title</td><td>“Unifiedmeds” (2738-370)</td><td>“unifiedmeds”</td><td>U-01</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer column titles</td><td>Uppercase, 12/16, wide tracking (2738-370)</td><td>Sentence case Label 12/16 SemiBold +2% (11/16 mobile) · <code>--type-desktop-label-*</code></td><td>Decision 13</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Mobile menu note</td><td>Slate Light, 11/18 (4046-911)</td><td>Slate, Body Fine 12/18 · <code>--type-desktop-fine-*</code></td><td>AA; 12 is the smallest text</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>☰ and ✕ icon stroke</td><td>1.75px (4046-606 export)</td><td>1.75px · <code>--size-icon-glyph-stroke</code></td><td>The UI glyph set: one set, 1.75 stroke (icons page)</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer social icons</td><td>20px icons in 40×40 targets (2738-370)</td><td>24px icons in 44×44 targets · <code>--size-icon</code>, <code>--size-tap-min</code></td><td>R-114 and the tap target</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer link hover</td><td>Underline grows left to right in 220ms (2738-370, as built on the site)</td><td>150ms · <code>--motion-duration-fast</code></td><td>Hover = 150ms</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>Outline button border</td><td>1px (2676-309, as recorded in the audit)</td><td>1.5px (components.css)</td><td>Not decided</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>Disabled button and field</td><td>No variant (2676-309)</td><td>Own colours at 40% opacity, no hover</td><td>R-42; add to Figma</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Footer</td><td>Deep Teal "Footer v2 compact", Horizontal reversed (2738-370, 2741-3169)</td><td>Mist, Horizontal main version, Dark Subscribe, 44px mobile link rows</td><td>R-48, R-114</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Menu dropdown meta lines</td><td>“Up to 36 hrs”, “Plan ahead”, “3 ingredients” (4046-606)</td><td>Product name only</td><td>R-65; U-31</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Header logo</td><td>45px (homepage header)</td><td>Horizontal 52 desktop, Primary seal 50 mobile</td><td>R-103</td><td><span class="status status--current">Approved</span></td></tr>
+              <tr><td>Menu spacers</td><td>Panel padding 6, row padding 7/12, thumbnail gap 10 (4046-606)</td><td>4 · 0/12 with a 44 min height · 12 (<code>--space-1</code>, <code>--space-3</code>)</td><td>Spacing scale; open layout item</td><td><span class="status status--proposed">To confirm</span></td></tr>
+              <tr><td>Footer CTA kit piece</td><td>Yellow Circle beside the Yellow button (2738-370, as built on the site)</td><td>Left out of the specimen</td><td>One Yellow element per viewport</td><td><span class="status status--proposed">To confirm</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+<script>
+(function () {
+  var root = getComputedStyle(document.documentElement);
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function ms(name) { return reduce.matches ? 0 : (parseFloat(root.getPropertyValue(name)) || 0); }
+  function canHover() { return window.matchMedia('(hover: hover) and (pointer: fine)').matches; }
+
+  /* Button width readout */
+  function measure() {
+    document.querySelectorAll('[data-measure]').forEach(function (m) {
+      var b = m.querySelector('.btn').getBoundingClientRect();
+      var l = m.querySelector('.measure__label').getBoundingClientRect();
+      m.querySelector('[data-measure-out]').textContent =
+        'Label ' + Math.round(l.width) + ' + padding 48 = width ' + Math.round(b.width) + ' px';
+    });
+  }
+  measure();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+  /* Show every hover state (touch-friendly) */
+  document.querySelectorAll('[data-force-hover]').forEach(function (t) {
+    var target = document.querySelector(t.getAttribute('data-force-hover'));
+    t.addEventListener('click', function () {
+      var on = t.getAttribute('aria-pressed') !== 'true';
+      t.setAttribute('aria-pressed', String(on));
+      target.classList.toggle('force-hover', on);
+    });
+  });
+
+  /* Capsule progress (R-42): fills step by step, the text names the step */
+  var prog = document.querySelector('[data-prog]');
+  if (prog) {
+    var names = ['About you', 'Health history', 'Medications', 'Your main concern', 'Preferences', 'ID and address', 'Review'];
+    var step = 2, max = names.length;
+    var progM = document.querySelector('[data-prog-m]');
+    var renderProg = function () {
+      var label = 'Step ' + step + ' of ' + max + ' · ' + names[step - 1];
+      var p = (step / max * 100).toFixed(1) + '%';
+      prog.style.setProperty('--p', p); if (progM) progM.style.setProperty('--p', p);
+      prog.setAttribute('aria-valuenow', String(step));
+      prog.setAttribute('aria-valuetext', label);
+      document.querySelectorAll('[data-prog-text], [data-prog-text-m]').forEach(function (t) { t.textContent = label; });
+    };
+    document.querySelectorAll('[data-prog-step]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        step = Math.min(max, Math.max(1, step + parseInt(b.getAttribute('data-prog-step'), 10)));
+        renderProg();
+      });
+    });
+  }
+
+  /* Chips: one topic at a time */
+  document.querySelectorAll('[data-chips]').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      var c = e.target.closest('.chip'); if (!c) return;
+      g.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === c)); });
+    });
+  });
+
+  /* Step tabs */
+  document.querySelectorAll('[data-steps]').forEach(function (list) {
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+    function select(tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(t); });
+      t.addEventListener('keydown', function (e) {
+        var n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = tabs[(i + 1) % tabs.length];
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = tabs[(i - 1 + tabs.length) % tabs.length];
+        if (e.key === 'Home') n = tabs[0];
+        if (e.key === 'End') n = tabs[tabs.length - 1];
+        if (n) { e.preventDefault(); select(n, true); }
+      });
+    });
+  });
+
+  /* Accordion */
+  document.querySelectorAll('[data-acc] .acc__btn').forEach(function (b) {
+    b.addEventListener('click', function () { accToggle(b); });
+  });
+
+  /* Desktop header: sticky hairline inside the frame */
+  var frame = document.querySelector('[data-scroll-demo]');
+  var mh = document.querySelector('[data-mh]');
+  if (frame && mh) {
+    var onScroll = function () { mh.classList.toggle('is-scrolled', frame.scrollTop > 8); };
+    frame.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* Desktop dropdown: menu v3 behaviour, timings read from tokens */
+  document.querySelectorAll('[data-dd]').forEach(function (item) {
+    var trigger = item.querySelector('[data-dd-trigger]');
+    var panel = item.querySelector('[data-dd-panel]');
+    var openTimer = 0, closeTimer = 0, hideTimer = 0;
+    var isOpen = function () { return trigger.getAttribute('aria-expanded') === 'true'; };
+    var links = function () { return Array.prototype.slice.call(panel.querySelectorAll('a')); };
+    function open() {
+      clearTimeout(closeTimer); clearTimeout(hideTimer);
+      if (isOpen()) return;
+      document.querySelectorAll('[data-dd]').forEach(function (o) { if (o !== item) o.dispatchEvent(new CustomEvent('dd:close')); });
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); });
+    }
+    function close() {
+      clearTimeout(openTimer);
+      if (!isOpen()) return;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.classList.remove('is-open');
+      clearTimeout(hideTimer);
+      var fade = ms('--motion-duration-fast');
+      if (!fade) panel.hidden = true;
+      else hideTimer = setTimeout(function () { panel.hidden = true; }, fade);
+    }
+    item.addEventListener('dd:close', close);
+    trigger.addEventListener('click', function () { if (isOpen()) close(); else open(); });
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); open(); var l = links()[0]; if (l) l.focus(); }
+    });
+    panel.addEventListener('keydown', function (e) {
+      var ls = links(), i = ls.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); ls[Math.min(i + 1, ls.length - 1)].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); if (i <= 0) trigger.focus(); else ls[i - 1].focus(); }
+    });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) { e.stopPropagation(); close(); trigger.focus(); }
+    });
+    item.addEventListener('focusout', function (e) {
+      if (e.relatedTarget && !item.contains(e.relatedTarget)) close();
+    });
+    item.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse' || !canHover()) return;
+      clearTimeout(closeTimer);
+      openTimer = setTimeout(open, ms('--motion-intent-delay'));
+    });
+    item.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse' || !canHover()) return;
+      clearTimeout(openTimer);
+      closeTimer = setTimeout(close, ms('--motion-close-delay'));
+    });
+    document.addEventListener('click', function (e) { if (isOpen() && !item.contains(e.target)) close(); });
+  });
+
+  /* Mobile menu specimen */
+  document.querySelectorAll('[data-mm]').forEach(function (mm) {
+    var toggle = mm.querySelector('[data-mm-toggle]');
+    var panel = mm.querySelector('[data-mm-panel]');
+    var hideTimer = 0;
+    var isOpen = function () { return toggle.getAttribute('aria-expanded') === 'true'; };
+    function openMenu() {
+      clearTimeout(hideTimer);
+      panel.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close menu');
+      mm.classList.add('is-open');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); });
+    }
+    function closeMenu(returnFocus) {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
+      mm.classList.remove('is-open');
+      panel.classList.remove('is-open');
+      var d = ms('--motion-duration-open');
+      if (!d) panel.hidden = true; else hideTimer = setTimeout(function () { panel.hidden = true; }, d);
+      if (returnFocus) toggle.focus();
+    }
+    toggle.addEventListener('click', function () { if (isOpen()) closeMenu(true); else openMenu(); });
+    mm.addEventListener('keydown', function (e) {
+      if (!isOpen()) return;
+      if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); return; }
+      if (e.key === 'Tab') {
+        var f = [toggle].concat(Array.prototype.slice.call(panel.querySelectorAll('a, button')).filter(function (el) {
+          return el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
+        }));
+        var i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
+    });
+    panel.addEventListener('click', function (e) { if (e.target.closest('a')) closeMenu(false); });
+    mm.querySelectorAll('[data-mm-acc]').forEach(function (row) {
+      var head = row.querySelector('.mm-row__head');
+      head.addEventListener('click', function () {
+        var open = head.getAttribute('aria-expanded') !== 'true';
+        mm.querySelectorAll('[data-mm-acc]').forEach(function (r) {
+          var on = r === row && open;
+          r.classList.toggle('is-expanded', on);
+          r.querySelector('.mm-row__head').setAttribute('aria-expanded', String(on));
+        });
+      });
+    });
+  });
+
+
+  /* ---- R-113 accordion one-open, segmented thumb, dots, stepper; R-114 footer form ---- */
+  function accToggle(btn) {
+    var group = btn.closest('[data-acc]');
+    var row = btn.closest('.acc__row, .ft3__col');
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    if (open && group) {
+      group.querySelectorAll('[aria-expanded="true"]').forEach(function (o) {
+        if (o !== btn) { o.setAttribute('aria-expanded', 'false'); o.closest('.acc__row, .ft3__col').classList.remove('is-open'); }
+      });
+    }
+    btn.setAttribute('aria-expanded', String(open));
+    row.classList.toggle('is-open', open);
+  }
+  document.querySelectorAll('.ft3__colbtn').forEach(function (b) { b.addEventListener('click', function () { accToggle(b); }); });
+
+  document.querySelectorAll('[data-seg]').forEach(function (seg) {
+    var opts = Array.prototype.slice.call(seg.querySelectorAll('[role="radio"]'));
+    seg.classList.add('has-thumb');
+    seg.style.setProperty('--seg-n', opts.length);
+    function pick(i, focus) {
+      opts.forEach(function (o, k) { o.setAttribute('aria-checked', String(k === i)); o.tabIndex = k === i ? 0 : -1; });
+      seg.style.setProperty('--seg-i', i);
+      if (focus) opts[i].focus();
+      var p = seg.getAttribute('data-seg-panels');
+      if (p) document.querySelector(p).querySelectorAll('[data-seg-panel]').forEach(function (x, k) { x.classList.toggle('is-on', k === i); });
+      var d = seg.getAttribute('data-seg-dots');
+      if (d) {
+        var list = document.querySelector(d), dots = list.querySelectorAll('.dot');
+        var on = (list.getAttribute('data-on-' + i) || '').split(',').map(Number);
+        var step = Math.min(ms('--motion-stagger-fine'), ms('--motion-duration-crossfade') / Math.max(1, on.length - 1));
+        list.setAttribute('data-state', String(i));
+        var n = 0;
+        dots.forEach(function (dot, k) {
+          var lit = on.indexOf(k) !== -1;
+          dot.style.setProperty('--dot-delay', (lit ? Math.round(step * n++) : 0) + 'ms');
+          dot.classList.toggle('is-on', lit);
+        });
+      }
+    }
+    var start = Math.max(0, opts.findIndex(function (o) { return o.getAttribute('aria-checked') === 'true'; }));
+    pick(start);
+    opts.forEach(function (o, i) {
+      o.addEventListener('click', function () { pick(i); });
+      o.addEventListener('keydown', function (e) {
+        var n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % opts.length;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + opts.length) % opts.length;
+        if (n !== null) { e.preventDefault(); pick(n, true); }
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-stepper]').forEach(function (list) {
+    var items = Array.prototype.slice.call(list.querySelectorAll('.stp'));
+    var cur = 0;
+    function go(i) {
+      cur = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach(function (it, k) {
+        it.classList.toggle('is-active', k === cur);
+        it.classList.toggle('is-passed', k < cur);
+        if (k === cur) it.setAttribute('aria-current', 'step'); else it.removeAttribute('aria-current');
+      });
+    }
+    items.forEach(function (it, k) {
+      it.addEventListener('click', function () { go(k); });
+      it.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } });
+    });
+    document.querySelectorAll('[data-stp-go][data-for="' + list.id + '"]').forEach(function (b) {
+      b.addEventListener('click', function () { go(cur + parseInt(b.getAttribute('data-stp-go'), 10)); });
+    });
+  });
+
+  /* Footer newsletter specimen: the consent box must be ticked; the form sends nothing, and says so */
+  document.querySelectorAll('[data-news3]').forEach(function (f) {
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var box = f.querySelector('.check'), st = f.querySelector('.ft3__status');
+      if (box && !box.checked) { box.setAttribute('aria-invalid', 'true'); st.textContent = 'Tick the box to subscribe.'; return; }
+      if (box) box.removeAttribute('aria-invalid');
+      st.textContent = 'Specimen only. On the site, a confirmation email follows (double opt-in).';
+    });
+  });
+
+  /* Dialog */
+  document.querySelectorAll('[data-dlg-open]').forEach(function (b) {
+    var d = document.getElementById(b.getAttribute('data-dlg-open'));
+    b.addEventListener('click', function () { if (d.showModal) d.showModal(); });
+  });
+})();
+</script>

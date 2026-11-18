@@ -1,0 +1,61 @@
+<style>
+  .gallery img { background: var(--color-surface-card); border: 1px solid var(--color-line-soft); }
+  .final { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .final .stage { display: grid; place-items: center; min-height: calc(var(--space-24) * 2); border-radius: var(--radius-small); background: var(--color-logo-cream); padding: var(--space-8); }
+  .final .stage img { width: min(100%, calc(var(--space-24) * 3)); height: auto; }
+  .story-idea { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8); align-items: center; padding: var(--space-10); border-radius: var(--radius-card); background: var(--color-surface-mist); }
+  .story-idea img { width: 100%; height: auto; display: block; }
+  .story-idea .big { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--type-desktop-section-family); color: var(--color-text-strong); }
+  .next-page { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  @media (max-width: 767px) {
+    .final, .story-idea { grid-template-columns: minmax(0, 1fr); }
+    .story-idea { padding: var(--space-6); }
+    .story-idea .big { font-size: var(--type-mobile-section-size); line-height: var(--type-mobile-section-line); }
+  }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Brand</span>
+        <h1>The logo story.</h1>
+        <p class="lead">The brand behind the capsule seal: the idea, the brief, the directions Avi drew, and the seal that was chosen. How to use the logo (lockups, colours, clear space, sizes, files) is on the <a class="link" href="logo.html">Logo</a> page.</p>
+        <nav class="toc" aria-label="On this page"><a href="#idea">The idea</a><a href="#brief">The brief</a><a href="#directions">Avi's directions</a><a href="#final">The choice</a></nav>
+      </header>
+
+      <section class="sec" id="idea" aria-labelledby="idea-h">
+        <div class="sec-head"><h2 id="idea-h">One capsule, two halves.</h2><p><span class="status status--current">Current</span> The brand idea, decided by Avi (U-31). The full brand story is on <a class="link" href="brand.html#idea">Who we are</a>.</p></div>
+        <div class="story-idea">
+          <img src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds primary seal">
+          <div class="prose">
+            <p class="big">The name and the mark say the same thing.</p>
+            <p>“unified” sits bold in the filled half of a capsule; “meds” sits in the open half. The parts of a man's care come together in one place, and treatment is only one half of it.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="brief" aria-labelledby="brief-h">
+        <div class="sec-head"><h2 id="brief-h">The brief.</h2><p>Summarised from the logo project notes (New Logo · handover).</p></div>
+        <div class="grid-2">
+          <div class="rule"><b>A real link to medicine.</b><p>Through shape, structure or a hidden meaning. Not a literal cross, stethoscope or caduceus.</p></div>
+          <div class="rule"><b>u and m that build a third meaning.</b><p>A person, a capsule, a face, a pill.</p></div>
+          <div class="rule"><b>Warmth and humanity.</b><p>People, care, a smile.</p></div>
+          <div class="rule"><b>Works small.</b><p>Readable at 16px and in one colour. The sizes are set in R-118 and R-93.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="directions" aria-labelledby="directions-h">
+        <div class="sec-head"><h2 id="directions-h">Avi's directions.</h2><p>Round 8: the capsule wordmark Avi drew himself, from which the logo was born, and the capsule as a container for words (02a, 02b). Number 01 became the capsule seal. The other round 8 directions are archived, outside the published hub.</p></div>
+        <div class="gallery">
+          <figure><img src="assets/logo-story/01-capsule-wordmark.png" alt="Direction 01: capsule wordmark" loading="lazy"><figcaption><b>01 · Capsule wordmark</b><span class="from">“unified” in the filled half, “meds” in the outlined half, one capsule. Chosen.</span></figcaption></figure>
+          <figure><img src="assets/logo-story/02a-meds-in-capsule-outline.png" alt="Direction 02a: meds inside an outlined capsule" loading="lazy"><figcaption><b>02a · meds in a capsule</b><span class="from">The capsule could hold other words, as a brand language. <span class="status status--proposed">Proposal · not used</span> R-33 stays: no text on a shape (U-31).</span></figcaption></figure>
+          <figure><img src="assets/logo-story/02b-meds-in-capsule-outline-teal.png" alt="Direction 02b: teal variant" loading="lazy"><figcaption><b>02b · teal variant</b><span class="from">Same idea in teal. Same status as 02a.</span></figcaption></figure>
+        </div>
+        <p class="cap">On a phone the three directions stack, one per row, at full width.</p>
+      </section>
+
+      <section class="sec" id="final" aria-labelledby="final-h">
+        <div class="sec-head"><h2 id="final-h">The choice.</h2><p>Two final directions were presented. Direction B, the capsule seal, was chosen (R-90). Direction A (um icon) stays in the logo file for reference. The animated stings, B plus C1 and C2, which build the seal from the letters u and m, are on the <a class="link" href="videos.html">Videos</a> page (R-101).</p></div>
+        <div class="final">
+          <figure><div class="stage"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="Direction B, capsule seal"></div><figcaption class="cap"><b>Direction B · capsule seal</b> <span class="status status--current">Chosen</span></figcaption></figure>
+          <figure><div class="stage"><img src="assets/brand/app-icon.svg" width="120" height="120" alt="The u|m app icon from Direction B"></div><figcaption class="cap"><b>Direction B · app icon</b></figcaption></figure>
+        </div>
+        <div class="next-page"><a class="btn btn--outline" href="logo.html">Using the logo</a><span class="cap">Lockups, light and dark, logo colours, clear space, minimum sizes, the app icon, allowed and not allowed, files and stings.</span></div>
+      </section>

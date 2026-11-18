@@ -1,0 +1,407 @@
+<style>
+  /* Shapes on photos and phone proportions (R-109, R-110) */
+  .sp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); align-items: start; }
+  .sp-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: var(--space-8); }
+  .sp-grid figure, .sp-ratios figure { margin: 0; display: grid; gap: var(--space-2); align-content: start; min-width: 0; }
+  .sp-grid figcaption, .sp-ratios figcaption { display: grid; gap: var(--space-1); justify-items: start; font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .sp-grid figcaption b, .sp-ratios figcaption b { color: var(--color-text-strong); font-weight: 600; }
+  .sp-grid .ph-tag { border-radius: var(--radius-button); }
+  .sp-ok::before, .sp-no::before { content: ""; display: inline-block; width: var(--space-2); height: var(--space-2); margin-right: var(--space-2); border-radius: var(--radius-pill); background: var(--color-brand-green); vertical-align: middle; }
+  .sp-no::before { background: var(--color-brand-coral); }
+  .sp-frame { position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-mist); }
+  .sp-frame > img:first-child { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .sp-169 { aspect-ratio: 16 / 9; } .sp-32 { aspect-ratio: 3 / 2; } .sp-11 { aspect-ratio: 1 / 1; } .sp-45 { aspect-ratio: 4 / 5; } .sp-916 { aspect-ratio: 9 / 16; }
+  .sp-bad { box-shadow: 0 0 0 2px var(--color-brand-coral); }
+  .sp-light { color: var(--color-brand-deep-teal); --sp-fill: var(--color-surface-wash-blue); }
+  .sp-dark { color: var(--color-surface-paper); --sp-fill: var(--color-surface-paper); }
+  .sp-shape { position: absolute; height: auto; display: block; overflow: visible; pointer-events: none; }
+  .sp-frame { container-type: inline-size; }
+  .sp-shape .o { fill: none; stroke: currentColor; vector-effect: non-scaling-stroke; stroke-width: max(1.5px, calc(var(--len, 50) * 0.0085cqw)); }
+  .sp-q .o { stroke-width: max(1.5px, calc(var(--len, 50) * 0.017cqw)); }
+  .sp-shape .f { fill: var(--sp-fill); fill-opacity: var(--sp-fill-op, var(--opacity-capsule-soft)); stroke: none; }
+  .sp-stamp { position: absolute; width: var(--space-12); height: auto; display: block; }
+  .sp-stamp--br { right: var(--space-4); bottom: var(--space-4); }
+  .sp-stamp--tr { right: var(--space-4); top: var(--space-4); }
+  .sp-hl { position: absolute; left: 8%; top: 16%; max-width: 70%; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-surface-paper); }
+  .sp-ratios { display: flex; flex-wrap: wrap; gap: var(--space-6) var(--space-4); align-items: flex-start; }
+  .sp-break { flex-basis: 100%; height: 0; }
+  .sp-r169 { flex: 1.778 1 0; } .sp-r32 { flex: 1.5 1 0; } .sp-r11 { flex: 1 1 0; } .sp-r45 { flex: 0.8 1 0; } .sp-r916 { flex: 0.5625 1 0; }
+  .sp-table { margin-top: var(--space-8); }
+  @media (max-width: 1023px) { .sp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sp-grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) {
+    .sp-stamp { width: var(--space-10); }
+    .sp-ratios { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-3); }
+    .sp-r169, .sp-r32 { grid-column: span 2; }
+    .sp-break { display: none; }
+    .sp-hl { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); }
+  }
+  /* Look and feel mood board */
+  .lf-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); align-items: start; }
+  .lf-grid figure { margin: 0; display: grid; gap: var(--space-2); align-content: start; min-width: 0; }
+  .lf-grid img, .lf-pair img { width: 100%; height: auto; display: block; object-fit: cover; border-radius: var(--radius-small); background: var(--color-surface-mist); }
+  .lf-grid figcaption, .lf-crops figcaption { display: grid; gap: var(--space-1); justify-items: start; font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .lf-grid figcaption b, .lf-crops figcaption b { color: var(--color-text-strong); font-weight: 600; }
+  .lf-w8 { grid-column: span 8; } .lf-w8 img { aspect-ratio: 3 / 2; }
+  .lf-w6 { grid-column: span 6; } .lf-w6 img { aspect-ratio: 4 / 3; }
+  .lf-w4 { grid-column: span 4; } .lf-w4 img { aspect-ratio: 3 / 4; }
+  .lf-w3 { grid-column: span 3; } .lf-w3 img { aspect-ratio: 4 / 5; }
+  .lf-crops { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin-top: var(--space-10); }
+  .lf-crops figure { margin: 0; display: grid; gap: var(--space-2); min-width: 0; }
+  .lf-pair { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: var(--space-3); align-items: end; }
+  .lf-pair span { display: grid; gap: var(--space-1); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .lf-pair .d img { aspect-ratio: 16 / 9; }
+  .lf-grid .ph-tag, .lf-crops .ph-tag { border-radius: var(--radius-button); }
+  .lf-pair .m img { aspect-ratio: 9 / 16; }
+  @media (max-width: 767px) {
+    .lf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-3); grid-auto-flow: row dense; }
+    .lf-grid > figure { grid-column: span 1; }
+    .lf-grid > figure img { aspect-ratio: 4 / 5; }
+    .lf-grid > .lf-w8, .lf-grid > .lf-m2 { grid-column: span 2; }
+    .lf-grid > .lf-w8 img, .lf-grid > .lf-m2 img { aspect-ratio: 3 / 2; }
+    .lf-crops { grid-template-columns: minmax(0, 1fr); }
+  }
+  /* photography rules, capsule on a photo and placeholders (from the Brand page) */
+  .ic-ok { color: var(--color-brand-green); }
+  .ic-flag { color: var(--color-text-secondary); }
+  .ic-no { color: var(--color-brand-coral); }
+  .verdict { display: flex; gap: var(--space-2); align-items: flex-start; }
+  .verdict svg { flex: none; width: var(--space-5); height: var(--space-5); }
+  .ph { display: grid; place-items: center; aspect-ratio: 520 / 420; border-radius: var(--radius-card); background: var(--color-surface-mist); border: 1px dashed var(--color-line-mid); padding: var(--space-5); text-align: center; }
+  .ph span { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary-on-mist); }
+  .ph--tall { aspect-ratio: 440 / 460; }
+  .ph--wide { aspect-ratio: 548 / 300; }
+  /* stand-in photos in the placeholder frames: not approved, to replace */
+  .ph { position: relative; overflow: hidden; }
+  .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph-fig { margin: 0; display: grid; gap: var(--space-2); align-content: end; }
+  .ph-fig figcaption { display: grid; gap: var(--space-1); justify-items: start; }
+  .ph-label { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+  .ph-tag { display: inline-flex; flex-wrap: wrap; gap: 0 var(--space-1); max-width: 100%; padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-wash-yellow); color: var(--color-brand-teal-deep); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); }
+  .ph-tag a { color: inherit; }
+  .never { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-24) * 2.5)), 1fr)); gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
+  .never li { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-3) var(--space-4); border: 1px solid var(--color-line-base); border-left: var(--space-1) solid var(--color-brand-coral); border-radius: var(--radius-small); background: var(--color-surface-card); }
+  .never svg { flex: none; width: var(--space-5); height: var(--space-5); margin-top: calc(var(--space-1) / 2); }
+  .cs-line { fill: none; stroke: var(--color-brand-deep-teal); stroke-linejoin: round; }
+  .cs-line--paper { fill: none; stroke: var(--color-surface-paper); stroke-linejoin: round; }
+  .cs-line--wash { fill: none; stroke: var(--color-surface-wash-blue); stroke-linejoin: round; }
+  .cs-fill-paper { fill: var(--color-surface-paper); opacity: var(--opacity-capsule-soft); }
+  .cs-fill-wash { fill: var(--color-surface-wash-blue); opacity: var(--opacity-capsule-soft); }
+  .cs-solid { fill: var(--color-brand-deep-teal); }
+  .cp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: start; }
+  .cp-grid figure, .cp-mob figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .cp-photo { position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-mist); }
+  .cp-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .cp-photo svg { position: absolute; display: block; height: auto; pointer-events: none; }
+  .cp-photo--45 { aspect-ratio: 4 / 5; }
+  .cp-photo--32 { aspect-ratio: 3 / 2; }
+  .cp-photo .cp-stamp { position: absolute; left: var(--space-4); bottom: var(--space-4); display: block; width: var(--stamp-w, var(--space-12)); height: auto; object-fit: contain; }
+  .cp-mob { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: start; }
+  .cp-mob figure { width: calc(var(--space-24) * 2.9); max-width: 100%; }
+  .cp-mob .cp-photo .cp-stamp { --stamp-w: var(--space-10); }
+  /* positions, in % of the frame so the shape scales with the photo */
+  .cp-a { right: -14%; bottom: 9%; width: 62%; }
+  .cp-b { right: -12%; bottom: 5%; width: 52%; }
+  .cp-x { left: 18%; top: 14%; width: 62%; }
+  .cp-am { right: -16%; bottom: 8%; width: 66%; }
+  .cp-bm { left: -22%; bottom: -6%; width: 78%; }
+  .cp-grid figcaption b, .cp-mob figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  @media (max-width: 1023px) { .cp-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 767px) { .cp-photo .cp-stamp { --stamp-w: var(--space-10); } }
+  /* copy and photos: three options (R-120) */
+  .co-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-24) * 3.5)), 1fr)); gap: var(--space-6) var(--space-4); align-items: start; }
+  .co-grid > figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; min-width: 0; max-width: calc(var(--space-24) * 6); }
+  .co-grid figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  .co-stage { position: relative; overflow: hidden; border-radius: var(--radius-small); background: var(--color-surface-mist); aspect-ratio: 4 / 3; }
+  .co-stage > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .co-beside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); }
+  .co-beside .co-img { position: relative; overflow: hidden; }
+  .co-beside .co-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .co-copy { display: grid; gap: var(--space-2); align-content: center; padding: var(--space-5); }
+  .co-h { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+  .co-s { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .co-panel { position: absolute; left: var(--space-4); right: var(--space-12); bottom: var(--space-4); display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-5); border-radius: var(--radius-small); background: var(--color-surface-paper); }
+  .co-panel--teal { background: var(--color-brand-deep-teal); }
+  .co-panel--teal .co-h, .co-panel--teal .co-s { color: var(--color-text-on-dark); }
+  .co-on { position: absolute; left: 5%; top: 9%; max-width: 40%; display: grid; gap: var(--space-2); }
+  .co-on .co-h { color: var(--color-brand-teal-deep); }
+  .co-on .co-s { color: var(--color-brand-deep-teal); }
+  .co-on--paper .co-h, .co-on--paper .co-s { color: var(--color-surface-paper); }
+  .co-on--face { left: 30%; top: 20%; max-width: 60%; }
+  .co-stage--tall { aspect-ratio: 4 / 5; }
+  .co-on--wall { left: 5%; top: 18%; max-width: 30%; }
+  .co-bad { box-shadow: 0 0 0 2px var(--color-brand-coral); }
+  .co-mob { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: start; margin-top: var(--space-6); }
+  .co-mob figure { margin: 0; width: calc(var(--space-24) * 2.9); max-width: 100%; display: grid; gap: var(--space-3); }
+  .co-mob .co-stage { aspect-ratio: 4 / 5; }
+  .co-mob .co-below { display: grid; gap: var(--space-1); padding: var(--space-4) 0 0; }
+  @media (max-width: 767px) {
+    .co-beside { grid-template-columns: minmax(0, 1fr); }
+    .co-beside .co-img { aspect-ratio: 4 / 3; }
+    .co-h { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); }
+    .co-on { max-width: 55%; }
+  }
+  /* placeholder figure without a photo */
+  .ph--empty { background: var(--color-surface-mist); }
+  .ph--empty span { max-width: 80%; }
+  .use-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); align-items: end; }
+  @media (max-width: 1023px) { .use-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) { .use-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">System</span>
+        <h1>Imagery.</h1>
+        <p class="lead">Every rule for photography in one place: the look, casting and light, what never appears, copy and photos, shapes on photos, crops for every ratio and phone, alt text and placeholders. Every photo on this page is a free stand-in for the hubs only: not approved, not cleared for the site, ads, email or press (R-39). The real set comes from a commissioned shoot plus licensed stock (O-13 closed, Q91).</p>
+        <nav class="toc" aria-label="On this page"><a href="#look">Look and feel</a><a href="#rules">Casting and light</a><a href="#never">Never</a><a href="#copy">Copy and photos</a><a href="#shapes">Shapes on photos</a><a href="#ratios">Photos on a phone</a><a href="#alt">Alt text</a><a href="#placeholders">Stand-ins</a><a href="#by-use">Photos by use</a><a href="#product">Product</a></nav>
+      </header>
+
+      <section class="sec" id="look" aria-labelledby="look-h">
+        <div class="sec-head"><h2 id="look-h">Look and feel.</h2><p>Sixteen stand-in photos that show the light, colour and mood of unifiedmeds across the uses below: at home, outdoors, with a partner, with family, with friends, at work, small daily rituals, hands and details, and the product in daily life.</p></div>
+        <div class="rule"><span class="status status--current">Current · R-37 to R-39</span><p>A mood board, not a library. Men aged 35 to 65, in relation, available light, warm and slightly muted, real skin, faces visible. Service and support moments show a balanced mix of people of all genders (R-37, U-27). Every photo here is a free stand-in for the hubs only, replaced by the commissioned shoot and licensed stock before launch (R-39, Q91). Credits: <a class="link" href="assets/photos/CREDITS.md">assets/photos/CREDITS.md</a>.</p></div>
+        <div class="lf-grid">
+          <figure class="lf-w8"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="A man and his partner laugh as they walk their dog down their street" loading="lazy" style="object-position: 60% 40%"><figcaption><b>With a partner, outdoors.</b><span>A walk on their own street; the joke is between them, not for the camera.</span><span class="ph-tag">Not approved · to replace · Pexels, Centre for Ageing Better</span></figcaption></figure>
+          <figure class="lf-w4"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="A man with a grey beard drinks from a mug at a table in warm window light" loading="lazy" style="object-position: 40% 35%"><figcaption><b>At home, morning.</b><span>Window light, a mug, a quiet minute. Warm and slightly muted.</span><span class="ph-tag">Not approved · to replace · Pexels, Mikhail Nilov</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/father-son-kitchen-hug-pexels-4259702.jpg" width="801" height="1200" alt="A father holds his young son in a bright kitchen, both smiling" loading="lazy" style="object-position: 50% 30%"><figcaption><b>With family.</b><span>A father and son in the kitchen; real skin, soft daylight.</span><span class="ph-tag">Not approved · to replace · Pexels, August de Richelieu</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/man-paperwork-sunlit-pexels-8124229.jpg" width="800" height="1200" alt="A smiling man with a grey beard sits in a sunlit room with a folder on his lap" loading="lazy" style="object-position: 50% 38%"><figcaption><b>At home.</b><span>Paperwork in a sunlit room; calm, direct, at ease.</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/man-home-office-pexels-8055837.jpg" width="800" height="1200" alt="A man in a brown sweater sits at his desk by a window, thinking" loading="lazy" style="object-position: 50% 40%"><figcaption><b>At work.</b><span>A desk by the window at home; focused, not posed.</span><span class="ph-tag">Not approved · to replace · Pexels, Annushka Ahuja</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/man-writing-home-pexels-6830382.jpg" width="800" height="1200" alt="A man with a white beard writes on a sheet of paper at a wooden table" loading="lazy" style="object-position: 50% 45%"><figcaption><b>Small rituals.</b><span>Writing a short list at the table; the palette sits with Deep Teal and Mist.</span><span class="ph-tag">Not approved · to replace · Pexels, cottonbro studio</span></figcaption></figure>
+          <figure class="lf-w4"><img src="assets/photos/father-son-autumn-pexels-35688949.jpg" width="1600" height="1095" alt="A father crouches on a forest path to zip up his young son&#x27;s jacket" loading="lazy" style="object-position: 58% 60%"><figcaption><b>With family, outdoors.</b><span>Stopping to zip a jacket; care shown in a small act.</span><span class="ph-tag">Not approved · to replace · Pexels, Filip Rankovic Grobgaard</span></figcaption></figure>
+          <figure class="lf-w8"><img src="assets/photos/friends-sharing-meal-pexels-6950755.jpg" width="1600" height="1068" alt="One man serves food to his laughing friend at a table by a window" loading="lazy" style="object-position: 50% 40%"><figcaption><b>With friends.</b><span>Serving a meal; the laugh is real and nobody looks at the lens.</span><span class="ph-tag">Not approved · to replace · Pexels, Kampus Production</span></figcaption></figure>
+          <figure class="lf-w6"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="A smiling man with a cup talks with his partner at a kitchen table, seen past her shoulder" loading="lazy" style="object-position: 62% 50%"><figcaption><b>With a partner, at home.</b><span>A cup at the kitchen table; the conversation is the moment.</span><span class="ph-tag">Not approved · to replace · Pexels, Gary Barnes</span></figcaption></figure>
+          <figure class="lf-w6 lf-m2"><img src="assets/photos/team-loft-table-pexels-3931417.jpg" width="1600" height="1066" alt="Three colleagues of different ages talk around a table in a bright loft office" loading="lazy" style="object-position: 50% 60%"><figcaption><b>At work, with a team.</b><span>Mixed ages in natural light; everyday, not corporate.</span><span class="ph-tag">Not approved · to replace · Pexels, Andrea Piacquadio</span></figcaption></figure>
+          <figure class="lf-w8"><img src="assets/photos/man-resting-forest-pexels-27915307.jpg" width="1600" height="1066" alt="A man with a grey beard rests on the forest floor in the sun, eyes closed" loading="lazy" style="object-position: 60% 0%"><figcaption><b>Outdoors, alone.</b><span>A rest in the forest, eyes closed; nothing to prove.</span><span class="ph-tag">Not approved · to replace · Pexels, iddea photo</span></figcaption></figure>
+          <figure class="lf-w4"><img src="assets/photos/man-kitchen-coffee-pexels-6269909.jpg" width="800" height="1200" alt="A man drinks from a cup at a kitchen table, his partner reading at the counter behind him" loading="lazy" style="object-position: 50% 45%"><figcaption><b>Small rituals.</b><span>Coffee before the day starts, someone close in the background.</span><span class="ph-tag">Not approved · to replace · Pexels, cottonbro studio</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/friends-talking-outdoors-pexels-13335592.jpg" width="1600" height="1066" alt="Two men talk face to face at an outdoor table" loading="lazy" style="object-position: 30% 40%"><figcaption><b>With a friend.</b><span>A serious talk, face to face; men talking to each other is part of the story.</span><span class="ph-tag">Not approved · to replace · Pexels, Mizuno K</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/man-reading-window-chair-pexels-8217708.jpg" width="1600" height="1066" alt="A man reads a book in a leather chair beside a tall window" loading="lazy" style="object-position: 64% 60%"><figcaption><b>At home.</b><span>Reading by the window; the frame leaves room for type.</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/hands-mailer-pexels-4464482.jpg" width="1600" height="1066" alt="Hands open a plain white mailer lined with kraft paper on a table" loading="lazy" style="object-position: 55% 50%"><figcaption><b>Hands and details.</b><span>A plain mailer opened at home: nothing on the outside says what is inside.</span><span class="ph-tag">Not approved · to replace · Pexels, Kaboompics</span></figcaption></figure>
+          <figure class="lf-w3"><img src="assets/photos/bathroom-niche-amber-pexels-16436909.jpg" width="1600" height="1068" alt="A closed amber bottle on a bathroom shelf in soft daylight" loading="lazy" style="object-position: 50% 55%"><figcaption><b>Product in life.</b><span>A closed amber bottle on a shelf, unbranded here; ours replaces it.</span><span class="ph-tag">Not approved · to replace · Pexels, Luis Zambrano</span></figcaption></figure>
+        </div>
+        <div class="lf-crops">
+          <figure><div class="lf-pair"><span class="d"><img src="assets/photos/couple-dog-article-header-2x1-pexels-11284049.jpg" width="2048" height="1024" alt="A couple walk down their street, the woman laughing, the man smiling behind her" loading="lazy" style="object-position: 62% 40%">Desktop · 16:9</span><span class="m"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="" loading="lazy" style="object-position: 64% 30%">Phone · 9:16</span></div><figcaption><b>One photo, two crops.</b><span>Desktop keeps both people and the street. On a phone the crop moves to the man (64% across), and the partner stays at the edge of the frame.</span><span class="ph-tag">Not approved · to replace · Pexels, Centre for Ageing Better</span></figcaption></figure>
+          <figure><div class="lf-pair"><span class="d"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="A man reads in a leather chair beside a tall window, the left of the frame open" loading="lazy" style="object-position: 50% 55%">Desktop · 16:9</span><span class="m"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="" loading="lazy" style="object-position: 64% 55%">Phone · 9:16</span></div><figcaption><b>Room for type on desktop, the person on a phone.</b><span>Desktop: the window side stays open for a headline. Phone: the crop centres the man (64% across) and the type moves below the photo.</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="sec" id="rules" aria-labelledby="rules-h">
+        <div class="sec-head"><h2 id="rules-h">Photography shows ordinary life.</h2><p>Real people in real places, in natural light. Nothing clinical, nothing staged for effect. A replacement photo passes every rule on this page.</p></div>
+        <div class="grid-3">
+          <div class="sub">
+            <h3>Casting</h3>
+            <div class="prose">
+              <ul>
+                <li>Men aged 35 to 65 lead hero and product imagery (R-37).</li>
+                <li>Partners appear in Sexual health stories: relaxed and natural, never suggestive.</li>
+                <li>Service and support sections (care team, delivery, member support) use a balanced, modular mix of people of all genders (R-37, U-27).</li>
+                <li>Women lead only in future women's products <span class="status status--planned">Planned</span>.</li>
+                <li>Real ages and real bodies. No gym physiques.</li>
+                <li>Unposed, doing something. Eye contact optional, never intense.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Light and setting</h3>
+            <div class="prose">
+              <ul>
+                <li>Natural, available light. True colour; no teal-and-orange grade, no duotone.</li>
+                <li>Home, bathroom and outdoors, as in Figma 2708-1034.</li>
+                <li>Shoot wide with a clean corner, so a kit piece or copy has somewhere to land.</li>
+                <li>Closed, branded bottles are allowed (R-38; Figma Packaging · Labels, 03 · Bottle mockups).</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sub">
+            <h3>Faces</h3>
+            <div class="prose">
+              <ul>
+                <li>A face is never covered by a shape, by text or by the crop (R-110).</li>
+                <li>One exception: at most one faceless detail crop per page, such as the neck-and-hands crop in the Figma category hero (R-38).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="never" aria-labelledby="never-h">
+        <div class="sec-head"><h2 id="never-h">Never in a photo.</h2><p>Rules R-38 and R-39.</p></div>
+        <ul class="never">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Loose pills or open packs</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Syringes</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Lab coats, scrubs, stethoscopes, clinics</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Before and after pairs</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Covered faces, beyond the one detail crop per page</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Watermarked stock on the website, in ads or in press. Inside the hubs only, a watermarked paid preview may stand in, with a small “Buy this image” link and the tag “Not approved · to replace” (R-39, U-27)</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>A model captioned as a member, for example “Member · 47”</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>A photo of unknown source or licence. The earlier photos of unknown source have left the site (U-31)</span></li>
+        </ul>
+      </section>
+
+
+      <section class="sec" id="copy" aria-labelledby="copy-h">
+        <div class="sec-head"><h2 id="copy-h">Copy and photos: three ways.</h2><p>Copy may sit beside the photo, on a solid colour panel, or directly on the photo. All three are allowed (R-120); the third only where the photo leaves a calm area and the copy passes contrast there.</p></div>
+        <div class="rule"><span class="status status--current">Current · R-120</span><p><b>Legibility rules for copy directly on a photo.</b> The copy sits on a calm area of the photo (a wall, a window, the sky, the floor), never across a face or skin, never on a shape (R-33, R-110). Contrast is measured on the area under the letters, at every crop: 4.5:1 for text under 24px, 3:1 for DM Serif at 24px and up (R-72). Teal Deep or Deep Teal on light areas, Paper on dark ones. No scrim, gradient or blur: there is no token for one; if the area is not calm enough, use the panel or set the copy beside the photo. On a photo, a headline and one short line at most; buttons use Outline Light, which hovers to Blue-dark on photos (R-41). On a phone the crop must keep the calm area; if it does not, the copy moves below the photo.</p></div>
+        <div class="co-grid">
+          <figure>
+            <div class="co-stage co-beside"><div class="co-img"><img src="assets/photos/man-reading-window-chair-pexels-8217708.jpg" width="1600" height="1066" alt="A man reads in a leather chair beside a tall window" loading="lazy" style="object-position: 64% 60%"></div><div class="co-copy"><span class="co-h">A private next step.</span><span class="co-s">A licensed provider reviews every assessment.</span></div></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>1 · Beside the photo</b>The safest choice, and the default on a phone: the photo stacks above the copy. Any photo works.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="A man and his partner laugh as they walk their dog down their street" loading="lazy" style="object-position: 60% 30%"><div class="co-panel"><span class="co-h">Care from home.</span><span class="co-s">A licensed provider reviews every assessment.</span></div></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>2 · On a solid colour panel</b>A Paper panel (or Deep Teal, Mist) at radius 8, inset 16px from the edges, placed where no face is. For busy photos.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage co-stage--tall"><img src="assets/photos/man-writing-home-pexels-6830382.jpg" width="800" height="1200" alt="A man writes at a table; the headline sits on the calm teal wall to his left" loading="lazy" style="object-position: 50% 0%"><div class="co-on co-on--paper co-on--wall"><span class="co-h">A private next step.</span></div></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>3 · Directly on the photo</b>Paper on the calm wall beside him, away from his face. Measured on that area: about 5.9:1 even on its lightest part, so it passes for any size.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage co-bad"><img src="assets/photos/man-paperwork-sunlit-pexels-8124229.jpg" width="800" height="1200" alt="Wrong: a headline set across a man's face" loading="lazy" style="object-position: 50% 30%"><div class="co-on co-on--paper co-on--face"><span class="co-h">A private next step.</span></div></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't · across a face</b>Copy never sits on skin or a face, at any crop.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage co-bad"><img src="assets/photos/friends-sharing-meal-pexels-6950755.jpg" width="1600" height="1068" alt="Wrong: small text set on a busy photo of two men at a table" loading="lazy" style="object-position: 50% 40%"><div class="co-on co-on--paper"><span class="co-s">A licensed provider reviews every assessment.</span></div></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't · small text on a busy area</b>Fails contrast and reads as noise. Use the panel or set it beside the photo.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage sp-frame sp-dark co-bad"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="Wrong: a headline on top of a capsule on a photo" loading="lazy" style="object-position: 60% 40%"><svg class="sp-shape" style="--len:70.0;width:70%;left:-6%;top:10%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg><div class="co-on co-on--paper"><span class="co-h">A private next step.</span></div></div>
+            <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't · on a shape</b>No text on a shape, ever, on a photo too (R-33).</span></figcaption>
+          </figure>
+        </div>
+        <div class="co-mob" aria-label="Copy and photos on a phone, 390 wide">
+          <figure>
+            <div class="co-stage"><img src="assets/photos/man-writing-home-pexels-6830382.jpg" width="800" height="1200" alt="" loading="lazy" style="object-position: 50% 0%"><div class="co-on co-on--paper co-on--wall"><span class="co-h">A private next step.</span></div></div>
+            <figcaption class="cap"><b>Mobile · 4:5, on the photo</b>The phone crop keeps the wall, so the copy stays on it. DM Serif drops to 21 on mobile, under 24, so it needs 4.5:1: the wall gives about 5.9:1.</figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="" loading="lazy" style="object-position: 64% 55%"></div>
+            <div class="co-below"><span class="co-h">A private next step.</span><span class="co-s">From home, on your schedule.</span></div>
+            <figcaption class="cap"><b>Mobile · 4:5, no calm area</b>The phone crop centres the man (64% across) and leaves only the busy window frame. The copy moves below the photo (option 1).</figcaption>
+          </figure>
+          <figure>
+            <div class="co-stage"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="" loading="lazy" style="object-position: 62% 30%"><div class="co-panel"><span class="co-h">Care from home.</span></div></div>
+            <figcaption class="cap"><b>Mobile · 4:5, panel</b>The panel keeps its 16px inset and drops to the headline only; the second line moves below the photo when the panel would reach a face.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="sec" id="shapes" aria-labelledby="shapes-h">
+        <div class="sec-head"><h2 id="shapes-h">Shapes on photos.</h2><p>A photo may carry the logo seal as a small stamp, or one or two brand shapes: the true capsule (outline, long half translucent) or Quadrant Kit pieces. They enter from an edge, stay light, and never touch a face or sit under text.</p></div>
+        <div class="rule"><span class="status status--current">Current · R-109, R-110</span><p>Outline stroke 0.85% of the capsule's length, minimum 1.5px, and at every size the two halves keep the divider, like the seal (R-109): the long half open toward the joint, the short, taller half closed by the divider, the step where the heights meet. The translucent long half sits inside the line with a small gap. Paper on dark or busy photos, Deep Teal on light ones; the long half filled in Paper or Wash Blue at half opacity (<code>--opacity-capsule-soft</code>). Enter from an edge or corner, cropped by it, toward the subject. Two shapes per photo at most, the stamp included (R-106). The stamp is the logo icon: the u|m mark from the app icon without its Navy tile (files <code>assets/shapes/logo-stamp-paper.svg</code> and <code>logo-stamp-teal.svg</code>). Paper on dark or busy photos, Deep Teal on light ones; 48px on its long side on desktop, 40px on a phone, never smaller, 16px from the edges. Shapes are drawn as inline SVG from <code>tools/capsule_svg.py</code> geometry, sized in % of the photo so they scale with it.</p></div>
+        <div class="sp-grid">
+          <figure><div class="sp-frame sp-169 sp-light"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="A man reads in a chair by a tall window; a capsule outline enters from the left edge" loading="lazy" style="object-position: 50% 55%"><svg class="sp-shape " style="--len:56.0;width:56%;left:-12%;bottom:8%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg></div><figcaption><b class="sp-ok">Do · capsule from an edge.</b><span>Deep Teal outline on a light photo, the long half in translucent Wash Blue, cropped by the left edge and pointing toward him.</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+          <figure><div class="sp-frame sp-32 sp-light"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="A couple walk their dog; a translucent circle sits in the sky corner and a small seal stamp in the lower corner" loading="lazy" style="object-position: 60% 40%"><svg class="sp-shape sp-q " style="--len:44.0;width:44%;right:-22%;top:-33%;--sp-fill-op:var(--opacity-capsule)" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false"><path class="f" d="M0 500A500 500 0 1 1 1000 500A500 500 0 1 1 0 500Z"/></svg><img class="sp-stamp sp-stamp--br" src="assets/shapes/logo-stamp-teal.svg" width="100" height="36" alt="" loading="lazy"></div><figcaption><b class="sp-ok">Do · Quadrant Circle and logo stamp.</b><span>Two shapes at most, the stamp included. The circle sits in the sky, cropped by the corner; the logo icon (u|m) is a small stamp 16px from the edges.</span><span class="ph-tag">Not approved · to replace · Pexels, Centre for Ageing Better</span></figcaption></figure>
+          <figure><div class="sp-frame sp-45 sp-dark"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="A man drinks from a mug in warm window light; a standing capsule enters from the top edge" loading="lazy" style="object-position: 40% 35%"><svg class="sp-shape " style="--len:55.0;width:20%;right:5%;top:-14%" viewBox="0 0 366.8 1008.5" aria-hidden="true" focusable="false"><path class="f" d="M337.74 541.96L337.74 171.42A154.37 154.37 0 0 0 28.99 171.42L28.99 541.96Z"/><path class="o" stroke-width="8.5" d="M350.49 554.71L350.49 171.42A167.12 167.12 0 0 0 16.24 171.42L16.24 554.71M362.53 554.71L362.53 825.13A179.17 179.17 0 0 1 4.2 825.13L4.2 554.71Z"/></svg></div><figcaption><b class="sp-ok">Do · standing capsule from the top.</b><span>Paper outline on a darker photo, the long half on top, kept clear of his face.</span><span class="ph-tag">Not approved · to replace · Pexels, Mikhail Nilov</span></figcaption></figure>
+          <figure><div class="sp-frame sp-32 sp-light"><img src="assets/photos/bathroom-niche-amber-pexels-16436909.jpg" width="1600" height="1068" alt="A closed amber bottle on a shelf; a Quadrant Arch outline rises from the bottom edge beside it" loading="lazy" style="object-position: 50% 55%"><svg class="sp-shape sp-q " style="--len:22.0;width:22%;right:8%;bottom:-20%" viewBox="0 0 1017 1517" aria-hidden="true" focusable="false"><path class="o" stroke-width="17" d="M8.5 1508.5L8.5 508.5A500 500 0 0 1 1008.5 508.5L1008.5 1508.5"/></svg></div><figcaption><b class="sp-ok">Do · Quadrant Arch in outline.</b><span>Product in life: an Arch outline rises from the bottom edge beside the bottle, never behind it.</span><span class="ph-tag">Not approved · to replace · Pexels, Luis Zambrano</span></figcaption></figure>
+          <figure><div class="sp-frame sp-45 sp-dark"><img src="assets/photos/man-writing-home-pexels-6830382.jpg" width="800" height="1200" alt="A man writes at a table against a teal wall; a capsule enters from the top left corner and a small capsule stamp sits top right" loading="lazy" style="object-position: 50% 45%"><svg class="sp-shape " style="--len:52.0;width:52%;left:-20%;top:5%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg><img class="sp-stamp sp-stamp--tr" src="assets/shapes/logo-stamp-paper.svg" width="100" height="36" alt="" loading="lazy"></div><figcaption><b class="sp-ok">Do · capsule from the corner.</b><span>On a dark wall the outline turns Paper and the long half Paper at half opacity, stopping well before his face. The stamp turns Paper too: two shapes.</span><span class="ph-tag">Not approved · to replace · Pexels, cottonbro studio</span></figcaption></figure>
+          <figure><div class="sp-frame sp-45 sp-light"><img src="assets/photos/man-home-office-pexels-8055837.jpg" width="800" height="1200" alt="A man thinks at his desk by a window; a Quadrant Arc line curves out of the top left corner" loading="lazy" style="object-position: 50% 40%"><svg class="sp-shape sp-q " style="--len:34.0;width:34%;left:0;top:0" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false"><path class="o" stroke-width="0" d="M1000 0A1000 1000 0 0 1 0 1000"/></svg></div><figcaption><b class="sp-ok">Do · Quadrant Arc line.</b><span>A single Arc from the window corner: light, quiet, out of the way.</span><span class="ph-tag">Not approved · to replace · Pexels, Annushka Ahuja</span></figcaption></figure>
+        </div>
+        <div class="sp-grid sp-grid--4">
+          <figure><div class="sp-frame sp-45 sp-light sp-bad"><img src="assets/photos/man-paperwork-sunlit-pexels-8124229.jpg" width="800" height="1200" alt="A capsule outline drawn across a man's face, shown as a mistake" loading="lazy" style="object-position: 50% 38%"><svg class="sp-shape " style="--len:62.0;width:62%;left:18%;top:32%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg></div><figcaption><b class="sp-no">Don't · over a face.</b><span>No shape crosses a face, eyes or mouth, at any crop.</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+          <figure><div class="sp-frame sp-45 sp-dark sp-bad"><img src="assets/photos/father-son-kitchen-hug-pexels-4259702.jpg" width="801" height="1200" alt="An opaque Paper capsule covering part of a father and son, shown as a mistake" loading="lazy" style="object-position: 50% 30%"><svg class="sp-shape " style="--len:80.0;width:80%;left:-10%;bottom:14%;--sp-fill-op:1" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg></div><figcaption><b class="sp-no">Don't · opaque fill.</b><span>A solid fill hides the people. Fills stay translucent; weight comes from the fill, not a thick stroke.</span><span class="ph-tag">Not approved · to replace · Pexels, August de Richelieu</span></figcaption></figure>
+          <figure><div class="sp-frame sp-45 sp-dark sp-bad"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="A headline set on top of a capsule on a photo, shown as a mistake" loading="lazy" style="object-position: 60% 30%"><svg class="sp-shape " style="--len:80.0;width:80%;left:-6%;top:8%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg><span class="sp-hl">A private next step.</span></div><figcaption><b class="sp-no">Don't · under text.</b><span>Copy never sits on a shape, and never on a face. Copy goes beside the photo, on a panel, or on a calm area of the photo (R-120).</span><span class="ph-tag">Not approved · to replace · Pexels, Centre for Ageing Better</span></figcaption></figure>
+          <figure><div class="sp-frame sp-45 sp-light sp-bad"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="A capsule, a circle and a stamp floating in the middle of a photo, shown as a mistake" loading="lazy" style="object-position: 64% 55%"><svg class="sp-shape " style="--len:46.0;width:46%;left:22%;top:30%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg><svg class="sp-shape sp-q " style="--len:30.0;width:30%;left:8%;top:6%" viewBox="0 0 1017 1017" aria-hidden="true" focusable="false"><path class="o" stroke-width="17" d="M8.5 508.5A500 500 0 1 1 1008.5 508.5A500 500 0 1 1 8.5 508.5Z"/></svg><img class="sp-stamp sp-stamp--br" src="assets/shapes/logo-stamp-teal.svg" width="100" height="36" alt="" loading="lazy"></div><figcaption><b class="sp-no">Don't · three shapes, floating.</b><span>Two shapes at most, each entering from an edge. Nothing floats in the middle of the frame.</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+        </div>
+        <div class="sub" id="photo-capsule">
+          <h3>The capsule on a photo, desktop and mobile.</h3>
+          <p class="prose">The same rule (R-110) on three photos, and how the crop changes on a phone. The stamp (u|m) is 48px long on desktop and 40 on mobile, never smaller, 16px from the edges; in exported images 12% of the short side.</p>
+          <div class="cp-grid">
+            <figure>
+              <div class="cp-photo cp-photo--45"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="A man with a grey beard drinks from a mug at a wooden table at home, in warm window light" loading="lazy" style="object-position: 45% 30%"><svg class="cp-a" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-wash"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line" stroke-width="2.55"/></svg><img class="cp-stamp" src="assets/shapes/logo-stamp-paper.svg" width="48" height="17.5" alt=""></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do · light photo</b>Deep Teal outline, Wash Blue long half at 50%, entering from the right edge toward him, below his face. Paper logo icon stamp (u|m), 48px long (40 on mobile), bottom left on the dark table. Two shapes.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="cp-photo cp-photo--32"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="A smiling man with a cup talks with his partner at a kitchen table, seen past her shoulder" loading="lazy"><svg class="cp-b" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-paper"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line--paper" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line--paper" stroke-width="2.55"/></svg></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ic-ok" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Do · busy photo</b>Paper outline and Paper long half at 50%, cropped by the bottom right corner, over the shelves and his shirt, clear of both faces. One shape.</span></figcaption>
+            </figure>
+            <figure>
+              <div class="cp-photo cp-photo--32"><img src="assets/photos/father-son-autumn-pexels-35688949.jpg" width="1600" height="1095" alt="Wrong: a solid capsule covers the faces of a father and his son on an autumn path" loading="lazy"><svg class="cp-x" viewBox="0 0 300 107.5" aria-hidden="true"><path d="M165.12 3.61L50.14 3.61A50.14 50.14 0 0 0 50.14 103.89L165.12 103.89M165.12 0L246.25 0A53.75 53.75 0 0 1 246.25 107.5L165.12 107.5Z" class="cs-solid"/></svg></div>
+              <figcaption class="cap verdict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-no" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span><b>Don't</b>An opaque capsule floating over the faces, not entering from an edge.</span></figcaption>
+            </figure>
+          </div>
+          <div class="cp-mob" aria-label="Mobile crops">
+            <figure>
+              <div class="cp-photo cp-photo--45"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="" loading="lazy" style="object-position: 45% 30%"><svg class="cp-am" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-wash"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line" stroke-width="2.55"/></svg><img class="cp-stamp" src="assets/shapes/logo-stamp-paper.svg" width="48" height="17.5" alt=""></div>
+              <figcaption class="cap"><b>Mobile · 4:5</b>Same crop, the shape scales with the photo (positions in %). The stamp drops to 40px long (never smaller), still 16px from the edges.</figcaption>
+            </figure>
+            <figure>
+              <div class="cp-photo cp-photo--45"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="" loading="lazy" style="object-position: 62% 50%"><svg class="cp-bm" viewBox="0 0 300 109.14" aria-hidden="true"><path d="M161.17 8.68L50.99 8.68A45.89 45.89 0 0 0 50.99 100.45L161.17 100.45" class="cs-fill-paper"/><path d="M164.99 4.86L50.99 4.86A49.71 49.71 0 0 0 50.99 104.28L164.99 104.28" class="cs-line--paper" stroke-width="2.55"/><path d="M164.99 1.28L245.43 1.28A53.29 53.29 0 0 1 245.43 107.86L164.99 107.86Z" class="cs-line--paper" stroke-width="2.55"/></svg></div>
+              <figcaption class="cap"><b>Mobile · 4:5, recropped</b>The 4:5 crop puts his face where the desktop capsule sat, so the capsule moves to the bottom left edge. If no edge is clear of a face, it hides.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="ratios" aria-labelledby="ratios-h">
+        <div class="sec-head"><h2 id="ratios-h">Photos on a phone.</h2><p>The same photo, cropped for each ratio the brand uses, with its focal point and where the shape goes. Desktop ratios on the left, phone ratios on the right.</p></div>
+        <div class="rule"><span class="status status--current">Current · R-107, R-110</span><p>Every photo gets a focal point (set with <code>object-position</code>) so each crop keeps the face. Shapes are sized in % of the photo and scale with it. When a crop would bring a shape near the face, the shape moves to the other edge, turns standing, or hides (R-110).</p></div>
+        <div class="sp-ratios">
+          <figure class="sp-r sp-r169"><div class="sp-frame sp-169 sp-light"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="A man reads in a chair by a tall window, cropped to 16:9" loading="lazy" style="object-position: 50% 55%"><svg class="sp-shape " style="--len:56.0;width:56%;left:-12%;bottom:8%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg></div><figcaption><b>16:9</b><span>Desktop hero, video, YouTube</span><span>Focal point 50% 55%. Capsule from the open (window) edge, up to 60% of the width.</span></figcaption></figure>
+          <figure class="sp-r sp-r32"><div class="sp-frame sp-32 sp-light"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="" loading="lazy" style="object-position: 55% 55%"><svg class="sp-shape " style="--len:52.0;width:52%;left:-14%;bottom:8%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg></div><figcaption><b>3:2</b><span>Desktop card, article image</span><span>Focal point 55% 55%. Same capsule, a little smaller.</span></figcaption></figure>
+          <span class="sp-break" aria-hidden="true"></span>
+          <figure class="sp-r sp-r11"><div class="sp-frame sp-11 sp-light"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="" loading="lazy" style="object-position: 64% 55%"><svg class="sp-shape " style="--len:48.0;width:48%;left:-22%;bottom:5%" viewBox="0 0 1008.5 366.8" aria-hidden="true" focusable="false"><path class="f" d="M541.96 28.99L171.42 28.99A154.37 154.37 0 0 0 171.42 337.74L541.96 337.74Z"/><path class="o" stroke-width="8.5" d="M554.71 16.24L171.42 16.24A167.12 167.12 0 0 0 171.42 350.49L554.71 350.49M554.71 4.2L825.13 4.2A179.17 179.17 0 0 1 825.13 362.53L554.71 362.53Z"/></svg></div><figcaption><b>1:1</b><span>Feed post, card on a phone</span><span>Focal point 64% 55%. Capsule smaller and further out, from the corner away from the face.</span></figcaption></figure>
+          <figure class="sp-r sp-r45"><div class="sp-frame sp-45 sp-light"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="" loading="lazy" style="object-position: 64% 55%"><svg class="sp-shape " style="--len:44.0;width:16%;left:6%;top:-12%" viewBox="0 0 366.8 1008.5" aria-hidden="true" focusable="false"><path class="f" d="M337.74 541.96L337.74 171.42A154.37 154.37 0 0 0 28.99 171.42L28.99 541.96Z"/><path class="o" stroke-width="8.5" d="M350.49 554.71L350.49 171.42A167.12 167.12 0 0 0 16.24 171.42L16.24 554.71M362.53 554.71L362.53 825.13A179.17 179.17 0 0 1 4.2 825.13L4.2 554.71Z"/></svg></div><figcaption><b>4:5</b><span>Phone feed, phone card</span><span>Focal point 64% 55%. The capsule turns standing and enters from the top on the open side.</span></figcaption></figure>
+          <figure class="sp-r sp-r916"><div class="sp-frame sp-916 sp-light"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="" loading="lazy" style="object-position: 64% 50%"><img class="sp-stamp sp-stamp--tr" src="assets/shapes/logo-stamp-teal.svg" width="100" height="36" alt="" loading="lazy"></div><figcaption><b>9:16</b><span>Story, reel, phone hero</span><span>Focal point 64% 50%, face in the upper middle. No capsule: only the stamp, in the clearest corner. Bottom 35% stays free for platform UI.</span></figcaption></figure>
+        </div>
+        <div class="table-wrap sp-table"><table>
+          <thead><tr><th>Ratio</th><th>Where</th><th>Focal point</th><th>Shape</th></tr></thead>
+          <tbody>
+            <tr><td>16:9</td><td>Desktop hero, video, YouTube, wide social headers</td><td>Subject on a third, 50 to 65% across</td><td>Capsule from the open edge, up to 60% of the width; or a Quadrant piece in the clear corner</td></tr>
+            <tr><td>3:2</td><td>Desktop cards, article images, email hero (2:1 is the same rule)</td><td>As 16:9</td><td>As 16:9, up to 55%</td></tr>
+            <tr><td>1:1</td><td>Feed posts, cards on a phone</td><td>Subject 60 to 65% across, face in the upper half</td><td>Smaller (at most 50%), from the corner away from the face</td></tr>
+            <tr><td>4:5</td><td>Phone feed, phone cards, the mood board on a phone</td><td>Subject centred to 65% across, face 25 to 45% down</td><td>Capsule turns standing and enters from the top on the open side, or hides</td></tr>
+            <tr><td>9:16</td><td>Stories, reels, phone hero</td><td>Face in the upper middle, 35 to 45% down</td><td>No capsule over the person: the stamp only, in the clearest top corner; keep the bottom 35% free for platform UI</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="alt" aria-labelledby="alt-h">
+        <div class="sec-head"><h2 id="alt-h">Alt text.</h2><p>Every photo carries alt text that describes it. The same rules on desktop and on a phone.</p></div>
+        <div class="prose">
+          <ul>
+            <li>Describe what the photo shows in one plain sentence. Do not start with “Image of”.</li>
+            <li>Describe this photo, not the one it replaced. Update the alt text whenever the image changes.</li>
+            <li>No claims, and no feelings the photo does not show.</li>
+            <li>Product images are content: name the product, for example “unifiedmeds Tadalafil bottle, closed”.</li>
+            <li>Use an empty <code>alt=""</code> only when the photo is purely decorative.</li>
+          </ul>
+        </div>
+      </section>
+
+
+      <section class="sec" id="placeholders" aria-labelledby="placeholders-h">
+        <div class="sec-head"><h2 id="placeholders-h">Stand-ins and placeholders.</h2><p>How a frame looks until the commissioned shoot and licensed stock arrive (Q91).</p></div>
+        
+          <p class="prose">Until real photography exists, a frame shows either a credited free stand-in or a plain Mist placeholder labelled “Photo · not approved · to replace”, at the frame's real ratio. The label under each frame is the brief for the real photo. Inside the hubs a watermarked paid preview may also stand in, with “Buy this image” and the tag “Not approved · to replace” (R-39). The ratios below follow the Figma category page frames: 520 × 420, 440 × 460 and 548 × 300.</p>
+          <div class="grid-3">
+            <figure class="ph-fig"><div class="ph"><img src="assets/photos/man-mug-sunlight-pexels-6972779.jpg" width="800" height="1200" alt="A man with a grey beard drinks from a mug at a wooden table at home, in warm window light" loading="lazy" style="object-position: 40% 30%"></div><figcaption><span class="ph-label">IMAGE · Man, 50s, at home by a window, morning light · 520 × 420</span><span class="ph-tag">Not approved · to replace · Pexels, Mikhail Nilov</span></figcaption></figure>
+            <figure class="ph-fig"><div class="ph ph--tall"><img src="assets/photos/couple-breakfast-pexels-6248662.jpg" width="1600" height="1066" alt="A smiling man with a cup talks with his partner at a kitchen table, seen past her shoulder" loading="lazy" style="object-position: 62% 50%"></div><figcaption><span class="ph-label">IMAGE · Couple, 40s, in a kitchen, talking · 440 × 460</span><span class="ph-tag">Not approved · to replace · Pexels, Gary Barnes</span></figcaption></figure>
+            <figure class="ph-fig"><div class="ph ph--wide"><img src="assets/photos/bathroom-niche-amber-pexels-16436909.jpg" width="1600" height="1068" alt="A closed amber bottle on a bathroom shelf in soft daylight" loading="lazy" style="object-position: 50% 60%"></div><figcaption><span class="ph-label">IMAGE · unifiedmeds bottle, closed, on a bathroom shelf · 548 × 300</span><span class="ph-tag">Not approved · to replace · Pexels, Luis Zambrano</span></figcaption></figure>
+          </div>
+          <p class="cap">Stand-in photos: free licence, not approved, shown so the frames carry the intended light, colour and mood. The bottle stand-in is a generic amber bottle, not ours. Credits: <a class="link" href="assets/photos/CREDITS.md">assets/photos/CREDITS.md</a>. On a phone the frames stack and keep their ratios.</p>
+      </section>
+
+
+      <section class="sec" id="by-use" aria-labelledby="by-use-h">
+        <div class="sec-head"><h2 id="by-use-h">Photos by use.</h2><p>One brief per use, shown with a credited stand-in. The label is the brief for the real shoot; the tag says who took the stand-in. Where no suitable stand-in exists, the frame stays a placeholder.</p></div>
+        <div class="use-grid">
+          <figure class="ph-fig"><div class="ph ph--wide"><img src="assets/photos/man-reading-window-wide-2048-pexels-8217708.jpg" width="2048" height="1365" alt="A man reads in a leather chair beside a tall window, the left of the frame open" loading="lazy" style="object-position: 50% 55%"></div><figcaption><span class="ph-label">Hero · wide · a man at home, room for type on one side · 548 × 300</span><span class="ph-tag">Not approved · to replace · Pexels, RDNE Stock project</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph"><img src="assets/photos/couple-walking-dog-pexels-11284049.jpg" width="1600" height="1066" alt="A man and his partner laugh as they walk their dog down their street" loading="lazy" style="object-position: 60% 40%"></div><figcaption><span class="ph-label">Category · Sexual health · a man and his partner, at ease · 520 × 420</span><span class="ph-tag">Not approved · to replace · Pexels, Centre for Ageing Better</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph ph--tall"><img src="assets/photos/man-kitchen-coffee-pexels-6269909.jpg" width="800" height="1200" alt="A man drinks from a cup at a kitchen table, his partner reading at the counter behind him" loading="lazy" style="object-position: 50% 45%"></div><figcaption><span class="ph-label">Lifestyle · at home, a small ritual · 440 × 460</span><span class="ph-tag">Not approved · to replace · Pexels, cottonbro studio</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph"><img src="assets/photos/friends-talking-outdoors-pexels-13335592.jpg" width="1600" height="1066" alt="Two men talk face to face at an outdoor table" loading="lazy" style="object-position: 30% 40%"></div><figcaption><span class="ph-label">Lifestyle · outdoors, with a friend · 520 × 420</span><span class="ph-tag">Not approved · to replace · Pexels, Mizuno K</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph ph--wide"><img src="assets/photos/father-son-autumn-pexels-35688949.jpg" width="1600" height="1095" alt="A father crouches on a forest path to zip up his young son's jacket" loading="lazy" style="object-position: 58% 60%"></div><figcaption><span class="ph-label">Lifestyle · with family · 548 × 300</span><span class="ph-tag">Not approved · to replace · Pexels, Filip Rankovic Grobgaard</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph ph--tall"><img src="assets/photos/man-beard-profile-vertical-9x16-pexels-6973179.jpg" width="1080" height="1920" alt="A bearded man in profile in soft light" loading="lazy" style="object-position: 55% 30%"></div><figcaption><span class="ph-label">Portrait · a man in his 50s, calm, natural light · 440 × 460</span><span class="ph-tag">Not approved · to replace · Pexels, Mikhail Nilov</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph"><img src="assets/photos/team-loft-table-pexels-3931417.jpg" width="1600" height="1066" alt="Three colleagues of different ages talk around a table in a bright loft office" loading="lazy" style="object-position: 50% 60%"></div><figcaption><span class="ph-label">Service and support · the team at work, a balanced mix of people (R-37) · 520 × 420</span><span class="ph-tag">Not approved · to replace · Pexels, Andrea Piacquadio</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph ph--tall"><img src="assets/photos/provider-standin-pexels-6481906.jpg" width="1600" height="1068" alt="A smiling man in a white shirt, standing in for a provider photo" loading="lazy" style="object-position: 50% 30%"></div><figcaption><span class="ph-label">Provider · a real, consenting provider, shirt, no lab coat · 440 × 460</span><span class="ph-tag">Not approved · stand-in for a real consenting provider · Pexels, Kampus Production</span></figcaption></figure>
+          <figure class="ph-fig"><div class="ph ph--empty" role="img" aria-label="Placeholder frame, no photo yet"><span>Photo · not approved · to replace</span></div><figcaption><span class="ph-label">Member support · a support team member on a call or at a desk, any gender (R-37) · 520 × 420</span><span class="ph-tag">No credited stand-in yet</span></figcaption></figure>
+        </div>
+        <p class="cap">On a phone every frame shows one per row at 4:5 or its own ratio, with the focal points set as in <a class="link" href="#ratios">Photos on a phone</a>.</p>
+      </section>
+
+
+      <section class="sec" id="product" aria-labelledby="product-h">
+        <div class="sec-head"><h2 id="product-h">Product.</h2><p>Closed amber bottles with the unifiedmeds label, from Avi's Figma (Packaging · Labels, 2678:2). These are mockups, not photographs. Labels, bottles and the box: <a class="link" href="packaging.html">Packaging</a> and <a class="link" href="unboxing.html">Box and unboxing</a>.</p></div>
+        <div class="gallery">
+          <figure><img src="assets/packaging/mockup-tadalafil.jpg" alt="Tadalafil bottle with the unifiedmeds label, closed" loading="lazy"><figcaption><span class="ph-tag">Mockup</span><b>Bottle · Tadalafil</b><span class="from">Figma Mockup / Tadalafil 2680:175</span></figcaption></figure>
+          <figure><img src="assets/packaging/mockup-duo.jpg" alt="Tadalafil and Sildenafil bottles with the unifiedmeds label, closed" loading="lazy"><figcaption><span class="ph-tag">Mockup</span><b>Bottles · Tadalafil and Sildenafil</b><span class="from">Figma Mockup / Duo 2680:393</span></figcaption></figure>
+          <figure><img src="assets/packaging/bottle-sildenafil.png" alt="Sildenafil bottle with the unifiedmeds label, closed" loading="lazy"><figcaption><span class="ph-tag">Mockup</span><b>Bottle · Sildenafil</b><span class="from">Figma Bottle / Amber 360, 2680:502</span></figcaption></figure>
+          <figure><img src="assets/packaging/bottle-combo.png" alt="Combo bottle with the unifiedmeds label, closed" loading="lazy"><figcaption><span class="ph-tag">Mockup</span><b>Bottle · Combo</b><span class="from">Built on the label master (R-89)</span></figcaption></figure>
+        </div>
+      </section>
+

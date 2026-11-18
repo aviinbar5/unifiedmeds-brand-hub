@@ -1,0 +1,898 @@
+<style>
+/* Motion page. Tokens only. Demo durations are the brand.css tokens times --speed (1, or 4 in slow motion). */
+.principle { margin: 0; padding: var(--space-8); border-radius: var(--radius-card); background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); display: grid; gap: var(--space-3); }
+.principle p:first-child { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--type-desktop-section-family); }
+.principle p + p { color: var(--color-text-on-dark-muted); }
+.rules { list-style: none; margin: 0; padding: 0; counter-reset: r; }
+.rules .rule { counter-increment: r; }
+.rules .rule b::before { content: counter(r) " · "; }
+.note { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); max-width: 68ch; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+td code, dd code, .note code { white-space: nowrap; }
+
+/* ---------- Lab wrapper + toolbar ---------- */
+.mlab {
+  --speed: 1;
+  --d-fast: calc(var(--motion-duration-fast) * var(--speed));
+  --d-open: calc(var(--motion-duration-open) * var(--speed));
+  --d-crossfade: calc(var(--motion-duration-crossfade) * var(--speed));
+  --d-reveal: calc(var(--motion-duration-reveal) * var(--speed));
+  --d-wipe: calc(var(--motion-duration-wipe) * var(--speed));
+  --d-shape: calc(var(--motion-duration-shape) * var(--speed));
+  --d-loader: calc(var(--motion-duration-loader) * var(--speed));
+  --d-stagger: calc(var(--motion-stagger) * var(--speed));
+  --d-close: calc(var(--motion-close-delay) * var(--speed));
+  --d-intent: calc(var(--motion-intent-delay) * var(--speed));
+  --d-rise: var(--motion-distance-rise);
+  --d-lift: var(--motion-distance-lift);
+  --d-drop: var(--motion-distance-dropdown);
+  --ui: var(--motion-easing-ui);
+  --enter: var(--motion-easing-enter);
+  min-width: 0;
+}
+.mlab.is-slow { --speed: 4; }
+.mlab.is-rm { --d-fast: 0ms; --d-open: 0ms; --d-reveal: 0ms; --d-wipe: 0ms; --d-shape: 0ms; --d-stagger: 0ms; --d-rise: 0px; --d-lift: 0px; --d-drop: 0px; }
+@media (prefers-reduced-motion: reduce) { .mlab { --d-stagger: 0ms; } }
+.mlab > .sec + .sec { margin-top: var(--space-24); }
+.mlab .sec, .mcard { scroll-margin-top: calc(var(--space-24) + var(--space-6)); }
+.mlab-bar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-bottom: var(--space-12); padding: var(--space-3) var(--space-4); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper); }
+.mlab-bar > b { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); margin-right: var(--space-2); }
+.mlab-bar .cap { flex-basis: 100%; }
+.chip:disabled { cursor: not-allowed; }
+.chip svg { width: var(--space-4); height: var(--space-4); margin-right: var(--space-2); }
+
+/* ---------- Stage ---------- */
+.stage { position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-4); min-height: calc(var(--space-24) + var(--space-18)); padding: var(--space-6) var(--space-4); border-radius: var(--radius-small); background: var(--color-surface-mist); }
+.stage--paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
+.stage--tall { min-height: calc(var(--space-24) * 3); }
+.stage--top { align-items: flex-start; }
+.stage[data-state="from"], .stage[data-state="from"] *, .stage[data-state="from"] *::after { transition: none !important; animation: none !important; }
+.mdemo { display: grid; gap: var(--space-3); min-width: 0; }
+.mdemo-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+
+/* Kit pieces (Quadrant Kit: solid, axis-aligned) */
+.kit { display: block; width: var(--space-18); height: var(--space-18); }
+.kit--quarter { border-radius: 0 100% 0 0; background: var(--color-brand-blue); }
+.kit--circle { border-radius: 50%; background: var(--color-brand-green); }
+
+/* M-001/002 buttons */
+.mlab .btn { transition-duration: var(--d-fast); }
+.mlab .btn:hover { transform: translateY(calc(var(--d-lift) * -1)); }
+.mlab .btn:active { transform: none; }
+.stage[data-state="on"] .btn, .stage[data-state="press"] .btn { background: var(--btn-bg-hover); color: var(--btn-fg-hover); border-color: var(--btn-border-hover); }
+.stage[data-state="on"] .btn { transform: translateY(calc(var(--d-lift) * -1)); }
+.stage[data-state="press"] .btn { transform: none; }
+
+/* M-003 link */
+.mlink { font: var(--type-desktop-body-weight) var(--type-desktop-body-size) / var(--type-desktop-body-line) var(--font-family-sans); color: var(--color-text-link); }
+.mlab .link { transition-duration: var(--d-fast); }
+.stage[data-state="on"] .link { text-decoration-thickness: 2px; /* mirrors components.css .link:hover */ }
+
+/* M-004/005 nav + dropdown */
+.mnav { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.mnav-i { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-2) var(--space-3); border-radius: var(--radius-pill); color: var(--color-brand-deep-teal); font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); white-space: nowrap; transition: background-color var(--d-fast) var(--ui); }
+.mnav-i:hover, .stage[data-state="on"] .mnav-i.is-t, .stage[data-state="open"] .mnav-i.is-t { background: var(--color-line-soft); }
+.chev { width: var(--space-4); height: var(--space-4); transition: transform var(--d-fast) var(--ui); }
+.stage[data-state="open"] .dd .chev, .stage[data-state="expand"] .pm-row .chev { transform: rotate(180deg); }
+.dd { position: relative; display: grid; justify-items: center; margin-top: var(--space-2); }
+.dd-ind { position: absolute; top: 100%; left: 50%; width: var(--space-6); height: 2px; margin: var(--space-1) 0 0 calc(var(--space-3) * -1); background: var(--color-brand-deep-teal); opacity: 0; transition: opacity var(--d-fast) var(--ui) var(--d-close); }
+.stage[data-state="open"] .dd-ind { opacity: 1; transition-delay: var(--d-intent); }
+.dd-panel { position: absolute; top: calc(100% + var(--space-2)); left: 50%; width: calc(var(--space-24) * 2 + var(--space-12)); margin-left: calc((var(--space-24) + var(--space-6)) * -1); display: grid; padding: var(--space-2); opacity: 0; transform: translateY(calc(var(--d-drop) * -1));
+  transition: opacity var(--d-fast) var(--ui) var(--d-close), transform 0s var(--ui) calc(var(--d-close) + var(--d-fast)); }
+.stage[data-state="open"] .dd-panel { opacity: 1; transform: none; transition: opacity var(--d-open) var(--ui) var(--d-intent), transform var(--d-open) var(--ui) var(--d-intent); }
+.dd-row { display: flex; align-items: center; gap: var(--space-3); min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs); font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-primary); }
+.dd-row:hover { background: var(--color-line-soft); }
+.dd-thumb { flex: none; width: var(--space-8); height: var(--space-8); border-radius: var(--radius-xs); background: var(--color-surface-mist); }
+.dd-all { margin-top: var(--space-2); padding: var(--space-3) var(--space-3) var(--space-2); border-top: 1px solid var(--color-line-base); font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-link); }
+
+/* M-006 mobile menu, M-007 header, M-008 sticky bar */
+.phone { position: relative; overflow: hidden; display: block; width: calc(var(--space-24) * 2 + var(--space-10)); height: calc(var(--space-24) * 4 + var(--space-12)); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper); }
+.phone--short { height: calc(var(--space-24) * 3); }
+.phone-head, .frame-head { display: flex; align-items: center; justify-content: space-between; height: var(--space-12); padding: 0 var(--space-2) 0 var(--space-3); background: var(--color-surface-paper); }
+.mini-logo { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / 1 var(--font-family-serif); color: var(--color-brand-deep-teal); }
+.ico-box { position: relative; width: var(--size-tap-min); height: var(--size-tap-min); color: var(--color-brand-deep-teal); }
+.ico { position: absolute; top: var(--space-3); left: var(--space-3); width: var(--space-5); height: var(--space-5); transition: opacity var(--d-fast) var(--ui); }
+.ico--close, .stage[data-state="open"] .ico--menu, .stage[data-state="expand"] .ico--menu { opacity: 0; }
+.stage[data-state="open"] .ico--close, .stage[data-state="expand"] .ico--close { opacity: 1; }
+.phone-menu { position: absolute; inset: var(--space-12) 0 0 0; display: flex; flex-direction: column; padding: var(--space-2) var(--space-3); background: var(--color-surface-paper); border-top: 1px solid var(--color-line-soft); opacity: 0; visibility: hidden; transform: translateY(calc(var(--d-drop) * -1));
+  transition: opacity var(--d-fast) var(--ui), transform 0s var(--ui) var(--d-fast), visibility 0s var(--ui) var(--d-fast); }
+.stage[data-state="open"] .phone-menu, .stage[data-state="expand"] .phone-menu { opacity: 1; visibility: visible; transform: none; transition: opacity var(--d-open) var(--ui), transform var(--d-open) var(--ui), visibility 0s; }
+.pm-row { display: flex; align-items: center; justify-content: space-between; min-height: var(--size-tap-min); border-bottom: 1px solid var(--color-line-soft); font: var(--type-desktop-card-weight) var(--type-mobile-card-size) / var(--type-mobile-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.acc-p { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows var(--d-open) var(--ui), opacity var(--d-open) var(--ui); }
+.acc-p > span { overflow: hidden; min-height: 0; }
+.stage[data-state="expand"] .phone .acc-p { grid-template-rows: 1fr; opacity: 1; }
+.pm-sub { display: grid; margin: var(--space-2) 0; padding: var(--space-1) var(--space-3); border-radius: var(--radius-small); background: var(--color-surface-card); border: 1px solid var(--color-line-soft); }
+.pm-sub span { display: flex; align-items: center; min-height: var(--space-10); font: var(--type-mobile-compact-weight) var(--type-mobile-compact-size) / var(--type-mobile-compact-line) var(--font-family-sans); }
+.pm-bar, .sbar { position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: var(--space-2); padding: var(--space-3); background: var(--color-surface-paper); border-top: 1px solid var(--color-line-soft); }
+.pm-note { text-align: center; font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.frame { display: block; overflow: hidden; width: 100%; max-width: calc(var(--space-24) * 3 + var(--space-6)); height: calc(var(--space-24) + var(--space-12)); border: 1px solid var(--color-line-base); border-radius: var(--radius-small); background: var(--color-surface-paper); }
+.frame-head { position: relative; z-index: 1; border-bottom: 1px solid transparent; transition: border-color var(--d-fast) var(--ui); }
+.stage[data-state="on"] .frame-head { border-bottom-color: var(--color-line-soft); }
+.frame-y { position: relative; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.frame-y .y1, .stage[data-state="on"] .frame-y .y0 { display: none; }
+.stage[data-state="on"] .frame-y .y1 { display: inline; }
+.frame-body { display: grid; gap: var(--space-3); padding: var(--space-4) var(--space-3); transition: transform var(--d-open) var(--ui); }
+.frame-body span { display: block; height: var(--space-3); border-radius: var(--radius-pill); background: var(--color-surface-mist); }
+.frame-body span:nth-child(2n) { width: 70%; }
+.stage[data-state="on"] .frame-body { transform: translateY(calc(var(--space-10) * -1)); }
+.sb-page { display: block; transition: transform var(--d-open) var(--ui); }
+.sb-hero { display: grid; place-items: center; height: calc(var(--space-24) + var(--space-6)); background: var(--color-surface-mist); }
+.stage[data-state="on"] .sb-page { transform: translateY(calc((var(--space-24) + var(--space-12)) * -1)); }
+.sbar { transform: translateY(100%); transition: transform var(--d-open) var(--ui); }
+.stage[data-state="on"] .sbar { transform: none; }
+
+/* M-009 link card */
+.mcard-demo { display: grid; gap: var(--space-2); width: 100%; max-width: calc(var(--space-24) * 3); transition: background-color var(--d-fast) var(--ui), color var(--d-fast) var(--ui), border-color var(--d-fast) var(--ui); }
+.mcard-demo b { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); }
+.mc-sub { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); transition: color var(--d-fast) var(--ui); }
+.mcard-demo:hover, .stage[data-state="on"] .mcard-demo { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+.mcard-demo:hover .mc-sub, .stage[data-state="on"] .mc-sub { color: var(--color-text-on-dark-muted); }
+
+/* M-010 select */
+.sel { display: grid; gap: var(--space-3); width: 100%; max-width: calc(var(--space-24) * 3); }
+.sel-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.mlab .option, .mlab .chip { transition-duration: var(--d-fast); }
+.stage[data-state="on"] .option.is-t, .stage[data-state="sel"] .asm-q1 .option.is-t, .stage[data-state="q2"] .asm-q1 .option.is-t { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); }
+.stage[data-state="on"] .chip.is-t { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+
+/* M-011 accordion */
+.acc { display: grid; width: 100%; max-width: calc(var(--space-24) * 4); padding: 0 var(--space-4); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+.acc-row + .acc-row { border-top: 1px solid var(--color-line-soft); }
+.acc-h { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-control); font: var(--type-desktop-card-weight) var(--type-mobile-card-size) / var(--type-mobile-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.plus { flex: none; width: var(--space-5); height: var(--space-5); transition: transform var(--d-fast) var(--ui); }
+.acc-t { display: block; padding-bottom: var(--space-4); font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.stage[data-state="a"] .acc-row--a .acc-p, .stage[data-state="b"] .acc-row--b .acc-p { grid-template-rows: 1fr; opacity: 1; }
+.stage[data-state="a"] .acc-row--a .plus, .stage[data-state="b"] .acc-row--b .plus { transform: rotate(45deg); }
+
+/* M-012 segmented */
+.seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: calc(var(--space-24) * 2 + var(--space-12)); padding: var(--space-1); border: 1px solid var(--color-line-field); border-radius: var(--radius-pill); background: var(--color-surface-card); }
+.seg-i { position: absolute; top: var(--space-1); bottom: var(--space-1); left: var(--space-1); width: calc(50% - var(--space-1)); border-radius: var(--radius-pill); background: var(--color-brand-deep-teal); transition: transform var(--d-open) var(--ui); }
+.seg-a, .seg-b { position: relative; display: grid; place-items: center; min-height: var(--size-tap-min); font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); color: var(--color-brand-deep-teal); transition: color var(--d-fast) var(--ui); }
+.seg-a, .stage[data-state="on"] .seg-b { color: var(--color-text-on-dark); }
+.stage[data-state="on"] .seg-a { color: var(--color-brand-deep-teal); }
+.stage[data-state="on"] .seg-i { transform: translateX(100%); }
+
+/* M-013 gallery */
+.gal { display: grid; gap: var(--space-3); width: 100%; max-width: calc(var(--space-24) * 2 + var(--space-12)); }
+.gal-main { position: relative; display: block; aspect-ratio: 4 / 3; border-radius: var(--radius-small); background: var(--color-surface-card); }
+.gal-a, .gal-b { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity var(--d-open) var(--ui); }
+.gal-b, .stage[data-state="on"] .gal-a { opacity: 0; }
+.stage[data-state="on"] .gal-b { opacity: 1; }
+.gal-thumbs { display: flex; gap: var(--space-2); }
+.gal-t { width: var(--space-12); height: var(--space-12); border-radius: var(--radius-xs); background: var(--color-surface-card); border: 1px solid var(--color-line-base); transition: border-color var(--d-fast) var(--ui), box-shadow var(--d-fast) var(--ui); }
+.gal-t--a, .stage[data-state="on"] .gal-t--b { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); }
+.stage[data-state="on"] .gal-t--a { border-color: var(--color-line-base); box-shadow: none; }
+
+/* M-014 steps */
+.hiw { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4); width: 100%; }
+.hiw-n { display: grid; gap: var(--space-2); align-content: start; color: var(--color-brand-deep-teal); }
+.mlab .step-num { transition-duration: var(--d-fast); }
+.stage[data-state="s1"] .n1, .stage[data-state="s2"] .n2, .stage[data-state="s3"] .n3 { background: var(--color-brand-yellow); border-color: var(--color-brand-yellow); color: var(--color-brand-teal-deep); }
+.hiw-s { position: relative; overflow: hidden; display: block; min-height: calc(var(--space-24) * 2); border-radius: var(--radius-small); background: var(--color-surface-card); }
+.hiw-q { position: absolute; left: 0; bottom: 0; width: var(--space-24); height: var(--space-24); border-radius: 0 100% 0 0; transform-origin: 0 100%; transform: rotate(-90deg); visibility: hidden; }
+.q1 { background: var(--color-brand-blue); } .q2 { background: var(--color-brand-green); } .q3 { background: var(--color-brand-blue-dark); }
+.stage[data-state="s1"] .q1, .stage[data-state="s2"] .q2, .stage[data-state="s3"] .q3 { transform: none; visibility: visible; transition: transform var(--d-shape) var(--enter); }
+.hiw-c { position: absolute; top: var(--space-4); left: 50%; width: var(--space-10); height: var(--space-10); border-radius: 50%; background: var(--color-brand-deep-teal); transition: left var(--d-shape) var(--ui); }
+.stage[data-state="s2"] .hiw-c { left: 70%; } .stage[data-state="s3"] .hiw-c { left: 30%; }
+.hiw-d { position: absolute; right: var(--space-4); bottom: var(--space-4); padding: var(--space-2) var(--space-3); border-radius: var(--radius-xs); background: var(--color-surface-paper); font: var(--type-desktop-card-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-strong); opacity: 0; transform: translateY(var(--d-rise)); }
+.stage[data-state="s1"] .d1, .stage[data-state="s2"] .d2, .stage[data-state="s3"] .d3 { opacity: 1; transform: none; transition: opacity var(--d-open) var(--ui), transform var(--d-open) var(--ui); }
+
+/* M-015 reveal, M-021 rise */
+.rv-wrap { display: grid; gap: var(--space-4); width: 100%; }
+.rv-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+.rv { display: grid; place-items: center; height: var(--space-18); border-radius: var(--radius-small); border: 1px solid var(--color-line-base); background: var(--color-surface-card); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); transition: opacity var(--d-reveal) var(--ui), transform var(--d-reveal) var(--ui); }
+.rv:nth-child(2), .k-rise span:nth-child(2) { transition-delay: var(--d-stagger); }
+.rv:nth-child(n+3), .k-rise span:nth-child(3) { transition-delay: calc(var(--d-stagger) * 2); }
+.stage[data-state="from"] .rv, .stage[data-state="from"] .k-rise span { opacity: 0; transform: translateY(var(--d-rise)); }
+.rv-legal { font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+.rv-legal em { font-style: normal; font-weight: 600; }
+.k-rise { display: grid; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+.k-rise span { display: block; transition: opacity var(--d-reveal) var(--ui), transform var(--d-reveal) var(--ui); }
+
+/* M-016 dialog */
+.dlg { display: grid; gap: var(--space-3); justify-items: start; width: 100%; max-width: calc(var(--space-24) * 3); padding: var(--space-6); opacity: 0; transform: translateY(var(--d-rise)); transition: opacity var(--d-fast) var(--ui), transform 0s var(--ui) var(--d-fast); }
+.dlg b { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.dlg-t { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-secondary); }
+.stage[data-state="open"] .dlg { opacity: 1; transform: none; transition: opacity var(--d-open) var(--ui), transform var(--d-open) var(--ui); }
+
+/* M-017 assessment */
+.asm { display: grid; gap: var(--space-4); width: 100%; }
+.qmark { display: grid; grid-template-columns: repeat(2, var(--space-4)); width: var(--space-8); height: var(--space-8); }
+.qmark span { background: var(--color-line-base); transition: background-color var(--d-open) var(--ui); }
+.qm1 { border-radius: 100% 0 0 0; } .qm2 { border-radius: 0 100% 0 0; } .qm3 { border-radius: 0 0 100% 0; } .qm4 { border-radius: 0 0 0 100%; }
+.qmark .qm1, .stage[data-state="q2"] .qmark .qm2 { background: var(--color-brand-deep-teal); }
+.asm-qs { display: grid; }
+.asm-q { grid-area: 1 / 1; display: grid; gap: var(--space-4); align-content: start; opacity: 0; visibility: hidden; transform: translateY(var(--d-rise)); }
+.asm-h { font: var(--type-desktop-h3-weight) var(--type-desktop-h3-size) / var(--type-desktop-h3-line) var(--type-desktop-h3-family); color: var(--color-text-strong); }
+.asm-o { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.stage[data-state="from"] .asm-q1, .stage[data-state="q1"] .asm-q1, .stage[data-state="sel"] .asm-q1, .stage[data-state="q2"] .asm-q2 { opacity: 1; visibility: visible; transform: none; transition: opacity var(--d-open) var(--ui), transform var(--d-open) var(--ui); }
+
+/* M-018 field */
+.mfield { width: 100%; max-width: calc(var(--space-24) * 3); }
+.mfield .field__input { display: flex; align-items: center; color: var(--color-text-secondary); transition: border-color var(--d-fast) var(--ui); }
+.stage[data-state="focus"] .mfield .field__input { border-color: var(--color-brand-deep-teal); outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
+.stage[data-state="error"] .mfield .field__input { border: 2px solid var(--color-brand-coral); }
+.mfield-err { display: block; min-height: var(--space-6); opacity: 0; transform: translateY(var(--d-rise)); }
+.mfield-err .field__help { display: flex; gap: var(--space-2); align-items: center; color: var(--color-text-primary); }
+.mfield-err .field__help::before { content: ''; flex: none; width: var(--space-3); height: var(--space-3); border-radius: 50%; background: var(--color-brand-coral); }
+.stage[data-state="error"] .mfield-err { opacity: 1; transform: none; transition: opacity var(--d-open) var(--ui), transform var(--d-open) var(--ui); }
+
+/* M-019 pivot, M-020 wipe, M-022 count */
+.k-pivot { position: absolute; left: 0; bottom: 0; width: calc(var(--space-24) + var(--space-12)); height: calc(var(--space-24) + var(--space-12)); border-radius: 0 100% 0 0; background: var(--color-brand-blue); transform-origin: 0 100%; transition: transform var(--d-shape) var(--enter); }
+.stage[data-state="from"] .k-pivot { transform: rotate(-90deg); }
+.k-wipe { width: calc(var(--space-24) + var(--space-6)); height: calc(var(--space-24) + var(--space-6)); border-radius: var(--radius-pill) var(--radius-pill) 0 0; background: var(--color-brand-green); clip-path: inset(0 0 0 0); transition: clip-path var(--d-wipe) var(--enter); }
+.stage[data-state="from"] .k-wipe { clip-path: inset(0 100% 0 0); }
+.k-countbox { display: grid; gap: var(--space-2); justify-items: center; }
+.k-count { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--font-family-serif); color: var(--color-text-strong); font-variant-numeric: tabular-nums; clip-path: inset(0 0 0 0); transition: clip-path var(--d-wipe) var(--ui); }
+.stage[data-state="from"] .k-count { clip-path: inset(0 0 0 100%); }
+.k-countcap { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+
+/* M-023 loader */
+.ld { display: grid; place-items: center; }
+.ld-wait, .ld-on { grid-area: 1 / 1; }
+.ld-wait { visibility: hidden; font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+.ld-on { display: flex; align-items: center; gap: var(--space-3); }
+.stage[data-state="wait"] .ld-wait { visibility: visible; }
+.stage[data-state="wait"] .ld-on { visibility: hidden; }
+/* The capsule loader (R-42, R-53, R-109): markup from tools/capsule_svg.py --loader, 64 wide, stroke 1.5. */
+.k-cap { flex: none; width: calc(var(--space-14) + var(--space-2)); height: auto; overflow: visible; }
+.k-cap-line { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 1.5; }
+.k-cap-fill { fill: var(--color-brand-deep-teal); transform-box: fill-box; transform-origin: left center; transform: scaleX(0.5); }
+.stage[data-state="spin"] .k-cap-fill { animation: m-fill var(--d-loader) var(--ui) infinite; }
+@keyframes m-fill { 0% { transform: scaleX(0); opacity: 1; } 60%, 100% { transform: scaleX(1); opacity: 0.15; } }
+.mlab.is-rm .k-cap-fill { animation: none !important; transform: scaleX(0.5); }
+@media (prefers-reduced-motion: reduce) { .k-cap-fill { animation: none !important; transform: scaleX(0.5); } }
+/* New sections: logo motion, landing pages, folds, interactive states, patterns */
+.mx-spec td:first-child { white-space: nowrap; color: var(--color-text-strong); font-weight: 600; }
+.mx-drift { position: relative; height: calc(var(--space-24) * 2); overflow: hidden; border-radius: var(--radius-card); background: var(--color-surface-mist); }
+.mx-drift .mx-cap { position: absolute; right: calc(var(--space-6) * -1); top: var(--space-6); width: calc(var(--space-24) * 2.5); height: auto; color: var(--color-surface-wash-blue); opacity: var(--opacity-capsule); transition: transform var(--d-shape) var(--enter); }
+.mx-drift[data-state="to"] .mx-cap { transform: translateY(var(--motion-distance-drift)) rotate(var(--motion-drift-rotate)); }
+.mx-drift .mx-copy { position: absolute; left: var(--space-6); bottom: var(--space-6); max-width: 22ch; font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+.mlab.is-rm .mx-drift .mx-cap { transition: none; }
+@media (prefers-reduced-motion: reduce) { .mx-drift .mx-cap { transition: none; transform: none !important; } }
+.ld-t { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-primary); }
+
+/* M-024 scroll-spy */
+.spy { display: grid; gap: var(--space-1); width: 100%; max-width: calc(var(--space-24) * 2 + var(--space-6)); }
+.spy-a { display: flex; align-items: center; min-height: var(--size-tap-min); padding: 0 var(--space-3); border-radius: var(--radius-xs); font: var(--type-desktop-nav-weight) var(--type-desktop-nav-size) / var(--type-desktop-nav-line) var(--font-family-sans); color: var(--color-text-primary); transition: background-color var(--d-fast) var(--ui), color var(--d-fast) var(--ui); }
+.stage[data-state="a1"] .s1, .stage[data-state="a2"] .s2, .stage[data-state="a3"] .s3 { background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); }
+
+/* ---------- Tokens section ---------- */
+.dbar { position: relative; display: block; overflow: hidden; min-width: calc(var(--space-24) + var(--space-6)); height: var(--space-2); margin-top: var(--space-2); border-radius: var(--radius-pill); background: var(--color-line-base); }
+.dbar i { position: absolute; inset: 0; background: var(--color-brand-deep-teal); transform-origin: 0 50%; transition: transform var(--dur) var(--ui); }
+[data-state="from"] .dbar i { transform: scaleX(0); transition: none; }
+.dur-play { display: grid; gap: var(--space-3); }
+.curves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.curve-card { display: grid; gap: var(--space-3); align-content: start; }
+.curve-card svg { width: 100%; max-width: calc(var(--space-24) * 2); height: auto; }
+.curve-axis { stroke: var(--color-line-base); }
+.curve-lin { stroke: var(--color-line-mid); }
+.curve-path { stroke: var(--color-brand-deep-teal); }
+.curve-h { stroke: var(--color-brand-blue); }
+.etrack { position: relative; display: block; height: var(--space-6); border-bottom: 1px solid var(--color-line-base); }
+.etrack i { position: absolute; top: 0; left: calc(100% - var(--space-6)); width: var(--space-6); height: var(--space-6); border-radius: 50%; background: var(--color-brand-deep-teal); transition: left var(--d-shape) var(--e); }
+[data-state="from"] .etrack i { left: 0; transition: none; }
+.code-note { display: grid; gap: var(--space-3); }
+
+/* ---------- Brand moves section ---------- */
+.moves .specimen { align-content: start; }
+.moves > * { grid-row: span 4; grid-template-rows: subgrid; }
+.moves h3 { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.moves p { color: var(--color-text-secondary); }
+
+/* ---------- Cards ---------- */
+.mgroup { display: grid; gap: var(--space-5); }
+.mgroup + .mgroup { margin-top: var(--space-12); }
+.mgroup > h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+.mcard { display: grid; gap: var(--space-5); padding: var(--space-6); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); min-width: 0; }
+.mcard-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+.mcard-id { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.mcard-head h4 { margin-right: auto; font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+.mcard-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+.mspec { margin: 0; display: grid; }
+.mspec > div { display: grid; grid-template-columns: calc(var(--space-24) + var(--space-6)) minmax(0, 1fr); gap: var(--space-3); padding: var(--space-2) 0; border-top: 1px solid var(--color-line-soft); }
+.mspec > div:first-child { border-top: 0; padding-top: 0; }
+.mspec dt { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-compact-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+.mspec dd { margin: 0; font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-primary); }
+.mspec .status { vertical-align: middle; }
+
+@media (max-width: 1439px) {
+  .mcard-body { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1023px) {
+  .mlab-bar { top: var(--size-header-mobile); }
+  .mlab > .sec + .sec { margin-top: var(--space-18); }
+  .mlab .sec, .mcard { scroll-margin-top: calc(var(--size-header-mobile) + var(--space-24) + var(--space-6)); }
+}
+@media (max-width: 767px) {
+  .principle { padding: var(--space-6); }
+  .principle p:first-child { font: var(--type-mobile-section-weight) var(--type-mobile-section-size) / var(--type-mobile-section-line) var(--type-mobile-section-family); }
+  .mlab-bar { position: static; }
+  .mlab > .sec + .sec { margin-top: var(--space-14); }
+  .mlab .sec, .mcard { scroll-margin-top: calc(var(--size-header-mobile) + var(--space-6)); }
+  .mcard { padding: var(--space-4); }
+  .mspec > div { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+  .curves { grid-template-columns: minmax(0, 1fr); }
+  .rv-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .asm-h { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--font-family-serif); }
+  .mgroup > h3 { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); }
+  .mx-spec td:first-child { white-space: normal; }
+  .mx-drift { height: calc(var(--space-24) * 1.75); }
+  .mx-drift .mx-cap { width: calc(var(--space-24) * 1.75); }
+  .mx-drift .mx-copy { font: var(--type-mobile-card-serif-weight) var(--type-mobile-card-serif-size) / var(--type-mobile-card-serif-line) var(--font-family-serif); }
+}
+</style>
+
+      <header class="page-head">
+        <span class="eyebrow">System</span>
+        <h1>Motion.</h1>
+        <p class="lead">One principle, seven durations, three curves, the 24 motion cards, the logo in motion, landing-page moments, fold drift and interactive states. This page is the only motion reference for unifiedmeds (R-54). Every value on it comes from tokens/tokens.json, and every demo runs on those tokens. The logo sting films live on <a class="link" href="videos.html">Videos</a>; icon motion on <a class="link" href="icons.html#capsule-motion">Icons</a>.</p>
+        <nav class="toc" aria-label="On this page"><a href="#principle">Principle</a><a href="#tokens">Tokens</a><a href="#moves">Brand moves</a><a href="#cards">Motion cards</a><a href="#logo-motion">Logo motion</a><a href="#lp-moments">Landing pages</a><a href="#fold-drift">Fold drift</a><a href="#interactive-states">Interactive states</a><a href="#patterns">Interactive patterns</a><a href="#not-allowed">Not used</a><a href="#reduced-motion">Reduced motion</a></nav>
+      </header>
+      <section class="sec" id="principle" aria-labelledby="principle-h">
+        <div class="sec-head"><h2 id="principle-h">One principle, six rules.</h2><p>Motion tells him something happened: a button heard him, a panel opened, a step moved on. It never decorates, never asks for attention, never repeats.</p></div>
+        <blockquote class="principle"><p>Motion confirms, it never performs.</p><p>Every unifiedmeds motion is a confirmation of something he did, or the single entrance of a brand shape. If a motion has neither job, it is cut.</p></blockquote>
+        <ol class="rules grid-2">
+          <li class="rule"><b>One easing for UI.</b><p>Every UI transition uses ease-out (<code>--motion-easing-ui</code>). The enter curve (<code>--motion-easing-enter</code>) is only for brand shapes entering. Every duration and distance is a token.</p></li>
+          <li class="rule"><b>Brand shapes move only on entrance or with the scroll.</b><p>A kit piece pivots or wipes once, when it enters. At most one shape entrance per view; the hero is static copy plus one shape entrance (R-53). A fold shape may drift with the scroll (R-111), and a landing page may carry three brand moments (R-104).</p></li>
+          <li class="rule"><b>Nothing loops except the loader.</b><p>No drift on a timer, no carousels that advance by themselves, no pulsing. The capsule loader (1.4s) is the only loop, and only while he waits (R-53).</p></li>
+          <li class="rule"><b>Reduced motion means instant and static.</b><p>When he asks for reduced motion, every state change happens at once and nothing moves. Not shorter motion: no motion.</p></li>
+          <li class="rule"><b>No bounce, no overshoot.</b><p>No spring, shake, stretch, scale or zoom. Things arrive and stop. The button lift is 2px and that is the largest UI movement there is, apart from the 12px rise.</p></li>
+          <li class="rule"><b>Disclaimers are visible at rest.</b><p>Disclaimers, safety information, eligibility lines and prices are never animated into view. They are present on load, or they are not compliant.</p></li>
+        </ol>
+        <p class="note">Authority (R-01): decided rules and tokens win. The designer's Figma is the source only for what is not decided yet; its one motion value is the button note "Smart Animate, 150ms ease-out", which <code>--motion-duration-fast</code> matches. Our own Figma files are kept in sync with the rules. brand-rules.md R-49 to R-54, R-101, R-104, R-111 and R-113 are the rules this page explains.</p>
+      </section>
+
+      <div class="mlab" id="mlab">
+        <div class="mlab-bar" role="group" aria-label="Demo controls">
+          <b>Demo controls</b>
+          <button class="chip" type="button" id="ctl-slow" aria-pressed="false">Slow motion 0.25×</button>
+          <button class="chip" type="button" id="ctl-rm" aria-pressed="false">Preview reduced motion</button>
+          <span class="cap" id="ctl-note" hidden>Your system asks for reduced motion, so every demo runs instantly and still. Turn the setting off to watch the motion.</span>
+        </div>
+
+        <section class="sec" id="tokens" aria-labelledby="tokens-h">
+          <div class="sec-head"><h2 id="tokens-h">Every value is a token.</h2><p>Seven durations, three curves, four distances, a turn, two staggers and five timings, generated from the token file. They live in <a href="tokens/tokens.json">tokens/tokens.json</a> and reach code as <code>--motion-*</code> custom properties in <a href="brand.css">brand.css</a>. Nothing else is allowed in a transition.</p></div>
+
+          <div class="sub" id="durations">
+            <h3>Durations.</h3>
+            <div class="dur-play">
+              <div class="table-wrap" id="dur-stage" data-seq="from@0 rest@30">
+                <table>
+                  <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Used for · the bar fills in that time</th></tr></thead>
+                  <tbody><tr><td><code>--motion-duration-fast</code></td><td>150ms</td><td>Hover, press, select, focus colour, chevrons, close fades. Matches the designer's button note.<span class="dbar" style="--dur: var(--d-fast)"><i></i></span></td></tr><tr><td><code>--motion-duration-open</code></td><td>220ms</td><td>Open, close, slide, accordion, dropdown open, sticky bar, dialog, step change, a toggle's thumb (R-113).<span class="dbar" style="--dur: var(--d-open)"><i></i></span></td></tr><tr><td><code>--motion-duration-crossfade</code></td><td>180ms</td><td>Content that depends on a toggle cross-fades; marks fill within this cap (R-113).<span class="dbar" style="--dur: var(--d-crossfade)"><i></i></span></td></tr><tr><td><code>--motion-duration-reveal</code></td><td>320ms</td><td>Reveal on scroll and Rise.<span class="dbar" style="--dur: var(--d-reveal)"><i></i></span></td></tr><tr><td><code>--motion-duration-wipe</code></td><td>420ms</td><td>Brand move Wipe; Count.<span class="dbar" style="--dur: var(--d-wipe)"><i></i></span></td></tr><tr><td><code>--motion-duration-shape</code></td><td>520ms</td><td>Brand move Pivot, the hero's one shape entrance, kit pieces moving between steps, a landing-page capsule moment (R-104).<span class="dbar" style="--dur: var(--d-shape)"><i></i></span></td></tr><tr><td><code>--motion-duration-loader</code></td><td>1400ms</td><td>One cycle of the capsule loader. The only loop.<span class="dbar" style="--dur: var(--d-loader)"><i></i></span></td></tr></tbody>
+                </table>
+              </div>
+              <div class="mdemo-foot"><button class="chip" type="button" data-play="dur-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> the duration scale</span></button><span class="cap">All seven bars start together; each fills in its own duration with ease-out.</span></div>
+            </div>
+          </div>
+
+          <div class="sub" id="easing">
+            <h3>Easing.</h3>
+            <div class="curves" id="ease-stage" data-seq="from@0 rest@30">
+              <div class="specimen curve-card">
+                <svg viewBox="0 0 120 120" role="img" aria-label="Ease-out curve: starts at full speed and settles"><path class="curve-axis" d="M10 10V110H110" fill="none" stroke-width="1"/><path class="curve-lin" d="M10 110L110 10" fill="none" stroke-width="1" stroke-dasharray="3 3"/><path class="curve-h" d="M10 110L10 110M110 10L68 10" fill="none" stroke-width="1"/><path class="curve-path" d="M10 110C10 110 68 10 110 10" fill="none" stroke-width="2.5" stroke-linecap="round"/></svg>
+                <p><b><code>--motion-easing-ui</code></b> · <code>cubic-bezier(0, 0, 0.58, 1)</code>, the CSS ease-out. Every UI transition: hover, press, open, close, select, reveal, Rise, Count.</p>
+                <span class="etrack" style="--e: var(--ui)"><i></i></span>
+              </div>
+              <div class="specimen curve-card">
+                <svg viewBox="0 0 120 120" role="img" aria-label="Enter curve: a fast start and a long, soft landing"><path class="curve-axis" d="M10 10V110H110" fill="none" stroke-width="1"/><path class="curve-lin" d="M10 110L110 10" fill="none" stroke-width="1" stroke-dasharray="3 3"/><path class="curve-h" d="M10 110L32 10M110 10L46 10" fill="none" stroke-width="1"/><path class="curve-path" d="M10 110C32 10 46 10 110 10" fill="none" stroke-width="2.5" stroke-linecap="round"/></svg>
+                <p><b><code>--motion-easing-enter</code></b> · <code>cubic-bezier(0.22, 1, 0.36, 1)</code>. Only brand shapes entering: Pivot and Wipe.</p>
+                <span class="etrack" style="--e: var(--enter)"><i></i></span>
+              </div>
+            </div>
+            <div class="mdemo-foot"><button class="chip" type="button" data-play="ease-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> the two curves</span></button><span class="cap">Both dots travel in <code>--motion-duration-shape</code> (520ms). The dashed line is <code>--motion-easing-linear</code> (<code>cubic-bezier(0, 0, 1, 1)</code>): it was the old loader's turn and now only maps a scroll position to a drift, which follows the scroll 1:1 (R-111). The capsule loader uses ease-out.</span></div>
+          </div>
+
+          <div class="sub" id="distances">
+            <h3>Distances, turn, staggers and timings.</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Used for</th></tr></thead>
+                <tbody>
+                  <tr><td><code>--motion-distance-rise</code></td><td>12px</td><td>Every entrance that moves: Reveal, Rise, dialog open, assessment question, field message, step detail.</td></tr>
+                  <tr><td><code>--motion-distance-lift</code></td><td>2px</td><td>Button hover lift. Only buttons lift; cards never do. The icon in a button with an icon moves this far in its direction (R-100).</td></tr>
+                  <tr><td><code>--motion-distance-dropdown</code></td><td>6px</td><td>Dropdown panel drop; mobile menu panel.</td></tr>
+                  <tr><td><code>--motion-distance-drift</code></td><td>24px</td><td>The most a fold shape travels across the fold's scroll (R-111).</td></tr>
+                  <tr><td><code>--motion-drift-rotate</code></td><td>6deg</td><td>The most a fold shape turns across the fold's scroll (R-111).</td></tr>
+                  <tr><td><code>--motion-stagger</code></td><td>90ms</td><td>Delay between siblings in a Reveal or Rise. Three items at most; the fourth and later arrive with the third.</td></tr>
+                  <tr><td><code>--motion-stagger-fine</code></td><td>40ms</td><td>Dots or marks fill one after the other, never past the crossfade cap in total (R-113).</td></tr>
+                  <tr><td><code>--motion-close-delay</code></td><td>150ms</td><td>Dropdown waits this long after the pointer leaves before it closes.</td></tr>
+                  <tr><td><code>--motion-intent-delay</code></td><td>100ms</td><td>Dropdown hover intent: the pointer must rest this long before a hover opens it. Click and keyboard open at once.</td></tr>
+                  <tr><td><code>--motion-loader-delay</code></td><td>400ms</td><td>The loader appears only when a wait passes this; shorter waits show nothing.</td></tr>
+                  <tr><td><code>--motion-auto-advance</code></td><td>320ms</td><td>Pause before the assessment moves on after a single-choice answer.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="code-note">
+              <p class="note">Write transitions with the tokens only, and list the properties that change (never <code>all</code>):</p>
+<pre><code>.btn {
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-ui),
+    color            var(--motion-duration-fast) var(--motion-easing-ui),
+    transform        var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.btn:hover, .btn:focus-visible {
+  transform: translateY(calc(var(--motion-distance-lift) * -1));
+}</code></pre>
+              <p class="note">Mapped from the archived Main menu v3 spec (<a href="https://www.figma.com/design/aOretSqF3eNZeDp38Urlwv/?node-id=4010-609">4010-609</a>): item hover 180ms ease → <code>--motion-duration-fast</code> ease-out; dropdown open 180ms ease → <code>--motion-duration-open</code> ease-out; close fade 140ms → <code>--motion-duration-fast</code>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="sec" id="moves" aria-labelledby="moves-h">
+          <div class="sec-head"><h2 id="moves-h">Four brand moves.</h2><p>Rise, Pivot, Wipe and Count are the only motions with a brand character. Each plays once. Shapes pivot or wipe; type rises; a result counts.</p></div>
+          <div class="grid-2 moves">
+            <div class="specimen">
+              <div class="stage stage--tall" id="mv-rise" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-rise"><span>Motion confirms,</span><span>it never</span><span>performs.</span></span></div>
+              <h3>Rise.</h3>
+              <p>Type and content blocks rise 12px (<code>--motion-distance-rise</code>) and fade in, <code>--motion-duration-reveal</code> (320ms), <code>--motion-easing-ui</code>, 90ms apart, three at most. Never hero copy. <a href="#m-021">M-021</a></p>
+              <div class="mdemo-foot"><button class="chip" type="button" data-play="mv-rise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> Rise</span></button></div>
+            </div>
+            <div class="specimen">
+              <div class="stage stage--tall" id="mv-pivot" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-pivot"></span></div>
+              <h3>Pivot.</h3>
+              <p>A kit piece turns exactly 90° about its anchored corner into place. <code>--motion-duration-shape</code> (520ms), <code>--motion-easing-enter</code>. No fade, no scale. <a href="#m-019">M-019</a></p>
+              <div class="mdemo-foot"><button class="chip" type="button" data-play="mv-pivot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> Pivot</span></button></div>
+            </div>
+            <div class="specimen">
+              <div class="stage stage--tall" id="mv-wipe" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-wipe"></span></div>
+              <h3>Wipe.</h3>
+              <p>A straight edge uncovers a kit piece from left to right. <code>--motion-duration-wipe</code> (420ms), <code>--motion-easing-enter</code>. No opacity change. <a href="#m-020">M-020</a></p>
+              <div class="mdemo-foot"><button class="chip" type="button" data-play="mv-wipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> Wipe</span></button></div>
+            </div>
+            <div class="specimen">
+              <div class="stage stage--tall" id="mv-count" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-countbox"><span class="k-count">18.2</span><span class="k-countcap">Sample value, not real data</span></span></div>
+              <h3>Count.</h3>
+              <p>A member’s own result is uncovered from right to left, as if written. Results only. <code>--motion-duration-wipe</code>, <code>--motion-easing-ui</code> <span class="status status--proposed">To confirm</span>. Never a rolling odometer. <a href="#m-022">M-022</a></p>
+              <div class="mdemo-foot"><button class="chip" type="button" data-play="mv-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> Count</span></button></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="sec" id="cards" aria-labelledby="cards-h">
+          <div class="sec-head"><h2 id="cards-h">The motion set: 24 cards.</h2><p>Approved (R-54). Each card has one value per property, names its tokens, and states its reduced-motion behaviour. Demos play once when they come into view; Replay plays them again. Use the controls above for slow motion and a reduced-motion preview.</p></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">ID</th><th scope="col">Motion</th><th scope="col">Duration · easing</th></tr></thead>
+              <tbody><tr><td><a href="#m-001">M-001</a></td><td>Button hover and focus</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-002">M-002</a></td><td>Button press</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-003">M-003</a></td><td>Text link hover</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-004">M-004</a></td><td>Main-menu item hover</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-005">M-005</a></td><td>Dropdown open and close</td><td><code>--motion-duration-open</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-006">M-006</a></td><td>Mobile menu</td><td><code>--motion-duration-open</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-007">M-007</a></td><td>Header on scroll</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-008">M-008</a></td><td>Sticky CTA bar</td><td><code>--motion-duration-open</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-009">M-009</a></td><td>Link-card hover</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-010">M-010</a></td><td>Select: option and chip</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-011">M-011</a></td><td>Accordion</td><td><code>--motion-duration-fast</code> · <code>--motion-duration-open</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-012">M-012</a></td><td>Segmented switch</td><td><code>--motion-duration-open</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-013">M-013</a></td><td>Gallery</td><td><code>--motion-duration-open</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-014">M-014</a></td><td>Steps (How it works)</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code> · <code>--motion-duration-shape</code> · <code>--motion-easing-enter</code> · <code>--motion-duration-open</code></td></tr><tr><td><a href="#m-015">M-015</a></td><td>Reveal on scroll</td><td><code>--motion-duration-reveal</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-016">M-016</a></td><td>Panel and dialog</td><td><code>--motion-duration-open</code> · <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-017">M-017</a></td><td>Assessment step change</td><td><code>--motion-duration-open</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-018">M-018</a></td><td>Field focus and error</td><td><code>--motion-duration-fast</code> · <code>--motion-duration-open</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-019">M-019</a></td><td>Pivot</td><td><code>--motion-duration-shape</code> · <code>--motion-easing-enter</code></td></tr><tr><td><a href="#m-020">M-020</a></td><td>Wipe</td><td><code>--motion-duration-wipe</code> · <code>--motion-easing-enter</code></td></tr><tr><td><a href="#m-021">M-021</a></td><td>Rise</td><td><code>--motion-duration-reveal</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-022">M-022</a></td><td>Count</td><td><code>--motion-duration-wipe</code> · <code>--motion-easing-ui</code></td></tr><tr><td><a href="#m-023">M-023</a></td><td>Loader</td><td><code>--motion-duration-loader</code></td></tr><tr><td><a href="#m-024">M-024</a></td><td>Scroll-spy contents</td><td><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code></td></tr></tbody>
+            </table>
+          </div>
+          <div>
+        <div class="mgroup" id="g-buttons">
+          <h3>Buttons and links.</h3>
+          <article class="mcard" id="m-001" aria-labelledby="m-001-h">
+            <header class="mcard-head"><span class="mcard-id">M-001</span><h4 id="m-001-h">Button hover and focus</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--row" id="m-001-stage" data-seq="rest@0 on@300 rest@1700" data-state="rest" aria-hidden="true"><span class="btn">Get started</span><span class="btn btn--yellow">Get started</span><span class="btn btn--outline">How it works</span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-001-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-001 Button hover and focus</span></button><span class="cap">Hover, hold, leave.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Every button: Dark, Yellow, Outline, Outline Light, header CTA (44px) and mobile-bar CTA (48px).</dd></div><div><dt>Trigger</dt><dd>Pointer hover and keyboard focus (<code>:focus-visible</code>).</dd></div><div><dt>From → to</dt><dd>Fill, label and border follow the hover matrix (Figma 2676-309): Dark (Teal-deep) → Yellow · Outline → Yellow · Light → Yellow · Yellow → Blue-dark with a Paper label · Outline Light on photos → Blue-dark · any button on a Yellow, Blue or Wash surface → White. <code>translateY(0)</code> → <code>translateY(-2px)</code> (<code>--motion-distance-lift</code>).</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> (150ms) · <code>--motion-easing-ui</code>. Matches the Figma note “Smart Animate, 150ms ease-out”.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per hover; reverses on leave.</dd></div><div><dt>Reduced motion</dt><dd>Colours change instantly. No lift.</dd></div><div><dt>Interruption</dt><dd>Leaving mid-transition reverses from the current value. No shadow, ever.</dd></div><div><dt>Accessibility</dt><dd>The same change on <code>:focus-visible</code>, plus the 2px Deep Teal focus ring at 3px offset, which appears instantly. Touch devices never depend on hover.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-002" aria-labelledby="m-002-h">
+            <header class="mcard-head"><span class="mcard-id">M-002</span><h4 id="m-002-h">Button press</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-002-stage" data-seq="rest@0 on@300 press@1000 on@1300 rest@2000" data-state="rest" aria-hidden="true"><span class="btn">Get started</span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-002-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-002 Button press</span></button><span class="cap">Hover, press, release, leave.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Every button.</dd></div><div><dt>Trigger</dt><dd>Pointer down, touch, Enter or Space.</dd></div><div><dt>From → to</dt><dd>Lifted hover state → <code>translateY(0)</code>. Colours stay at the hover colour. No scale, no shadow, no ripple.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>. Press = hover = 150ms.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per press.</dd></div><div><dt>Reduced motion</dt><dd>Instant. The lift is 0, so nothing moves.</dd></div><div><dt>Interruption</dt><dd>Release returns to the hover state. Dragging off cancels the press without a jump.</dd></div><div><dt>Accessibility</dt><dd>A tap shows the press state only (no hover on touch). Enter and Space give the same state as a click.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-003" aria-labelledby="m-003-h">
+            <header class="mcard-head"><span class="mcard-id">M-003</span><h4 id="m-003-h">Text link hover</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper" id="m-003-stage" data-seq="rest@0 on@300 rest@1700" data-state="rest" aria-hidden="true"><span class="mlink"><span class="link">View all Sexual health</span> →</span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-003-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-003 Text link hover</span></button><span class="cap">Hover, hold, leave.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Inline links and “View all Sexual health →”.</dd></div><div><dt>Trigger</dt><dd>Pointer hover and <code>:focus-visible</code>.</dd></div><div><dt>From → to</dt><dd>Underline <code>text-decoration-thickness</code> 1px → 2px. Colour stays Deep Teal (<code>--color-text-link</code>). The arrow does not move.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per hover; reverses on leave.</dd></div><div><dt>Reduced motion</dt><dd>Thickness changes instantly.</dd></div><div><dt>Interruption</dt><dd>Reverses from the current value.</dd></div><div><dt>Accessibility</dt><dd>Links are underlined at rest, so hover is never the only cue. Focus adds the focus ring.</dd></div></dl>
+            </div>
+          </article>
+        </div>
+        <div class="mgroup" id="g-nav">
+          <h3>Navigation.</h3>
+          <article class="mcard" id="m-004" aria-labelledby="m-004-h">
+            <header class="mcard-head"><span class="mcard-id">M-004</span><h4 id="m-004-h">Main-menu item hover</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper" id="m-004-stage" data-seq="rest@0 on@300 rest@1700" data-state="rest" aria-hidden="true"><span class="mnav"><span class="mnav-i">Sexual health <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="mnav-i is-t">How it works</span><span class="mnav-i">FAQ</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-004-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-004 Main-menu item hover</span></button><span class="cap">Hover on “How it works”, leave.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Header items in Main menu v3: Sexual health, How it works, FAQ, Sign in.</dd></div><div><dt>Trigger</dt><dd>Pointer hover and <code>:focus-visible</code>.</dd></div><div><dt>From → to</dt><dd>Background transparent → Line/Soft pill (<code>--color-line-soft</code>, <code>--radius-pill</code>, padding 8/12). Label stays Deep Teal.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>. The designer's menu spec said 180ms ease; it maps to this token.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per hover; reverses on leave.</dd></div><div><dt>Reduced motion</dt><dd>The pill appears instantly.</dd></div><div><dt>Interruption</dt><dd>Moving between items swaps the pill with no delay. An open item keeps its pill.</dd></div><div><dt>Accessibility</dt><dd>Items are links or buttons in tab order. The pill also shows on focus, with the focus ring.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-005" aria-labelledby="m-005-h">
+            <header class="mcard-head"><span class="mcard-id">M-005</span><h4 id="m-005-h">Dropdown open and close</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper stage--top stage--tall" id="m-005-stage" data-seq="rest@0 open@300 rest@2700" data-state="rest" aria-hidden="true"><span class="dd"><span class="mnav-i is-t">Sexual health <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="dd-ind"></span><span class="dd-panel overlay"><span class="dd-row"><span class="dd-thumb"></span>Tadalafil</span><span class="dd-row"><span class="dd-thumb"></span>Sildenafil</span><span class="dd-row"><span class="dd-thumb"></span>Combo</span><span class="dd-all"><span class="link">View all Sexual health</span> →</span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-005-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-005 Dropdown open and close</span></button><span class="cap">Hover with intent, open; leave, close delay, fade.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Header · Sexual health ▾. Rows: Tadalafil, Sildenafil, Combo, then “View all Sexual health →” under a Line/Base divider.</dd></div><div><dt>Trigger</dt><dd>Open: hover after the intent delay, or click, Enter, Space or ↓ (no delay). Close: pointer leaves item and panel, Esc, click outside, or focus leaves.</dd></div><div><dt>From → to</dt><dd>Open: panel <code>opacity 0 → 1</code> and <code>translateY(-6px) → 0</code> (<code>--motion-distance-dropdown</code>); chevron 0° → 180°; a 24×2 Deep Teal indicator appears; the item keeps its Line/Soft pill. Close: <code>opacity 1 → 0</code> only.</dd></div><div><dt>Duration · easing</dt><dd>Open <code>--motion-duration-open</code> · close <code>--motion-duration-fast</code> · chevron <code>--motion-duration-fast</code> · all <code>--motion-easing-ui</code>. Figma said 180ms ease (open) and 140ms (close); mapped to the tokens.</dd></div><div><dt>Delay · stagger</dt><dd>Hover intent <code>--motion-intent-delay</code> (100ms). Close delay <code>--motion-close-delay</code> (150ms).</dd></div><div><dt>Plays</dt><dd>Once per open or close.</dd></div><div><dt>Reduced motion</dt><dd>Opens and closes instantly. The two delays stay: they prevent accidental opens and closes, they are not motion.</dd></div><div><dt>Interruption</dt><dd>Coming back during the close delay cancels the close. Opening another item closes this one at once: one dropdown at a time.</dd></div><div><dt>Accessibility</dt><dd>The item is a <code>button</code> with <code>aria-expanded</code> and <code>aria-controls</code>. Esc closes and returns focus to it. Rows show a 2px Deep Teal inside focus ring; row meta is Slate (not Slate Light).</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-006" aria-labelledby="m-006-h">
+            <header class="mcard-head"><span class="mcard-id">M-006</span><h4 id="m-006-h">Mobile menu</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper stage--tall" id="m-006-stage" data-seq="rest@0 open@300 expand@1100 rest@3300" data-state="rest" aria-hidden="true"><span class="phone"><span class="phone-head"><span class="mini-logo"><img src="assets/brand/logo-horizontal.svg" width="99" height="16" alt="unifiedmeds"></span><span class="ico-box"><svg class="ico ico--menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="ico ico--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span></span><span class="phone-menu"><span class="pm-row">Sexual health <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="acc-p"><span><span class="pm-sub"><span>Tadalafil</span><span>Sildenafil</span><span>Combo</span></span></span></span><span class="pm-row">How it works</span><span class="pm-row">FAQ</span><span class="pm-bar"><span class="btn btn--bar">Get started</span><span class="pm-note">Assessment only. Not a diagnosis.</span></span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-006-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-006 Mobile menu</span></button><span class="cap">Open, expand a category, close. Schematic, not to scale.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Mobile header (64px): ☰ in a 44×44 target.</dd></div><div><dt>Trigger</dt><dd>Tap, Enter or Space on ☰. Category rows: tap to expand in place.</dd></div><div><dt>From → to</dt><dd>Full-screen panel <code>opacity 0 → 1</code> and <code>translateY(-6px) → 0</code> (<code>--motion-distance-dropdown</code>) <span class="status status--proposed">To confirm</span>. Icon ☰ → ✕ (cross-fade). Body scroll locks. Category row: sub-list height and opacity open, chevron 0° → 180°.</dd></div><div><dt>Duration · easing</dt><dd>Panel and rows <code>--motion-duration-open</code> · icon and close fade <code>--motion-duration-fast</code> · all <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per open, close or expand.</dd></div><div><dt>Reduced motion</dt><dd>Opens, closes and expands instantly.</dd></div><div><dt>Interruption</dt><dd>Tapping ✕ mid-open closes from the current state. One category open at a time.</dd></div><div><dt>Accessibility</dt><dd>Focus moves into the panel and stays there until it closes. Esc closes and returns focus to ☰. Sub-list rows are at least 48px. The bottom-bar line “Assessment only. Not a diagnosis.” is static, never animated.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-007" aria-labelledby="m-007-h">
+            <header class="mcard-head"><span class="mcard-id">M-007</span><h4 id="m-007-h">Header on scroll</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper" id="m-007-stage" data-seq="rest@0 on@400 rest@2200" data-state="rest" aria-hidden="true"><span class="frame"><span class="frame-head"><span class="mini-logo"><img src="assets/brand/logo-horizontal.svg" width="99" height="16" alt="unifiedmeds"></span><span class="frame-y"><span class="y0">scrollY 0</span><span class="y1">scrollY &gt; 8px</span></span></span><span class="frame-body"><span></span><span></span><span></span><span></span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-007-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-007 Header on scroll</span></button><span class="cap">Simulated scroll down past 8px, then back to the top.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Site header: Paper, sticky, 80px desktop / 64px mobile.</dd></div><div><dt>Trigger</dt><dd>Page scrolled more than 8px; reverses at 8px or less.</dd></div><div><dt>From → to</dt><dd>Bottom border transparent → 1px Line/Soft (<code>--color-line-soft</code>). Nothing else changes: no colour change, no height change, no shadow.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code> <span class="status status--proposed">To confirm</span> (the audit proposed 220ms).</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Each time the threshold is crossed.</dd></div><div><dt>Reduced motion</dt><dd>The border appears instantly.</dd></div><div><dt>Interruption</dt><dd>Follows the latest scroll position.</dd></div><div><dt>Accessibility</dt><dd>Decorative only; no content changes. Use an IntersectionObserver on a sentinel 8px below the top, not a scroll handler.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-008" aria-labelledby="m-008-h">
+            <header class="mcard-head"><span class="mcard-id">M-008</span><h4 id="m-008-h">Sticky CTA bar</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper stage--tall" id="m-008-stage" data-seq="rest@0 on@400 rest@2400" data-state="rest" aria-hidden="true"><span class="phone phone--short"><span class="sb-page"><span class="sb-hero"><span class="btn">Get started</span></span><span class="frame-body"><span></span><span></span><span></span></span></span><span class="sbar"><span class="btn btn--bar">Get started</span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-008-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-008 Sticky CTA bar</span></button><span class="cap">The hero CTA scrolls away, the bar slides up; back to the top, it slides away.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Long pages on mobile that have a hero CTA: homepage, Sexual health, product pages.</dd></div><div><dt>Trigger</dt><dd>Shows when the hero CTA leaves the viewport. Hides when the final CTA enters.</dd></div><div><dt>From → to</dt><dd><code>translateY(100%) → 0</code>. No fade, no shadow; 1px Line/Soft top border.</dd></div><div><dt>Duration · easing</dt><dd>Show and hide <code>--motion-duration-open</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Each time a trigger fires.</dd></div><div><dt>Reduced motion</dt><dd>Appears and disappears instantly.</dd></div><div><dt>Interruption</dt><dd>Retargets from the current position. Triggered by IntersectionObserver on the two CTAs, never by a fixed scroll offset.</dd></div><div><dt>Accessibility</dt><dd>While hidden it is <code>inert</code> and <code>aria-hidden="true"</code>. Pads for <code>env(safe-area-inset-bottom)</code>. The page gets bottom padding equal to the bar, so it never covers focused content.</dd></div></dl>
+            </div>
+          </article>
+        </div>
+        <div class="mgroup" id="g-select">
+          <h3>Cards and selection.</h3>
+          <article class="mcard" id="m-009" aria-labelledby="m-009-h">
+            <header class="mcard-head"><span class="mcard-id">M-009</span><h4 id="m-009-h">Link-card hover</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-009-stage" data-seq="rest@0 on@300 rest@1700" data-state="rest" aria-hidden="true"><span class="card mcard-demo"><b>Sexual health</b><span class="mc-sub">Treatments and how they work.</span><span class="mc-arrow">→</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-009-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-009 Link-card hover</span></button><span class="cap">Hover, hold, leave.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Every card that is a link (<code>a.card</code>): homepage product cards, category cards.</dd></div><div><dt>Trigger</dt><dd>Pointer hover and <code>:focus-visible</code>.</dd></div><div><dt>From → to</dt><dd>Fill Card white → Deep Teal; text → Paper (<code>--color-text-on-dark</code>); secondary text → <code>--color-text-on-dark-muted</code>; border → Deep Teal. No lift, no shadow, no image zoom.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per hover; reverses on leave.</dd></div><div><dt>Reduced motion</dt><dd>Colours change instantly.</dd></div><div><dt>Interruption</dt><dd>Reverses from the current value.</dd></div><div><dt>Accessibility</dt><dd>The whole card is one link with one accessible name. Focus ring 2px Deep Teal outside the card. A tap navigates; no content is hover-only.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-010" aria-labelledby="m-010-h">
+            <header class="mcard-head"><span class="mcard-id">M-010</span><h4 id="m-010-h">Select: option and chip</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-010-stage" data-seq="rest@0 on@400 rest@2200" data-state="rest" aria-hidden="true"><span class="sel"><span class="option is-t">Yes</span><span class="option">No</span><span class="sel-chips"><span class="chip is-t">Email</span><span class="chip">Text message</span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-010-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-010 Select: option and chip</span></button><span class="cap">Select “Yes” and “Email”, then clear.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Assessment answer options; chips for filters and preferences.</dd></div><div><dt>Trigger</dt><dd>Click, tap, Enter or Space; arrow keys inside a radio group.</dd></div><div><dt>From → to</dt><dd>Single-choice option: Slate border (<code>--color-line-field</code>) → Deep Teal fill with the Yellow mark. Multiple-choice option: Slate border → Deep Teal border plus a 1px inset (R-42). Chip: transparent → Deep Teal fill with a Paper label. No scale.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per change.</dd></div><div><dt>Reduced motion</dt><dd>Instant.</dd></div><div><dt>Interruption</dt><dd>A new choice deselects the old one in the same frame.</dd></div><div><dt>Accessibility</dt><dd>State lives in <code>aria-checked</code> or <code>aria-pressed</code>. Selection also changes border weight, so colour is never the only cue.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-011" aria-labelledby="m-011-h">
+            <header class="mcard-head"><span class="mcard-id">M-011</span><h4 id="m-011-h">Accordion</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-011-stage" data-seq="rest@0 a@300 b@1600 rest@3000" data-state="rest" aria-hidden="true"><span class="acc"><span class="acc-row acc-row--a"><span class="acc-h">Who reviews my assessment? <svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="acc-p"><span><span class="acc-t">Answer text sits here once the row is open.</span></span></span></span><span class="acc-row acc-row--b"><span class="acc-h">How is my order shipped? <svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="acc-p"><span><span class="acc-t">Answer text sits here once the row is open.</span></span></span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-011-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-011 Accordion</span></button><span class="cap">Open row one, then row two (row one closes), then close.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>FAQ, product-page details, mobile-menu categories.</dd></div><div><dt>Trigger</dt><dd>Click, tap, Enter or Space on the row.</dd></div><div><dt>From → to</dt><dd>Icon + rotates 0° → 45° (×). Panel <code>grid-template-rows: 0fr → 1fr</code> and <code>opacity 0 → 1</code>. The row that was open closes in the same frame.</dd></div><div><dt>Duration · easing</dt><dd>Icon <code>--motion-duration-fast</code> · panel <code>--motion-duration-open</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per open or close.</dd></div><div><dt>Reduced motion</dt><dd>Opens and closes instantly.</dd></div><div><dt>Interruption</dt><dd>A second click mid-open reverses from the current height. The page never scroll-jumps.</dd></div><div><dt>Accessibility</dt><dd>The row is a <code>button</code> with <code>aria-expanded</code> and <code>aria-controls</code>, or <code>&lt;details name="…"&gt;</code> for one-open grouping. Closed content is hidden from assistive tech.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-012" aria-labelledby="m-012-h">
+            <header class="mcard-head"><span class="mcard-id">M-012</span><h4 id="m-012-h">Segmented switch</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-012-stage" data-seq="rest@0 on@400 rest@2000" data-state="rest" aria-hidden="true"><span class="seg"><span class="seg-i"></span><span class="seg-a">1 month</span><span class="seg-b">3 months</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-012-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-012 Segmented switch</span></button><span class="cap">Switch to the second segment and back.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Two- or three-way switches, for example supply length on a product page.</dd></div><div><dt>Trigger</dt><dd>Click, tap, arrow keys.</dd></div><div><dt>From → to</dt><dd>The Deep Teal indicator slides (<code>translateX</code>) under the chosen segment. Labels swap Deep Teal ↔ Paper.</dd></div><div><dt>Duration · easing</dt><dd>Indicator <code>--motion-duration-open</code> · labels <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per change.</dd></div><div><dt>Reduced motion</dt><dd>The indicator jumps.</dd></div><div><dt>Interruption</dt><dd>Retargets from the current position.</dd></div><div><dt>Accessibility</dt><dd>A radio group (or tabs, when it switches panels); arrow keys move the selection; the selected label is announced.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-013" aria-labelledby="m-013-h">
+            <header class="mcard-head"><span class="mcard-id">M-013</span><h4 id="m-013-h">Gallery</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-013-stage" data-seq="rest@0 on@400 rest@2300" data-state="rest" aria-hidden="true"><span class="gal"><span class="gal-main"><span class="gal-a"><span class="kit kit--circle"></span></span><span class="gal-b"><span class="kit kit--quarter"></span></span></span><span class="gal-thumbs"><span class="gal-t gal-t--a"></span><span class="gal-t gal-t--b"></span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-013-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-013 Gallery</span></button><span class="cap">Choose the second image, then the first.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Product-page image gallery.</dd></div><div><dt>Trigger</dt><dd>Thumbnail click or tap, arrow keys, swipe.</dd></div><div><dt>From → to</dt><dd>Main image cross-fade: old <code>opacity 1 → 0</code>, new <code>0 → 1</code>. Selected thumbnail: Deep Teal border plus 1px inset. No zoom, no slide.</dd></div><div><dt>Duration · easing</dt><dd>Image <code>--motion-duration-open</code> · thumbnail <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per change. Never auto-advances.</dd></div><div><dt>Reduced motion</dt><dd>Images swap instantly.</dd></div><div><dt>Interruption</dt><dd>A new choice mid-fade starts from the current opacities.</dd></div><div><dt>Accessibility</dt><dd>Thumbnails are buttons with <code>aria-pressed</code> and a label. Every image has alt text.</dd></div></dl>
+            </div>
+          </article>
+        </div>
+        <div class="mgroup" id="g-flows">
+          <h3>Content and flows.</h3>
+          <article class="mcard" id="m-014" aria-labelledby="m-014-h">
+            <header class="mcard-head"><span class="mcard-id">M-014</span><h4 id="m-014-h">Steps (How it works)</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-014-stage" data-seq="s1@0 s2@400 s3@1800 s1@3200" data-state="s1" aria-hidden="true"><span class="hiw"><span class="hiw-n"><span class="step-num n1">1</span><span class="step-num n2">2</span><span class="step-num n3">3</span></span><span class="hiw-s"><span class="hiw-q q1"></span><span class="hiw-q q2"></span><span class="hiw-q q3"></span><span class="hiw-c"></span><span class="hiw-d d1">Step 1</span><span class="hiw-d d2">Step 2</span><span class="hiw-d d3">Step 3</span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-014-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-014 Steps (How it works)</span></button><span class="cap">Steps 2, 3, then back to 1.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>How it works page and the homepage How it works section.</dd></div><div><dt>Trigger</dt><dd>Step tab: click, tap, ← / →, Home, End. Number circle: hover, tap or focus.</dd></div><div><dt>From → to</dt><dd>Number circle → Yellow fill with Teal-deep digits. The step’s quarter enters with Pivot (−90° → 0° about its anchored corner, no fade). The circle moves to its new place. The detail text rises: <code>opacity 0 → 1</code>, <code>translateY(12px) → 0</code> (<code>--motion-distance-rise</code>). Outgoing piece and text leave at once. <span class="status status--proposed">To confirm</span> Each step re-enters its piece, because a kit piece may rotate only during its entrance (R-32).</dd></div><div><dt>Duration · easing</dt><dd>Number circle <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>. Quarter <code>--motion-duration-shape</code> · <code>--motion-easing-enter</code>. Circle move <code>--motion-duration-shape</code> · <code>--motion-easing-ui</code>. Detail <code>--motion-duration-open</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per step change.</dd></div><div><dt>Reduced motion</dt><dd>The new step shows instantly; pieces sit in their final positions.</dd></div><div><dt>Interruption</dt><dd>A new step mid-move retargets from the current position. Steps never queue.</dd></div><div><dt>Accessibility</dt><dd>Tabs pattern: <code>role="tablist"</code>, <code>aria-selected</code>, roving tabindex. The detail text is the tab panel; shapes are <code>aria-hidden</code>. The active circle is the only Yellow element on screen.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-015" aria-labelledby="m-015-h">
+            <header class="mcard-head"><span class="mcard-id">M-015</span><h4 id="m-015-h">Reveal on scroll</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-015-stage" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="rv-wrap"><span class="rv-row"><span class="rv">1</span><span class="rv">2</span><span class="rv">3</span><span class="rv">4</span></span><span class="rv-legal">Assessment only. Not a diagnosis. <em>Never animated.</em></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-015-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-015 Reveal on scroll</span></button><span class="cap">Three staggered items; the fourth arrives with the third. The disclaimer never moves.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Content blocks below the hero: card rows, section intros, images.</dd></div><div><dt>Trigger</dt><dd>The element enters the viewport (IntersectionObserver, threshold 0.15 <span class="status status--proposed">To confirm</span>).</dd></div><div><dt>From → to</dt><dd><code>opacity 0 → 1</code>, <code>translateY(12px) → 0</code> (<code>--motion-distance-rise</code>).</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-reveal</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd><code>--motion-stagger</code> (90ms) between siblings, three at most. The fourth and later arrive with the third.</dd></div><div><dt>Plays</dt><dd>Once per element per page view. Never replays on scroll back.</dd></div><div><dt>Reduced motion</dt><dd>Nothing is hidden: every block is visible at load.</dd></div><div><dt>Interruption</dt><dd>If the user jumps past (anchor link, fast scroll), the block appears in its final state.</dd></div><div><dt>Accessibility</dt><dd>Never on the hero, disclaimers, safety information, eligibility lines, prices or the legal footer: they are visible at rest. Content is in the DOM and readable without JavaScript; only the script adds the hidden state.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-016" aria-labelledby="m-016-h">
+            <header class="mcard-head"><span class="mcard-id">M-016</span><h4 id="m-016-h">Panel and dialog</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--tall" id="m-016-stage" data-seq="rest@0 open@300 rest@2500" data-state="rest" aria-hidden="true"><span class="dlg overlay"><b>Dialog title</b><span class="dlg-t">Body text sits here.</span><span class="btn btn--outline">Close</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-016-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-016 Panel and dialog</span></button><span class="cap">Open, hold, close.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Dialogs and side panels.</dd></div><div><dt>Trigger</dt><dd>Open: the opener button. Close: the close button or Esc.</dd></div><div><dt>From → to</dt><dd>Open: <code>opacity 0 → 1</code>, <code>translateY(12px) → 0</code> (<code>--motion-distance-rise</code>). Close: <code>opacity 1 → 0</code> only. Surface: Card white, <code>--radius-small</code>, <code>--shadow-overlay</code>.</dd></div><div><dt>Duration · easing</dt><dd>Open <code>--motion-duration-open</code> · close <code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per open or close.</dd></div><div><dt>Reduced motion</dt><dd>Opens and closes instantly.</dd></div><div><dt>Interruption</dt><dd>Closing mid-open fades from the current opacity.</dd></div><div><dt>Accessibility</dt><dd><code>role="dialog"</code>, <code>aria-modal="true"</code> and a label. Focus moves into the dialog, stays there, and returns to the opener on close.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-017" aria-labelledby="m-017-h">
+            <header class="mcard-head"><span class="mcard-id">M-017</span><h4 id="m-017-h">Assessment step change</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--tall" id="m-017-stage" data-seq="from@0 q1@30 sel@500 q2@820" data-state="q1" aria-hidden="true"><span class="asm"><span class="qmark"><span class="qm1"></span><span class="qm2"></span><span class="qm4"></span><span class="qm3"></span></span><span class="asm-qs"><span class="asm-q asm-q1"><span class="asm-h">Have you used this kind of treatment before?</span><span class="asm-o"><span class="option is-t">Yes</span><span class="option">No</span></span></span><span class="asm-q asm-q2"><span class="asm-h">Do you take any other medicines?</span><span class="asm-o"><span class="option">Yes</span><span class="option">No</span></span></span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-017-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-017 Assessment step change</span></button><span class="cap">Answer, 320ms pause, the next question rises and the progress mark fills a quarter.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>The clinical intake assessment (its own domain, not the marketing site).</dd></div><div><dt>Trigger</dt><dd>Next, or auto-advance after a single-choice answer.</dd></div><div><dt>From → to</dt><dd>The outgoing question is removed instantly: no wipe, no crossfade. The new question: <code>opacity 0 → 1</code>, <code>translateY(12px) → 0</code> (<code>--motion-distance-rise</code>). The capsule progress mark (R-42) fills toward the next step, Line/Base → Deep Teal.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-open</code> (220ms) · <code>--motion-easing-ui</code> for the question and the progress mark.</dd></div><div><dt>Delay · stagger</dt><dd>Auto-advance pause after a single-choice answer: <code>--motion-auto-advance</code> (320ms).</dd></div><div><dt>Plays</dt><dd>Once per step.</dd></div><div><dt>Reduced motion</dt><dd>The new question appears instantly. The 320ms pause stays, so he sees his choice before the step changes.</dd></div><div><dt>Interruption</dt><dd>Changing the answer during the pause restarts it. Back cancels it. Steps never queue.</dd></div><div><dt>Accessibility</dt><dd>Focus moves to the new question (H3, DM Serif 26/1.3). Progress has a text equivalent. Questions never time out.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-018" aria-labelledby="m-018-h">
+            <header class="mcard-head"><span class="mcard-id">M-018</span><h4 id="m-018-h">Field focus and error</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-018-stage" data-seq="rest@0 focus@300 error@1300 rest@3100" data-state="rest" aria-hidden="true"><span class="field mfield"><span class="field__label">Email</span><span class="field__input">name@example.com</span><span class="mfield-err"><span class="field__help">Enter a valid email address.</span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-018-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-018 Field focus and error</span></button><span class="cap">Focus, then an error on submit, then clear.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Every text field (50px, radius 12, 1px Slate border).</dd></div><div><dt>Trigger</dt><dd>Focus. Validation on blur or submit.</dd></div><div><dt>From → to</dt><dd>Focus: border Slate → Deep Teal; the focus ring appears. Error: border → 2px Coral; the message with its icon rises, <code>opacity 0 → 1</code>, <code>translateY(12px) → 0</code> (<code>--motion-distance-rise</code>). No shake.</dd></div><div><dt>Duration · easing</dt><dd>Border <code>--motion-duration-fast</code> · message <code>--motion-duration-open</code> · <code>--motion-easing-ui</code>. The focus ring itself never animates.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per state change.</dd></div><div><dt>Reduced motion</dt><dd>Instant.</dd></div><div><dt>Interruption</dt><dd>Fixing the value removes the error at once, without an exit animation.</dd></div><div><dt>Accessibility</dt><dd>The message is linked with <code>aria-describedby</code>; the field gets <code>aria-invalid="true"</code>. Icon plus text carry the error; Coral is never a text colour.</dd></div></dl>
+            </div>
+          </article>
+        </div>
+        <div class="mgroup" id="g-moves">
+          <h3>Brand moves.</h3>
+          <article class="mcard" id="m-019" aria-labelledby="m-019-h">
+            <header class="mcard-head"><span class="mcard-id">M-019</span><h4 id="m-019-h">Pivot</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--tall" id="m-019-stage" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-pivot"></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-019-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-019 Pivot</span></button><span class="cap">Plays once.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Brand shapes on entrance: the hero’s one shape entrance, section kit pieces, How it works pieces.</dd></div><div><dt>Trigger</dt><dd>The piece enters the viewport; for the hero shape, page load.</dd></div><div><dt>From → to</dt><dd><code>rotate(-90deg) → rotate(0)</code> exactly, about the piece’s anchored corner (<code>transform-origin</code> on that corner). No fade, no scale.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-shape</code> (520ms) · <code>--motion-easing-enter</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None. One shape entrance per view.</dd></div><div><dt>Plays</dt><dd>Once per page view.</dd></div><div><dt>Reduced motion</dt><dd>The piece is static in its final position.</dd></div><div><dt>Interruption</dt><dd>Finishes even if scrolled away. Never replays.</dd></div><div><dt>Accessibility</dt><dd>Decorative: <code>aria-hidden="true"</code>. Never carries text, never a disclaimer.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-020" aria-labelledby="m-020-h">
+            <header class="mcard-head"><span class="mcard-id">M-020</span><h4 id="m-020-h">Wipe</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--tall" id="m-020-stage" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-wipe"></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-020-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-020 Wipe</span></button><span class="cap">Plays once.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Brand shapes on entrance, as the alternative to Pivot (one or the other per shape).</dd></div><div><dt>Trigger</dt><dd>The piece enters the viewport; for the hero shape, page load.</dd></div><div><dt>From → to</dt><dd><code>clip-path: inset(0 100% 0 0) → inset(0)</code>: a straight vertical edge travels left to right. No opacity change.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-wipe</code> (420ms) · <code>--motion-easing-enter</code>.</dd></div><div><dt>Delay · stagger</dt><dd>None. One shape entrance per view.</dd></div><div><dt>Plays</dt><dd>Once per page view.</dd></div><div><dt>Reduced motion</dt><dd>The piece is static and whole.</dd></div><div><dt>Interruption</dt><dd>Finishes even if scrolled away. Never replays.</dd></div><div><dt>Accessibility</dt><dd>Decorative: <code>aria-hidden="true"</code>. Never on text or a photo.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-021" aria-labelledby="m-021-h">
+            <header class="mcard-head"><span class="mcard-id">M-021</span><h4 id="m-021-h">Rise</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--tall" id="m-021-stage" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-rise"><span>Motion confirms,</span><span>it never</span><span>performs.</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-021-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-021 Rise</span></button><span class="cap">Three lines, 90ms apart.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Section headlines and intro copy below the hero, through Reveal (M-015). Never hero copy.</dd></div><div><dt>Trigger</dt><dd>The block enters the viewport.</dd></div><div><dt>From → to</dt><dd>Each line or block: <code>opacity 0 → 1</code>, <code>translateY(12px) → 0</code> (<code>--motion-distance-rise</code>).</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-reveal</code> (320ms) · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd><code>--motion-stagger</code> (90ms), three lines at most.</dd></div><div><dt>Plays</dt><dd>Once per page view.</dd></div><div><dt>Reduced motion</dt><dd>Text is visible at rest.</dd></div><div><dt>Interruption</dt><dd>Jumping past shows the final state.</dd></div><div><dt>Accessibility</dt><dd>Real text in the DOM. Split lines are presentational; never split into letters, so screen readers read the sentence once.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-022" aria-labelledby="m-022-h">
+            <header class="mcard-head"><span class="mcard-id">M-022</span><h4 id="m-022-h">Count</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--tall" id="m-022-stage" data-seq="from@0 rest@30" data-state="rest" aria-hidden="true"><span class="k-countbox"><span class="k-count">18.2</span><span class="k-countcap">Sample value, not real data</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-022-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-022 Count</span></button><span class="cap">The final value is uncovered from right to left.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Results only: a member’s own result in the portal or the assessment summary. Never marketing stats, clinical figures, prices or savings.</dd></div><div><dt>Trigger</dt><dd>The result enters the viewport.</dd></div><div><dt>From → to</dt><dd><code>clip-path: inset(0 0 0 100%) → inset(0)</code>: the final value is uncovered from right to left. The digits never change: no count-up, no rolling odometer.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-wipe</code> (420ms) · <code>--motion-easing-ui</code> <span class="status status--proposed">To confirm</span></dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Once per page view.</dd></div><div><dt>Reduced motion</dt><dd>The value is static and whole.</dd></div><div><dt>Interruption</dt><dd>Finishes even if scrolled away.</dd></div><div><dt>Accessibility</dt><dd>The final value is in the DOM from the start, so screen readers read it once.</dd></div></dl>
+            </div>
+          </article>
+        </div>
+        <div class="mgroup" id="g-system">
+          <h3>System.</h3>
+          <article class="mcard" id="m-023" aria-labelledby="m-023-h">
+            <header class="mcard-head"><span class="mcard-id">M-023</span><h4 id="m-023-h">Loader</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage" id="m-023-stage" data-seq="wait@0 spin@400 rest@4600" data-state="rest" aria-hidden="true"><span class="ld"><span class="ld-wait">Under 400ms, nothing shows.</span><span class="ld-on"><svg class="k-cap" viewBox="0 0 64 23.9" aria-hidden="true"><path class="k-cap-fill" d="M32.9 1.5L11.2 1.5A10.45 10.45 0 0 0 11.2 22.39L32.9 22.39ZM35.15 0.75L52.05 0.75A11.2 11.2 0 0 1 52.05 23.15L35.15 23.15Z"/><path class="k-cap-line" d="M35.15 1.5L11.2 1.5A10.45 10.45 0 0 0 11.2 22.39L35.15 22.39"/><path class="k-cap-line" d="M35.15 0.75L52.05 0.75A11.2 11.2 0 0 1 52.05 23.15L35.15 23.15Z"/></svg><span class="ld-t">Loading your results.</span></span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-023-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-023 Loader</span></button><span class="cap">Nothing for 400ms, then the loader. The demo stops after three cycles.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Any wait for content: results, checkout steps, data loading. Small version inside a button's loading state (40 wide).</dd></div><div><dt>Trigger</dt><dd>A wait longer than <code>--motion-loader-delay</code> (400ms).</dd></div><div><dt>From → to</dt><dd>The logo capsule (R-105, R-109), outline in Deep Teal, 64 wide, stroke 1.5: both halves fill from the open end, with the gap at the divider, then fade, beside a plain sentence. Inside a button it is 40 wide; the line is drawn with <code>vector-effect: non-scaling-stroke</code>, so it renders at 1.5 there too (components.css <code>.cap-loader</code>). Markup: <code>python3 -I tools/capsule_svg.py --loader</code>; file: <a class="link" href="assets/shapes/capsule-loader.svg">capsule-loader.svg</a>.</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-loader</code> (1400ms) per cycle · <code>--motion-easing-ui</code>.</dd></div><div><dt>Delay · stagger</dt><dd>Shown after 400ms; shorter waits show nothing.</dd></div><div><dt>Plays</dt><dd>Loops until the content arrives. The only loop in the system (R-53).</dd></div><div><dt>Reduced motion</dt><dd>A still capsule, half filled, plus the sentence. No fill cycle.</dd></div><div><dt>Interruption</dt><dd>Removed in the frame the content arrives; no exit animation.</dd></div><div><dt>Mobile</dt><dd>Same size and timing; it never shrinks under 64 on its own or 40 in a button.</dd></div><div><dt>Accessibility</dt><dd><code>role="status"</code> with the sentence as text; the capsule is <code>aria-hidden</code>.</dd></div></dl>
+            </div>
+          </article>
+          <article class="mcard" id="m-024" aria-labelledby="m-024-h">
+            <header class="mcard-head"><span class="mcard-id">M-024</span><h4 id="m-024-h">Scroll-spy contents</h4><span class="status status--current">Ready for dev</span></header>
+            <div class="mcard-body">
+              <div class="mdemo">
+                <div class="stage stage--paper" id="m-024-stage" data-seq="a1@0 a2@400 a3@1100 a1@2400" data-state="a1" aria-hidden="true"><span class="spy"><span class="spy-a s1">Overview</span><span class="spy-a s2">Treatments</span><span class="spy-a s3">Safety information</span></span></div>
+                <div class="mdemo-foot"><button class="chip" type="button" data-play="m-024-stage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> M-024 Scroll-spy contents</span></button><span class="cap">The active link follows the section in view.</span></div>
+              </div>
+              <dl class="mspec"><div><dt>Where</dt><dd>Long pages with an on-page contents list: FAQ, legal pages, this hub.</dd></div><div><dt>Trigger</dt><dd>A section reaches the reading zone, or a contents link is clicked.</dd></div><div><dt>From → to</dt><dd>Active link: transparent → Deep Teal fill, Paper text. A click scrolls to the section (<code>scroll-behavior: smooth</code>).</dd></div><div><dt>Duration · easing</dt><dd><code>--motion-duration-fast</code> · <code>--motion-easing-ui</code>. Smooth scroll uses the browser’s own timing.</dd></div><div><dt>Delay · stagger</dt><dd>None.</dd></div><div><dt>Plays</dt><dd>Each time the active section changes.</dd></div><div><dt>Reduced motion</dt><dd>The active state changes instantly; scrolling jumps (<code>scroll-behavior: auto</code>).</dd></div><div><dt>Interruption</dt><dd>Follows the latest section.</dd></div><div><dt>Accessibility</dt><dd>The active link carries <code>aria-current="true"</code>. After a jump, focus moves to the target heading.</dd></div></dl>
+            </div>
+          </article>
+        </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="sec" id="logo-motion" aria-labelledby="logo-motion-h">
+        <div class="sec-head"><h2 id="logo-motion-h">Logo motion.</h2><p>The capsule seal assembling, in three approved stings (R-101): <b>B</b>, the two halves click together, is the default; <b>C1</b>, built from the u, is for brand and story moments; <b>C2</b>, built from u and m, opens short social videos. One sting per video, at the start or the end, never in the middle. Each ends on the seal on Cream, the logo presentation ground.</p></div>
+        <div class="cards">
+          <a class="card" href="videos.html#sting"><div class="meta"><span class="status status--current">R-101</span></div><b>The three stings</b><span class="cap">MP4 files, live versions you can re-export at any size, and where each one goes.</span></a>
+          <a class="card" href="sound.html#sting"><div class="meta"><span class="status status--proposed">Proposed</span></div><b>The sting sound</b><span class="cap">The short form of the stings' sound, for product and video moments.</span></a>
+        </div>
+        <p class="cap">On the website the logo itself never animates: the header logo is static, and the capsule loader (M-023) is the only capsule that loops. Mobile: the same files; videos play inline at the column width.</p>
+      </section>
+
+      <section class="sec" id="lp-moments" aria-labelledby="lp-moments-h">
+        <div class="sec-head"><h2 id="lp-moments-h">Landing-page moments.</h2><p>Campaign pages outside the website menu may carry up to three brand moments (R-104). The website itself keeps R-53.</p></div>
+        <div class="table-wrap mx-spec"><table>
+          <thead><tr><th scope="col">Topic</th><th scope="col">Rule</th></tr></thead>
+          <tbody>
+            <tr><td>What counts</td><td>A capsule that draws, fills, closes or slides in. Rise on enter (12px, three items at most) is not a brand moment.</td></tr>
+            <tr><td>How many</td><td>Three per landing page at most. Each plays once and never loops.</td></tr>
+            <tr><td>Timing</td><td>Motion tokens only: <code>--motion-duration-shape</code> with <code>--motion-easing-enter</code> for a shape, the stagger for a sequence. Where a moment tells a sequence it follows the scroll, so the visitor sets the pace.</td></tr>
+            <tr><td>Hero</td><td>The copy is readable from the first frame; only the shape moves (R-53).</td></tr>
+            <tr><td>Photo parallax</td><td>One at most, desktop only, at 0.85 of the scroll speed. Mobile: none.</td></tr>
+            <tr><td>Mobile</td><td>The same moments, triggered when 40% of the shape is on screen; a scroll sequence becomes steps that play once each.</td></tr>
+            <tr><td>Reduced motion</td><td>Every moment is off and the page shows its end state.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="cap">In use: <a class="link" href="landing-pages.html#sexual-health">the Sexual health landing page</a>.</p>
+      </section>
+
+      <section class="sec" id="fold-drift" aria-labelledby="fold-drift-h">
+        <div class="sec-head"><h2 id="fold-drift-h">Fold drift.</h2><p>On every page a fold carries up to two shapes (R-106, R-111). A shape may move with the scroll: drift at most 24px (<code>--motion-distance-drift</code>) or turn at most 6° (<code>--motion-drift-rotate</code>), or draw its outline once. Only shapes move, never text. A shape that straddles two folds counts once in each.</p></div>
+        <div class="specimen">
+          <div class="mx-drift" id="mx-drift" data-seq="from@0 to@60" data-state="from" aria-hidden="true">
+            <svg class="mx-cap" viewBox="0 0 320 116.41" fill="none"><path d="M175.99 5.18L54.39 5.18A53.03 53.03 0 0 0 54.39 111.23L175.99 111.23M175.99 1.36L261.79 1.36A56.85 56.85 0 0 1 261.79 115.05L175.99 115.05Z" stroke="currentColor" stroke-width="2.72"/></svg>
+            <p class="mx-copy">The copy stays still.</p>
+          </div>
+          <div class="mdemo-foot"><button class="chip" type="button" data-play="mx-drift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>Replay<span class="vh"> fold drift</span></button><span class="cap">The demo plays the full drift in <code>--motion-duration-shape</code>; on a page the drift follows the scroll position (linear), from the fold entering to the fold leaving.</span></div>
+        </div>
+        <div class="grid-2">
+          <div class="rule rule--do"><b>Do</b><p>Outline or translucent capsules (<code>--opacity-capsule</code>, <code>--opacity-capsule-soft</code>), cropped by the fold edge, moving within the two caps. Mobile: the same caps; the shape scales with the fold.</p></div>
+          <div class="rule rule--dont"><b>Don't</b><p>Move a shape under text, on a timer, past 24px or 6°, or at all with reduced motion (the end state, static).</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="interactive-states" aria-labelledby="interactive-states-h">
+        <div class="sec-head"><h2 id="interactive-states-h">Interactive states.</h2><p>Toggles, two-state data marks, steppers and accordions (R-113). The live demos are on <a class="link" href="components.html#interactive">Components</a>; the timing is here.</p></div>
+        <div class="table-wrap mx-spec"><table>
+          <thead><tr><th scope="col">Control</th><th scope="col">Motion</th><th scope="col">Tokens</th></tr></thead>
+          <tbody>
+            <tr><td>Toggle</td><td>The thumb slides between options; dependent content cross-fades.</td><td><code>--motion-duration-open</code>, <code>--motion-duration-crossfade</code></td></tr>
+            <tr><td>Two-state data marks</td><td>Green for the first state, Blue for the second (Daily Green, As needed Blue), never product colours or Yellow; marks fill one after the other.</td><td><code>--motion-stagger-fine</code>, within <code>--motion-duration-crossfade</code></td></tr>
+            <tr><td>Stepper or scroll story</td><td>Steps not reached fade to 0.45; the active step gets a 2px Deep Teal border, a filled number and a left accent bar; passed steps are checked.</td><td><code>--opacity-step-faded</code>, <code>--motion-duration-open</code></td></tr>
+            <tr><td>Accordion</td><td>One answer open at a time; height and opacity animate and the chevron turns 180°.</td><td><code>--motion-duration-open</code></td></tr>
+            <tr><td>Mobile</td><td>The same timings; a tap is the trigger and every row is at least 44 tall.</td><td>(same)</td></tr>
+            <tr><td>Reduced motion</td><td>Instant, same colours.</td><td>(tokens drop to 0)</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="patterns" aria-labelledby="patterns-h">
+        <div class="sec-head"><h2 id="patterns-h">Interactive patterns to rebuild.</h2><p>Patterns from earlier working demos that still apply. They are rebuilt in the unifiedmeds look, with the capsule and the tokens on this page, and no testimonials or statistics. Until then they are patterns, not pages.</p></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Pattern</th><th scope="col">Where it goes</th><th scope="col">Status</th></tr></thead>
+          <tbody>
+            <tr><td>Care-area rows that open in place; sticky header; mobile menu</td><td>Homepage</td><td><span class="status status--proposed">Rebuild needed</span></td></tr>
+            <tr><td>Step selector with a shape that changes per step</td><td>Homepage, How it works (M-014)</td><td><span class="status status--proposed">Rebuild needed</span></td></tr>
+            <tr><td>Section reveals, image mosaic</td><td>Homepage (M-015)</td><td><span class="status status--proposed">Rebuild needed</span></td></tr>
+            <tr><td>Category hero, product cards, steps</td><td>Sexual health category page</td><td><span class="status status--proposed">Rebuild needed</span></td></tr>
+            <tr><td>Four steps as tabs, shapes that move with the step</td><td>How it works</td><td><span class="status status--proposed">Rebuild needed</span></td></tr>
+            <tr><td>Sticky narrative that builds a plan chapter by chapter</td><td>Longevity, Phase 2</td><td><span class="status">Phase 2 reference</span></td></tr>
+          </tbody>
+        </table></div>
+        <p class="cap">The Figma website pages already cover most of these: <a class="link" href="website-pages.html">Website pages</a>.</p>
+      </section>
+
+      <section class="sec" id="not-allowed" aria-labelledby="not-allowed-h">
+        <div class="sec-head"><h2 id="not-allowed-h">Motions we do not use.</h2><p>Not allowed on the website or in brand material, with the reason.</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Motion</th><th scope="col">Why not</th></tr></thead>
+            <tbody>
+              <tr><td>Looping demos and ambient drift</td><td>Only the loader loops. Anything moving while he reads competes with the words.</td></tr>
+              <tr><td>Hue cycles</td><td>Blending brand colours reads as a gradient. Colours are fixed.</td></tr>
+              <tr><td>Bounce and overshoot</td><td>It performs, and it deforms a kit piece. Things arrive and stop.</td></tr>
+              <tr><td>Count-up of clinical stats</td><td>No clinical statistics until legal approves real data, and an animated number sells it.</td></tr>
+              <tr><td>Rolling odometer</td><td>Spinning digits read as a slot machine. Count uncovers the final value; the digits never change.</td></tr>
+              <tr><td>Fades and scale on Pivot</td><td>The kit is solid only. A fading or growing piece is a ghost, not a shape.</td></tr>
+              <tr><td>82px display type</td><td>Off the type scale. 70/60 is the homepage hero only; 46/54 for every other hero.</td></tr>
+              <tr><td>Animated disclaimers</td><td>Compliance text must be present on load, never waiting to be revealed.</td></tr>
+              <tr><td>Hero entrance sequences</td><td>The hero must be readable at once: static copy plus one shape entrance.</td></tr>
+              <tr><td>Circular wipe and grow</td><td>Wipe is a straight edge. Growing shapes are not a brand move.</td></tr>
+              <tr><td>Card lifts, shadows, image zoom, 1.02 select</td><td>UI is flat. Link cards fill Deep Teal; selection is a border.</td></tr>
+              <tr><td>Header turning Deep Teal or collapsing</td><td>The header stays Paper at one height; only a hairline appears.</td></tr>
+              <tr><td>Growing underline on menu items</td><td>The main menu uses a Line/Soft pill.</td></tr>
+              <tr><td>Scene crossfades and page transitions</td><td>There are no animated page transitions. Pages load normally.</td></tr>
+              <tr><td>Arc spinner and three dots</td><td>One loader: the capsule (M-023).</td></tr>
+              <tr><td>“.01ms” reduced motion</td><td>It makes infinite loops flicker. Reduced motion sets tokens to zero or removes the animation.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec" id="reduced-motion" aria-labelledby="reduced-motion-h">
+        <div class="sec-head"><h2 id="reduced-motion-h">Reduced motion means no motion.</h2><p>When the operating system asks for reduced motion, unifiedmeds does not shorten its motion. It removes it. Every state still changes; nothing travels.</p></div>
+        <div class="grid-2">
+          <div class="rule rule--do"><b>What still happens</b><p>Colours, borders, selection, open and close: all change instantly. The intent delay (100ms), close delay (150ms), loader delay (400ms) and the assessment’s 320ms auto-advance pause stay, because they protect his intent and are not motion. Every block is visible at load. The loader shows a still capsule, half filled, with its sentence.</p></div>
+          <div class="rule rule--dont"><b>What stops</b><p>Every movement: lift, rise, drop, Pivot, Wipe, Count, stagger, slides. Smooth scrolling (<code>scroll-behavior: auto</code>). The loader’s fill cycle. Fold drift and turn, landing-page moments. Any animation started by script.</p></div>
+        </div>
+        <div class="prose">
+          <p>brand.css does most of the work. Inside <code>@media (prefers-reduced-motion: reduce)</code> it sets every <code>--motion-duration-*</code> (except the loader) to <code>0ms</code>, every <code>--motion-distance-*</code> to <code>0px</code>, both staggers to <code>0ms</code> and the drift turn to <code>0deg</code>, so any component built on the tokens becomes instant and still on its own. Two things need code of their own:</p>
+          <ul>
+            
+            <li><b>The loader.</b> Set <code>animation: none</code> on the fill and show it at half (<code>transform: scaleX(0.5)</code>), with the sentence.</li>
+            <li><b>Script.</b> Check the preference before smooth scrolling, before adding a Reveal’s hidden state, and before starting any animation. Listen for changes.</li>
+          </ul>
+        </div>
+<pre><code>const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+target.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' });
+if (!reduce.matches) observeReveals();   // never hide content when motion is off</code></pre>
+        <div class="prose">
+          <p><b>Never</b> fake it with <code>0.01ms</code> durations or iteration tricks, never ignore the setting in demos, and never let reduced motion hide content or change the order of anything.</p>
+          <p><b>Test it.</b> macOS: System Settings › Accessibility › Display › Reduce motion. iOS: Settings › Accessibility › Motion › Reduce Motion. Windows 11: Settings › Accessibility › Visual effects › Animation effects (off). Chrome DevTools: Rendering › Emulate CSS media feature <code>prefers-reduced-motion</code>. The demos on this page follow your setting, and the “Preview reduced motion” control shows the result without changing it.</p>
+        </div>
+      </section>
+
+<script>
+/* Motion demos: play once in view, Replay, slow motion (4×), reduced-motion preview. */
+(function () {
+  var lab = document.getElementById('mlab');
+  if (!lab) return;
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var slow = document.getElementById('ctl-slow');
+  var rm = document.getElementById('ctl-rm');
+  var note = document.getElementById('ctl-note');
+  var stages = document.querySelectorAll('[data-seq]');
+
+  function play(el) {
+    if (!el) return;
+    (el._t || []).forEach(clearTimeout);
+    el._t = [];
+    var k = lab.classList.contains('is-slow') ? 4 : 1;
+    el.getAttribute('data-seq').split(' ').forEach(function (step) {
+      var p = step.split('@');
+      var go = function () { el.setAttribute('data-state', p[0]); void el.offsetWidth; };
+      if (+p[1] === 0) go(); else el._t.push(setTimeout(go, +p[1] * k));
+    });
+  }
+  function setRm(on) {
+    lab.classList.toggle('is-rm', on);
+    rm.setAttribute('aria-pressed', String(on));
+  }
+  function sync() {
+    rm.disabled = mq.matches;
+    note.hidden = !mq.matches;
+    if (mq.matches) setRm(true);
+  }
+  sync();
+  if (mq.addEventListener) mq.addEventListener('change', sync);
+
+  slow.addEventListener('click', function () {
+    slow.setAttribute('aria-pressed', String(lab.classList.toggle('is-slow')));
+  });
+  rm.addEventListener('click', function () { setRm(!lab.classList.contains('is-rm')); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-play]');
+    if (b) play(document.getElementById(b.getAttribute('data-play')));
+  });
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { io.unobserve(en.target); play(en.target); }
+      });
+    }, { threshold: 0.5 });
+    stages.forEach(function (s) { io.observe(s); });
+  }
+})();
+</script>

@@ -1,0 +1,96 @@
+<style>
+  .glance { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--space-4); }
+  .glance .specimen { align-content: start; }
+  .t-hero { font: var(--type-desktop-hero-weight) var(--type-desktop-hero-size) / var(--type-desktop-hero-line) var(--type-desktop-hero-family); color: var(--color-text-strong); }
+  .t-body { color: var(--color-text-primary); }
+  @media (max-width: 767px) { .t-hero { font: var(--type-mobile-hero-weight) var(--type-mobile-hero-size) / var(--type-mobile-hero-line) var(--type-mobile-hero-family); } }
+  .lockup img { height: var(--space-14); width: auto; }
+  .strip { display: grid; height: var(--space-12); border-radius: var(--radius-small); overflow: hidden; }
+  .strip--site { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+  .strip--logo { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .strip--product { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .strip i { display: block; }
+  .authority { counter-reset: a; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .authority li { counter-increment: a; display: grid; grid-template-columns: var(--size-tap-min) minmax(0, 1fr); gap: var(--space-4); align-items: start; padding: var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .authority li::before { content: counter(a); display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: 50%; background: var(--color-brand-deep-teal); color: var(--color-text-on-dark); font: 400 var(--type-desktop-card-serif-size) / 1 var(--font-family-serif); }
+  .authority b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  .authority span { color: var(--color-text-secondary); }
+  @media (max-width: 1023px) { .glance { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 767px) { .lockup img { height: var(--space-12); } }
+
+  .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .ways .rule b { display: block; }
+  .latest { display: grid; gap: var(--space-4); }
+  .latest article { display: grid; gap: var(--space-2); padding: var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .latest ul { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-1); color: var(--color-text-secondary); }
+  @media (max-width: 1023px) { .ways { grid-template-columns: minmax(0, 1fr); } }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">unifiedmeds Brand Hub</span>
+        <h1>One brand, one place.</h1>
+        <p class="lead">Every rule, value, asset and output of unifiedmeds lives here: the brand, the visual system, the website, the care journey and marketing. Use the menu, or search for anything with <kbd>⌘K</kbd>.</p>
+        <nav class="toc" aria-label="On this page"><a href="#works">How this hub works</a><a href="#glance">The brand at a glance</a><a href="#ov-start">Every page</a><a href="#latest">Latest changes</a></nav>
+      </header>
+
+      <section class="sec" id="works" aria-labelledby="works-h">
+        <div class="sec-head"><h2 id="works-h">How this hub works.</h2><p>Three things to know before you use anything here.</p></div>
+        <div class="ways">
+          <div class="rule"><b>Decided rules and tokens win.</b><p>Every rule is in the <a class="link" href="rulebook.html">rulebook</a>, every value in <a class="link" href="tokens/tokens.json">tokens.json</a>. When a page, a file or a Figma frame disagrees, the rule wins (R-01).</p></div>
+          <div class="rule"><b>Figma follows the rules.</b><p>Our own Figma files are kept in sync with the rules and tokens. The designer's files are read only and are the source only for what is not decided yet.</p></div>
+          <div class="rule"><b>Marked when not final.</b><p>A yellow dot in the menu, or a "Proposed" label on a page, means waiting for approval. Placeholder photos read "Not approved · to replace".</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="glance" aria-labelledby="glance-h">
+        <div class="sec-head">
+          <h2 id="glance-h">The brand at a glance.</h2>
+          <p>A men's health telehealth brand that launches with Sexual health. Masculine, on the gentle side.</p>
+        </div>
+        <div class="glance">
+          <div class="specimen">
+            <div class="lockup"><img src="assets/brand/logo-seal.svg" width="154" height="56" alt="unifiedmeds primary seal"></div>
+            <div class="strip strip--site" aria-label="Website palette">
+              <i style="background: var(--color-brand-deep-teal)" title="Deep Teal"></i>
+              <i style="background: var(--color-brand-teal-deep)" title="Teal Deep"></i>
+              <i style="background: var(--color-brand-blue-dark)" title="Blue Dark"></i>
+              <i style="background: var(--color-brand-blue)" title="Blue"></i>
+              <i style="background: var(--color-brand-green)" title="Green"></i>
+              <i style="background: var(--color-brand-yellow)" title="Yellow"></i>
+              <i style="background: var(--color-surface-wash-blue)" title="Wash Blue"></i>
+              <i style="background: var(--color-surface-mist)" title="Mist"></i>
+              <i style="background: var(--color-surface-paper); box-shadow: inset 0 0 0 1px var(--color-line-base)" title="Paper"></i>
+            </div>
+            <p class="cap">Website palette: Deep Teal · Teal Deep · Blue Dark · Blue · Green · Yellow · Wash Blue · Mist · Paper.</p>
+            <div class="strip strip--logo" aria-label="Logo colours">
+              <i style="background: var(--color-logo-navy)" title="Navy"></i>
+              <i style="background: var(--color-logo-ink)" title="Ink"></i>
+              <i style="background: var(--color-logo-blue)" title="Logo Blue"></i>
+              <i style="background: var(--color-logo-sky)" title="Sky"></i>
+              <i style="background: var(--color-logo-cream)" title="Cream"></i>
+            </div>
+            <p class="cap">Logo colours, for the logo, app icon and favicon only: Navy · Ink · Logo Blue · Sky · Cream.</p>
+            <div class="strip strip--product" aria-label="Product colours">
+              <i style="background: var(--color-product-tadalafil)" title="Tadalafil"></i>
+              <i style="background: var(--color-product-sildenafil)" title="Sildenafil"></i>
+              <i style="background: var(--color-product-combo)" title="Combo"></i>
+            </div>
+            <p class="cap">Product colours: on labels and packaging, and on the website as a dot or an edge that marks the product (R-85): Tadalafil · Sildenafil · Combo.</p>
+          </div>
+          <div class="specimen specimen--mist">
+            <p class="t-hero">Feel more like yourself.</p>
+            <p class="t-body">DM Serif Display for editorial moments, Inter for everything else.</p>
+            <div class="specimen-row">
+              <a class="btn" href="components.html">Get started</a>
+              <a class="btn btn--outline" href="components.html">Explore treatments</a>
+            </div>
+            <p class="cap">Every button is 50px high, with 5px corners and 24px side padding.</p>
+          </div>
+        </div>
+      </section>
+
+<!--PAGE-CARDS-->
+
+      <section class="sec" id="latest" aria-labelledby="latest-h">
+        <div class="sec-head"><h2 id="latest-h">Latest changes.</h2><p>The three newest entries of the <a class="link" href="changelog.html">changelog</a>.</p></div>
+        <div class="latest"><!--LATEST--></div>
+      </section>

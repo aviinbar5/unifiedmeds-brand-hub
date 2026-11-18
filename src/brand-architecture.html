@@ -1,0 +1,209 @@
+<style>
+  .tree { display: grid; gap: var(--space-4); }
+  .tier { display: grid; grid-template-columns: calc(var(--space-24) * 2) minmax(0, 1fr); gap: var(--space-4); align-items: stretch; }
+  .tier > b { display: grid; align-content: center; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); text-transform: uppercase; letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+  .tier-row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-3); }
+  .node { display: grid; gap: var(--space-1); align-content: start; padding: var(--space-4) var(--space-5); border-radius: var(--radius-card); background: var(--color-surface-card); border: 1px solid var(--color-line-base); min-width: 0; }
+  .node small { color: var(--color-text-secondary); font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); }
+  .node--master { background: var(--color-brand-deep-teal); border-color: transparent; color: var(--color-text-on-dark); }
+  .node--master small { color: var(--color-text-on-dark-muted); }
+  .node--master img { height: var(--space-8); width: auto; }
+  .node--later { background: var(--color-surface-mist); border-style: dashed; }
+  .node--later small, .node--later span { color: var(--color-text-secondary-on-mist); }
+  .node b { color: var(--color-text-strong); }
+  .node--master b { color: var(--color-text-on-dark); }
+  .bottles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .bottles figure { margin: 0; display: grid; grid-row: span 2; grid-template-rows: subgrid; gap: var(--space-3); padding: var(--space-5); border-radius: var(--radius-card); background: var(--color-surface-mist); }
+  .bottles img { justify-self: center; height: calc(var(--space-24) * 2.4); width: auto; }
+  .bottles figcaption { display: grid; gap: var(--space-1); }
+  .bottles figcaption b { font: var(--type-desktop-h3-weight) var(--type-desktop-h3-size) / var(--type-desktop-h3-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .bottles figcaption span { color: var(--color-text-secondary-on-mist); }
+  .mob { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--space-24) * 3.25); gap: var(--space-6); align-items: start; }
+  .mob-frame { justify-self: center; width: calc(var(--space-24) * 3.25); max-width: 100%; padding: var(--space-4); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-mist); display: grid; gap: var(--space-3); }
+  .mob-frame .mob-cap { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); text-transform: uppercase; letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary-on-mist); }
+  .mob-card { display: grid; grid-template-columns: calc(var(--space-12) * 1.5) minmax(0, 1fr); gap: var(--space-3); align-items: center; padding: var(--space-3); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .mob-card img { width: 100%; height: auto; }
+  .mob-card b { font: var(--type-mobile-card-serif-weight, 400) var(--type-mobile-card-serif-size) / 1.15 var(--font-family-serif); color: var(--color-text-strong); }
+  .mob-card span { display: block; color: var(--color-text-secondary); font-size: var(--type-mobile-compact-size); }
+  .say { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); counter-reset: s; }
+  .steps li { counter-increment: s; display: grid; gap: var(--space-2); align-content: start; padding: var(--space-5); border-radius: var(--radius-card); border: 1px solid var(--color-line-base); background: var(--color-surface-card); }
+  .steps li::before { content: counter(s); display: grid; place-items: center; width: var(--space-8); height: var(--space-8); border-radius: var(--radius-pill); background: var(--color-surface-wash-blue); color: var(--color-brand-teal-deep); font-weight: 600; }
+  .steps b { color: var(--color-text-strong); }
+  .cat-card { display: grid; gap: var(--space-3); align-content: start; }
+  .cat-card .status { justify-self: start; }
+  .cat-card h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--type-desktop-card-serif-family); color: var(--color-text-strong); }
+  .cat-card ul { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-1); }
+  @media (max-width: 767px) { .cat-card h3 { font-size: var(--type-mobile-card-serif-size); line-height: var(--type-mobile-card-serif-line); } }
+  @media (max-width: 1023px) {
+    .tier { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+    .tier-row { grid-auto-flow: row; }
+    .bottles, .say, .steps, .mob { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Brand</span>
+        <h1>Brand architecture and naming.</h1>
+        <p class="lead">How the master brand, its categories, its products and its plans relate, how each one is written on desktop and on a phone, and how a new product gets its name. One brand the member trusts; product names that say what the product is and never promise a result (R-108). Who the brand is: <a class="link" href="brand.html">Who we are</a>. How the press writes the name: <a class="link" href="media-kit.html#usage">Media kit</a>.</p>
+        <nav class="toc" aria-label="On this page"><a href="#structure">Structure</a><a href="#categories">Categories</a><a href="#launch">Launch products</a><a href="#write">Writing names</a><a href="#mobile">On a phone</a><a href="#new">New names</a><a href="#never">Never in a name</a><a href="#open">Open items</a></nav>
+      </header>
+
+      <div class="rule"><span class="status status--current">Current · R-06, R-108</span><p>The launch products are <b>Tadalafil</b>, <b>Sildenafil</b> and <b>Combo</b> (U-21). The names on the Recommendation page in the website Figma (UM Passion, UM+, Generic Cialis) are not used; that page is on the designer's update list. The naming rules on this page are R-108.</p></div>
+
+      <section class="sec" id="structure" aria-labelledby="structure-h">
+        <div class="sec-head"><h2 id="structure-h">One master brand, four levels.</h2><p>A branded house: unifiedmeds is the only brand the member has to trust. Categories describe, products say what they are, plans are choices, never names.</p></div>
+        <div class="tree" role="list" aria-label="Brand architecture">
+          <div class="tier" role="listitem"><b>Master brand</b><div class="tier-row"><div class="node node--master"><img src="assets/brand/logo-horizontal-reversed.svg" alt="unifiedmeds" width="198" height="32"><small>The service: assessment, licensed provider, treatment, delivery, care. Always lowercase (R-07).</small></div></div></div>
+          <div class="tier" role="listitem"><b>Category</b><div class="tier-row">
+            <div class="node"><b>Sexual health</b><small>Launch (U-04). Descriptive, never branded. "Better Intimacy" only as an editorial hero title (R-08).</small></div>
+            <div class="node node--later"><b>Longevity</b><small>Phase 2. Legal review required (R-87).</small></div>
+            <div class="node node--later"><b>Hair loss</b><small>Phase 2. Legal review required (R-87).</small></div>
+          </div></div>
+          <div class="tier" role="listitem"><b>Product</b><div class="tier-row">
+            <div class="node"><b>Single medicines</b><small>Named by the medicine, then strength and form: “Tadalafil, 20 mg tablets”. Never a reference brand name.</small></div>
+            <div class="node"><b>Combinations</b><small>A product that combines medicines gets a plain descriptive name: Combo. Its ingredients are always written under the name.</small></div>
+          </div></div>
+          <div class="tier" role="listitem"><b>Plan</b><div class="tier-row">
+            <div class="node"><b>How and how often</b><small>Daily or As needed; every month, every 3 months or every 6 months (Q100, U-32). Plain descriptors in sentence case, never a product name or a tier like “Pro” or “Gold”.</small></div>
+          </div></div>
+        </div>
+      </section>
+
+      <section class="sec" id="categories" aria-labelledby="categories-h">
+        <div class="sec-head"><h2 id="categories-h">Categories.</h2><p>Each category, its products and its colour, and the rules for adding one.</p></div>
+        <div class="grid-3">
+          <article class="card cat-card">
+            <span class="status status--current">Current</span>
+            <h3>Sexual health</h3>
+            <p class="cap">Nav label and category name. "Better Intimacy" is used only as the editorial hero title of the category page.</p>
+            <ul>
+              <li>Tadalafil</li>
+              <li>Sildenafil</li>
+              <li>Combo</li>
+            </ul>
+            <p class="cap">Launch catalogue (R-06, U-21). Category colour Deep Teal (R-117). Figma: <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ?node-id=2708-1034">category page 2708-1034</a>.</p>
+            <p class="cap"><span class="status status--planned">Planned</span> PT-141, not in the launch catalogue (R-85).</p>
+          </article>
+          <article class="card cat-card">
+            <span class="status status--planned">Phase 2</span>
+            <h3>Hair loss</h3>
+            <ul>
+              <li>Finasteride</li>
+              <li>Hair Growth Spray</li>
+            </ul>
+            <p class="cap">Category colour Sky (R-117). Designed in Figma: <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/?node-id=2076-10934">category page 2076-10934</a>. Product pages carry “Legal review required” (R-87).</p>
+          </article>
+          <article class="card cat-card">
+            <span class="status status--planned">Phase 2</span>
+            <h3>Longevity</h3>
+            <ul>
+              <li>NAD+ Capsules</li>
+              <li>NAD+ injection</li>
+              <li>Metformin</li>
+            </ul>
+            <p class="cap">Category colour Forest (R-117). Designed in Figma: <a href="https://www.figma.com/design/h7D0eRszARBaWdJT1NWrpZ/?node-id=2076-9857">category page 2076-9857</a>. Product pages carry “Legal review required” (R-87).</p>
+          </article>
+        </div>
+
+        <div class="sub">
+          <h3>Rules for adding a category</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">#</th><th scope="col">Rule</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><b>One nav item.</b> The category gets one item in the main menu, built exactly like “Sexual health ▾” (Main menu v3): a dropdown with its product names only, no meta line (U-31), and a “View all” link. The name is in sentence case. Phase 2 uses the full menu (Figma 2641:14411) with Longevity, Sexual health, Hair loss and Help. Its wording is <span class="status status--proposed">To confirm</span> (O-10).</td></tr>
+                <tr><td>2</td><td><b>One category page template.</b> Every category page reuses the Sexual health category layout (Figma 2708-1034). No new section types per category.</td></tr>
+                <tr><td>3</td><td><b>One hero.</b> One hero per category page, Hero 46/54 (<code>--type-desktop-hero-*</code>). It may carry an editorial title, as "Better Intimacy" does; the nav and the category label keep the plain name.</td></tr>
+                <tr><td>4</td><td><b>Core palette, plus one category colour.</b> Every category uses the core tokens, and its category colour marks its own pages: Sexual health Deep Teal, Longevity Forest, Hair loss Sky (R-117, the same as the label grounds). No pink theme. The master brand is never recoloured.</td></tr>
+                <tr><td>5</td><td><b>Status first.</b> A Phase 2 category never appears in the live nav before Avi approves its launch and legal approves its product pages.</td></tr>
+                <tr><td>6</td><td><b>Products for women.</b> Some planned products serve women. They sit in the same categories and the same brand; only the photography casting changes. <span class="status status--proposed">To confirm</span> Which products.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="sec" id="launch" aria-labelledby="launch-h">
+        <div class="sec-head"><h2 id="launch-h">The three launch products.</h2><p>Each product has its own capsule colour on the label (R-85). On the website the product colour marks its own product with a dot or an edge and never carries text (U-28). The bottles below use the label master (R-89); strengths are open until the clinical team confirms them.</p></div>
+        <div class="bottles">
+          <figure><img src="assets/packaging/bottle-tadalafil.png" alt="Tadalafil bottle" width="496" height="800" loading="lazy"><figcaption><b>Tadalafil</b><span>Single medicine: “Tadalafil, [DOSE] tablets”. Capsule colour Sky.</span></figcaption></figure>
+          <figure><img src="assets/packaging/bottle-sildenafil.png" alt="Sildenafil bottle" width="496" height="800" loading="lazy"><figcaption><b>Sildenafil</b><span>Single medicine: “Sildenafil, [DOSE] tablets”. Capsule colour Coral.</span></figcaption></figure>
+          <figure><img src="assets/packaging/bottle-combo.png" alt="Combo bottle" width="496" height="800" loading="lazy"><figcaption><b>Combo</b><span>Combination: “Combo”, [ingredients · clinical team] written under it. Capsule colour Aqua.</span></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="sec" id="write" aria-labelledby="write-h">
+        <div class="sec-head"><h2 id="write-h">How every name is written.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Level</th><th>Written</th><th>Never</th><th>URL slug and tracking</th></tr></thead>
+          <tbody>
+            <tr><td>Master brand</td><td>unifiedmeds</td><td>Unifiedmeds, UnifiedMeds, Unified Meds, unified meds, UNIFIEDMEDS, “UM” as a short name for the company</td><td>unifiedmeds</td></tr>
+            <tr><td>Category</td><td>Sexual health</td><td>Sexual Health, ED, Men's issues</td><td>sexual-health</td></tr>
+            <tr><td>Single medicine</td><td>Tadalafil · Sildenafil as a title; tadalafil · sildenafil in running text, mid-sentence; then strength and form: “Tadalafil, 20 mg tablets” (number, space, unit: “5 mg”, never “5mg”). On labels: “20 mg · Tablets” (R-89)</td><td>Generic Cialis, Generic Viagra, “like Cialis”, all capitals</td><td>tadalafil · sildenafil</td></tr>
+            <tr><td>Combination</td><td>Combo, also in running text; its ingredients written under it</td><td>COMBO, The Combo, Combo Pack, Trio, Trio combo, Sync</td><td>combo</td></tr>
+            <tr><td>Plan</td><td>Daily · As needed · Every month · Every 3 months · Every 6 months</td><td>Daily Plan®, Power pack, Pro, Gold, Most popular, Best value</td><td>daily · as-needed · 1-month · 3-month · 6-month</td></tr>
+          </tbody>
+        </table></div>
+        <div class="say">
+          <div class="rule rule--do"><b>First mention carries what it is.</b><p>"Combo, a tablet with [ingredients]." "Tadalafil, 20 mg tablets." Then the name alone. Safety information is one tap away (R-65, R-66).</p></div>
+          <div class="rule rule--do"><b>The company is always unifiedmeds.</b><p>The letters “UM” are never used for the company: not alone, not in a headline, not as a logo. This is about the letters in copy; the u|m mark of the app icon is part of the logo and is used as the logo rules say (R-93, R-110).</p></div>
+          <div class="rule rule--dont"><b>No product name in a hero or an ad.</b><p>R-65: product names appear on product pages with safety information and in the navigation only.</p></div>
+          <div class="rule rule--dont"><b>No product name where the inbox can see it.</b><p>Email subjects, previews, the mailer and push notifications use "your treatment", never a product name.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="mobile" aria-labelledby="mobile-h">
+        <div class="sec-head"><h2 id="mobile-h">Names on a phone.</h2><p>The three names are short on purpose: each fits one line on a 390 wide screen at every size we use. The line under the name may wrap; the name never does.</p></div>
+        <div class="mob">
+          <div class="table-wrap"><table>
+            <thead><tr><th>Where</th><th>Desktop</th><th>Mobile</th><th>Rule</th></tr></thead>
+            <tbody>
+              <tr><td>Product card title</td><td>DM Serif 24px (card serif)</td><td>DM Serif 21px (card serif)</td><td>One line. Strength and form below in Inter, may wrap to two lines. Card action “Learn more”.</td></tr>
+              <tr><td>Navigation dropdown</td><td>Inter 15px, one row each</td><td>Inter 16px, full-width rows, 48px tall</td><td>Name only: no strength, no meta line (U-31). Tap target 44px minimum.</td></tr>
+              <tr><td>Product page title</td><td>DM Serif 46px at most</td><td>DM Serif 34px</td><td>Not a hero size: the page title uses the page scale (R-20), never 52. The name alone on its line, no claim, price or benefit beside it (R-58, R-61, R-65); the ingredients line follows in Inter.</td></tr>
+              <tr><td>Label (print)</td><td>Same art on every screen</td><td>Shown at 50% width or more, never cropped</td><td>The name stays legible: 21px or larger on screen.</td></tr>
+              <tr><td>Recommendation after the assessment</td><td>Three cards in a row</td><td>One card per row, bottle left, name right</td><td>The matching card says “Matches your answers” with “Your provider makes the final decision” (U-29), never “Recommended for you” alone. It is the only Yellow moment (R-11).</td></tr>
+            </tbody>
+          </table></div>
+          <div class="mob-frame" aria-label="Product cards at 390 wide">
+            <span class="mob-cap">Mobile · 390 wide</span>
+            <div class="mob-card"><img src="assets/packaging/bottle-tadalafil.png" alt="" width="496" height="800" loading="lazy"><div><b>Tadalafil</b><span>[DOSE] tablets</span></div></div>
+            <div class="mob-card"><img src="assets/packaging/bottle-sildenafil.png" alt="" width="496" height="800" loading="lazy"><div><b>Sildenafil</b><span>[DOSE] tablets</span></div></div>
+            <div class="mob-card"><img src="assets/packaging/bottle-combo.png" alt="" width="496" height="800" loading="lazy"><div><b>Combo</b><span>[ingredients · clinical team]</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="new" aria-labelledby="new-h">
+        <div class="sec-head"><h2 id="new-h">How a new product gets its name.</h2><p>A single medicine is always called by the medicine. A combination gets a short descriptive name, like Combo.</p></div>
+        <ol class="steps">
+          <li><b>Brief.</b><span>What is in it, the form, the category, who it is for. The clinical team confirms the facts.</span></li>
+          <li><b>Long list.</b><span>Plain descriptive candidates. One English word, one or two syllables, easy to say on the phone, one line on a 390 wide screen.</span></li>
+          <li><b>Screen.</b><span>Remove any word on the never list, any word that names the body, a symptom or a result, and any word that reveals the category on a mailer.</span></li>
+          <li><b>Check.</b><span>Trademark search (USPTO, class 5 and 44), existing drug names (FDA), domain and social handles, and no clash with a sound-alike medicine.</span></li>
+          <li><b>Legal.</b><span>Legal and compliance approve the short list in writing, including the line under the name.</span></li>
+          <li><b>Avi decides.</b><span>One name. It goes into brand-rules, the label family (a new capsule colour, R-97) and the product tokens.</span></li>
+        </ol>
+      </section>
+
+      <section class="sec" id="never" aria-labelledby="never-h">
+        <div class="sec-head"><h2 id="never-h">Words that never go in a name.</h2></div>
+        <div class="grid-3">
+          <div class="rule rule--dont"><b>Results and speed.</b><p>Max, Power, Ultra, Instant, Rock, Last, Boost, Strong, Pro. A name is not a promise (R-108).</p></div>
+          <div class="rule rule--dont"><b>The body and the condition.</b><p>Anything anatomical, ED, Erect, Stiff, any pun on the condition. Discretion first (R-108).</p></div>
+          <div class="rule rule--dont"><b>Other brands.</b><p>Cialis, Viagra or any reference brand, any “-like” or “generic of” naming, any sound-alike of a medicine (R-108).</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="open" aria-labelledby="open-h">
+        <div class="sec-head"><h2 id="open-h">Open items.</h2><p>Real open items only. The rules above are current.</p></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Item</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td>What Combo contains, in one line under the name</td><td>Clinical team</td></tr>
+            <tr><td>Strengths of every product ([DOSE]); the Figma Combo label reads 100 mg</td><td>Clinical team</td></tr>
+            <tr><td>Recommendation page in the website Figma still shows UM Passion, UM+ and Generic Cialis: update to Tadalafil, Sildenafil, Combo</td><td>Avi's designer (update list)</td></tr>
+          </tbody>
+        </table></div>
+      </section>

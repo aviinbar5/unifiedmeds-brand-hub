@@ -1,0 +1,190 @@
+<style>
+  .snd-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .snd-card { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: var(--space-3); padding: var(--space-6); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); min-width: 0; }
+  .snd-card h3 { font: var(--type-desktop-card-serif-weight) var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .snd-card p { color: var(--color-text-primary); }
+  .snd-card .cap { align-self: end; }
+  .snd-files td:first-child b { display: block; color: var(--color-text-strong); }
+  .snd-files audio { display: block; width: 100%; min-width: calc(var(--space-24) * 2.5); height: var(--space-10); }
+  .snd-files .ph-tag { margin-top: var(--space-1); }
+  .snd-caption { caption-side: bottom; text-align: left; padding: var(--space-3) var(--space-4); }
+  .snd-list { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-2); }
+  .snd-list b { color: var(--color-text-strong); font-weight: 600; }
+  .snd-mood { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .snd-mood span { display: inline-flex; align-items: center; min-height: var(--space-8); padding: 0 var(--space-3); border-radius: var(--radius-pill); background: var(--color-surface-mist); color: var(--color-text-strong); font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); }
+  @media (max-width: 1023px) { .snd-cards { grid-template-columns: minmax(0, 1fr); } .snd-card { grid-row: auto; grid-template-rows: none; } }
+  @media (max-width: 767px) {
+    .snd-files thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .snd-files table, .snd-files tbody, .snd-files tr, .snd-files td { display: block; width: 100%; }
+    .snd-files tr { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-line-base); }
+    .snd-files tr:last-child { border-bottom: 0; }
+    .snd-files td { border-bottom: 0; padding: var(--space-1) var(--space-4); }
+    .snd-files td[data-label]::before { content: attr(data-label) ": "; font-weight: 600; color: var(--color-text-strong); }
+    .snd-files audio { min-width: 0; }
+  }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">System</span>
+        <h1>Sonic branding.</h1>
+        <p class="lead">How unifiedmeds sounds: the short sting sound, the few sounds the product may make, and sound in videos. Quiet by design. A member may be on a train, at work or at home with family, so the brand never makes a sound he did not ask for, and no sound says what he is treated for.</p>
+        <nav class="toc" aria-label="On this page"><a href="#principles">Principles</a><a href="#sting">Sting sound</a><a href="#product">Product sounds</a><a href="#files">Files</a><a href="#video">Sound in videos</a><a href="#dodont">Do and don't</a><a href="#open">Open items</a></nav>
+      </header>
+
+      <div class="rule"><span class="status status--proposed">Proposed</span><p>Every sound file on this page is a prototype, synthesised in code from the notes of the approved logo stings. It shows the idea, length and level. A sound designer produces the final files before anything ships. No sound rule is in the rulebook yet; once Avi approves this page, its principles become numbered rules. The stings themselves are on <a class="link" href="videos.html#sting">Videos</a>; every file here is also on <a class="link" href="downloads.html#sound">Downloads</a>.</p></div>
+
+      <section class="sec" id="principles" aria-labelledby="principles-h">
+        <div class="sec-head"><h2 id="principles-h">Principles.</h2><p>Sound follows the motion principle: "Motion confirms, it never performs" (R-49).</p></div>
+        <div class="grid-3">
+          <div class="rule"><b>Sound confirms.</b><p>A sound marks something that happened: an order placed, a message arrived. It is never decoration and never runs under a screen.</p></div>
+          <div class="rule"><b>Calm and warm.</b><p>Soft bell and sine tones in C major, a gentle attack, a short tail. No buzzers, alarms or bright synth leads.</p></div>
+          <div class="rule"><b>Short.</b><p>The sting sound stays under 2 seconds. A product sound stays under 1 second.</p></div>
+          <div class="rule"><b>Private.</b><p>Nothing hints at a condition or a body. Nothing is loud or distinctive enough to make the people nearby look up.</p></div>
+          <div class="rule"><b>Always optional.</b><p>The product is silent by default. On the web nothing plays with sound until the visitor presses play.</p></div>
+          <div class="rule"><b>Captions always.</b><p>Every spoken word is captioned. Every video makes sense with the sound off.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="sting" aria-labelledby="sting-h">
+        <div class="sec-head"><h2 id="sting-h">The sting sound.</h2><p>The three approved logo stings (R-101, <a class="link" href="videos.html">Videos</a>) are 8 seconds long and carry their own sound. The sting sound is their short form, under 2 seconds, for places too short for a full sting: the end of a 6-second social cut, an audio ad, a podcast read. All three versions share one signature: a soft click as the two halves meet, then two rising bell notes, G and the C above it, over a quiet C major chord.</p></div>
+        <div class="snd-cards">
+          <article class="snd-card">
+            <h3>B · Two halves</h3>
+            <p>Two soft rushes of air from both sides, the click and a low, soft thump as the halves meet, then the two notes. The default.</p>
+            <p class="cap">Pairs with sting B. 1.8 seconds. <a class="link" href="#files">Listen in Files</a>.</p>
+          </article>
+          <article class="snd-card">
+            <h3>C1 · From u</h3>
+            <p>A soft tone rises as the u turns on its hinge, a lighter click as it closes, then the two notes. For brand and story moments.</p>
+            <p class="cap">Pairs with sting C1. 1.85 seconds. <a class="link" href="#files">Listen in Files</a>.</p>
+          </article>
+          <article class="snd-card">
+            <h3>C2 · From u + m</h3>
+            <p>Two quiet notes for the u and the m, a short rush as they turn, the click, then the two notes. For short social openers.</p>
+            <p class="cap">Pairs with sting C2. 1.9 seconds. <a class="link" href="#files">Listen in Files</a>.</p>
+          </article>
+        </div>
+        <div class="table-wrap"><table>
+          <caption class="cap snd-caption">Times are seconds from the start of each file. Notes are the same as in the 8-second stings, so the short and long forms belong together.</caption>
+          <thead><tr><th scope="col">Moment</th><th scope="col">B</th><th scope="col">C1</th><th scope="col">C2</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Approach</th><td>Two rushes of air, 0 to 0.46</td><td>A rising tone, G4 to C5, 0 to 0.6</td><td>Notes G4 and B4 at 0.02 and 0.18, a rush to 0.62</td></tr>
+            <tr><th scope="row">Contact</th><td>Click and thump at 0.46</td><td>Click and thump at 0.58</td><td>Click and thump at 0.62</td></tr>
+            <tr><th scope="row">Signature</th><td>G5 at 0.78, C6 at 0.98</td><td>G5 at 0.86, C6 at 1.06</td><td>G5 at 0.90, C6 at 1.10</td></tr>
+            <tr><th scope="row">Tail</th><td>C major 9 chord, gone by 1.8</td><td>Gone by 1.85</td><td>Gone by 1.9</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="product" aria-labelledby="product-h">
+        <div class="sec-head"><h2 id="product-h">Product sounds.</h2><p>The product is silent by default. These three sounds exist for members who turn sounds on in the app, and nowhere else.</p></div>
+        <div class="grid-2">
+          <div class="rule rule--do"><b>Silent by default.</b><p>The app and the website make no sound unless the member turns sounds on in settings. One switch covers all of them.</p></div>
+          <div class="rule rule--do"><b>Push notifications use the system sound.</b><p>A push uses the phone's default sound and vibration. A unifiedmeds sound plays only if the member chooses it, because a sound people learn to recognise tells them which app it is.</p></div>
+          <div class="rule rule--dont"><b>Never a sound that tells.</b><p>No sound, file name or notification text names a condition, a medicine or a body part. File names stay neutral: confirm, message, error.</p></div>
+          <div class="rule rule--dont"><b>Never in the assessment or checkout.</b><p>No sound during the assessment, at payment or on any web page. Errors in a form are shown, never heard.</p></div>
+        </div>
+        <div class="snd-cards">
+          <article class="snd-card">
+            <h3>Confirm</h3>
+            <p>The brand's two notes, small and fast: G then C. After an action the member took: order placed, refill confirmed.</p>
+            <p class="cap">0.55 seconds. In app only, when sounds are on.</p>
+          </article>
+          <article class="snd-card">
+            <h3>Message from your provider</h3>
+            <p>An open, unhurried C then G with a soft tail. A new message from the care team while the app is open, or as the chosen push sound.</p>
+            <p class="cap">0.95 seconds. The only sound offered for push.</p>
+          </article>
+          <article class="snd-card">
+            <h3>Gentle error</h3>
+            <p>A soft falling step, D to C, sine only and quiet. Something did not go through: a payment or an upload.</p>
+            <p class="cap">0.5 seconds. Never a buzz, never repeated.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="files" aria-labelledby="files-h">
+        <div class="sec-head"><h2 id="files-h">Files.</h2><p>WAV, 44.1 kHz, mono, 16-bit, peak at about -3 dBFS, with short fades. The players load nothing until you press play. The code that makes them, <a class="link" href="assets/sound/build_sounds.py" download>build_sounds.py</a>, is the brief for the sound designer.</p></div>
+        <div class="table-wrap snd-files"><table>
+          <thead><tr><th scope="col">Name</th><th scope="col">Use</th><th scope="col">Length</th><th scope="col">File</th><th scope="col">Listen</th></tr></thead>
+          <tbody>
+            <tr><td><b>Sting sound B</b><span class="ph-tag">Prototype, to be produced by a sound designer</span></td><td data-label="Use">End or start of short videos with sting B; audio ads</td><td data-label="Length">1.80 s</td><td data-label="File"><a class="link" href="assets/sound/sting-b-prototype.wav" download>sting-b-prototype.wav</a></td><td><audio controls preload="none" src="assets/sound/sting-b-prototype.wav" aria-label="Play sting sound B, prototype"></audio></td></tr>
+            <tr><td><b>Sting sound C1</b><span class="ph-tag">Prototype, to be produced by a sound designer</span></td><td data-label="Use">Brand and story pieces with sting C1</td><td data-label="Length">1.85 s</td><td data-label="File"><a class="link" href="assets/sound/sting-c1-prototype.wav" download>sting-c1-prototype.wav</a></td><td><audio controls preload="none" src="assets/sound/sting-c1-prototype.wav" aria-label="Play sting sound C1, prototype"></audio></td></tr>
+            <tr><td><b>Sting sound C2</b><span class="ph-tag">Prototype, to be produced by a sound designer</span></td><td data-label="Use">Short social openers with sting C2</td><td data-label="Length">1.90 s</td><td data-label="File"><a class="link" href="assets/sound/sting-c2-prototype.wav" download>sting-c2-prototype.wav</a></td><td><audio controls preload="none" src="assets/sound/sting-c2-prototype.wav" aria-label="Play sting sound C2, prototype"></audio></td></tr>
+            <tr><td><b>Confirm</b><span class="ph-tag">Prototype, to be produced by a sound designer</span></td><td data-label="Use">In app, after an action the member took</td><td data-label="Length">0.55 s</td><td data-label="File"><a class="link" href="assets/sound/ui-confirm-prototype.wav" download>ui-confirm-prototype.wav</a></td><td><audio controls preload="none" src="assets/sound/ui-confirm-prototype.wav" aria-label="Play confirm sound, prototype"></audio></td></tr>
+            <tr><td><b>Message</b><span class="ph-tag">Prototype, to be produced by a sound designer</span></td><td data-label="Use">In app, a new message; the opt-in push sound</td><td data-label="Length">0.95 s</td><td data-label="File"><a class="link" href="assets/sound/ui-message-prototype.wav" download>ui-message-prototype.wav</a></td><td><audio controls preload="none" src="assets/sound/ui-message-prototype.wav" aria-label="Play message sound, prototype"></audio></td></tr>
+            <tr><td><b>Gentle error</b><span class="ph-tag">Prototype, to be produced by a sound designer</span></td><td data-label="Use">In app, something did not go through</td><td data-label="Length">0.50 s</td><td data-label="File"><a class="link" href="assets/sound/ui-error-prototype.wav" download>ui-error-prototype.wav</a></td><td><audio controls preload="none" src="assets/sound/ui-error-prototype.wav" aria-label="Play gentle error sound, prototype"></audio></td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="sec" id="video" aria-labelledby="video-h">
+        <div class="sec-head"><h2 id="video-h">Sound in videos.</h2><p>Music, voice and level for every video the brand makes. Silence is allowed: a video with no music at all is on brand.</p></div>
+        <div class="grid-2">
+          <div class="sub">
+            <h3>Music</h3>
+            <ul class="snd-list">
+              <li><b>Tempo.</b> 70 to 96 beats per minute. Steady, never a build to a drop.</li>
+              <li><b>Instruments.</b> Felt or upright piano, soft electric piano, nylon or warm acoustic guitar, round bass, brushed or light hand percussion, soft pads, the brand bells.</li>
+              <li><b>Key.</b> Major keys; C major where the sting sound follows, so it lands in key.</li>
+              <li><b>Level.</b> Music sits well under the voice, about 12 dB lower while anyone speaks.</li>
+              <li><b>Rights.</b> Licensed for every channel and the full term, or commissioned. No trending audio in paid ads.</li>
+            </ul>
+            <div class="snd-mood" aria-label="Mood words"><span>Steady</span><span>Warm</span><span>Unhurried</span><span>Assured</span><span>Discreet</span><span>Adult</span></div>
+          </div>
+          <div class="sub">
+            <h3>Voice</h3>
+            <ul class="snd-list">
+              <li><b>Who.</b> An adult voice that sounds 35 to 60, warm, mid to low, neutral US accent. One voice per piece.</li>
+              <li><b>Pace.</b> About 140 to 160 words per minute: conversational, plain, the way a good provider explains.</li>
+              <li><b>Tone.</b> Never whispered, never suggestive, never a hard sell. No innuendo, ever.</li>
+              <li><b>Legal lines.</b> Any safety or legal line is read at the same pace and level as the rest. Never sped up, never pushed under music.</li>
+              <li><b>Words.</b> The content rules apply to the script: provider, assessment, member; no claims, no numbers without units (R-56 to R-62).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Where it plays</th><th scope="col">Integrated loudness</th><th scope="col">True peak</th><th scope="col">Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Social: Instagram, TikTok, YouTube, Facebook</td><td>-14 LUFS</td><td>-1 dBTP</td><td>Captions burned in; most people watch with the sound off</td></tr>
+            <tr><td>Website and email video</td><td>-16 LUFS</td><td>-1 dBTP</td><td>Autoplay only muted, with visible play and sound controls; captions on</td></tr>
+            <tr><td>Audio ads and podcasts</td><td>-16 LUFS</td><td>-1 dBTP</td><td>The sting sound may open or close the read</td></tr>
+            <tr><td>US broadcast TV, if ever</td><td>-24 LKFS (ATSC A/85)</td><td>-2 dBTP</td><td>Delivery specs come from the network</td></tr>
+            <tr><td>Product sounds</td><td>Not measured</td><td>-3 dBFS in the file</td><td>Played at the phone's notification level, never boosted</td></tr>
+          </tbody>
+        </table></div>
+        <div class="grid-2">
+          <div class="rule"><b>Captions.</b><p>Burned in on social; a caption file (WebVTT) on the web. Inter, sentence case, at most two lines, inside the safe area, on a plain Teal-deep or Paper box so they pass AA on any frame.</p></div>
+          <div class="rule"><b>The sting.</b><p>One sting per video, at the start or the end, never in the middle (R-101). The sting sound plays only with the logo on screen, never on its own under other pictures.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="dodont" aria-labelledby="dodont-h">
+        <div class="sec-head"><h2 id="dodont-h">Do and don't.</h2></div>
+        <div class="dodont">
+          <div class="rule rule--do"><b>Do: stay silent until asked.</b><p>Sound starts only when the member presses play or turns sounds on.</p></div>
+          <div class="rule rule--dont"><b>Don't: play on load or on hover.</b><p>No sound on page load, on scroll, on hover or behind a pop-up.</p></div>
+          <div class="rule rule--do"><b>Do: use the system sound for push.</b><p>The phone's default sound keeps a notification anonymous.</p></div>
+          <div class="rule rule--dont"><b>Don't: ship a branded push sound by default.</b><p>A sound people learn to recognise names the app to everyone in the room.</p></div>
+          <div class="rule rule--do"><b>Do: land the sting at the start or the end.</b><p>One sting per video, with the logo on screen.</p></div>
+          <div class="rule rule--dont"><b>Don't: loop or repeat the sting.</b><p>Never in the middle, never twice, never as a music bed.</p></div>
+          <div class="rule rule--do"><b>Do: caption every word.</b><p>The story works with the sound off.</p></div>
+          <div class="rule rule--dont"><b>Don't: carry meaning in sound alone.</b><p>No message, warning or price that only the voice says.</p></div>
+          <div class="rule rule--do"><b>Do: leave room for silence.</b><p>A pause, room tone or no music at all is on brand.</p></div>
+          <div class="rule rule--dont"><b>Don't: hype or hint.</b><p>No risers, drops, heartbeat or monitor sounds, sultry saxophone, whispers or innuendo.</p></div>
+        </div>
+      </section>
+
+      <section class="sec" id="open" aria-labelledby="open-h">
+        <div class="sec-head"><h2 id="open-h">Open items.</h2></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Item</th><th scope="col">Owner</th></tr></thead>
+          <tbody>
+            <tr><td>One sting sound for all three stings, or one sound per sting</td><td>Avi</td></tr>
+            <tr><td>The voice: male, female, or either per piece</td><td>Avi</td></tr>
+            <tr><td>Whether the app offers product sounds and the opt-in push sound at all</td><td>Avi and product</td></tr>
+            <tr><td>Final sting sound and product sounds, produced from these prototypes; whether the 8-second stings are re-mixed to -14 LUFS</td><td>Sound designer</td></tr>
+            <tr><td>Music source: a licensed library or a commissioned theme; licence terms</td><td>Marketing and legal</td></tr>
+            <tr><td>Haptics in the app (vibration patterns)</td><td>Product, Phase 2</td></tr>
+          </tbody>
+        </table></div>
+      </section>

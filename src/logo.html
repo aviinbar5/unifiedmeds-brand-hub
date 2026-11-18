@@ -1,0 +1,205 @@
+<style>
+  /* logo.html · tokens only */
+  .hero-mark { display: grid; place-items: center; min-height: calc(var(--space-24) * 3); border-radius: var(--radius-card); background: var(--color-logo-cream); padding: var(--space-12); }
+  .hero-mark img { width: min(100%, calc(var(--space-24) * 4)); height: auto; display: block; }
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .tiles figure { margin: 0; display: grid; gap: var(--space-3); align-content: start; }
+  .stage { display: grid; place-items: center; min-height: calc(var(--space-24) * 2); border-radius: var(--radius-small); padding: var(--space-6); overflow: hidden; }
+  .stage img { max-width: 100%; height: auto; display: block; }
+  .stage .w-seal { width: calc(var(--space-24) * 2); }
+  .stage .w-horizontal { width: calc(var(--space-24) * 2 + var(--space-6)); }
+  .stage .w-stacked { width: calc(var(--space-24) + var(--space-12)); }
+  figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+  .bg-paper { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); }
+  .bg-mist { background: var(--color-surface-mist); }
+  .bg-cream { background: var(--color-logo-cream); }
+  .bg-teal { background: var(--color-brand-deep-teal); }
+  .bg-ink { background: var(--color-logo-ink); }
+  .bg-navy { background: var(--color-logo-navy); }
+  .swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-4); }
+  .swatch { display: grid; gap: var(--space-2); }
+  .swatch i { display: block; height: var(--space-18); border-radius: var(--radius-small); }
+  .swatch b { color: var(--color-text-strong); font-weight: 600; }
+  .clear { position: relative; display: inline-grid; place-items: center; padding: var(--space-12); border: 1px dashed var(--color-text-secondary); border-radius: var(--radius-small); background: var(--color-logo-cream); }
+  .clear img { width: calc(var(--space-24) * 2); height: auto; display: block; outline: 1px solid var(--color-line-mid); }
+  .clear .x { position: absolute; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+  .clear .x-top { top: var(--space-4); left: 50%; transform: translateX(-50%); }
+  .clear .x-left { left: var(--space-4); top: 50%; transform: translateY(-50%); }
+  .icons-row { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: flex-end; }
+  .icons-row figure { margin: 0; display: grid; gap: var(--space-2); justify-items: center; }
+  .i120 { width: calc(var(--space-24) + var(--space-6)); } .i48 { width: var(--space-12); } .i32 { width: var(--space-8); } .i16 { width: var(--space-4); }
+  .icons-row img { height: auto; display: block; }
+  .dont .stage { background: var(--color-surface-paper); border: 1px solid var(--color-line-base); border-left: var(--space-1) solid var(--color-brand-coral); }
+  .dont img { width: calc(var(--space-24) + var(--space-12)); }
+  .x-stretch { transform: scaleX(1.5); } .x-rotate { transform: rotate(-12deg); } .x-recolour { filter: hue-rotate(140deg) saturate(2); } .x-shadow { filter: drop-shadow(0 var(--space-2) var(--space-2) var(--color-line-mid)); }
+  .typed { font: 400 var(--type-desktop-section-size) / 1 var(--font-family-serif); color: var(--color-brand-deep-teal); }
+  .files td:first-child { white-space: nowrap; }
+  .bg-white { background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+  .bg-black { background: var(--color-logo-ink); }
+  .stage .w-hor-sm { width: calc(var(--space-24) * 2); }
+  .story-link { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  @media (max-width: 1023px) { .tiles, .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) { .tiles, .swatches { grid-template-columns: minmax(0, 1fr); } .hero-mark { padding: var(--space-6); } }
+</style>
+
+      <header class="page-head">
+        <span class="eyebrow">Brand</span>
+        <h1>Using the logo.</h1>
+        <p class="lead">The capsule seal: “unified” bold in the filled half, “meds” regular in the open half. Care comes together in one capsule, and treatment is one half of it. This page is how to use it: lockups, light and dark, colours, clear space, minimum sizes, allowed and not allowed, files and stings. The idea and how it was chosen: <a class="link" href="logo-story.html">The logo story</a>.</p>
+        <nav class="toc" aria-label="On this page">
+          <a href="#lockups">Lockups</a>
+          <a href="#versions">Light and dark</a>
+          <a href="#colours">Logo colours</a>
+          <a href="#space">Clear space</a>
+          <a href="#sizes">Minimum sizes</a>
+          <a href="#icon">App icon and favicon</a>
+          <a href="#misuse">Not allowed</a>
+          <a href="#stings">Stings</a>
+          <a href="#files">Files</a>
+        </nav>
+      </header>
+
+      <div class="hero-mark"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds primary seal"></div>
+
+      <section class="sec" id="lockups" aria-labelledby="lockups-h">
+        <div class="sec-head">
+          <h2 id="lockups-h">Three lockups, one job each.</h2>
+          <p>Pick the lockup by the space, not by taste. Source: the website Figma file, Foundations (3038:178), rule R-90.</p>
+        </div>
+        <div class="asset-actions" data-figma="10-3" data-files="assets/brand/logo-seal.svg|Primary seal;assets/brand/logo-horizontal.svg|Horizontal;assets/brand/logo-stacked.svg|Stacked"></div>
+        <div class="tiles">
+          <figure><div class="stage bg-cream"><img class="w-seal" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Primary seal"></div>
+            <figcaption><b>Primary seal</b><span class="cap">Where the brand needs presence: packaging labels, hero moments, and the mobile header at 50px (R-103). Not the social profile picture: that is the app icon (U-27).</span></figcaption></figure>
+          <figure><div class="stage bg-cream"><img class="w-horizontal" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="Horizontal lockup"></div>
+            <figcaption><b>Horizontal lockup</b><span class="cap">The website navigation and footer. Desktop header 52px tall, always taller than the 44px header button (R-103). On mobile the header uses the Primary seal at 50px. Footer 30px desktop, 28px mobile, on Mist (R-90, R-114).</span></figcaption></figure>
+          <figure><div class="stage bg-cream"><img class="w-stacked" src="assets/brand/logo-stacked.svg" width="176" height="93" alt="Stacked lockup"></div>
+            <figcaption><b>Stacked lockup</b><span class="cap">Square spaces where the horizontal lockup would be too small.</span></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="sec" id="versions" aria-labelledby="versions-h">
+        <div class="sec-head">
+          <h2 id="versions-h">Navy on light, reversed on dark.</h2>
+          <p>On Paper, Mist or Cream use the main version. On Deep Teal, Ink, Navy and on photography use the reversed version only (R-91). The website footer sits on Mist with the main Horizontal lockup; the reversed lockup appears only on the dark CTA band above it and in dark sections (R-48, R-114).</p>
+        </div>
+        <div class="asset-actions" data-figma="10-3" data-files="assets/brand/logo-seal-reversed.svg|Primary seal · reversed;assets/brand/logo-horizontal-reversed.svg|Horizontal · reversed;assets/brand/logo-stacked-reversed.svg|Stacked · reversed"></div>
+        <div class="tiles">
+          <figure><div class="stage bg-paper"><img class="w-horizontal" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="Horizontal lockup on Paper"></div><figcaption><b>On Paper</b><span class="cap">The website page.</span></figcaption></figure>
+          <figure><div class="stage bg-mist"><img class="w-horizontal" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="Horizontal lockup on Mist"></div><figcaption><b>On Mist</b><span class="cap">Alternate bands, hero grounds and the website footer.</span></figcaption></figure>
+          <figure><div class="stage bg-cream"><img class="w-horizontal" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="Horizontal lockup on Cream"></div><figcaption><b>On Cream</b><span class="cap">Logo presentations only. Labels sit on their category colour with the reversed seal (R-89, R-96).</span></figcaption></figure>
+          <figure><div class="stage bg-teal"><img class="w-horizontal" src="assets/brand/logo-horizontal-reversed.svg" width="290" height="47" alt="Reversed horizontal lockup on Deep Teal"></div><figcaption><b>Reversed on Deep Teal</b><span class="cap">The CTA band above the footer and dark sections.</span></figcaption></figure>
+          <figure><div class="stage bg-ink"><img class="w-seal" src="assets/brand/logo-seal-reversed.svg" width="250" height="91" alt="Reversed primary seal on Ink"></div><figcaption><b>Reversed on Ink</b><span class="cap">The darkest ground. The filled half turns Logo Blue.</span></figcaption></figure>
+          <figure><div class="stage bg-navy"><img class="w-stacked" src="assets/brand/logo-stacked-reversed.svg" width="176" height="93" alt="Reversed stacked lockup on Navy"></div><figcaption><b>Reversed on Navy</b><span class="cap">Square dark spaces.</span></figcaption></figure>
+        </div>
+        <div class="sub" id="one-colour">
+          <h3>One colour, for technical uses only.</h3>
+          <div class="rule"><span class="status status--current">Current · R-94</span><p>Black on white and White on black, only where colour cannot print: fax, emboss, stamp, one-colour print. Scrubs green, Clinic sky and Grey are not used (U-28). The files are the exported logo with every colour set to black or white, nothing else changed.</p></div>
+          <div class="asset-actions" data-files="assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-seal-black.svg|Seal · black;assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-seal-white.svg|Seal · white;assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-horizontal-black.svg|Horizontal · black;assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-horizontal-white.svg|Horizontal · white"></div>
+          <div class="tiles">
+            <figure><div class="stage bg-white"><img class="w-seal" src="assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-seal-black.svg" width="250" height="91" alt="Primary seal, black on white"></div><figcaption><b>Black on white</b><span class="cap">Fax, stamp, one-colour print on light paper.</span></figcaption></figure>
+            <figure><div class="stage bg-black"><img class="w-seal" src="assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-seal-white.svg" width="250" height="91" alt="Primary seal, white on black"></div><figcaption><b>White on black</b><span class="cap">Emboss, foil or one-colour print on dark stock. Shown here on Ink, the darkest token.</span></figcaption></figure>
+            <figure><div class="stage bg-white"><img class="w-hor-sm" src="assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-horizontal-black.svg" width="290" height="47" alt="Horizontal lockup, black on white"></div><figcaption><b>Horizontal and Stacked</b><span class="cap">Same rule; all six files are in the <a class="link" href="media-kit.html#logos">media kit</a> and on <a class="link" href="downloads.html">Downloads</a>.</span></figcaption></figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="colours" aria-labelledby="colours-h">
+        <div class="sec-head">
+          <h2 id="colours-h">The logo has its own colours.</h2>
+          <p>These colours belong to the logo, the app icon and the favicon only. They never colour website UI, text, buttons or sections; the website keeps Deep Teal and the Pastel palette. Rule R-84.</p>
+        </div>
+        <div class="swatches">
+          <div class="swatch"><i style="background: var(--color-logo-navy)"></i><b>Navy</b><span class="cap">#0F2E57 · <code>--color-logo-navy</code></span></div>
+          <div class="swatch"><i style="background: var(--color-logo-ink)"></i><b>Ink</b><span class="cap">#031D2C · <code>--color-logo-ink</code></span></div>
+          <div class="swatch"><i style="background: var(--color-logo-blue)"></i><b>Logo Blue</b><span class="cap">#3976C6 · <code>--color-logo-blue</code></span></div>
+          <div class="swatch"><i style="background: var(--color-logo-sky)"></i><b>Sky</b><span class="cap">#C9DDEA · <code>--color-logo-sky</code></span></div>
+          <div class="swatch"><i style="background: var(--color-logo-cream); box-shadow: inset 0 0 0 1px var(--color-line-base)"></i><b>Cream</b><span class="cap">#F1ECE0 · <code>--color-logo-cream</code></span></div>
+        </div>
+        <p class="cap">On a phone the swatches stack one per row. Product colours are a separate group (R-85); no product shares a logo colour.</p>
+      </section>
+
+      <section class="sec" id="space" aria-labelledby="space-h">
+        <div class="sec-head">
+          <h2 id="space-h">Give the logo room.</h2>
+          <p>Clear space is the height of the "meds" half on every side (x). Nothing enters that space: no text, no shape, no edge of the frame. Rule R-92.</p>
+        </div>
+        <div><div class="clear"><span class="x x-top">x</span><span class="x x-left">x</span><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="Primary seal with clear space"></div></div>
+        <p class="cap">On a phone the clear space scales with the logo: x is always the height of the “meds” half at the size shown.</p>
+      </section>
+
+      <section class="sec" id="sizes" aria-labelledby="sizes-h">
+        <div class="sec-head">
+          <h2 id="sizes-h">Never smaller than this.</h2>
+          <p><span class="status status--current">Current · R-118</span> Below these sizes, use the app icon, down to the 16px favicon (R-93).</p>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Lockup</th><th scope="col">Screen, smallest</th><th scope="col">Print, smallest</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Primary seal</th><td>40px tall (about 110px wide)</td><td>25 mm wide</td></tr>
+            <tr><th scope="row">Horizontal</th><td>24px tall (about 148px wide)</td><td>30 mm wide</td></tr>
+            <tr><th scope="row">Stacked</th><td>48px tall (about 91px wide)</td><td>20 mm wide</td></tr>
+            <tr><th scope="row">App icon</th><td>16px (favicon, solid capsule, R-93)</td><td>Not for print</td></tr>
+          </tbody>
+        </table></div>
+        <p class="cap">The same values on desktop and on a phone: the minimum is a size on the screen, not a share of it. The website header (52 desktop, 50 mobile) and footer (30, 28) sit well above them.</p>
+      </section>
+
+      <section class="sec" id="icon" aria-labelledby="icon-h">
+        <div class="sec-head">
+          <h2 id="icon-h">The app icon is "u|m" in the capsule.</h2>
+          <p>A Navy rounded square with the capsule in White. Favicon sizes 48, 32 and 16. At 16px the capsule is drawn solid. The favicon never uses the wordmark. Rule R-93.</p>
+        </div>
+        <div class="asset-actions" data-figma="10-3" data-files="assets/brand/app-icon.svg|App icon and favicon"></div>
+        <div class="icons-row">
+          <figure><img class="i120" src="assets/brand/app-icon.svg" width="120" height="120" alt="App icon"><span class="cap">App icon · 120</span></figure>
+          <figure><img class="i48" src="assets/brand/app-icon.svg" width="48" height="48" alt="Favicon 48"><span class="cap">48</span></figure>
+          <figure><img class="i32" src="assets/brand/app-icon.svg" width="32" height="32" alt="Favicon 32"><span class="cap">32</span></figure>
+          <figure><img class="i16" src="assets/brand/app-icon.svg" width="16" height="16" alt="Favicon 16"><span class="cap">16</span></figure>
+        </div>
+        <p class="cap">The 16px solid-capsule favicon exists in Figma (logo file, “Favicon 16, solid capsule”) and still has to be exported. The 16px shown here is the app icon scaled down.</p>
+        <div class="rule"><b>Social profile picture.</b><p>The app icon's white u|m on full Navy, 400 × 400, safe in a circle or a square crop (U-27). Never the seal or the wordmark. File: <a class="link" href="assets/media-kit/kit/01-logos/social-and-mobile/avatar-400x400.png" download>avatar-400x400.png</a>.</p></div>
+      </section>
+
+      <section class="sec" id="misuse" aria-labelledby="misuse-h">
+        <div class="sec-head">
+          <h2 id="misuse-h">Allowed and not allowed.</h2>
+          <p>Use the files as they are. Never recolour individual parts, stretch, rotate, redraw or add effects (R-92). Allowed: the main version on light grounds, the reversed version on dark grounds and photos, the one-colour versions for technical uses, at or above the minimum sizes, with clear space.</p>
+        </div>
+        <div class="tiles dont">
+          <figure><div class="stage"><img class="x-stretch" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: stretched logo"></div><figcaption><b>Don't stretch</b><span class="cap">Scale both directions together.</span></figcaption></figure>
+          <figure><div class="stage"><img class="x-rotate" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: rotated logo"></div><figcaption><b>Don't rotate</b><span class="cap">The capsule always lies flat.</span></figcaption></figure>
+          <figure><div class="stage"><img class="x-recolour" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: recoloured logo"></div><figcaption><b>Don't recolour</b><span class="cap">Only the versions on this page.</span></figcaption></figure>
+          <figure><div class="stage"><img class="x-shadow" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: logo with a shadow"></div><figcaption><b>Don't add effects</b><span class="cap">No shadows, glows, gradients or outlines.</span></figcaption></figure>
+          <figure><div class="stage bg-teal"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: main logo on a dark ground"></div><figcaption><b>Don't put the main version on dark</b><span class="cap">Use the reversed version.</span></figcaption></figure>
+          <figure><div class="stage"><span class="typed" role="img" aria-label="Wrong: the name typed in a font instead of the logo">unifiedmeds</span></div><figcaption><b>Don't retype the wordmark</b><span class="cap">The wordmark is artwork drawn in Outfit Medium. Always use the files; Outfit is not a website font.</span></figcaption></figure>
+        </div>
+      </section>
+
+      <section class="sec" id="stings" aria-labelledby="stings-h">
+        <div class="sec-head">
+          <h2 id="stings-h">Motion: the logo stings.</h2>
+          <p>Three animated stings build the seal: B is the default, C1 for brand and story moments, C2 for short social openers. One sting per video, at the start or the end, never in the middle (R-101). All three end on the seal on Cream.</p>
+        </div>
+        <div class="story-link"><a class="btn btn--outline" href="videos.html#sting">See the stings</a><span class="cap">On the Videos page, with files and specs. Motion rules: <a class="link" href="motion.html">Motion</a>.</span></div>
+      </section>
+
+      <section class="sec" id="files" aria-labelledby="files-h">
+        <div class="sec-head">
+          <h2 id="files-h">Use the exported files, never a copy.</h2>
+          <p>SVG files exported from the website Figma file (Foundations, 3038:178). PNG exports and the press kit: <a class="link" href="media-kit.html#logos">Media kit</a>. Every downloadable file in one list: <a class="link" href="downloads.html">Downloads</a>.</p>
+        </div>
+        <div class="table-wrap files"><table>
+          <thead><tr><th>File</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td><a class="link" href="assets/brand/logo-seal.svg" download>logo-seal.svg</a></td><td>Primary seal on light</td></tr>
+            <tr><td><a class="link" href="assets/brand/logo-seal-reversed.svg" download>logo-seal-reversed.svg</a></td><td>Primary seal on dark</td></tr>
+            <tr><td><a class="link" href="assets/brand/logo-horizontal.svg" download>logo-horizontal.svg</a></td><td>Website header</td></tr>
+            <tr><td><a class="link" href="assets/brand/logo-horizontal-reversed.svg" download>logo-horizontal-reversed.svg</a></td><td>The CTA band above the footer, dark sections</td></tr>
+            <tr><td><a class="link" href="assets/brand/logo-stacked.svg" download>logo-stacked.svg</a></td><td>Square spaces on light</td></tr>
+            <tr><td><a class="link" href="assets/brand/logo-stacked-reversed.svg" download>logo-stacked-reversed.svg</a></td><td>Square spaces on dark</td></tr>
+            <tr><td><a class="link" href="assets/brand/app-icon.svg" download>app-icon.svg</a></td><td>App icon, favicon 48 and 32</td></tr>
+            <tr><td><a class="link" href="assets/media-kit/kit/01-logos/one-colour/unifiedmeds-logo-seal-black.svg" download>unifiedmeds-logo-seal-black.svg</a> and five more</td><td>One colour, technical uses only (R-94). All six in <code>assets/media-kit/kit/01-logos/one-colour/</code></td></tr>
+          </tbody>
+        </table></div>
+        <div class="story-link"><a class="btn btn--outline" href="logo-story.html">The logo story</a><span class="cap">The idea, the brief, Avi's directions and the choice.</span></div>
+      </section>

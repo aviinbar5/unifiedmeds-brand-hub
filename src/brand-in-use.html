@@ -1,0 +1,421 @@
+<style>
+  /* Pairs: right and wrong share one row; stages and captions line up (R-98) */
+  .bu-group { display: grid; gap: var(--space-12); }
+  .bu-pair { display: grid; gap: var(--space-4); }
+  .bu-pair h3 { font: var(--type-desktop-card-weight) var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .bu-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .bu-ex { margin: 0; min-width: 0; display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: var(--space-4); padding: var(--space-4); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); }
+  .bu-ex--right { border-left: var(--space-1) solid var(--color-brand-green); }
+  .bu-ex--wrong { border-left: var(--space-1) solid var(--color-brand-coral); }
+  .bu-ex figcaption { display: grid; grid-template-rows: auto 1fr auto; gap: var(--space-2); align-content: start; }
+  .bu-ex figcaption p { font: var(--type-desktop-small-weight) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-primary); }
+  .bu-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-3); }
+  .bu-rid { font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); }
+  .bu-verdict { justify-self: start; display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-brand-teal-deep); }
+  .bu-verdict svg { width: var(--space-4); height: var(--space-4); flex: none; }
+  .bu-verdict--right { background: var(--color-surface-wash-green); }
+  .bu-verdict--wrong { background: var(--color-surface-card); border: 1px solid var(--color-line-base); }
+  .bu-verdict--wrong svg { color: var(--color-brand-coral); }
+
+  /* Stage: one 4:3 frame per pair */
+  .bu-stage { position: relative; overflow: hidden; aspect-ratio: 4 / 3; border-radius: var(--radius-xs); background: var(--color-surface-paper); border: 1px solid var(--color-line-soft); display: grid; place-items: center; color: var(--color-text-primary); }
+  .bu-stage--mist { background: var(--color-surface-mist); }
+  .bu-stage--teal { background: var(--color-brand-deep-teal); }
+  .bu-serif { font: 400 var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+  .bu-small { font: var(--type-desktop-compact-weight) var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-primary); }
+  .bu-cap { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-text-secondary); }
+  .bu-copy { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-5); align-self: center; justify-self: stretch; position: relative; z-index: 1; }
+  .bu-skel { display: grid; gap: var(--space-2); width: 100%; }
+  .bu-skel i { display: block; height: var(--space-2); border-radius: var(--radius-xs); background: var(--color-line-base); }
+  .bu-skel i:nth-child(2) { width: 80%; } .bu-skel i:nth-child(3) { width: 60%; }
+
+  /* 1 clear space */
+  .bu-clear { position: relative; padding: var(--space-10); border: 1px dashed var(--color-text-secondary); border-radius: var(--radius-xs); }
+  .bu-clear img { display: block; height: var(--space-10); width: auto; }
+  .bu-clear .x { position: absolute; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / 1 var(--font-family-sans); color: var(--color-text-secondary); }
+  .bu-clear .x-t { top: var(--space-4); left: 50%; transform: translateX(-50%); }
+  .bu-clear .x-l { left: var(--space-4); top: 50%; transform: translateY(-50%); }
+  .bu-crowd { position: absolute; inset: 0; display: grid; align-content: start; justify-items: start; }
+  .bu-crowd img { height: var(--space-14); width: auto; margin: calc(var(--space-2) * -1) 0 0 calc(var(--space-6) * -1); }
+  .bu-crowd .bu-serif { margin: calc(var(--space-1) * -1) 0 0 var(--space-3); }
+  .bu-crowd .tag { position: absolute; top: var(--space-4); left: calc(var(--space-24) + var(--space-5)); }
+
+  /* 2 stretched and recoloured */
+  .bu-split { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
+  .bu-split > div { display: grid; place-items: center; padding: var(--space-4); }
+  .bu-split img { width: 100%; max-width: calc(var(--space-24) * 1.5); height: auto; display: block; }
+  .bu-split .on-teal { background: var(--color-brand-deep-teal); }
+  .bu-split img.bu-stretch { transform: scaleX(1.55); max-width: calc(var(--space-24) * 0.95); }
+
+  /* 3 header */
+  .bu-page { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr; background: var(--color-surface-mist); }
+  .bu-hdr { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); height: var(--size-header-mobile); padding: 0 var(--space-4); background: var(--color-surface-paper); border-bottom: 1px solid var(--color-line-soft); }
+  .bu-hdr .seal { height: var(--size-logo-header-mobile); width: auto; display: block; }
+  .bu-hdr .tiny { height: var(--space-5); width: auto; display: block; }
+  .bu-page .bu-skel { padding: var(--space-5); align-content: start; }
+  .bu-measure { position: absolute; right: var(--space-4); bottom: var(--space-4); }
+
+  /* 4 yellow */
+  .bu-steps { display: flex; gap: var(--space-2); }
+  .bu-steps span { display: inline-grid; place-items: center; width: var(--space-8); height: var(--space-8); border-radius: var(--radius-pill); border: 1px solid var(--color-brand-deep-teal); font: 600 var(--type-desktop-compact-size) / 1 var(--font-family-sans); color: var(--color-brand-deep-teal); }
+  .bu-yband { position: absolute; inset: 0; display: grid; grid-template-rows: 1fr 1fr; }
+  .bu-yband > div { display: grid; align-content: center; justify-items: start; gap: var(--space-3); padding: 0 var(--space-5); }
+  .bu-yband .y { background: var(--color-brand-yellow); }
+  .bu-yband .bu-steps span { background: var(--color-brand-yellow); border-color: var(--color-brand-yellow); }
+
+  /* 5 colour has a job */
+  .bu-two { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr); gap: var(--space-4); padding: var(--space-4); align-items: center; }
+  .bu-strip { display: grid; align-self: stretch; border-radius: var(--radius-xs); overflow: hidden; border: 1px solid var(--color-line-base); grid-template-rows: 1fr 2fr 2fr 2fr 2fr 1.5fr; }
+  .bu-strip i { display: block; }
+  .bu-strip .p { background: var(--color-surface-paper); } .bu-strip .m { background: var(--color-surface-mist); } .bu-strip .t { background: var(--color-brand-deep-teal); }
+  .bu-strip .t + .t { border-top: 1px solid var(--color-line-on-dark); }
+  .bu-two img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .bu-pcard { display: grid; gap: var(--space-2); padding: var(--space-4); border-radius: var(--radius-xs); background: var(--color-product-tadalafil); color: var(--color-surface-paper); }
+  .bu-pcard b { font: 400 var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); }
+  .bu-pcard span { font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); }
+  .bu-sky { --btn-bg: var(--color-product-tadalafil); --btn-fg: var(--color-surface-paper); --btn-border: var(--color-product-tadalafil); }
+
+  /* 6 type */
+  .bu-card { display: grid; gap: var(--space-2); padding: var(--space-5); margin: var(--space-4); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-card); justify-self: stretch; }
+  .bu-tiny-serif { font: 400 var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-serif); color: var(--color-text-primary); }
+  .bu-italic { font-style: italic; }
+
+  /* 7 shapes */
+  /* the capsule: true shape from extended.css (.um-cap, R-105), sized by its height when standing */
+  .bu-capsule { position: absolute; background-color: var(--color-surface-wash-blue); opacity: var(--opacity-capsule); }
+  .bu-capsule--edge { right: calc(var(--space-8) * -1); top: var(--space-6); height: calc(var(--space-24) * 2.1); width: auto; }
+  .bu-shapes { position: absolute; inset: 0; }
+  .bu-shapes i { position: absolute; display: block; background: var(--color-brand-blue); }
+  .bu-shapes i.s1 { left: var(--space-4); top: var(--space-10); width: calc(var(--space-24) * 2.2); height: auto; background-color: var(--color-brand-blue); }
+  .bu-shapes .s2 { right: var(--space-6); top: var(--space-4); width: var(--space-12); height: var(--space-12); border-radius: var(--radius-pill); background: var(--color-surface-wash-green); }
+  .bu-shapes .s3 { right: 0; bottom: 0; width: var(--space-18); height: var(--space-18); border-top-left-radius: 100%; background: var(--color-surface-wash-blue); }
+  .bu-shapes .s4 { left: 45%; bottom: 0; width: var(--space-12); height: var(--space-14); border-radius: var(--space-6) var(--space-6) 0 0; background: var(--color-brand-green); }
+  .bu-onshape { position: absolute; left: var(--space-8); top: calc(var(--space-12) + var(--space-1)); width: calc(var(--space-24) * 1.7); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); color: var(--color-surface-paper); }
+
+  /* 8 faces */
+  .bu-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .bu-panel { position: absolute; left: var(--space-3); bottom: var(--space-3); right: var(--space-12); padding: var(--space-3) var(--space-4); border-radius: var(--radius-xs); background: var(--color-surface-paper); }
+  .bu-onface { position: absolute; left: 44%; top: 16%; width: 52%; font: 400 var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-surface-paper); }
+  .bu-onface-cap { left: 50%; top: 4%; height: 56%; width: auto; background-color: var(--color-surface-paper); }
+
+  /* 9 pills */
+  .bu-bottle { position: absolute; top: 7%; left: 50%; height: 86%; width: auto; display: block; transform: translateX(-50%); }
+  .bu-spill { position: absolute; inset: 0; }
+  .bu-spill img { position: absolute; height: 78%; width: auto; left: 4%; bottom: -4%; transform: rotate(78deg); }
+  .bu-spill i { position: absolute; width: var(--space-6); height: var(--space-4); border-radius: var(--radius-pill); background: var(--color-brand-clay); border: 1px solid var(--color-line-deep); }
+
+  .bu-corner { position: absolute; left: var(--space-4); top: var(--space-4); }
+
+  /* 10 buttons */
+  .bu-btns { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; padding: var(--space-4); }
+  .bu-btns .bu-pill { border-radius: var(--radius-pill); }
+
+  /* 11 copy */
+  .bu-cta { display: grid; gap: var(--space-2); justify-items: start; }
+
+  /* 12 discretion */
+  .bu-disc { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: var(--space-3); padding: var(--space-4); background: var(--color-surface-mist); }
+  .bu-mail { display: grid; gap: 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-xs); background: var(--color-surface-card); min-width: 0; }
+  .bu-mail b { font: 600 var(--type-desktop-compact-size) / var(--type-desktop-compact-line) var(--font-family-sans); color: var(--color-text-strong); }
+  .bu-mail span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bu-box { position: relative; justify-self: center; align-self: center; width: 70%; height: 100%; max-height: calc(var(--space-24) * 1.3); border-radius: var(--radius-xs); background: var(--color-brand-clay); border: 1px solid var(--color-line-deep); }
+  .bu-box .lbl { position: absolute; right: var(--space-3); top: var(--space-3); width: 46%; padding: var(--space-2); border-radius: 2px; background: var(--color-surface-card); display: grid; gap: var(--space-1); }
+  .bu-box .lbl i { display: block; height: var(--space-1); background: var(--color-line-mid); border-radius: 2px; }
+  .bu-box .lbl i:first-child { width: 60%; }
+  .bu-box .print { position: absolute; left: var(--space-3); bottom: var(--space-3); display: grid; gap: var(--space-1); justify-items: start; }
+  .bu-box .print img { height: var(--space-6); width: auto; }
+  .bu-box .print span { font: 600 var(--type-desktop-compact-size) / 1.2 var(--font-family-sans); color: var(--color-brand-deep-teal); }
+  .bu-box .print--line { display: flex; align-items: center; gap: var(--space-2); }
+  .bu-box .print--line span:last-child { font-weight: 400; }
+  .bu-mini-cap { width: var(--space-6); color: var(--color-brand-deep-teal); flex: none; }
+
+  /* 13 motion */
+  .bu-motion { position: absolute; inset: 0; display: grid; align-content: center; }
+  .bu-motion .bu-capsule--edge { transform: translateX(0); }
+  .bu-logo-sm { height: var(--space-6); width: auto; display: block; }
+  .bu-play { justify-self: start; }
+  @media (prefers-reduced-motion: no-preference) {
+    .is-playing.bu-m-right .bu-capsule--edge { animation: bu-slide var(--motion-duration-shape) var(--motion-easing-enter) 1 both; }
+    .is-playing.bu-m-wrong .bu-logo-sm { animation: bu-spin var(--motion-duration-loader) linear 3; }
+    .is-playing.bu-m-wrong .bu-serif { animation: bu-bounce var(--motion-duration-wipe) var(--motion-easing-ui) 6 alternate; }
+    .is-playing.bu-m-wrong .btn { animation: bu-pulse var(--motion-duration-reveal) var(--motion-easing-ui) 8 alternate; }
+    .is-playing.bu-m-wrong .bu-capsule--edge { animation: bu-wobble var(--motion-duration-shape) var(--motion-easing-ui) 6 alternate; }
+  }
+  @keyframes bu-slide { from { transform: translateX(110%); } to { transform: translateX(0); } }
+  @keyframes bu-spin { to { transform: rotate(360deg); } }
+  @keyframes bu-bounce { to { transform: translateY(calc(var(--space-3) * -1)); } }
+  @keyframes bu-pulse { to { transform: scale(1.12); } }
+  @keyframes bu-wobble { to { transform: translateX(calc(var(--space-10) * -1)) rotate(-8deg); } }
+  .bu-rm-note { display: none; }
+  @media (prefers-reduced-motion: reduce) { .bu-play { display: none; } .bu-rm-note { display: block; } }
+
+  /* 14 contrast */
+  .bu-contrast { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-5); margin: var(--space-4); border-radius: var(--radius-card); background: var(--color-surface-mist); justify-self: stretch; }
+  .bu-contrast .ok { color: var(--color-text-secondary-on-mist); }
+  .bu-contrast .bad { color: var(--color-text-tertiary); }
+  .bu-faint { --btn-bg: var(--color-brand-blue); --btn-border: var(--color-brand-blue); --btn-fg: var(--color-surface-paper); }
+
+  @media (max-width: 767px) {
+    .bu-row { grid-template-columns: minmax(0, 1fr); }
+    .bu-copy { padding: var(--space-4); }
+  }
+</style>
+      <header class="page-head">
+        <span class="eyebrow">Brand</span>
+        <h1>Brand in use.</h1>
+        <p class="lead">Fourteen common moments, each shown right and wrong, side by side. Every example is built live from the real logo files, photos, bottles, buttons and type tokens, so what you see is what the rule means.</p>
+        <nav class="toc" aria-label="On this page"><a href="#logo">Logo</a><a href="#colour">Colour</a><a href="#type-shape">Type and shape</a><a href="#photo">Photography</a><a href="#buttons-copy">Buttons and copy</a><a href="#discretion">Discretion</a><a href="#motion-access">Motion and access</a><a href="#open">Open items</a></nav>
+      </header>
+
+      <div class="rule"><span class="status status--current">Current</span><p>A gallery, not a new rulebook: each pair names the rule it shows, and the rulebook wins (R-02). Right carries a green edge and the Right tag; wrong carries a coral edge and the Wrong tag. Photos are credited free stand-ins for the hubs only, not approved, until the commissioned shoot and licensed stock arrive (R-39, Q91). On a phone every pair stacks: Right first, then Wrong.</p></div>
+
+      <div class="rule"><span class="status status--current">Current · U-30</span><p><b>The wrong examples stay</b>, including real condition words such as “ED”, because each one is clearly marked Wrong (U-30). <b>Two dark bands never touch</b> (R-119). <b>A face is never covered</b> (R-110). <b>Product colours on the website</b> (R-85, U-28): a product colour marks its product with a dot or an edge, never carries text and never replaces the category colour (R-117).</p></div>
+
+      <section class="sec" id="logo" aria-labelledby="logo-h">
+        <div class="sec-head"><h2 id="logo-h">Logo.</h2><p>Use the exported files only, give them room, and let the logo lead the header.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p1-h">
+            <h3 id="p1-h">Give the logo room.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-clear"><span class="x x-t" aria-hidden="true">x</span><span class="x x-l" aria-hidden="true">x</span><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="The primary seal with clear space on every side"></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Clear space of x on every side, where x is the height of the "meds" half. Nothing enters it.</p><span class="bu-foot"><span class="bu-rid">R-92</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-crowd"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: the seal cropped by the frame and crowded"><span class="tag">New</span><span class="bu-serif">Care from home.</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>Cropped by the frame edge, with a tag and a headline pressed against it.</p><span class="bu-foot"><span class="bu-rid">R-92</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p2-h">
+            <h3 id="p2-h">Use the file as it is.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-split"><div><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="Main seal in Navy on Paper"></div><div class="on-teal"><img src="assets/brand/logo-seal-reversed.svg" width="250" height="91" alt="Reversed seal on Deep Teal"></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>The main version on light grounds, the reversed file on dark ones, both at their own proportions.</p><span class="bu-foot"><span class="bu-rid">R-91 · R-92</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-split"><div><img class="bu-stretch" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: the seal stretched sideways"></div><div class="on-teal"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt="Wrong: the Navy seal on Deep Teal, nearly invisible"></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>Stretched to fill a space, and the Navy version on Deep Teal (1.35:1). Never recolour parts to rescue it.</p><span class="bu-foot"><span class="bu-rid">R-91 · R-92 · R-95</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p3-h">
+            <h3 id="p3-h">The logo is taller than the header button.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-page"><div class="bu-hdr"><img class="seal" src="assets/brand/logo-seal.svg" width="250" height="91" alt="Primary seal, 50 px tall, in a mobile header"><span class="btn btn--header">Get started</span></div><div class="bu-skel"><i></i><i></i><i></i></div></div><span class="bu-cap bu-measure">Logo 50 · button 44</span></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Mobile header: the Primary seal at 50 beside the 44 header button. On desktop the Horizontal lockup at 52.</p><span class="bu-foot"><span class="bu-rid">R-103 · U-19</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-page"><div class="bu-hdr"><img class="tiny" src="assets/brand/logo-horizontal.svg" width="290" height="47" alt="Wrong: the horizontal lockup shrunk to 20 px"><span class="btn">Get started</span></div><div class="bu-skel"><i></i><i></i><i></i></div></div><span class="bu-cap bu-measure">Logo 20 · button 50</span></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>The logo shrunk to make room, and a full-height button beside it. The button wins the header.</p><span class="bu-foot"><span class="bu-rid">R-103 · E-02</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="colour" aria-labelledby="colour-h">
+        <div class="sec-head"><h2 id="colour-h">Colour.</h2><p>One Yellow, and every colour in its own place.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p4-h">
+            <h3 id="p4-h">One Yellow in view, never a background.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-copy"><span class="bu-serif">Three steps to a plan.</span><span class="bu-steps" aria-hidden="true"><span>1</span><span>2</span><span>3</span></span><span class="btn btn--yellow">Get started</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>The one Yellow element is the call to action. Step numbers stay outlined until hover.</p><span class="bu-foot"><span class="bu-rid">R-11 · R-44</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-yband"><div class="y"><span class="bu-serif">Three steps to a plan.</span></div><div><span class="bu-steps" aria-hidden="true"><span>1</span><span>2</span><span>3</span></span><span class="btn btn--yellow">Get started</span></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>A Yellow band, Yellow steps and a Yellow button. Nothing stands out when everything does.</p><span class="bu-foot"><span class="bu-rid">R-11</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p5-h">
+            <h3 id="p5-h">Every colour keeps its job.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-two"><div class="bu-strip" role="img" aria-label="Page bands: Paper, Mist, Paper, Deep Teal, Paper, Deep Teal footer"><i class="p"></i><i class="m"></i><i class="p"></i><i class="t"></i><i class="p"></i><i class="t"></i></div><img src="assets/packaging/label-tadalafil.png" width="560" height="640" alt="Tadalafil label with its Sky capsule on the Deep Teal ground"></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Dark bands always have a light band between them. A product colour marks its product with a dot or an edge, and never carries text.</p><span class="bu-foot"><span class="bu-rid">R-10 · R-85 · R-96 · R-119</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-two"><div class="bu-strip" role="img" aria-label="Wrong: two Deep Teal bands next to each other"><i class="p"></i><i class="m"></i><i class="p"></i><i class="p"></i><i class="t"></i><i class="t"></i></div><div class="bu-pcard"><b>Tadalafil</b><span>Product colour as a website card</span></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>Two Deep Teal bands back to back, and a product colour used as a card ground with Paper text on it (1.72:1).</p><span class="bu-foot"><span class="bu-rid">R-119 · R-85 · R-72</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="type-shape" aria-labelledby="type-shape-h">
+        <div class="sec-head"><h2 id="type-shape-h">Type and shape.</h2><p>The serif is for display sizes only. Shapes frame the content; they never carry it.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p6-h">
+            <h3 id="p6-h">The serif stays large and upright.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-card"><span class="bu-serif">Talk to a provider.</span><span class="bu-small">Answer a few questions online. A licensed provider reviews them and decides what fits.</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>DM Serif at 24 for the card title, upright. Inter for every line of reading text.</p><span class="bu-foot"><span class="bu-rid">R-18 · R-21 · R-23</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-card"><span class="bu-serif">Talk to a <span class="bu-italic">provider</span>.</span><span class="bu-tiny-serif">Answer a few questions online. A licensed provider reviews them and decides what fits.</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>An italic highlight word, and the serif set at 13 for body text, far below its floor of 24 (21 on mobile).</p><span class="bu-foot"><span class="bu-rid">R-21 · R-23</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p7-h">
+            <h3 id="p7-h">One shape, cropped, behind nothing.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><span class="bu-capsule bu-capsule--edge um-cap um-cap--v" aria-hidden="true"></span><div class="bu-copy"><span class="bu-serif">Care from home.</span><span class="bu-small">A licensed provider reviews<br>every assessment.</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>One outline capsule in Wash Blue at 70%, cropped by the edge, clear of the text.</p><span class="bu-foot"><span class="bu-rid">R-32 · R-33</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-shapes" aria-hidden="true"><i class="s1 um-cap um-cap--solid"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i></div><span class="bu-onshape">A licensed provider reviews every assessment.</span></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>Small text on a filled capsule, and four shapes on one small surface. Two shapes per surface at most.</p><span class="bu-foot"><span class="bu-rid">R-33 · R-106</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="photo" aria-labelledby="photo-h">
+        <div class="sec-head"><h2 id="photo-h">Photography.</h2><p>Men in their lives, faces clear. Products closed and branded.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p8-h">
+            <h3 id="p8-h">Faces stay clear; men in their lives.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><img class="bu-photo" src="assets/photos/friends-talking-outdoors-pexels-13335592.jpg" alt="Two men talk face to face at an outdoor table" loading="lazy" style="object-position: 30% 30%;"><div class="bu-panel"><span class="bu-serif">Care that fits your life.</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Two men outdoors, together. Copy sits on a solid panel where no face is, one of the three ways to set copy with a photo.</p><span class="bu-foot"><span class="bu-rid">R-37 · R-110 · R-120</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><img class="bu-photo" src="assets/photos/man-paperwork-sunlit-pexels-8124229.jpg" alt="Wrong: a headline and a capsule laid over a man's face" loading="lazy" style="object-position: 50% 30%;"><span class="bu-capsule bu-onface-cap um-cap um-cap--v" aria-hidden="true"></span><span class="bu-onface">Care that fits your life.</span></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>A headline and a capsule across his face. Copy never sits on skin; a shape never covers a face.</p><span class="bu-foot"><span class="bu-rid">R-33 · R-110 · R-120</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p9-h">
+            <h3 id="p9-h">Closed, branded bottles only.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage bu-stage--mist"><img class="bu-bottle" src="assets/packaging/bottle-tadalafil-generic.png" width="539" height="903" alt="A closed amber bottle with the unifiedmeds label" loading="lazy"></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>The bottle closed, upright and labelled, on a calm ground.</p><span class="bu-foot"><span class="bu-rid">R-38</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage bu-stage--mist"><div class="bu-spill" aria-hidden="true"><img src="assets/packaging/bottle-tadalafil-generic.png" width="539" height="903" alt=""><i style="left: 52%; top: 58%;"></i><i style="left: 62%; top: 66%; transform: rotate(30deg);"></i><i style="left: 70%; top: 54%; transform: rotate(-20deg);"></i><i style="left: 58%; top: 76%; transform: rotate(60deg);"></i><i style="left: 78%; top: 72%;"></i><i style="left: 46%; top: 70%; transform: rotate(-40deg);"></i></div><span class="bu-cap bu-corner">Loose tablets</span></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>A tipped bottle with loose tablets around it. The same goes for syringes, lab coats and before and after pairs.</p><span class="bu-foot"><span class="bu-rid">R-38</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="buttons-copy" aria-labelledby="buttons-copy-h">
+        <div class="sec-head"><h2 id="buttons-copy-h">Buttons and copy.</h2><p>The capsule belongs to the logo. Headlines state, they never promise.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p10-h">
+            <h3 id="p10-h">Buttons are rounded rectangles.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-btns"><span class="btn">Get started</span><span class="btn btn--outline">How it works</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Radius 5, height 50, padding 24, sentence case.</p><span class="bu-foot"><span class="bu-rid">R-40 · U-11</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-btns"><span class="btn bu-pill">Get started</span><span class="btn btn--outline bu-pill">How it works</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>Pill buttons. A pill reads as a capsule, and the capsule is the logo's shape.</p><span class="bu-foot"><span class="bu-rid">R-40 · U-11</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p11-h">
+            <h3 id="p11-h">State it, end it with a full stop, keep the line.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-copy"><span class="bu-serif">Talk to a licensed provider from home.</span><span class="bu-cta"><span class="btn">Get started</span><span class="bu-cap">Assessment only. Not a diagnosis.</span></span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>A statement with a full stop, no benefit claim, and the assessment line beside the button.</p><span class="bu-foot"><span class="bu-rid">R-24 · R-58 · R-63</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-copy"><span class="bu-serif">Better performance, guaranteed?</span><span class="bu-cta"><span class="btn">Get started</span></span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>A question for a headline, a promise of results, and no assessment line by the button.</p><span class="bu-foot"><span class="bu-rid">R-24 · R-58 · R-63</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="discretion" aria-labelledby="discretion-h">
+        <div class="sec-head"><h2 id="discretion-h">Discretion.</h2><p>The inbox and the doorstep are not private. Neither says what he is treated for.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p12-h">
+            <h3 id="p12-h">Plain in the inbox and at the door.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-disc"><div class="bu-mail bu-small"><b>unifiedmeds</b><span>Your order is on its way</span><span class="bu-cap">Track it any time.</span></div><div class="bu-box" role="img" aria-label="A plain mailer with a shipping label and the printed line Packed with care, just for you, after a small outline capsule"><span class="lbl"><i></i><i></i><i></i></span><span class="print print--line"><span class="um-cap bu-mini-cap" aria-hidden="true"></span><span>Packed with care, just for you.</span></span></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>A subject that says what happened, not what is inside. A plain mailer with a label and one printed line, “Packed with care, just for you.”, after a small outline capsule; sender name unifiedmeds (U-29).</p><span class="bu-foot"><span class="bu-rid">R-108 · U-29 · <a class="link" href="unboxing.html">Box and unboxing</a></span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-disc"><div class="bu-mail bu-small"><b>unifiedmeds</b><span>Your ED treatment has shipped</span><span class="bu-cap">Your prescription for erectile dysfunction is on its way.</span></div><div class="bu-box" role="img" aria-label="Wrong: a mailer printed with the logo and Men's sexual health"><span class="lbl"><i></i><i></i><i></i></span><span class="print"><img src="assets/brand/logo-seal.svg" width="250" height="91" alt=""><span>Men's sexual health</span></span></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>The condition in the subject and preview, and the category printed on the box.</p><span class="bu-foot"><span class="bu-rid">Emails · Box and unboxing</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="motion-access" aria-labelledby="motion-access-h">
+        <div class="sec-head"><h2 id="motion-access-h">Motion and access.</h2><p>Motion confirms, it never performs. Every word is readable by everyone.</p></div>
+        <div class="bu-group">
+          <article class="bu-pair" aria-labelledby="p13-h">
+            <h3 id="p13-h">One moment, played once.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage bu-m-right" id="bu-m-right"><span class="bu-capsule bu-capsule--edge um-cap um-cap--v" aria-hidden="true"></span><div class="bu-motion"><div class="bu-copy"><img class="bu-logo-sm" src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds"><span class="bu-serif">Care from home.</span><span class="btn">Get started</span></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Copy is still from the first frame; only the capsule enters, once, in 520 ms. With reduced motion it is simply there.</p><span class="bu-foot"><span class="bu-rid">R-49 · R-53 · R-104</span><button class="btn btn--outline bu-play" type="button" data-play="bu-m-right">Play</button><span class="bu-cap bu-rm-note">Reduced motion is on: the end state shows.</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage bu-m-wrong" id="bu-m-wrong"><span class="bu-capsule bu-capsule--edge um-cap um-cap--v" aria-hidden="true"></span><div class="bu-motion"><div class="bu-copy"><img class="bu-logo-sm" src="assets/brand/logo-seal.svg" width="250" height="91" alt="unifiedmeds"><span class="bu-serif">Care from home.</span><span class="btn">Get started</span></div></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>The logo spins, the headline bounces, the button pulses and the shape wobbles, again and again.</p><span class="bu-foot"><span class="bu-rid">R-49 · R-53 · R-101</span><button class="btn btn--outline bu-play" type="button" data-play="bu-m-wrong">Play</button><span class="bu-cap bu-rm-note">Reduced motion is on: nothing moves.</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="bu-pair" aria-labelledby="p14-h">
+            <h3 id="p14-h">Text passes AA on its ground.</h3>
+            <div class="bu-row">
+              <figure class="bu-ex bu-ex--right">
+                <div class="bu-stage"><div class="bu-contrast"><span class="bu-serif">Your next check-in.</span><span class="bu-cap ok">Captions on Mist use Blue-dark: 4.77:1.</span><span class="btn btn--outline">Open my account</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--right"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Right</span><p>Blue-dark captions on Mist, Deep Teal labels on light buttons.</p><span class="bu-foot"><span class="bu-rid">R-13 · R-72</span></span></figcaption>
+              </figure>
+              <figure class="bu-ex bu-ex--wrong">
+                <div class="bu-stage"><div class="bu-contrast"><span class="bu-serif">Your next check-in.</span><span class="bu-cap bad">Captions on Mist in Slate Light: 2.4:1.</span><span class="btn bu-faint">Open my account</span></div></div>
+                <figcaption><span class="bu-verdict bu-verdict--wrong"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Wrong</span><p>Slate Light on Mist, and a Paper label on Pastel Blue (3.53:1). Both fail AA for text this size.</p><span class="bu-foot"><span class="bu-rid">R-12 · R-13 · R-72</span></span></figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="open" aria-labelledby="open-h">
+        <div class="sec-head"><h2 id="open-h">Open items.</h2><p>Shapes per surface (R-106), dark bands (R-119), faces (R-110), wrong examples (U-30) and product colours (R-85) are decided; only the photography item stays open.</p></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Item</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td>Stand-in photos replaced by the commissioned shoot and licensed stock (Q91, R-39)</td><td>Avi</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+<script>
+  document.querySelectorAll('[data-play]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var s = document.getElementById(b.getAttribute('data-play'));
+      s.classList.remove('is-playing'); void s.offsetWidth; s.classList.add('is-playing');
+    });
+  });
+</script>
