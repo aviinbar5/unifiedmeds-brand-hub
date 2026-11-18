@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="28.69" viewBox="0 0 64 25.5" fill="none">
+<style>.f{transform-box:fill-box;transform-origin:left center;animation:f 1.4s cubic-bezier(0,0,.58,1) infinite}@keyframes f{0%{transform:scaleX(0)}60%,100%{transform:scaleX(1);opacity:.15}}@media (prefers-reduced-motion:reduce){.f{animation:none;transform:scaleX(.5)}}</style>
+<path class="f" d="M34.3 3.44L12.03 3.44A9.31 9.31 0 0 0 12.03 22.06L34.3 22.06M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z" fill="#264653"/>
+<path d="M35.02 2.72L12.03 2.72A10.03 10.03 0 0 0 12.03 22.78L35.02 22.78" stroke="#264653" stroke-width="1.5"/>
+<path d="M35.02 2L51.25 2A10.75 10.75 0 0 1 51.25 23.5L35.02 23.5Z" stroke="#264653" stroke-width="1.5"/>
+</svg>
