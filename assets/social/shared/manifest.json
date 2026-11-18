@@ -1,0 +1,1148 @@
+[
+ {
+  "key": "avatar",
+  "title": "Profile picture",
+  "use": "The page's face in every post, comment and message. Facebook masks it to a circle.",
+  "size": [
+   400,
+   400
+  ],
+  "ratio": "1:1",
+  "ftype": "PNG",
+  "maxsize": "PNG or JPG, under 1 MB",
+  "safe": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 400,
+    "h": 400,
+    "label": "Circle crop",
+    "kind": "round"
+   }
+  ],
+  "ctx": "avatar",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-avatar-a.png"
+   ],
+   "line": "Navy mark on Cream. Light, calm, reads best on white feeds.",
+   "svgs": [
+    "assets/social/facebook/facebook-avatar-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-avatar-b.png"
+   ],
+   "line": "The app icon colours (R-93): White mark on Navy. Strongest at 32px.",
+   "svgs": [
+    "assets/social/facebook/facebook-avatar-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "cover",
+  "title": "Cover photo",
+  "use": "The banner across the top of the Page. Desktop shows the full width; the app shows a 16:9 centre crop.",
+  "size": [
+   1640,
+   624
+  ],
+  "ratio": "2.63:1 (desktop) \u00b7 16:9 crop (mobile)",
+  "ftype": "PNG (logo and type) or JPG (photo)",
+  "maxsize": "Under 1 MB; Facebook recommends a small sRGB file",
+  "safe": [
+   {
+    "x": 265,
+    "y": 0,
+    "w": 1110,
+    "h": 624,
+    "label": "Visible on mobile (16:9)",
+    "kind": "keep"
+   },
+   {
+    "x": 40,
+    "y": 470,
+    "w": 380,
+    "h": 154,
+    "label": "Profile picture overlaps (desktop, approx.)",
+    "kind": "ui"
+   }
+  ],
+  "ctx": "cover",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-cover-a.png"
+   ],
+   "line": "Photo right, Paper left, one serif line and the Horizontal logo inside the mobile crop.",
+   "svgs": [
+    "assets/social/facebook/facebook-cover-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-cover-b.png"
+   ],
+   "line": "Deep Teal, the reversed seal centred, two capsules cropped by the edges.",
+   "svgs": [
+    "assets/social/facebook/facebook-cover-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "post-square",
+  "title": "Feed post, square",
+  "use": "Organic posts that must also fit other placements, and carousel cards.",
+  "size": [
+   1080,
+   1080
+  ],
+  "ratio": "1:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB (Meta accepts up to 30 MB)",
+  "safe": [
+   {
+    "x": 60,
+    "y": 60,
+    "w": 960,
+    "h": 960,
+    "label": "Keep type and logo inside",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "feed",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-post-square-a.png"
+   ],
+   "line": "Photo above, Paper band below, serif headline, the seal small.",
+   "svgs": [
+    "assets/social/facebook/facebook-post-square-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-post-square-b.png"
+   ],
+   "line": "Deep Teal, a large serif line, one outline capsule cropped by the corner.",
+   "svgs": [
+    "assets/social/facebook/facebook-post-square-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "post-portrait",
+  "title": "Feed post, 4:5",
+  "use": "The default feed post: the most screen on a phone.",
+  "size": [
+   1080,
+   1350
+  ],
+  "ratio": "4:5",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1.5 MB (Meta accepts up to 30 MB)",
+  "safe": [
+   {
+    "x": 60,
+    "y": 60,
+    "w": 960,
+    "h": 1230,
+    "label": "Keep type and logo inside",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "feed",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-post-portrait-a.png"
+   ],
+   "line": "Full-bleed photo; the Paper card sits where no face is.",
+   "svgs": [
+    "assets/social/facebook/facebook-post-portrait-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-post-portrait-b.png"
+   ],
+   "line": "Mist ground, Teal Deep serif, one standing split capsule on the right.",
+   "svgs": [
+    "assets/social/facebook/facebook-post-portrait-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "link",
+  "title": "Link share image",
+  "use": "The image a shared website link shows (og:image). The title and domain sit under it, set by the page.",
+  "size": [
+   1200,
+   630
+  ],
+  "ratio": "1.91:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB (og:image under 8 MB)",
+  "safe": [
+   {
+    "x": 285,
+    "y": 0,
+    "w": 630,
+    "h": 630,
+    "label": "Centre square: some placements crop to 1:1",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "link",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-link-a.png"
+   ],
+   "line": "Photo strip on the left, Paper, a short serif line in the centre square.",
+   "svgs": [
+    "assets/social/facebook/facebook-link-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-link-b.png"
+   ],
+   "line": "Deep Teal; both capsules live outside the centre square.",
+   "svgs": [
+    "assets/social/facebook/facebook-link-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "story",
+  "title": "Story",
+  "use": "Full-screen, 24 hours. Sound often on; Facebook adds the reply bar and the profile row.",
+  "size": [
+   1080,
+   1920
+  ],
+  "ratio": "9:16",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB (Meta accepts up to 30 MB)",
+  "safe": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 1080,
+    "h": 270,
+    "label": "Profile and progress bar \u00b7 14%",
+    "kind": "ui"
+   },
+   {
+    "x": 0,
+    "y": 1650,
+    "w": 1080,
+    "h": 270,
+    "label": "Reply bar \u00b7 14%",
+    "kind": "ui"
+   },
+   {
+    "x": 80,
+    "y": 1490,
+    "w": 520,
+    "h": 120,
+    "label": "Link sticker",
+    "kind": "sticker"
+   }
+  ],
+  "ctx": "story",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-story-a.png"
+   ],
+   "line": "Paper, the photo in a 16px-radius frame, the serif line below it.",
+   "svgs": [
+    "assets/social/facebook/facebook-story-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-story-b.png"
+   ],
+   "line": "Deep Teal, a large serif line, one standing split capsule cropped by the bottom.",
+   "svgs": [
+    "assets/social/facebook/facebook-story-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "event",
+  "title": "Event cover",
+  "use": "The header of a Facebook event (a live Q&A, a launch). Details in brackets until the event is set.",
+  "size": [
+   1920,
+   1005
+  ],
+  "ratio": "1.91:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1.5 MB",
+  "safe": [
+   {
+    "x": 96,
+    "y": 50,
+    "w": 1728,
+    "h": 905,
+    "label": "Keep type inside (edges crop on some screens)",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "event",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-event-a.png"
+   ],
+   "line": "Photo left, Paper right: date line, serif title, seal.",
+   "svgs": [
+    "assets/social/facebook/facebook-event-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-event-b.png"
+   ],
+   "line": "Deep Teal, serif title in Paper, two capsules on the right.",
+   "svgs": [
+    "assets/social/facebook/facebook-event-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "ad",
+  "title": "Ad-ready post",
+  "use": "A boosted post or Meta ad. Follows the Ads page: headline of nine words or fewer, one Yellow CTA, the legal line inside the art.",
+  "size": [
+   1080,
+   1350
+  ],
+  "ratio": "4:5 (also export 1:1 and 9:16 from the Ads page templates)",
+  "ftype": "PNG or JPG",
+  "maxsize": "Meta: up to 30 MB",
+  "safe": [
+   {
+    "x": 60,
+    "y": 60,
+    "w": 960,
+    "h": 1230,
+    "label": "Nothing critical at the edges",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "feed",
+  "a": {
+   "files": [
+    "assets/social/facebook/facebook-ad-a.png"
+   ],
+   "line": "Photo top 56%, Deep Teal panel: headline, Yellow button, legal line.",
+   "svgs": [
+    "assets/social/facebook/facebook-ad-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/facebook/facebook-ad-b.png"
+   ],
+   "line": "Paper, type only, one outline capsule cropped by the corner.",
+   "svgs": [
+    "assets/social/facebook/facebook-ad-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "facebook"
+ },
+ {
+  "key": "avatar",
+  "title": "Profile picture",
+  "use": "Instagram and Threads share it. Shown as a circle in the feed, stories and comments.",
+  "size": [
+   320,
+   320
+  ],
+  "ratio": "1:1",
+  "ftype": "PNG",
+  "maxsize": "PNG or JPG, under 1 MB",
+  "safe": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 320,
+    "h": 320,
+    "label": "Circle crop",
+    "kind": "round"
+   }
+  ],
+  "ctx": "avatar",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-avatar-a.png"
+   ],
+   "line": "Navy mark on Cream. Light, calm, reads best on white feeds.",
+   "svgs": [
+    "assets/social/instagram/instagram-avatar-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-avatar-b.png"
+   ],
+   "line": "The app icon colours (R-93): White mark on Navy. Strongest at 32px.",
+   "svgs": [
+    "assets/social/instagram/instagram-avatar-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "channel": "instagram",
+  "key": "grid",
+  "title": "Grid look",
+  "use": "How nine posts read together on the profile (3:4 tiles since 2025). Plan the grid three posts at a time.",
+  "size": [
+   1080,
+   1437
+  ],
+  "ratio": "3 \u00d7 3 tiles at 3:4",
+  "ftype": "PNG (planning view, not posted)",
+  "maxsize": "n/a",
+  "safe": [],
+  "ctx": "grid",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-grid-a.png"
+   ],
+   "line": "Checkerboard: photo, type, photo. Calm and even.",
+   "svgs": [
+    "assets/social/instagram/instagram-grid-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-grid-b.png"
+   ],
+   "line": "Rows: a dark graphic row, a photo row, a light type row.",
+   "svgs": [
+    "assets/social/instagram/instagram-grid-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  }
+ },
+ {
+  "key": "post-portrait",
+  "title": "Feed post, 4:5",
+  "use": "The default feed post. The profile grid shows a 3:4 centre crop.",
+  "size": [
+   1080,
+   1350
+  ],
+  "ratio": "4:5",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1.5 MB (Meta accepts up to 30 MB)",
+  "safe": [
+   {
+    "x": 34,
+    "y": 0,
+    "w": 1012,
+    "h": 1350,
+    "label": "Profile grid crop (3:4)",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "feed",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-post-portrait-a.png"
+   ],
+   "line": "Full-bleed photo, Paper card below the face, serif line, seal.",
+   "svgs": [
+    "assets/social/instagram/instagram-post-portrait-a.svg"
+   ],
+   "jpgs": [
+    "assets/social/instagram/instagram-post-portrait-a.jpg"
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-post-portrait-b.png"
+   ],
+   "line": "Deep Teal, a large serif line, one split capsule cropped by the corner.",
+   "svgs": [
+    "assets/social/instagram/instagram-post-portrait-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "post-square",
+  "title": "Feed post, 1:1",
+  "use": "Square posts. The profile grid crops them to 3:4, so the sides fall away there.",
+  "size": [
+   1080,
+   1080
+  ],
+  "ratio": "1:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB (Meta accepts up to 30 MB)",
+  "safe": [
+   {
+    "x": 135,
+    "y": 0,
+    "w": 810,
+    "h": 1080,
+    "label": "Profile grid crop (3:4)",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "feed",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-post-square-a.png"
+   ],
+   "line": "Photo above, Paper band, type inside the 3:4 grid crop.",
+   "svgs": [
+    "assets/social/instagram/instagram-post-square-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-post-square-b.png"
+   ],
+   "line": "Mist ground, Teal Deep serif, one standing outline capsule.",
+   "svgs": [
+    "assets/social/instagram/instagram-post-square-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "carousel",
+  "title": "Carousel",
+  "use": "Two to ten cards, one idea per card. The cover is what the grid and the feed show first.",
+  "size": [
+   1080,
+   1350
+  ],
+  "ratio": "4:5, every card the same",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB per card",
+  "safe": [
+   {
+    "x": 34,
+    "y": 0,
+    "w": 1012,
+    "h": 1350,
+    "label": "Grid crop of the cover (3:4)",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "carousel",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-carousel-a-1.png",
+    "assets/social/instagram/instagram-carousel-a-2.png",
+    "assets/social/instagram/instagram-carousel-a-3.png"
+   ],
+   "line": "Cover photo, then Paper cards: number, serif step, one plain line; the legal line on the last card.",
+   "svgs": [
+    "assets/social/instagram/instagram-carousel-a-1.svg",
+    "assets/social/instagram/instagram-carousel-a-2.svg",
+    "assets/social/instagram/instagram-carousel-a-3.svg"
+   ],
+   "jpgs": [
+    null,
+    null,
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-carousel-b-1.png",
+    "assets/social/instagram/instagram-carousel-b-2.png",
+    "assets/social/instagram/instagram-carousel-b-3.png"
+   ],
+   "line": "Deep Teal; one outline capsule runs across all three cards (swipe to follow it).",
+   "svgs": [
+    "assets/social/instagram/instagram-carousel-b-1.svg",
+    "assets/social/instagram/instagram-carousel-b-2.svg",
+    "assets/social/instagram/instagram-carousel-b-3.svg"
+   ],
+   "jpgs": [
+    null,
+    null,
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "story",
+  "title": "Story",
+  "use": "Full-screen, 24 hours. Instagram lays the profile row on top and the reply bar at the bottom.",
+  "size": [
+   1080,
+   1920
+  ],
+  "ratio": "9:16",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB (Meta accepts up to 30 MB)",
+  "safe": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 1080,
+    "h": 250,
+    "label": "Profile and progress bar \u00b7 14%",
+    "kind": "ui"
+   },
+   {
+    "x": 0,
+    "y": 1670,
+    "w": 1080,
+    "h": 250,
+    "label": "Reply bar \u00b7 14%",
+    "kind": "ui"
+   },
+   {
+    "x": 80,
+    "y": 1500,
+    "w": 520,
+    "h": 120,
+    "label": "Link sticker",
+    "kind": "sticker"
+   }
+  ],
+  "ctx": "story",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-story-a.png"
+   ],
+   "line": "Paper, a framed photo, the serif line; room for the link sticker.",
+   "svgs": [
+    "assets/social/instagram/instagram-story-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-story-b.png"
+   ],
+   "line": "Deep Teal, a large serif line, one split capsule low on the right.",
+   "svgs": [
+    "assets/social/instagram/instagram-story-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "reel-cover",
+  "title": "Reel cover",
+  "use": "The still that stands for a reel in the Reels tab (9:16) and in the profile grid (3:4 centre).",
+  "size": [
+   1080,
+   1920
+  ],
+  "ratio": "9:16, grid crop 3:4",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1.5 MB",
+  "safe": [
+   {
+    "x": 0,
+    "y": 240,
+    "w": 1080,
+    "h": 1440,
+    "label": "Profile grid crop (3:4)",
+    "kind": "keep"
+   },
+   {
+    "x": 0,
+    "y": 285,
+    "w": 1080,
+    "h": 1350,
+    "label": "4:5 crop (feed preview)",
+    "kind": "keep2"
+   }
+  ],
+  "ctx": "reel",
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-reel-cover-a.png"
+   ],
+   "line": "Photo full-height, a Paper band with the title inside the grid crop.",
+   "svgs": [
+    "assets/social/instagram/instagram-reel-cover-a.svg"
+   ],
+   "jpgs": [
+    "assets/social/instagram/instagram-reel-cover-a.jpg"
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-reel-cover-b.png"
+   ],
+   "line": "Deep Teal, the title large, one standing split capsule.",
+   "svgs": [
+    "assets/social/instagram/instagram-reel-cover-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "highlights",
+  "title": "Highlight covers",
+  "use": "Five saved story groups under the bio: Start, How it works, Privacy, Questions, Delivery. The label is typed in the app, never drawn on the cover.",
+  "size": [
+   1080,
+   1920
+  ],
+  "ratio": "9:16 file, circle crop from the centre",
+  "ftype": "PNG",
+  "maxsize": "Under 500 KB",
+  "safe": [
+   {
+    "x": 0,
+    "y": 420,
+    "w": 1080,
+    "h": 1080,
+    "label": "Circle crop",
+    "kind": "round"
+   }
+  ],
+  "ctx": "highlights",
+  "labels": [
+   "Start",
+   "How it works",
+   "Privacy",
+   "Questions",
+   "Delivery"
+  ],
+  "a": {
+   "files": [
+    "assets/social/instagram/instagram-highlight-start-a.png",
+    "assets/social/instagram/instagram-highlight-how-a.png",
+    "assets/social/instagram/instagram-highlight-privacy-a.png",
+    "assets/social/instagram/instagram-highlight-questions-a.png",
+    "assets/social/instagram/instagram-highlight-delivery-a.png"
+   ],
+   "line": "Deep Teal icons on Mist: quiet, reads as a set.",
+   "svgs": [
+    "assets/social/instagram/instagram-highlight-start-a.svg",
+    "assets/social/instagram/instagram-highlight-how-a.svg",
+    "assets/social/instagram/instagram-highlight-privacy-a.svg",
+    "assets/social/instagram/instagram-highlight-questions-a.svg",
+    "assets/social/instagram/instagram-highlight-delivery-a.svg"
+   ],
+   "jpgs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/instagram-highlight-start-b.png",
+    "assets/social/instagram/instagram-highlight-how-b.png",
+    "assets/social/instagram/instagram-highlight-privacy-b.png",
+    "assets/social/instagram/instagram-highlight-questions-b.png",
+    "assets/social/instagram/instagram-highlight-delivery-b.png"
+   ],
+   "line": "Paper icons on Deep Teal: matches the dark posts.",
+   "svgs": [
+    "assets/social/instagram/instagram-highlight-start-b.svg",
+    "assets/social/instagram/instagram-highlight-how-b.svg",
+    "assets/social/instagram/instagram-highlight-privacy-b.svg",
+    "assets/social/instagram/instagram-highlight-questions-b.svg",
+    "assets/social/instagram/instagram-highlight-delivery-b.svg"
+   ],
+   "jpgs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "threads",
+  "title": "Threads post image",
+  "use": "Threads is text first: an image only when one line deserves a card. Same profile picture as Instagram.",
+  "size": [
+   1080,
+   1350
+  ],
+  "ratio": "4:5",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 1 MB [Threads limit: check]",
+  "safe": [
+   {
+    "x": 60,
+    "y": 60,
+    "w": 960,
+    "h": 1230,
+    "label": "Keep type inside",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "threads",
+  "a": {
+   "files": [
+    "assets/social/instagram/threads-post-a.png"
+   ],
+   "line": "A quote card: Paper, the seal, one serif line.",
+   "svgs": [
+    "assets/social/instagram/threads-post-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/instagram/threads-post-b.png"
+   ],
+   "line": "Deep Teal quote card with one outline capsule.",
+   "svgs": [
+    "assets/social/instagram/threads-post-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "instagram"
+ },
+ {
+  "key": "avatar",
+  "title": "Profile picture",
+  "use": "Shown as a circle on the profile, every post and every reply.",
+  "size": [
+   400,
+   400
+  ],
+  "ratio": "1:1",
+  "ftype": "PNG",
+  "maxsize": "PNG or JPG, under 2 MB",
+  "safe": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 400,
+    "h": 400,
+    "label": "Circle crop",
+    "kind": "round"
+   }
+  ],
+  "ctx": "avatar",
+  "a": {
+   "files": [
+    "assets/social/x/x-avatar-a.png"
+   ],
+   "line": "Navy mark on Cream. Light, calm, reads best on white feeds.",
+   "svgs": [
+    "assets/social/x/x-avatar-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/x/x-avatar-b.png"
+   ],
+   "line": "The app icon colours (R-93): White mark on Navy. Strongest at 32px.",
+   "svgs": [
+    "assets/social/x/x-avatar-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "x"
+ },
+ {
+  "key": "header",
+  "title": "Header",
+  "use": "The banner above the profile. The profile picture overlaps its lower left; phones trim the top and bottom.",
+  "size": [
+   1500,
+   500
+  ],
+  "ratio": "3:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 2 MB",
+  "safe": [
+   {
+    "x": 0,
+    "y": 60,
+    "w": 1500,
+    "h": 380,
+    "label": "Visible on phones (approx.)",
+    "kind": "keep"
+   },
+   {
+    "x": 40,
+    "y": 330,
+    "w": 330,
+    "h": 170,
+    "label": "Profile picture overlaps",
+    "kind": "ui"
+   }
+  ],
+  "ctx": "xheader",
+  "a": {
+   "files": [
+    "assets/social/x/x-header-a.png"
+   ],
+   "line": "Paper left with the serif line and logo, photo right; the lower left stays clear.",
+   "svgs": [
+    "assets/social/x/x-header-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/x/x-header-b.png"
+   ],
+   "line": "Deep Teal, the reversed seal centred right of the avatar, two capsules.",
+   "svgs": [
+    "assets/social/x/x-header-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "x"
+ },
+ {
+  "key": "post-wide",
+  "title": "Post image, 16:9",
+  "use": "A single image in a post. Shown whole in the timeline on phone and desktop.",
+  "size": [
+   1600,
+   900
+  ],
+  "ratio": "16:9",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 5 MB",
+  "safe": [
+   {
+    "x": 80,
+    "y": 60,
+    "w": 1440,
+    "h": 780,
+    "label": "Keep type inside",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "xpost",
+  "a": {
+   "files": [
+    "assets/social/x/x-post-wide-a.png"
+   ],
+   "line": "Photo left, Paper right, a three-line serif headline and the seal.",
+   "svgs": [
+    "assets/social/x/x-post-wide-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/x/x-post-wide-b.png"
+   ],
+   "line": "Deep Teal, the serif line large, one split capsule cropped by the edge.",
+   "svgs": [
+    "assets/social/x/x-post-wide-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "x"
+ },
+ {
+  "key": "post-square",
+  "title": "Post image, 1:1",
+  "use": "Square image posts and the first image of a set.",
+  "size": [
+   1080,
+   1080
+  ],
+  "ratio": "1:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 5 MB",
+  "safe": [
+   {
+    "x": 60,
+    "y": 60,
+    "w": 960,
+    "h": 960,
+    "label": "Keep type inside",
+    "kind": "keep"
+   }
+  ],
+  "ctx": "xpost",
+  "a": {
+   "files": [
+    "assets/social/x/x-post-square-a.png"
+   ],
+   "line": "Photo above (partners may appear in Sexual health, R-37), Paper band below.",
+   "svgs": [
+    "assets/social/x/x-post-square-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/x/x-post-square-b.png"
+   ],
+   "line": "Mist ground, Teal Deep serif, one standing outline capsule.",
+   "svgs": [
+    "assets/social/x/x-post-square-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "x"
+ },
+ {
+  "key": "card",
+  "title": "Link card image",
+  "use": "The large image card a shared website link shows (twitter:image). X lays the domain over the lower left.",
+  "size": [
+   1200,
+   628
+  ],
+  "ratio": "1.91:1",
+  "ftype": "PNG or JPG",
+  "maxsize": "Under 5 MB",
+  "safe": [
+   {
+    "x": 24,
+    "y": 548,
+    "w": 420,
+    "h": 60,
+    "label": "Domain label (X adds it)",
+    "kind": "ui"
+   }
+  ],
+  "ctx": "xcard",
+  "a": {
+   "files": [
+    "assets/social/x/x-card-a.png"
+   ],
+   "line": "Paper left with the seal and a serif line, photo right.",
+   "svgs": [
+    "assets/social/x/x-card-a.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "b": {
+   "files": [
+    "assets/social/x/x-card-b.png"
+   ],
+   "line": "Deep Teal, two capsules on the right, the lower left kept clear.",
+   "svgs": [
+    "assets/social/x/x-card-b.svg"
+   ],
+   "jpgs": [
+    null
+   ]
+  },
+  "channel": "x"
+ }
+]
