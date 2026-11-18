@@ -1,4 +1,4 @@
-/* unifiedmeds brand tokens · Brand Edition 03 (15.11.2026)
+/* unifiedmeds brand tokens · Brand Edition 04 (from 18.11.2026)
    GENERATED from tokens/tokens.json by tools/build_tokens.py. Do not edit by hand. */
 
 :root {
@@ -250,10 +250,8 @@
   --size-favicon-md: 32px;
   --size-favicon-sm: 16px;
   --size-button-padding-x: 24px;
-  --size-capsule-stroke: 20px;
   --size-capsule-stroke-ratio: 0.0085;
   --size-capsule-stroke-min: 1.5px;
-  --size-capsule-divider-max: 120px;
   --shadow-overlay: 0 24px 60px rgba(38, 70, 83, 0.16), 0 2px 6px rgba(38, 70, 83, 0.06);
   --motion-duration-fast: 150ms;
   --motion-duration-open: 220ms;
@@ -280,6 +278,26 @@
   --opacity-capsule-soft: 0.5;
   --opacity-step-faded: 0.45;
   --opacity-disabled: 0.4;
+  --chart-line-width: 2px;
+  --chart-ring-stroke: 8px;
+  --chart-marker-radius: 4px;
+  --chart-marker-ring: 2px;
+  --chart-dot-border: 1.5px;
+  --chart-dot-border-color: var(--color-line-deep);
+  --chart-plot-height-desktop: 200px;
+  --chart-plot-height-mobile: 160px;
+  --chart-hit-area: 24px;
+  --chart-figure-desktop-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --chart-figure-desktop-size: 26px;
+  --chart-figure-desktop-weight: 600;
+  --chart-figure-desktop-line: 30px;
+  --chart-figure-desktop-tracking: 0;
+  --chart-figure-mobile-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --chart-figure-mobile-size: 21px;
+  --chart-figure-mobile-weight: 600;
+  --chart-figure-mobile-line: 27px;
+  --chart-figure-mobile-tracking: 0;
+  --chart-refetch-opacity: 0.5;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -296,5 +314,6 @@
     --motion-distance-drift: 0px;
     --motion-stagger: 0ms;
     --motion-stagger-fine: 0ms;
+    --motion-drift-rotate: 0deg;
   }
 }

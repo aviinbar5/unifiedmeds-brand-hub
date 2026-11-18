@@ -70,3 +70,93 @@
     });
   });
 })();
+
+/* Search (Edition 04, 18.11.2026): one dialog over window.HUB_INDEX (pages, sections, rules, colours, files).
+   Open with the search button, Cmd/Ctrl+K or "/". Arrow keys move, Enter opens, Esc closes. Hebrew words match pages. */
+(function () {
+  var dlg = document.querySelector('dialog.hub-search');
+  if (!dlg) return;
+  var input = dlg.querySelector('input'), list = dlg.querySelector('.hub-search-list'), hint = dlg.querySelector('.hub-search-hint');
+  var KIND = { page: 'Page', section: 'Section', rule: 'Rule', decision: 'Decision', colour: 'Colour', file: 'File' };
+  var WEIGHT = { page: 6, rule: 5, decision: 4, section: 3, colour: 3, file: 1 };
+  var sel = 0, results = [];
+  function norm(s) { return String(s || '').toLowerCase().replace(/[֑-ׇ]/g, '').replace(/\s+/g, ' ').trim(); }
+  function score(item, terms, q) {
+    var t = norm(item.t), d = norm(item.d), h = norm(item.h), s = 0;
+    for (var i = 0; i < terms.length; i++) {
+      var w = terms[i], hit = 0;
+      if (t === w) hit = 40; else if (t.indexOf(w) === 0) hit = 25; else if (t.indexOf(w) > -1) hit = 15;
+      else if (h.indexOf(w) > -1) hit = 14; else if (d.indexOf(w) > -1) hit = 6;
+      if (!hit) return 0;
+      s += hit;
+    }
+    if (t.indexOf(q) > -1) s += 10;
+    return s + (WEIGHT[item.k] || 0);
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function render() {
+    var q = norm(input.value), idx = window.HUB_INDEX || [];
+    hint.hidden = !!q;
+    if (!q) { list.innerHTML = ''; results = []; return; }
+    var terms = q.split(' ');
+    results = idx.map(function (it) { return { it: it, s: score(it, terms, q) }; })
+      .filter(function (r) { return r.s > 0; })
+      .sort(function (a, b) { return b.s - a.s; }).slice(0, 40).map(function (r) { return r.it; });
+    sel = 0;
+    if (!results.length) { list.innerHTML = '<li class="empty">Nothing found for “' + esc(input.value) + '”. Try another word, a rule number or a colour.</li>'; return; }
+    list.innerHTML = results.map(function (it, i) {
+      return '<li><a role="option" id="sr-' + i + '" href="' + esc(it.u) + '"' + (i === 0 ? ' aria-selected="true"' : '') + '><b>' + esc(it.t) + '</b><span>' + esc(it.d || it.g || '') + '</span><em>' + (KIND[it.k] || '') + '</em></a></li>';
+    }).join('');
+  }
+  function move(n) {
+    var opts = list.querySelectorAll('a[role="option"]');
+    if (!opts.length) return;
+    opts[sel].removeAttribute('aria-selected');
+    sel = (sel + n + opts.length) % opts.length;
+    opts[sel].setAttribute('aria-selected', 'true');
+    opts[sel].scrollIntoView({ block: 'nearest' });
+  }
+  function open() {
+    var hub = document.querySelector('.hub'), btn = document.querySelector('.hub-toggle');
+    if (hub && hub.classList.contains('is-open')) { hub.classList.remove('is-open'); document.body.style.overflow = ''; if (btn) btn.setAttribute('aria-expanded', 'false'); }
+    if (!dlg.open) dlg.showModal();
+    input.select(); render();
+  }
+  document.querySelectorAll('[data-search-open]').forEach(function (b) { b.addEventListener('click', open); });
+  dlg.querySelector('.hub-search-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  input.addEventListener('input', render);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+    else if (e.key === 'Enter') { var a = list.querySelector('a[aria-selected="true"]'); if (a) { e.preventDefault(); dlg.close(); location.href = a.getAttribute('href'); } }
+  });
+  list.addEventListener('click', function (e) { if (e.target.closest('a')) dlg.close(); });
+  document.addEventListener('keydown', function (e) {
+    var typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '') || (e.target && e.target.isContentEditable);
+    if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); open(); }
+    else if (e.key === '/' && !typing && !dlg.open) { e.preventDefault(); open(); }
+  });
+  if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) document.querySelectorAll('.hub-search-btn kbd').forEach(function (k) { k.textContent = 'Ctrl K'; });
+})();
+
+/* Menu groups: the group of the current page opens; the open or closed state of the others is remembered per viewer. */
+(function () {
+  var KEY = 'um-hub-groups';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { saved = {}; }
+  document.querySelectorAll('details.hub-group').forEach(function (d) {
+    var g = d.getAttribute('data-group');
+    var current = !!d.querySelector('[aria-current="page"]');
+    if (!current && saved[g] === true) d.open = true;
+    var sum = d.querySelector('summary');
+    if (sum) sum.addEventListener('click', function () {
+      setTimeout(function () {  /* only a viewer's click is remembered, never the initial open state */
+        saved[g] = d.open;
+        try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* storage blocked: state is not kept */ }
+      }, 0);
+    });
+  });
+  var cur = document.querySelector('.hub-nav [aria-current="page"]');
+  if (cur && cur.scrollIntoView) { var nav = document.querySelector('.hub-nav'); if (nav && cur.offsetTop > nav.clientHeight - 80) nav.scrollTop = cur.offsetTop - nav.clientHeight / 2; }
+})();

@@ -1,7 +1,7 @@
-/* unifiedmeds components · Brand Edition 03 (15.11.2026, buttons updated)
+/* unifiedmeds components · Brand Edition 04
    Reference implementation of the core components. Uses brand.css tokens only:
    no hex, no px values that are not tokens (except 1px hairlines and 1.5px button borders).
-   Figma sources: Buttons — Hover Rules 2676:309 · Main menu v3 4046:606 / spec 4010:609 (archive copy aOret…). */
+   Figma sources: Buttons, Hover Rules 2676:309 · Main menu v3 4046:606 / spec 4010:609 (archive copy aOret…). */
 
 /* ---------- Base ---------- */
 .sc {
@@ -16,7 +16,7 @@
 .specimen--dark :focus-visible { outline-color: var(--color-focus-ring-on-dark); }
 
 /* ---------- Buttons ----------
-   Rule (Avi, 15.11.2026, U-11): buttons are rounded rectangles, not pills, because the logo is the capsule.
+   Rule (U-11, R-40): buttons are rounded rectangles, not pills, because the logo is the capsule.
    One height for every button: size.control (50px). Radius radius.button (5px). Side padding size.button-padding-x (24px).
    Width = label width + two paddings. Figma source: Button set 2676:310.
    Exceptions are explicit modifiers: .btn--header (44px) and .btn--bar (48px). */
@@ -102,7 +102,7 @@
 .btn--header { --btn-h: var(--size-control-exception-header); font-size: var(--type-desktop-nav-size); }
 .btn--bar { --btn-h: var(--size-control-exception-mobile-bar); width: 100%; }
 .btn[aria-disabled="true"], .btn:disabled {
-  /* R-42 (Avi 17.11.2026): the button keeps its own colours at 40% opacity and does not react to hover */
+  /* R-42: the button keeps its own colours at 40% opacity and does not react to hover */
   --btn-bg-hover: var(--btn-bg);
   --btn-fg-hover: var(--btn-fg);
   --btn-border-hover: var(--btn-border);
@@ -140,8 +140,41 @@
 .field--error .field__input { border-color: var(--color-brand-coral); border-width: 2px; }
 .field--error .field__help { color: var(--color-text-primary); display: flex; gap: var(--space-2); align-items: center; }
 .field--error .field__help::before { content: ''; flex: none; width: var(--space-3); height: var(--space-3); border-radius: 50%; background: var(--color-brand-coral); }
+/* Disabled (R-42): the field keeps its own colours at 40% (--opacity-disabled), never a grey fill, no hover */
+.field__input:disabled, .field__input[aria-disabled="true"] { opacity: var(--opacity-disabled); cursor: not-allowed; }
+.field__input:disabled:hover, .field__input[aria-disabled="true"]:hover { border-color: var(--color-line-field); }
+.field:has(.field__input:disabled) .field__label, .field:has(.field__input:disabled) .field__help { opacity: var(--opacity-disabled); }
 
-/* Answer option (assessment): selected = Deep Teal border, no scale */
+/* ---------- Checkbox and radio (R-30, the one spec; the assessment uses the same) ----------
+   22px box, 1.5px Line/Field border, radius 5 like buttons (the radio is round). Checked: Deep Teal fill,
+   Paper tick (radio: Deep Teal dot). Invalid: 2px Coral border. Disabled: own colours at 40%.
+   The whole row is the hit area, 44px minimum (.check-row). Never pre-ticked. */
+.check {
+  -webkit-appearance: none; appearance: none; margin: 0; flex: none; box-sizing: border-box;
+  display: inline-grid; place-items: center;
+  width: calc(var(--space-5) + var(--space-1) / 2); height: calc(var(--space-5) + var(--space-1) / 2);
+  border: var(--size-button-border) solid var(--color-line-field); border-radius: var(--radius-button);
+  background: var(--color-surface-card); cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-ui), border-color var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.check::after {
+  content: ''; width: 100%; height: 100%; background: var(--color-text-on-dark); opacity: 0;
+  clip-path: polygon(20% 52%, 31% 41%, 43% 53%, 69% 27%, 80% 38%, 43% 75%);
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-ui);
+}
+.check:checked { background: var(--color-brand-deep-teal); border-color: var(--color-brand-deep-teal); }
+.check:checked::after { opacity: 1; }
+.check--radio { border-radius: 50%; }
+.check--radio::after { background: var(--color-brand-deep-teal); clip-path: circle(28% at 50% 50%); }
+.check--radio:checked { background: var(--color-surface-card); }
+.check[aria-invalid="true"] { border: 2px solid var(--color-brand-coral); }
+.check:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
+.check-row { display: flex; gap: var(--space-3); align-items: center; min-height: var(--size-tap-min); cursor: pointer; }
+.check-row:has(.check:disabled) { cursor: not-allowed; }
+.check-row:has(.check:disabled) > span { opacity: var(--opacity-disabled); }
+
+/* Answer option, MULTIPLE choice (assessment check card): selected = Deep Teal border plus a 1px inset,
+   Paper ground, no fill, no scale (R-42). A SINGLE choice uses the choice card (.choice): Deep Teal fill, Yellow mark. */
 .option {
   display: flex; align-items: center; gap: var(--space-3);
   box-sizing: border-box; min-height: var(--size-control);
@@ -152,7 +185,8 @@
   cursor: pointer;
   transition: border-color var(--motion-duration-fast) var(--motion-easing-ui), box-shadow var(--motion-duration-fast) var(--motion-easing-ui);
 }
-.option[aria-checked="true"], .option.is-selected { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); }
+.option:hover { border-color: var(--color-brand-deep-teal); }
+.option:has(input:checked), .option[aria-checked="true"], .option.is-selected { border-color: var(--color-brand-deep-teal); box-shadow: inset 0 0 0 1px var(--color-brand-deep-teal); }
 
 /* ---------- Cards ---------- */
 .card {
@@ -204,7 +238,7 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .btn--icon:hover .btn-icon[data-dir="down"], .btn--icon:focus-visible .btn-icon[data-dir="down"] { transform: translateY(var(--motion-distance-lift)); }
 .btn--icon:hover .btn-icon[data-dir="out"], .btn--icon:focus-visible .btn-icon[data-dir="out"] { transform: translate(var(--motion-distance-lift), calc(var(--motion-distance-lift) * -1)); }
 
-/* ===================== Feedback and states (16.11.2026, proposal) ===================== */
+/* ===================== Feedback and states ===================== */
 .specimen--dark { background: var(--color-brand-teal-deep); }
 .specimen--center { display: grid; justify-items: center; align-content: center; gap: var(--space-4); text-align: center; }
 /* Progress steps */
@@ -216,14 +250,16 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .steps-bar .is-current { color: var(--color-text-on-dark); }
 .steps-bar .is-current .steps-dot { background: var(--color-brand-yellow); border-color: var(--color-brand-yellow); color: var(--color-brand-deep-teal); }
 @media (max-width: 767px) { .steps-bar li:not(.is-current) { font-size: 0; gap: 0; } }
-/* Choice cards */
+/* Choice cards: a SINGLE choice (R-42, q130). Selected = Deep Teal fill, Paper text, the Yellow mark.
+   Several answers use .option (border plus inset). No badge ("Most popular", "Best value": R-61, R-67). */
 .choice-group { display: grid; gap: var(--space-2); }
 .choice { position: relative; display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-5); border: 1px solid var(--color-line-base); border-radius: var(--radius-card); background: var(--color-surface-paper); color: var(--color-text-primary); cursor: pointer; transition: border-color var(--motion-duration-fast) var(--motion-easing-ui), background-color var(--motion-duration-fast) var(--motion-easing-ui); }
 .choice input { position: absolute; opacity: 0; pointer-events: none; }
 .choice:hover { border-color: var(--color-line-field); }
 .choice:has(input:focus-visible) { outline: var(--size-focus-width) solid var(--color-focus-ring); outline-offset: var(--size-focus-offset); }
 .choice-radio { flex: none; display: grid; place-items: center; width: calc(var(--space-5) + var(--space-1) / 2); height: calc(var(--space-5) + var(--space-1) / 2); border-radius: var(--radius-pill); border: 1.5px solid var(--color-surface-wash-blue); color: var(--color-brand-deep-teal); }
-.choice-radio svg { width: var(--space-3); height: var(--space-3); }
+.choice-radio svg { width: var(--space-3); height: var(--space-3); opacity: 0; transition: opacity var(--motion-duration-fast) var(--motion-easing-ui); }
+.choice:has(input:checked) .choice-radio svg { opacity: 1; }
 .choice-text { display: grid; gap: var(--space-1); flex: 1; }
 .choice-text b { font: 600 var(--type-desktop-card-size) / var(--type-desktop-card-line) var(--font-family-sans); }
 .choice-text span { font: var(--type-desktop-small-weight, 400) var(--type-desktop-small-size) / var(--type-desktop-small-line) var(--font-family-sans); color: var(--color-text-secondary); }
@@ -241,8 +277,9 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 /* Tags */
 .tag { display: inline-flex; align-items: center; padding: calc(var(--space-1) + var(--space-1) / 2) calc(var(--space-3) + var(--space-1) / 2); border-radius: var(--radius-pill); border: 1px solid var(--color-line-base); font: 400 var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-primary); white-space: nowrap; }
 .tag--highlight { background: var(--color-surface-wash-yellow); border-color: var(--color-surface-wash-yellow); }
-.tag--product { background: var(--tag-colour); border-color: var(--tag-colour); color: var(--color-text-strong); }
-.tag--quiet { border-color: transparent; padding-inline: 0; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking, 0.08em); text-transform: uppercase; color: var(--color-text-secondary); }
+.tag--product { gap: var(--space-2); }
+.tag--product::before { content: ''; flex: none; width: var(--space-2); height: var(--space-2); border-radius: 50%; background: var(--tag-colour); } /* R-85: the product colour marks, it never carries text */
+.tag--quiet { border-color: transparent; padding-inline: 0; font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); color: var(--color-text-secondary); } /* sentence case (R-22) */
 .on-dark .tag { border-color: var(--color-surface-wash-blue); color: var(--color-text-on-dark); }
 /* Toasts */
 .toast { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-3); align-items: start; padding: var(--space-4); border: 1px solid var(--color-line-soft); border-radius: var(--radius-small); background: var(--color-surface-card); box-shadow: var(--shadow-overlay); }
@@ -259,13 +296,23 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .errpage { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-10) var(--space-8); border-radius: var(--radius-card); background: var(--color-surface-mist); }
 .errpage-title { font: var(--type-desktop-section-weight) var(--type-desktop-section-size) / var(--type-desktop-section-line) var(--font-family-serif); color: var(--color-text-strong); }
 .errpage p { margin: 0 0 var(--space-2); color: var(--color-text-secondary-on-mist); }
-/* Loading. The loader is the logo capsule (tools/capsule_svg.py, length 60 in a 64 x 25.5 box): left half 55% of the length,
-   right half taller. Never a rounded rect with equal halves. 72px wide on desktop and mobile; 40px inside a button. */
+/* Loading (R-42, R-53, O-11 closed): one loader, the logo capsule with its divider (tools/capsule_svg.py, length 61.6
+   in a 64 x 24.47 box, R-105, R-109). The fill sits inside the line and stops short of the divider on both sides, so a full
+   loader keeps the thin gap at the joint. Line = the R-109 stroke: stroke_for() is 1.5px at 64 and at 40, so the stroke
+   is drawn at --size-capsule-stroke-min and never scales. 64px wide on desktop and mobile; 40px inside a button. */
 .cap-loader { width: calc(var(--space-14) + var(--space-2)); height: auto; overflow: visible; }
-.cap-loader-line { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: 2; }
+.cap-loader-line { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: var(--size-capsule-stroke-min); vector-effect: non-scaling-stroke; }
 .cap-loader-fill { fill: var(--color-brand-deep-teal); transform-box: fill-box; transform-origin: left center; animation: cap-fill var(--motion-duration-loader) var(--motion-easing-ui) infinite; }
 @keyframes cap-fill { 0% { transform: scaleX(0); } 60%, 100% { transform: scaleX(1); opacity: 0.15; } }
 @media (prefers-reduced-motion: reduce) { .cap-loader-fill { animation: none; transform: scaleX(0.5); } }
+/* Progress (R-42): the same capsule fills step by step; desktop 120 wide, mobile 96 (as on the assessment screens) */
+.cap-prog { position: relative; display: block; flex: none; width: calc(var(--space-24) + var(--space-6)); }
+.cap-prog svg { display: block; width: 100%; height: auto; }
+.cap-prog__line path { fill: none; stroke: var(--color-brand-deep-teal); stroke-width: var(--size-capsule-stroke-min); vector-effect: non-scaling-stroke; }
+.cap-prog__fill { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--p, 0%)) 0 0); transition: clip-path var(--motion-duration-open) var(--motion-easing-ui); }
+.cap-prog__fill path { fill: var(--color-brand-deep-teal); }
+.cap-prog--m { width: var(--space-24); }
+@media (prefers-reduced-motion: reduce) { .cap-prog__fill { transition: none; } }
 .btn.is-loading { position: relative; pointer-events: none; }
 .btn.is-loading .btn-label { visibility: hidden; }
 .btn.is-loading .cap-loader { position: absolute; inset: 0; margin: auto; width: var(--space-10); }
@@ -278,10 +325,10 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .check-list svg { flex: none; width: var(--space-5); height: var(--space-5); padding: calc(var(--space-1) * 0.75); box-sizing: border-box; border-radius: var(--radius-pill); background: var(--color-surface-wash-blue); color: var(--color-brand-deep-teal); }
 
 /* =====================================================================
-   Round 2 · Avi's review decisions D3, D5, D7 (17.11.2026, proposed)
+   Adjacent buttons (R-112), interactive states (R-113), footer (R-114)
    ===================================================================== */
 
-/* ---------- D3 · Adjacent buttons never share a colour, in any state ----------
+/* ---------- R-112 · Adjacent buttons never share a colour, in any state ----------
    Next to a Yellow button: Outline, Outline Light and Light hover to Deep Teal with a Paper label
    (never to Yellow); Dark hovers to Blue-dark (its rest Teal-deep is too close to Deep Teal).
    On a dark surface (.on-dark) the outline and light buttons hover to Paper with a Deep Teal label,
@@ -309,7 +356,7 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
   .btn-pair > .btn { width: 100%; }
 }
 
-/* ---------- D5 · Segmented toggle with a sliding thumb ----------
+/* ---------- R-113 · Segmented toggle with a sliding thumb ----------
    The Paper thumb slides under the chosen option (220ms, --motion-duration-open, --motion-easing-ui).
    JS adds .has-thumb and sets --seg-i (index) and --seg-n (count); without JS the chosen button is Paper. */
 .segmented.has-thumb { position: relative; display: inline-grid; grid-template-columns: repeat(var(--seg-n, 2), minmax(0, 1fr)); }
@@ -328,7 +375,7 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .seg-panels > [data-seg-panel] { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity var(--motion-duration-crossfade) var(--motion-easing-ui), visibility 0s linear var(--motion-duration-crossfade); }
 .seg-panels > [data-seg-panel].is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
 
-/* ---------- D5 · Two-state accent dots ----------
+/* ---------- R-113 · Two-state accent dots ----------
    Each state has its own accent where it marks data: first state Green, second Blue
    (brand colours, never product colours, never Yellow). Dots fill one after the other,
    --motion-stagger-fine apart (40ms), never longer than --motion-duration-crossfade (180ms) in total. */
@@ -340,7 +387,7 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .state-key { display: inline-flex; align-items: center; gap: var(--space-2); }
 .state-key::before { content: ''; width: var(--space-3); height: var(--space-3); border-radius: 50%; background: var(--key); }
 
-/* ---------- D5 · Stepper / scroll story ----------
+/* ---------- R-113 · Stepper / scroll story ----------
    Not reached: --opacity-step-faded (0.45). Active: 2px Deep Teal border, filled number, short left accent bar.
    Passed: full opacity, a small check. Every change 220ms; reduced motion: instant (tokens go to 0). */
 .stepper { display: grid; grid-template-columns: repeat(var(--steps, 4), minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; counter-reset: stp; }
@@ -366,11 +413,11 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
   .stp p { font-size: var(--type-mobile-compact-size); line-height: var(--type-mobile-compact-line); }
 }
 
-/* ---------- D7 · Footer v3 (website and landing pages) ----------
+/* ---------- R-48, R-114 · The footer (website and landing pages) ----------
    Mist ground, logo Horizontal 30 (28 mobile), brand line, four columns, newsletter (field + Dark button,
    consent line, discreet promise), six social icons (24px in 44px targets), contact and compliance
    placeholders, copyright. Layout follows the footer's own width (container query): from 768 the
-   desktop grid; under 768 the newsletter comes first and the columns become a one-open accordion (D5). */
+   desktop grid; under 768 the newsletter comes first and the columns become a one-open accordion (R-113), link rows 44 tall (E-01 retired). */
 .ft3 { container-type: inline-size; border-radius: var(--radius-card); background: var(--color-surface-mist); color: var(--color-text-primary); border-top: 1px solid var(--color-line-base); }
 .ft3__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); grid-template-areas: "brand cols" "news social" "legal legal"; gap: var(--space-10) var(--space-12); padding: var(--layout-section-y) var(--space-10) var(--space-8); }
 .ft3__brand { grid-area: brand; display: grid; gap: var(--space-4); align-content: start; }
@@ -398,6 +445,8 @@ a.card:hover, a.card:focus-visible { background: var(--color-brand-deep-teal); b
 .ft3__promise { display: flex; align-items: center; gap: var(--space-2); font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-primary); }
 .ft3__promise svg { flex: none; width: var(--space-4); height: var(--space-4); color: var(--color-brand-green); }
 .ft3__status:empty { display: none; }
+.ft3__consent { align-items: flex-start; padding-block: var(--space-2); font: var(--type-desktop-fine-weight) var(--type-desktop-fine-size) / var(--type-desktop-fine-line) var(--font-family-sans); color: var(--color-text-secondary-on-mist); }
+.ft3__consent a { color: var(--color-text-primary); text-decoration: underline; text-underline-offset: 3px; }
 .ft3__social { grid-area: social; align-self: end; justify-self: end; display: flex; flex-wrap: wrap; gap: 0; margin: 0; padding: 0; list-style: none; }
 .ft3__social a { display: grid; place-items: center; width: var(--size-tap-min); height: var(--size-tap-min); border-radius: var(--radius-xs); color: var(--color-brand-deep-teal); transition: background-color var(--motion-duration-fast) var(--motion-easing-ui); }
 .ft3__social a:hover { background: var(--color-line-base); }

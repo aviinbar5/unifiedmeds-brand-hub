@@ -1,0 +1,34 @@
+/* unifiedmeds Brand Hub Extended · shared page styles. Tokens only (var(--…)), values come from the core hub brand.css. */
+.ext-pill { display: inline-flex; align-self: start; justify-self: start; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); background: var(--color-surface-wash-blue); color: var(--color-brand-teal-deep); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); letter-spacing: var(--type-desktop-label-tracking); }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.cards .card { display: grid; gap: var(--space-2); align-content: start; }
+.cards .card b { font: 400 var(--type-desktop-card-serif-size) / var(--type-desktop-card-serif-line) var(--font-family-serif); color: var(--color-text-strong); }
+.cards .card span.cap { color: var(--color-text-secondary); }
+.cards .card .meta { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.gallery figure { margin: 0; display: grid; gap: var(--space-2); align-content: start; }
+.gallery img { width: 100%; height: auto; display: block; border-radius: var(--radius-small); background: var(--color-surface-mist); }
+.gallery figcaption b { display: block; color: var(--color-text-strong); font-weight: 600; }
+.ph-tag { display: inline-flex; align-self: start; justify-self: start; padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-wash-yellow); color: var(--color-brand-teal-deep); font: var(--type-desktop-label-weight) var(--type-desktop-label-size) / var(--type-desktop-label-line) var(--font-family-sans); }
+.from { color: var(--color-text-secondary); font: var(--type-desktop-caption-weight) var(--type-desktop-caption-size) / var(--type-desktop-caption-line) var(--font-family-sans); }
+@media (max-width: 1023px) { .cards, .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 767px) { .cards, .gallery { grid-template-columns: minmax(0, 1fr); } }
+.cards a.card:hover b, .cards a.card:focus-visible b { color: var(--color-text-on-dark); }
+.cards a.card:hover span.cap, .cards a.card:focus-visible span.cap { color: var(--color-text-on-dark-muted); }
+
+/* R-98 alignment: in every row the frames share one line and the captions share the next (16.11.2026) */
+.gallery > figure, .final > figure, .icon-grid > figure, .social-row > figure { grid-row: span 2; grid-template-rows: subgrid; }
+.posts { align-items: end; }
+.final > figure { display: grid; gap: var(--space-2); margin: 0; }
+
+/* The brand capsule in its true shape (R-105, Avi 17.11.2026): left half 55% of the length, right half taller (left = 93.3% of its height); standing = turned 90° clockwise, long half on top.
+   Never draw it with border-radius. Use: <span class="um-cap"> (outline, lying) + --solid or --split, + --v for standing.
+   Size it by ONE side (width when lying, height when standing): the ratio is fixed. Colour = background-color (a token), default currentColor.
+   Shapes: assets/patterns/capsule-{outline,solid,split}-{h,v}.svg, built by tools/capsule_svg.py; outline and split only at 176px length or more (R-109).
+   R-109 (17.11.2026): outline and split keep the divider at every size, like the seal; split = outline + the long half filled inside it with a gap. */
+.um-cap { display: block; background-color: currentColor; aspect-ratio: 320 / 116.412; -webkit-mask: url(assets/shapes/capsule-outline-h.svg) center / 100% 100% no-repeat; mask: url(assets/shapes/capsule-outline-h.svg) center / 100% 100% no-repeat; }
+.um-cap--solid { -webkit-mask-image: url(assets/shapes/capsule-solid-h.svg); mask-image: url(assets/shapes/capsule-solid-h.svg); }
+.um-cap--split { -webkit-mask-image: url(assets/shapes/capsule-split-h.svg); mask-image: url(assets/shapes/capsule-split-h.svg); }
+.um-cap--v { aspect-ratio: 116.412 / 320; -webkit-mask-image: url(assets/shapes/capsule-outline-v.svg); mask-image: url(assets/shapes/capsule-outline-v.svg); }
+.um-cap--v.um-cap--solid { -webkit-mask-image: url(assets/shapes/capsule-solid-v.svg); mask-image: url(assets/shapes/capsule-solid-v.svg); }
+.um-cap--v.um-cap--split { -webkit-mask-image: url(assets/shapes/capsule-split-v.svg); mask-image: url(assets/shapes/capsule-split-v.svg); }
