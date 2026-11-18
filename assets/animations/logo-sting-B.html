@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>unifiedmeds logo sting B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../brand.css">
+<style>
+  /* Colours are tokens from brand.css: the sting is a logo presentation, so it uses the logo colours (R-84). */
+  :root { --bg:var(--color-logo-ink); }
+  html,body { margin:0; height:100%; background:var(--bg); }
+  body { display:flex; align-items:center; justify-content:center; font-family:Outfit, system-ui, sans-serif; }
+  canvas { width:100vw; max-width:100%; height:auto; aspect-ratio:16/9; display:block; }
+  #play { position:fixed; right:20px; bottom:20px; border:0; background:var(--color-logo-cream); color:var(--color-logo-navy);
+          font:500 14px Outfit, system-ui, sans-serif; padding:9px 18px; min-height:44px; border-radius:var(--radius-button); cursor:pointer; }
+  body.rec #play { display:none; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<button id="play" type="button">Play with sound</button>
+<script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/build/mp4-muxer.min.js"></script>
+<script>
+/* ---------- geometry: direction B capsule seal (Claude Design, project/B-System.dc.html) ---------- */
+const P = {
+  bodyLine: new Path2D("M1035.8 -262.1H320A312.1 312.1 0 0 0 320 362.1H1035.8"),
+  cap:      new Path2D("M1035.8 -284.6H1540.8A334.6 334.6 0 0 1 1540.8 384.6H1035.8Z"),
+  solid:    new Path2D("M320 -238.6H1012.2V338.6H320A288.6 288.6 0 0 1 320 -238.6Z"),
+  unified:  new Path2D("M244.5 0H269.2V54.8A22 22 0 0 0 313.1 54.8V0H337.8V54.8A46.7 46.7 0 0 1 244.5 54.8ZM364.1 100V0H388.2V18.4Q393.1 10 401.2 4.5Q411 -2 424.7 -2Q441 -2 450.1 7.3Q459.2 16.5 459.2 31.8V100H434.3V36.9Q434.3 27.6 429.6 22.9Q424.9 18.2 415.9 18.2Q408 18.2 401.9 21.8Q395.7 25.3 392.2 31.6Q388.8 37.8 388.8 46.1V100ZM483.3 100V0H508V100ZM482.1 -16.5V-43.7H509V-16.5ZM541.2 100V19.4H523.1V0H541.2V-9.2Q541.2 -25.7 550.3 -34.4Q559.4 -43.1 577.6 -43.1Q581.8 -43.1 584.5 -42.7Q587.2 -42.4 589.8 -41.6V-22.4Q588.4 -22.9 586.3 -23.2Q584.1 -23.5 581.4 -23.5Q573.5 -23.5 569.7 -19.7Q565.9 -15.9 565.9 -8.6V0H587.6V19.4H565.9V100ZM604.7 100V0H629.4V100ZM603.5 -16.5V-43.7H630.4V-16.5ZM700.2 102Q684.3 102 672.4 95.3Q660.6 88.6 654 76.9Q647.4 65.1 647.4 49.8Q647.4 34.5 654 22.8Q660.6 11.2 672.3 4.6Q684.1 -2 699.8 -2Q714.7 -2 725.7 4.2Q736.7 10.4 742.7 21.6Q748.8 32.7 748.8 47.6Q748.8 50.4 748.6 52.7Q748.4 55.1 748 57.5H672.5Q673.9 68.2 679.6 74.7Q686.9 83.3 700.4 83.3Q708.2 83.3 714.1 80.4Q720 77.5 722.7 71.4H746.1Q741.2 85.5 729.5 93.7Q717.8 102 700.2 102ZM672.9 40.2H723.7Q722.7 29.6 717.4 23.7Q711 16.7 699.4 16.7Q686.9 16.7 679.6 25.3Q674.7 31 672.9 40.2ZM839.6 100V83.5Q836.3 90.6 829.2 95.3Q819.4 102 805.9 102Q792.1 102 782 95.6Q771.9 89.2 766.5 77.6Q761 66.1 761 50.4Q761 34.5 766.7 22.7Q772.3 11 782.6 4.5Q792.9 -2 806.7 -2Q820.8 -2 830 4.7Q835.9 9 838.8 15.5V-41.2H863.7V100ZM813.1 81.8Q825.1 81.8 832.2 73.4Q839.4 65.1 839.4 50Q839.4 34.9 832.1 26.7Q824.9 18.4 812.9 18.4Q801.2 18.4 793.9 26.8Q786.7 35.1 786.7 50.2Q786.7 65.3 793.9 73.5Q801.2 81.8 813.1 81.8Z"),
+  meds:     new Path2D("M1171.2 100V0H1185.9V19Q1190.8 10 1199.6 4.5Q1209.8 -2 1221.8 -2Q1236.3 -2 1245.3 6.5Q1250.4 11.4 1252.5 18Q1257.4 9.8 1266.1 4.5Q1276.7 -2 1288.8 -2Q1303.3 -2 1312.5 6.6Q1321.8 15.1 1321.8 29.6V100H1306.1V33.7Q1306.1 22.4 1301 17.1Q1295.9 11.8 1286.3 11.8Q1277.2 11.8 1270 16.1Q1262.7 20.4 1258.5 28Q1254.3 35.7 1254.3 45.9V100H1238.6V33.7Q1238.6 22.4 1233.5 17.1Q1228.4 11.8 1218.8 11.8Q1209.8 11.8 1202.5 16.1Q1195.3 20.4 1191.1 28Q1186.8 35.7 1186.8 45.9V100ZM1392.9 102Q1378.6 102 1367.6 95.2Q1356.7 88.4 1350.4 76.7Q1344.1 64.9 1344.1 49.6Q1344.1 34.3 1350.3 22.6Q1356.5 11 1367.6 4.5Q1378.8 -2 1393.3 -2Q1407.2 -2 1417.5 4.1Q1427.8 10.2 1433.4 21.2Q1439 32.2 1439 47.1Q1439 49 1438.9 50.8Q1438.8 52.5 1438.4 54.7H1360.4Q1361.6 68.8 1369.4 77.8Q1378.4 88.6 1393.7 88.6Q1403.3 88.6 1410.6 84.4Q1417.8 80.2 1421.2 72.4H1436.1Q1431.2 86.1 1419.7 94Q1408.2 102 1392.9 102ZM1360.8 41.6H1423.3Q1421.9 28.8 1415.9 21Q1407.8 11.4 1393.3 11.4Q1378.4 11.4 1369.4 21.6Q1362.3 29.6 1360.8 41.6ZM1535.3 100V82.2Q1531.4 90.2 1523.7 95.3Q1513.7 102 1500 102Q1486.5 102 1476.4 95.5Q1466.3 89 1460.7 77.5Q1455.1 65.9 1455.1 50.4Q1455.1 34.7 1460.8 22.9Q1466.5 11.2 1476.7 4.7Q1486.8 -1.8 1500.6 -1.8Q1514.7 -1.8 1524.3 5.1Q1530.6 9.6 1534.3 16.5V-41.2H1550V100ZM1502.9 88.2Q1518 88.2 1526.6 77.9Q1535.1 67.6 1535.1 49.8Q1535.1 32.4 1526.5 22.2Q1517.8 12 1502.9 12Q1488 12 1479.6 22.2Q1471.2 32.4 1471.2 50.4Q1471.2 68 1479.6 78.1Q1488 88.2 1502.9 88.2ZM1615.3 102Q1596.8 102 1585.9 93.4Q1574.9 84.9 1573.3 69.2H1588.4Q1589.8 78.8 1596.8 83.9Q1603.9 89 1615.7 89Q1626.1 89 1631.9 85.1Q1637.8 81.2 1637.8 73.9Q1637.8 68.8 1634.5 65Q1631.2 61.2 1621.2 58.6L1605.1 54.5Q1591.4 51 1584.5 43.6Q1577.6 36.3 1577.6 26.1Q1577.6 13.1 1587.2 5.6Q1596.8 -2 1613.3 -2Q1629.6 -2 1639.8 5.9Q1650 13.7 1651.4 27.6H1636.3Q1634.9 19.6 1628.8 15.3Q1622.7 11 1612.7 11Q1603.1 11 1597.8 14.6Q1592.5 18.2 1592.5 24.9Q1592.5 30 1596.4 33.7Q1600.2 37.5 1609.2 40L1624.9 44.3Q1638.8 48 1645.9 55.7Q1652.9 63.3 1652.9 74.1Q1652.9 87.3 1642.9 94.6Q1632.9 102 1615.3 102Z"),
+};
+/* Logo colour tokens from brand.css (R-84); the fallbacks are the same values, for a file opened on its own.
+   The end frame is CREAM (color.logo.cream, the logo presentation ground), as Avi decided 18.11.2026 (q123). */
+const TOK = getComputedStyle(document.documentElement), tok = (n, v) => TOK.getPropertyValue(n).trim() || v;
+const INK = tok('--color-logo-ink', '#031D2C'), COBALT = tok('--color-logo-navy', '#0F2E57'), CAPBLUE = tok('--color-logo-blue', '#3976C6'),
+      ICE = tok('--color-logo-sky', '#C9DDEA'), WHITE = tok('--color-logo-white', '#FFFFFF'), CREAM = tok('--color-logo-cream', '#F1ECE0');
+const DARK  = { line: ICE,    solid: CAPBLUE, unified: WHITE, meds: WHITE };
+const LIGHT = { line: COBALT, solid: COBALT, unified: WHITE, meds: INK };
+const W = 1920, H = 1080, DURATION = 8.0, FPS = 60, STROKE = 15.7;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const work = document.createElement('canvas'); work.width = W; work.height = H;
+const wx = work.getContext('2d');
+const SEAL_C = [941.6, 50], BODY_C = [668, 50], CAP_C = [1288, 50];
+
+/* The capsule in the logo's true shape (R-105, Avi 17.11.2026): the seal's own outer edge (the paths above,
+   stroke included), scaled by k around (cx, cy). Left half 55% of the length, right half taller. Used for the
+   iris and the impact rings, which were a symmetric roundRect before. Timing unchanged. */
+const SEAL_OUT = { L: 1883.2, wl: 1035.75, H: 684.9, h: 639.9 };
+function capsulePath(g, cx, cy, k) {
+  const len = SEAL_OUT.L * k, wl = SEAL_OUT.wl * k, hr = SEAL_OUT.H * k, hl = SEAL_OUT.h * k;
+  const x0 = cx - len / 2, rl = hl / 2, rr = hr / 2, HALF = Math.PI / 2;
+  g.beginPath();
+  g.moveTo(x0 + wl, cy - hl / 2); g.lineTo(x0 + rl, cy - hl / 2);
+  g.arc(x0 + rl, cy, rl, -HALF, HALF, true);            // left end (the long, filled half)
+  g.lineTo(x0 + wl, cy + hl / 2); g.lineTo(x0 + wl, cy + hr / 2); g.lineTo(x0 + len - rr, cy + hr / 2);
+  g.arc(x0 + len - rr, cy, rr, HALF, -HALF, true);      // right end (the short, taller half)
+  g.lineTo(x0 + wl, cy - hr / 2); g.closePath();
+}
+/* ---------- easing ---------- */
+const clamp = v => Math.max(0, Math.min(1, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, p) => a + (b - a) * p;
+const outCubic = p => 1 - Math.pow(1 - p, 3);
+const outQuint = p => 1 - Math.pow(1 - p, 5);
+const inOutCubic = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const inOutQuint = p => p < .5 ? 16 * p ** 5 : 1 - Math.pow(-2 * p + 2, 5) / 2;
+const outBack = (p, k = 1.7) => 1 + (k + 1) * Math.pow(p - 1, 3) + k * Math.pow(p - 1, 2);
+
+/* ---------- timeline ---------- */
+const T = {
+  fly: [0.30, 1.25], close: [1.25, 1.50],
+  ring: [1.45, 2.30],
+  iris: [1.95, 2.85],
+  unified: 2.75, meds: 2.95, wordDur: 0.75,
+  breathe: [3.8, 8.0],
+};
+const CONTACT = 1.25 + 0.25 * 0.4545;
+const S = 0.6;   // seal scale on screen
+
+function scene(g, t) {
+  t = Math.max(0, Math.min(t, DURATION));
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1;
+  g.fillStyle = INK; g.fillRect(0, 0, W, H);
+  const glow = g.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 900);
+  glow.addColorStop(0, 'rgba(57,118,198,0.20)'); glow.addColorStop(1, 'rgba(3,29,44,0)');
+  g.fillStyle = glow; g.fillRect(0, 0, W, H);
+
+  const br = 1 + 0.025 * inOutCubic(seg(t, ...T.breathe));
+  const push = lerp(1.35, 1, inOutQuint(seg(t, 0.3, 2.6)));       // slow camera pull back
+  const sc = S * push * br;
+  g.translate(W / 2, H / 2); g.scale(sc, sc); g.translate(-SEAL_C[0], -SEAL_C[1]);
+  const world = g.getTransform();
+
+  // capsule-shaped iris: paper grows out of the seal itself
+  const pi = inOutQuint(seg(t, ...T.iris));
+  const irisPath = () => {
+    const k = 1 + pi * 6.5;
+    capsulePath(g, SEAL_C[0], SEAL_C[1], k);
+  };
+  if (pi > 0) { g.fillStyle = CREAM; irisPath(); g.fill(); }
+
+  // the two halves fly in from opposite sides, tilted, then the cap sleeves over the body
+  const f = outCubic(seg(t, ...T.fly));
+  const gap = lerp(140, 0, outBack(seg(t, ...T.close), 1.2));
+  const bodyX = lerp(-1500, 0, f) - (t < T.close[1] ? gap / 2 : 0);
+  const capX  = lerp(1500, 0, f) + (t < T.close[1] ? gap / 2 : 0);
+  const bodyY = lerp(500, 0, f), capY = lerp(-500, 0, f);
+  const bodyR = lerp(-0.9, 0, f), capR = lerp(0.9, 0, f);
+  const pulse = 1 + 0.03 * Math.sin(Math.PI * seg(t, CONTACT, CONTACT + 0.35));
+
+  // text rises inside each half
+  const rise = (start) => { const p = seg(t, start, start + T.wordDur); return { p, y: (1 - outQuint(p)) * 160 }; };
+  const ru = rise(T.unified), rm = rise(T.meds);
+
+  function drawSeal(pal) {
+    g.save(); g.translate(SEAL_C[0], SEAL_C[1]); g.scale(pulse, pulse); g.translate(-SEAL_C[0], -SEAL_C[1]);
+    if (t >= T.fly[0]) {
+      // body: solid + its open outline
+      g.save(); g.translate(bodyX, bodyY); g.translate(BODY_C[0], BODY_C[1]); g.rotate(bodyR); g.translate(-BODY_C[0], -BODY_C[1]);
+      g.fillStyle = pal.solid; g.fill(P.solid);
+      g.lineWidth = STROKE; g.strokeStyle = pal.line; g.stroke(P.bodyLine);
+      if (ru.p > 0) { g.save(); g.clip(P.solid); g.globalAlpha = clamp(ru.p * 3); g.translate(0, ru.y); g.fillStyle = pal.unified; g.fill(P.unified); g.restore(); }
+      g.restore();
+      // cap: closed outline
+      g.save(); g.translate(capX, capY); g.translate(CAP_C[0], CAP_C[1]); g.rotate(capR); g.translate(-CAP_C[0], -CAP_C[1]);
+      g.lineWidth = STROKE; g.strokeStyle = pal.line; g.stroke(P.cap);
+      if (rm.p > 0) { g.save(); g.clip(P.cap); g.globalAlpha = clamp(rm.p * 3); g.translate(0, rm.y); g.fillStyle = pal.meds; g.fill(P.meds); g.restore(); }
+      g.restore();
+    }
+    g.restore();
+  }
+  drawSeal(DARK);
+  if (pi > 0) { g.save(); irisPath(); g.clip(); drawSeal(LIGHT); g.restore(); }
+
+  // impact: capsule-shaped rings
+  for (const [delay, w0] of [[0, 1], [0.12, 0.6]]) {
+    const pr = seg(t, T.ring[0] + delay, T.ring[1] + delay);
+    if (pr > 0 && pr < 1) {
+      const k = 1.06 + outCubic(pr) * 0.55;
+      g.save(); g.globalAlpha = (1 - pr) * 0.75 * w0;
+      g.strokeStyle = pi > 0.25 ? COBALT : ICE; g.lineWidth = 5 / push;
+      capsulePath(g, SEAL_C[0], SEAL_C[1], k); g.stroke(); g.restore();
+    }
+  }
+  g.globalAlpha = 1;
+}
+
+/* motion blur: exact running average of sub-frames across a 180-degree shutter */
+function renderFrame(t, samples) {
+  if (samples <= 1) { scene(ctx, t); return; }
+  const shutter = 0.5 / FPS;
+  for (let k = 0; k < samples; k++) {
+    scene(wx, t + (k / (samples - 1) - 0.5) * shutter);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1 / (k + 1);
+    ctx.drawImage(work, 0, 0);
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- sound design (synthesised, no samples) ---------- */
+const SR = 48000;
+async function buildAudio() {
+  const oc = new OfflineAudioContext(2, Math.ceil(SR * DURATION), SR);
+  const comp = oc.createDynamicsCompressor();
+  comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.004; comp.release.value = 0.2;
+  const master = oc.createGain(); master.gain.value = 0.9;
+  comp.connect(master).connect(oc.destination);
+
+  const nb = oc.createBuffer(1, SR * 2, SR), nd = nb.getChannelData(0);
+  for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  const noise = (t0, dur) => { const s = oc.createBufferSource(); s.buffer = nb; s.loop = true; s.start(t0); s.stop(t0 + dur + 0.05); return s; };
+  const env = (node, t0, a, peak, d, curve = 'exp') => {
+    const g = oc.createGain(); g.gain.setValueAtTime(0.0001, t0);
+    g.gain.linearRampToValueAtTime(peak, t0 + a);
+    if (curve === 'exp') g.gain.exponentialRampToValueAtTime(0.0001, t0 + a + d);
+    else g.gain.linearRampToValueAtTime(0.0001, t0 + a + d);
+    node.connect(g); return g;
+  };
+  const pan = (node, p0, p1, t0, dur) => { const p = oc.createStereoPanner(); p.pan.setValueAtTime(p0, t0); p.pan.linearRampToValueAtTime(p1, t0 + dur); node.connect(p); p.connect(comp); };
+
+  function whoosh(t0, dur, f0, f1, peak, p0, p1) {
+    const n = noise(t0, dur);
+    const bp = oc.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1.4;
+    bp.frequency.setValueAtTime(f0, t0); bp.frequency.exponentialRampToValueAtTime(f1, t0 + dur * 0.85);
+    n.connect(bp);
+    const g = oc.createGain(); g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(peak, t0 + dur * 0.7); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    bp.connect(g); pan(g, p0, p1, t0, dur);
+  }
+  function tone(t0, f0, f1, type, peak, dur, p = 0) {
+    const o = oc.createOscillator(); o.type = type;
+    o.frequency.setValueAtTime(f0, t0); o.frequency.exponentialRampToValueAtTime(f1, t0 + Math.min(dur, 0.25));
+    o.start(t0); o.stop(t0 + dur + 0.05);
+    pan(env(o, t0, 0.004, peak, dur), p, p, t0, dur);
+  }
+  function click(t0, pitch, p = 0) {
+    tone(t0, pitch, pitch * 0.98, 'triangle', 0.22, 0.09, p);
+    const n = noise(t0, 0.03), hp = oc.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3500;
+    n.connect(hp); pan(env(hp, t0, 0.001, 0.25, 0.025), p, p, t0, 0.03);
+  }
+  function bell(t0, f, peak) {
+    for (const [m, a] of [[1, 1], [2.76, 0.32], [5.4, 0.12]]) {
+      const o = oc.createOscillator(); o.type = 'sine'; o.frequency.value = f * m;
+      o.start(t0); o.stop(t0 + 2.6);
+      pan(env(o, t0, 0.006, peak * a, 2.4), 0, 0, t0, 2.6);
+    }
+  }
+
+  whoosh(0.28, 1.0, 300, 2400, 0.26, -0.9, -0.1);        // body from the left
+  whoosh(0.32, 1.0, 320, 2600, 0.26, 0.9, 0.1);          // cap from the right
+  { const n = noise(0.9, 0.45), hp = oc.createBiquadFilter(); hp.type = 'highpass';
+    hp.frequency.setValueAtTime(900, 0.9); hp.frequency.exponentialRampToValueAtTime(7000, CONTACT);
+    n.connect(hp); pan(env(hp, 0.9, 0.4, 0.07, 0.08, 'lin'), 0, 0, 0.9, 0.5); }
+  click(CONTACT, 990, 0);                                 // cap sleeves over the body
+  tone(CONTACT + 0.005, 92, 40, 'sine', 0.9, 0.55);       // impact
+  bell(CONTACT + 0.02, 523.25, 0.09);
+  whoosh(1.9, 0.95, 250, 1400, 0.10, -0.3, 0.3);          // paper opens
+  for (const f of [130.81, 261.63, 329.63, 392.0, 493.88, 587.33]) {
+    for (const det of [-3, 3]) {
+      const o = oc.createOscillator(); o.type = 'triangle'; o.frequency.value = f; o.detune.value = det;
+      const lp = oc.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1800;
+      const g = oc.createGain();
+      g.gain.setValueAtTime(0.0001, CONTACT); g.gain.linearRampToValueAtTime(0.022, 2.9);
+      g.gain.setValueAtTime(0.022, 6.0); g.gain.linearRampToValueAtTime(0.0001, DURATION);
+      o.connect(lp).connect(g); g.connect(comp); o.start(CONTACT); o.stop(DURATION);
+    }
+  }
+  bell(T.unified + 0.05, 783.99, 0.16);
+  bell(T.meds + 0.12, 1046.5, 0.14);
+
+  const buf = await oc.startRendering();
+  let peak = 0;
+  for (let ch = 0; ch < 2; ch++) for (const v of buf.getChannelData(ch)) peak = Math.max(peak, Math.abs(v));
+  const gain = peak > 0 ? 0.89 / peak : 1;
+  for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < d.length; i++) d[i] *= gain; }
+  return buf;
+}
+
+/* ---------- live preview ---------- */
+let timer = null, audioCtx = null, audioBuf = null;
+async function play(withSound) {
+  clearTimeout(timer);
+  if (withSound) {
+    audioBuf = audioBuf || await buildAudio();
+    audioCtx = audioCtx || new AudioContext({ sampleRate: SR });
+    const src = audioCtx.createBufferSource(); src.buffer = audioBuf; src.connect(audioCtx.destination); src.start();
+  }
+  const t0 = performance.now();
+  const loop = () => {
+    const t = (performance.now() - t0) / 1000;
+    renderFrame(t, 1);
+    if (t < DURATION) timer = setTimeout(loop, 1000 / FPS);
+  };
+  loop();
+}
+
+/* ---------- export: deterministic frame-by-frame MP4 with AAC audio ---------- */
+async function record() {
+  document.body.classList.add('rec');
+  const total = Math.round(DURATION * FPS);
+  const audio = await buildAudio();
+  const aacCfg = { codec: 'mp4a.40.2', sampleRate: SR, numberOfChannels: 2, bitrate: 192000 };
+  const aacOk = window.AudioEncoder && (await AudioEncoder.isConfigSupported(aacCfg)).supported;
+  const muxer = new Mp4Muxer.Muxer({
+    target: new Mp4Muxer.ArrayBufferTarget(),
+    video: { codec: 'avc', width: W, height: H, frameRate: FPS },
+    audio: aacOk ? { codec: 'aac', sampleRate: SR, numberOfChannels: 2 } : undefined,
+    fastStart: 'in-memory', firstTimestampBehavior: 'offset'
+  });
+  let err = null;
+  const venc = new VideoEncoder({ output: (c, m) => muxer.addVideoChunk(c, m), error: e => err = e });
+  venc.configure({ codec: 'avc1.640028', width: W, height: H, bitrate: 14_000_000, framerate: FPS });
+  for (let i = 0; i < total; i++) {
+    renderFrame(i / FPS, 6);
+    const vf = new VideoFrame(cv, { timestamp: Math.round(i * 1e6 / FPS), duration: Math.round(1e6 / FPS) });
+    venc.encode(vf, { keyFrame: i % 120 === 0 }); vf.close();
+    if (venc.encodeQueueSize > 6) await new Promise(r => setTimeout(r, 4));
+  }
+  await venc.flush();
+  if (aacOk) {
+    const aenc = new AudioEncoder({ output: (c, m) => muxer.addAudioChunk(c, m), error: e => err = e });
+    aenc.configure(aacCfg);
+    const L = audio.getChannelData(0), Rch = audio.getChannelData(1), N = 4096;
+    for (let off = 0; off < L.length; off += N) {
+      const n = Math.min(N, L.length - off), data = new Float32Array(n * 2);
+      data.set(L.subarray(off, off + n), 0); data.set(Rch.subarray(off, off + n), n);
+      aenc.encode(new AudioData({ format: 'f32-planar', sampleRate: SR, numberOfFrames: n, numberOfChannels: 2,
+                                  timestamp: Math.round(off * 1e6 / SR), data }));
+    }
+    await aenc.flush();
+  }
+  muxer.finalize();
+  const buf = muxer.target.buffer;
+  const res = await fetch('/upload?name=unifiedmeds-direction-B-sting.mp4', { method: 'POST', body: buf });
+  window.__recDone = { frames: total, size: buf.byteLength, audio: !!aacOk, status: res.status, err: err && String(err) };
+}
+
+document.getElementById('play').addEventListener('click', () => play(true));
+Promise.resolve().then(() => {
+  const q = new URLSearchParams(location.search);
+  if (q.has('record')) record();
+  else if (q.has('t')) renderFrame(parseFloat(q.get('t')), 1);
+  else play(false);
+});
+</script>
+</body>
+</html>
