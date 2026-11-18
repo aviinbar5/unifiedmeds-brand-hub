@@ -1,0 +1,19 @@
+PLACEHOLDER IMAGES, NOT LICENSED FOR PRESS (R-39)
+
+Every file in this folder is a placeholder used while the brand is built:
+credited Pexels stand-ins (hub use only) and product mockups.
+None of them may be published, printed or shared outside unifiedmeds.
+Licensed photography and product shots replace them before launch.
+
+product/bottle-tadalafil.png: Tadalafil bottle, closed, front label
+product/bottle-sildenafil.png: Sildenafil bottle, closed, front label
+product/bottle-combo.png: Combo bottle, closed, front label
+lifestyle/man-at-home-wide.jpg: A man reading by a tall window at home, wide (Pexels, RDNE Stock project)
+lifestyle/man-in-kitchen.jpg: A man with a cup at his kitchen table (Pexels, cottonbro studio)
+lifestyle/two-men-outdoors.jpg: Two men talking at an outdoor table (Pexels, Mizuno K)
+lifestyle/couple-at-home.jpg: A couple talking at the kitchen table (Pexels, Gary Barnes)
+lifestyle/man-portrait.jpg: A man in a sunlit room, portrait (Pexels, RDNE Stock project)
+lifestyle/man-portrait-2.jpg: A man with a mug in window light, portrait (Pexels, Mikhail Nilov)
+lifestyle/article-header-wide.jpg: A couple with a dog outdoors, 2:1 article header (Pexels, Centre for Ageing Better)
+lifestyle/story-vertical-1.jpg: A man in warm light, 9:16 for phone stories (Pexels, Doğan Alpaslan Demir)
+lifestyle/story-vertical-2.jpg: A man in profile, 9:16 for phone stories (Pexels, Mikhail Nilov)
