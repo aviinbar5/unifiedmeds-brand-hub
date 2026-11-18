@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Refill calendar">
+  <title>Refill calendar</title>
+  <rect x="26" y="26" width="88" height="88" fill="#B6CDBB"/>
+  <circle cx="48" cy="48" r="7" fill="#FEFCF6"/>
+  <circle cx="70" cy="48" r="7" fill="#FEFCF6"/>
+  <circle cx="92" cy="48" r="7" fill="#FEFCF6"/>
+  <circle cx="48" cy="70" r="7" fill="#FEFCF6"/>
+  <circle cx="70" cy="70" r="7" fill="#FEFCF6"/>
+  <circle cx="92" cy="70" r="7" fill="#FEFCF6"/>
+  <circle cx="48" cy="92" r="7" fill="#FEFCF6"/>
+  <circle cx="70" cy="92" r="7" fill="#FEFCF6"/>
+  <circle cx="92" cy="92" r="7" fill="#264653"/>
+  <path d="M139.12 97.96L139.12 67.87A13.12 13.12 0 0 0 112.88 67.87L112.88 97.96" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M140.06 97.96L140.06 119.19A14.06 14.06 0 0 1 111.94 119.19L111.94 97.96Z" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M136.87 95.71L136.87 67.87A10.87 10.87 0 0 0 115.13 67.87L115.13 95.71" fill="#6E8B97"/>
+</svg>

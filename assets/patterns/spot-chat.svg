@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Chat with a provider">
+  <title>Chat with a provider</title>
+  <path d="M71.34 26.96L36.04 26.96A16.04 16.04 0 0 0 36.04 59.04L71.34 59.04ZM72.84 25.8L98.8 25.8A17.2 17.2 0 0 1 98.8 60.2L72.84 60.2Z" fill="#264653"/>
+  <path d="M40 58.5439H56A16 16 0 0 1 40 74.5439Z" fill="#264653"/>
+  <circle cx="52" cy="43" r="4" fill="#FEFCF6"/>
+  <circle cx="68" cy="43" r="4" fill="#FEFCF6"/>
+  <circle cx="84" cy="43" r="4" fill="#FEFCF6"/>
+  <path d="M97.14 87.62L63.38 87.62A15.38 15.38 0 0 0 63.38 118.38L97.14 118.38ZM98.64 86.52L123.52 86.52A16.48 16.48 0 0 1 123.52 119.48L98.64 119.48Z" fill="#A8BEC7"/>
+  <path d="M120 118.983H104A16 16 0 0 0 120 134.983Z" fill="#A8BEC7"/>
+</svg>

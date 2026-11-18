@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 160 160" role="img" aria-label="Plain box">
+  <title>Plain box</title>
+  <rect x="24" y="48" width="88" height="88" fill="#A8BEC7"/>
+  <path d="M112 48H138A26 26 0 0 0 112 22Z" fill="#6A8670"/>
+  <path d="M71.1 81.72L47.53 81.72A10.28 10.28 0 0 0 47.53 102.28L71.1 102.28" fill="none" stroke="#264653" stroke-width="2.5"/>
+  <path d="M71.1 80.98L87.73 80.98A11.02 11.02 0 0 1 87.73 103.02L71.1 103.02Z" fill="none" stroke="#264653" stroke-width="2.5"/>
+  <path d="M67.35 85.47L47.53 85.47A6.53 6.53 0 0 0 47.53 98.53L67.35 98.53" fill="#264653"/>
+</svg>

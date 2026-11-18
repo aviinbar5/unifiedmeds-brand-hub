@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Ongoing care">
+  <title>Ongoing care</title>
+  <path d="M80 24A56 56 0 0 1 136 80H128A48 48 0 0 0 80 32Z" fill="#4E6873"/>
+  <path d="M80 136A56 56 0 0 1 24 80H32A48 48 0 0 0 80 128Z" fill="#A8BEC7"/>
+  <path d="M91.78 83.55L91.78 56.53A11.78 11.78 0 0 0 68.22 56.53L68.22 83.55" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M92.63 83.55L92.63 102.62A12.63 12.63 0 0 1 67.37 102.62L67.37 83.55Z" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M89.53 81.3L89.53 56.53A9.53 9.53 0 0 0 70.47 56.53L70.47 81.3" fill="#6A8670"/>
+</svg>

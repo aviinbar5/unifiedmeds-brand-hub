@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Provider review">
+  <title>Provider review</title>
+  <path d="M32 140V60A40 40 0 0 1 112 60V140Z" fill="#A8BEC7"/>
+  <path d="M74.75 78.89L53.86 78.89A9.11 9.11 0 0 0 53.86 97.11L74.75 97.11" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M74.75 78.24L89.49 78.24A9.76 9.76 0 0 1 89.49 97.76L74.75 97.76Z" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M72.5 81.14L53.86 81.14A6.86 6.86 0 0 0 53.86 94.86L72.5 94.86" fill="#264653"/>
+  <circle cx="116" cy="120" r="20" fill="#6A8670"/>
+</svg>

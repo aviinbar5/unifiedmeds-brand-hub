@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Privacy lock">
+  <title>Privacy lock</title>
+  <circle cx="108" cy="38" r="22" fill="#A8BEC7"/>
+  <path d="M91.14 84.38L91.14 35.89A21.14 21.14 0 0 0 48.86 35.89L48.86 84.38" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <path d="M92.66 84.38L92.66 118.59A22.66 22.66 0 0 1 47.34 118.59L47.34 84.38Z" fill="none" stroke="#264653" stroke-width="1.5"/>
+  <rect x="30" y="68" width="80" height="80" fill="#264653"/>
+  <circle cx="70" cy="98" r="8" fill="#FEFCF6"/>
+  <path d="M73.34 107.51L73.34 101.34A3.34 3.34 0 0 0 66.66 101.34L66.66 107.51ZM73.58 109.01L73.58 114.42A3.58 3.58 0 0 1 66.42 114.42L66.42 109.01Z" fill="#FEFCF6"/>
+</svg>
