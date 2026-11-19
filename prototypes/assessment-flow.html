@@ -1,0 +1,345 @@
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Assessment Flow Prototype</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: split screen. Left = the step companion (one standing capsule that is both the step icon and the progress). Right = one question at a time. Single light theme on purpose: it mirrors the brand's Paper ground. */
+:root{
+  --paper:#FEFCF6; --card:#FFFFFF; --mist:#E8E7E1; --teal:#264653; --teal-deep:#1C3742;
+  --text2:#55747F; --text3:#7E9AA6; --line:#E3DFD5; --line-soft:#EDEAE2; --line-field:#55747F;
+  --wash-green:#B6CDBB; --wash-yellow:#FCE7AE; --yellow:#FFBE0B; --coral:#E76F51; --green:#6A8670; --blue:#6E8B97;
+  --serif:"DM Serif Display", Georgia, serif; --sans:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --e-out:cubic-bezier(.22,1,.36,1); --e-in:cubic-bezier(.4,0,.6,1); color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--teal);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;height:80px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-left:max(56px,env(safe-area-inset-left,0px));padding-right:max(56px,env(safe-area-inset-right,0px));background:var(--paper);border-bottom:1px solid var(--line-soft)}
+.top .logo svg{height:40px;width:auto;display:block}
+.top nav{display:flex;gap:24px;align-items:center;font-weight:500}
+.top nav a{color:var(--teal);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.top nav a.u{text-decoration:underline;text-underline-offset:4px}
+.tag{font-size:12px;font-weight:600;letter-spacing:.02em;padding:3px 10px;border-radius:999px;background:var(--mist);color:var(--text2)}
+.app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:72px;max-width:1240px;margin:0 auto;min-height:calc(100% - 80px);padding-left:max(56px,env(safe-area-inset-left,0px));padding-right:max(56px,env(safe-area-inset-right,0px))}
+/* companion */
+.side{position:sticky;top:calc(80px + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - 80px);padding:48px 40px 32px 0;display:flex;flex-direction:column;gap:24px;border-right:1px solid var(--line-soft)}
+.cap-wrap{position:relative;width:168px;height:168px;margin-left:-24px}
+.cap-wrap svg{width:100%;height:100%;display:block;overflow:visible}
+.cap-line{fill:none;stroke:var(--teal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.cap-fill{fill:var(--wash-green)}
+#clipRect{transition:y 520ms var(--e-out),height 520ms var(--e-out)}
+.glyph{transform-box:fill-box;transform-origin:center;transition:opacity 220ms var(--e-in),transform 220ms var(--e-in),filter 220ms var(--e-in)}
+.glyph.out{opacity:0;transform:scale(.82);filter:blur(1.2px)}
+.glyph.drawin{animation:glyphIn 520ms var(--e-out) both}
+@keyframes glyphIn{from{stroke-dashoffset:var(--glen);opacity:.2;transform:scale(.92)}to{stroke-dashoffset:0;opacity:1;transform:none}}
+.cap-wrap svg{transition:transform 520ms var(--e-out)}
+.cap-wrap.breathe svg{animation:breathe 520ms var(--e-out)}
+@keyframes breathe{40%{transform:scale(1.03)}100%{transform:none}}
+#stepText{transition:opacity 220ms var(--e-in),transform 220ms var(--e-in),filter 220ms var(--e-in)}
+#stepText.out{opacity:0;transform:translateY(-6px);filter:blur(2px)}
+#stepText.in{animation:softIn 320ms var(--e-out) both}
+@keyframes softIn{from{opacity:0;transform:translateY(10px);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+.step-eyebrow{font-weight:600;font-size:13px;color:var(--text2);letter-spacing:.02em}
+.step-name{font:400 clamp(28px,2.6vw,34px)/1.15 var(--serif);margin:4px 0 8px;text-wrap:balance}
+.step-note{color:var(--text2);max-width:34ch;margin:0}
+.rail{list-style:none;margin:auto 0 0;padding:0;display:grid;gap:2px}
+.rail li{display:flex;align-items:center;gap:12px;min-height:34px;font-size:14px;opacity:.5;transition:opacity 220ms var(--e-out)}
+.rail li.passed,.rail li.active{opacity:1}
+.rail li.active{font-weight:600}
+.rail .n{width:24px;height:24px;border-radius:50%;border:1px solid var(--teal);display:grid;place-items:center;font-size:11px;font-weight:600;flex:none;transition:background 220ms var(--e-out),border-color 220ms var(--e-out),color 220ms}
+.rail li.active .n{background:var(--teal);color:var(--paper)}
+.rail li.passed .n{background:var(--wash-green);border-color:var(--wash-green)}
+.private{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text2)}
+/* main */
+.main{display:flex;flex-direction:column;padding:48px 0 32px;min-width:0}
+.prog{display:flex;align-items:center;gap:12px;min-height:44px;margin-bottom:24px}
+.prog svg{width:56px;height:auto;flex:none}
+.prog[hidden]{display:none}
+.prog .lbl{color:var(--text2);font-size:15px}
+.prog .lbl b{color:var(--teal);font-weight:600}
+.stage{position:relative;flex:1;max-width:680px}
+.q>*{animation:rise 320ms var(--e-out) both}
+.q>*:nth-child(2){animation-delay:60ms}
+.q>*:nth-child(n+3){animation-delay:120ms}
+.q .opt{animation:rise 320ms var(--e-out) both;animation-delay:calc(160ms + var(--i,0) * 40ms)}
+.q.leaving>*,.q.leaving .opt{animation:leave 220ms var(--e-in) both;animation-delay:0ms}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+@keyframes leave{to{opacity:0;transform:translateY(-8px);filter:blur(2px)}}
+.q h1{font:400 clamp(30px,3.2vw,44px)/1.15 var(--serif);margin:0 0 12px;text-wrap:balance}
+.q .help{color:var(--text2);margin:0 0 28px;max-width:58ch}
+.opts{display:grid;gap:12px}
+.opts.two{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.opt{position:relative;display:flex;align-items:center;gap:16px;width:100%;text-align:left;min-height:64px;padding:14px 18px;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;cursor:pointer;transition:border-color 150ms var(--e-out),background 150ms var(--e-out),transform 150ms var(--e-out),box-shadow 150ms var(--e-out)}
+.opt:hover{border-color:var(--line-field);transform:translateY(-1px);box-shadow:0 6px 18px -12px rgba(38,70,83,.35)}
+.opt .key{flex:none;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--text2);transition:all 150ms var(--e-out)}
+.opt .t{flex:1;min-width:0}
+.opt .t b{display:block;font-weight:600}
+.opt .t span{display:block;color:var(--text2);font-size:14px}
+.opt .mark{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-field);display:grid;place-items:center;transition:all 150ms var(--e-out)}
+.opt.multi .mark{border-radius:5px}
+.opt .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.opt[aria-checked="true"].single{background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.opt[aria-checked="true"].single .t span{color:#D5E0E3}
+.opt[aria-checked="true"].single .key{border-color:rgba(254,252,246,.35);color:var(--paper)}
+.opt[aria-checked="true"].single .mark{background:var(--yellow);border-color:var(--yellow)}
+.opt[aria-checked="true"].multi{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.opt[aria-checked="true"].multi .mark{background:var(--teal);border-color:var(--teal)}
+.opt[aria-checked="true"] .mark svg{opacity:1;transform:scale(1)}
+.opt .mark svg{width:14px;height:14px;opacity:0;transform:scale(.6);transition:all 150ms var(--e-out)}
+.opts.err .opt:not([aria-checked="true"]):not(.optional){border-color:var(--coral)}
+.opt.multi .mark{color:var(--paper)}
+.err-msg{display:none;align-items:center;gap:8px;margin-top:14px;font-size:14px}
+.err-msg.on{display:flex}
+.err-msg i{width:16px;height:16px;border-radius:50%;background:var(--coral);flex:none;display:grid;place-items:center;color:#fff;font:700 11px/1 var(--sans);font-style:normal}
+.fields{display:grid;gap:16px;max-width:520px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px}
+label.f{display:grid;gap:6px;font-size:14px;color:var(--text2)}
+.f input,.f select{height:52px;border:1px solid var(--line-field);border-radius:12px;padding:0 16px;font:16px var(--sans);color:var(--teal);background:var(--card);transition:box-shadow 150ms var(--e-out)}
+.f input:focus,.f select:focus{outline:none;border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal),0 0 0 3px rgba(38,70,83,.15)}
+.note{font-size:13px;color:var(--text2)}
+.info{display:flex;gap:12px;background:var(--mist);border-radius:12px;padding:14px 16px;margin-top:16px;animation:rise 220ms var(--e-out) both}
+.info b{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.sos{background:var(--wash-yellow);border-radius:12px;padding:14px 16px;margin-top:20px}
+.list{display:grid;gap:10px;margin:0 0 8px;padding:0;list-style:none}
+.list li{display:flex;gap:10px;align-items:flex-start}
+.list svg{flex:none;margin-top:3px}
+.review{display:grid;gap:12px}
+.review .card{display:grid;gap:4px}
+.review .head{display:flex;justify-content:space-between;align-items:center}
+.review .head button{background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-weight:500;min-height:44px}
+.review .v{color:var(--text2);font-size:14px}
+.actions{display:flex;gap:12px;align-items:center;margin-top:32px;flex-wrap:wrap}
+.btn{min-height:48px;padding:0 24px;border-radius:12px;border:1px solid var(--teal);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:background 150ms var(--e-out),opacity 150ms}
+.btn.primary{background:var(--teal);color:var(--paper)}
+.btn.primary:hover{background:var(--teal-deep)}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.hint{font-size:13px;color:var(--text3);margin-left:4px}
+.hint kbd{font:600 12px var(--sans);border:1px solid var(--line);border-radius:6px;padding:1px 6px;background:var(--card);color:var(--text2)}
+.legal{margin-top:auto;padding-top:40px;font-size:12px;color:var(--text2)}
+.legal a{color:var(--teal)}
+.toast{position:fixed;right:max(24px,env(safe-area-inset-right,0px));top:calc(96px + env(safe-area-inset-top,0px));transform:translate(0,-8px);opacity:0;background:var(--teal);color:var(--paper);
+  padding:12px 18px;border-radius:999px;display:flex;gap:10px;align-items:center;font-weight:500;font-size:14px;pointer-events:none;transition:opacity 220ms var(--e-out),transform 220ms var(--e-out);z-index:20}
+.toast.on{opacity:1;transform:translate(0,0)}
+.toast .ok{width:20px;height:20px;border-radius:50%;background:var(--wash-green);display:grid;place-items:center}
+.done-wrap{text-align:left}
+.steps3{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:14px;counter-reset:s}
+.steps3 li{display:flex;gap:14px;align-items:flex-start}
+.steps3 li::before{counter-increment:s;content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--teal);display:grid;place-items:center;font-size:12px;font-weight:600}
+@media (max-width:860px){
+  .top{height:64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top .logo svg{height:30px}
+  .top nav a:not(.u){display:none}
+  .top nav .long{display:none}
+  .prog{display:none}
+  .top .tag{display:none}
+  .app{grid-template-columns:1fr;gap:0;padding-left:0;padding-right:0}
+  .side{position:static;height:auto;flex-direction:row;align-items:center;gap:14px;padding:12px max(16px,env(safe-area-inset-left,0px));border-right:0;border-bottom:1px solid var(--line-soft)}
+  .cap-wrap{width:64px;height:64px;margin:0;flex:none}
+  .step-name{font-size:22px;margin:0}
+  .step-note,.rail,.private{display:none}
+  .main{padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+  .q h1{font-size:26px;line-height:1.3}
+  .hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms!important;animation-delay:0ms!important;transition-duration:1ms!important}
+}
+</style>
+
+<header class="top">
+  <a class="logo" href="#" aria-label="unifiedmeds"><svg role="img" aria-hidden="true" width="290" height="47" viewBox="0 0 290 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M69.9603 3.53857H21.6223C16.4284 3.53857 11.4472 5.60186 7.77453 9.2745C4.10185 12.9472 2.03857 17.9284 2.03857 23.1223C2.03857 28.3163 4.10185 33.2974 7.77453 36.9701C11.4472 40.6428 16.4284 42.7061 21.6223 42.7061H69.9603" stroke="#0F2E57" stroke-width="4.05181"/>
+<path d="M69.9604 2.02594H104.063C109.658 2.02594 115.024 4.24859 118.981 8.20495C122.937 12.1613 125.16 17.5273 125.16 23.1223C125.16 28.7175 122.937 34.0834 118.981 38.0398C115.024 41.9961 109.658 44.2188 104.063 44.2188H69.9604V2.02594Z" stroke="#0F2E57" stroke-width="4.05181"/>
+<path d="M21.6225 8.94104H64.5582V37.3037H21.6225C17.8614 37.3037 14.2543 35.8096 11.5948 33.1501C8.93528 30.4906 7.44116 26.8835 7.44116 23.1224C7.44116 19.3613 8.93528 15.7542 11.5948 13.0947C14.2543 10.4351 17.8614 8.94104 21.6225 8.94104Z" fill="#0F2E57"/>
+<path d="M145.675 16.6394H148.878V23.7447C148.926 24.4663 149.247 25.1424 149.776 25.6363C150.304 26.1302 151 26.4049 151.724 26.4049C152.447 26.4049 153.143 26.1302 153.672 25.6363C154.2 25.1424 154.521 24.4663 154.57 23.7447V16.6394H157.772V23.7447C157.7 25.3004 157.031 26.7685 155.905 27.844C154.779 28.9195 153.281 29.5196 151.724 29.5196C150.167 29.5196 148.669 28.9195 147.543 27.844C146.416 26.7685 145.747 25.3004 145.675 23.7447V16.6394ZM161.183 29.6052V16.6394H164.307V19.0251C164.731 18.299 165.293 17.6983 165.993 17.2229C166.84 16.661 167.856 16.3801 169.039 16.3801C170.449 16.3801 171.546 16.782 172.333 17.5859C173.12 18.3811 173.513 19.44 173.513 20.7625V29.6052H170.284V21.4238C170.284 20.6199 170.081 20.0148 169.675 19.6085C169.269 19.2023 168.676 18.9992 167.899 18.9992C167.216 18.9992 166.611 19.1547 166.084 19.4659C165.548 19.7685 165.128 20.192 164.826 20.7366C164.532 21.2725 164.385 21.8992 164.385 22.6166V29.6052H161.183ZM176.637 29.6052V16.6394H179.84V29.6052H176.637ZM176.482 14.5V10.9733H179.97V14.5H176.482ZM184.145 29.6052V19.1547H181.798V16.6394H184.145V15.4465C184.145 14.0203 184.538 12.9312 185.325 12.1792C186.111 11.4271 187.291 11.0512 188.865 11.0512C189.228 11.0512 189.525 11.0684 189.759 11.103C189.992 11.1289 190.221 11.1765 190.446 11.2456V13.7351C190.325 13.6918 190.174 13.6573 189.992 13.6313C189.802 13.6054 189.591 13.5924 189.357 13.5924C188.674 13.5924 188.169 13.7567 187.84 14.0851C187.511 14.4136 187.347 14.8934 187.347 15.5244V16.6394H190.161V19.1547H187.347V29.6052H184.145ZM192.378 29.6052V16.6394H195.581V29.6052H192.378ZM192.222 14.5V10.9733H195.71V14.5H192.222ZM204.76 29.8645C203.386 29.8645 202.184 29.5749 201.156 28.9958C200.136 28.4167 199.341 27.6214 198.77 26.6101C198.199 25.5901 197.915 24.4189 197.915 23.0964C197.915 21.7739 198.199 20.6069 198.77 19.5956C199.341 18.5929 200.132 17.8063 201.143 17.2358C202.163 16.6654 203.352 16.3801 204.708 16.3801C205.996 16.3801 207.116 16.6481 208.067 17.1839C209.018 17.7199 209.752 18.4719 210.271 19.44C210.798 20.3995 211.062 21.5232 211.062 22.8111C211.062 23.0531 211.053 23.2736 211.036 23.4724C211.019 23.6798 210.993 23.8873 210.958 24.0947H201.169C201.29 25.0196 201.597 25.763 202.09 26.3248C202.72 27.0682 203.619 27.4399 204.786 27.4399C205.46 27.4399 206.053 27.3146 206.563 27.0639C207.072 26.8132 207.444 26.4243 207.678 25.897H210.712C210.288 27.1158 209.571 28.0795 208.559 28.7883C207.548 29.5058 206.282 29.8645 204.76 29.8645ZM201.221 21.8516H207.807C207.721 20.9354 207.448 20.2223 206.991 19.7123C206.438 19.1072 205.659 18.8047 204.657 18.8047C203.576 18.8047 202.72 19.1764 202.09 19.9197C201.666 20.4125 201.377 21.0564 201.221 21.8516ZM222.834 29.6052V27.4658C222.55 28.0795 222.1 28.5895 221.486 28.9958C220.639 29.5749 219.632 29.8645 218.465 29.8645C217.272 29.8645 216.24 29.5879 215.366 29.0347C214.502 28.4815 213.832 27.7035 213.357 26.7009C212.881 25.7068 212.644 24.5312 212.644 23.1741C212.644 21.7998 212.89 20.6026 213.383 19.5827C213.867 18.5713 214.554 17.7847 215.444 17.2229C216.334 16.661 217.376 16.3801 218.569 16.3801C219.788 16.3801 220.795 16.6697 221.59 17.2488C222.1 17.6205 222.48 18.0872 222.731 18.6491V11.2975H225.959V29.6052H222.834ZM219.399 27.2454C220.436 27.2454 221.262 26.8824 221.875 26.1563C222.498 25.4388 222.809 24.4275 222.809 23.1223C222.809 21.8171 222.493 20.8101 221.862 20.1013C221.24 19.3838 220.41 19.0251 219.373 19.0251C218.362 19.0251 217.54 19.3881 216.909 20.1142C216.287 20.8317 215.976 21.843 215.976 23.1482C215.976 24.4535 216.287 25.4604 216.909 26.1693C217.54 26.8867 218.37 27.2454 219.399 27.2454Z" fill="#0F2E57"/>
+<path d="M227.515 29.6052V16.6395H229.421V19.1029C229.845 18.325 230.437 17.6983 231.198 17.2229C232.079 16.661 233.039 16.3802 234.076 16.3802C235.329 16.3802 236.345 16.7475 237.123 17.4822C237.564 17.9058 237.879 18.4028 238.069 18.9733C238.493 18.2645 239.077 17.6811 239.82 17.2229C240.736 16.661 241.722 16.3802 242.776 16.3802C244.029 16.3802 245.054 16.7518 245.849 17.4952C246.644 18.2299 247.042 19.224 247.042 20.4773V29.6052H245.006V21.0089C245.006 20.0322 244.786 19.3148 244.345 18.8566C243.904 18.3985 243.269 18.1694 242.439 18.1694C241.661 18.1694 240.956 18.3553 240.326 18.7269C239.703 19.0986 239.211 19.6129 238.848 20.2699C238.485 20.9354 238.303 21.7091 238.303 22.5908V29.6052H236.267V21.0089C236.267 20.0322 236.047 19.3148 235.606 18.8566C235.165 18.3985 234.53 18.1694 233.7 18.1694C232.914 18.1694 232.209 18.3553 231.587 18.7269C230.956 19.0986 230.458 19.6129 230.095 20.2699C229.732 20.9354 229.551 21.7091 229.551 22.5908V29.6052H227.515ZM256.274 29.8646C255.037 29.8646 253.944 29.5707 252.993 28.9829C252.042 28.3951 251.295 27.5955 250.75 26.5842C250.214 25.5643 249.946 24.393 249.946 23.0705C249.946 21.748 250.21 20.5811 250.737 19.5697C251.273 18.567 252.025 17.7848 252.993 17.2229C253.961 16.661 255.072 16.3802 256.325 16.3802C257.527 16.3802 258.573 16.6438 259.463 17.1711C260.353 17.6983 261.04 18.4374 261.525 19.3882C262.009 20.339 262.251 21.4584 262.251 22.7463C262.251 22.9106 262.247 23.0705 262.238 23.2261C262.229 23.373 262.208 23.5416 262.173 23.7318H252.047C252.15 24.9505 252.543 25.9489 253.226 26.7268C254.004 27.6604 255.055 28.1271 256.377 28.1271C257.207 28.1271 257.933 27.9456 258.555 27.5826C259.186 27.2195 259.645 26.7009 259.93 26.0267H261.862C261.438 27.2109 260.729 28.1444 259.735 28.8273C258.75 29.5188 257.596 29.8646 256.274 29.8646ZM252.099 22.0332H260.215C260.094 20.9268 259.77 20.0365 259.242 19.3623C258.551 18.5325 257.579 18.1176 256.325 18.1176C255.037 18.1176 254.004 18.5584 253.226 19.4401C252.613 20.1316 252.237 20.996 252.099 22.0332ZM274.724 29.6052V27.2973C274.387 27.9889 273.889 28.555 273.233 28.9958C272.369 29.575 271.34 29.8646 270.147 29.8646C268.98 29.8646 267.96 29.5837 267.087 29.0218C266.214 28.46 265.535 27.682 265.051 26.688C264.567 25.6853 264.325 24.514 264.325 23.1742C264.325 21.8171 264.572 20.6286 265.064 19.6086C265.557 18.5973 266.244 17.8107 267.126 17.2489C268.008 16.687 269.04 16.4061 270.225 16.4061C271.444 16.4061 272.472 16.7043 273.311 17.3007C273.846 17.6897 274.278 18.1824 274.607 18.7788V11.2975H276.63V29.6052H274.724ZM270.536 28.0753C271.841 28.0753 272.861 27.6301 273.596 26.7398C274.331 25.8495 274.698 24.635 274.698 23.0964C274.698 21.5924 274.326 20.3996 273.583 19.5179C272.839 18.6362 271.824 18.1954 270.536 18.1954C269.248 18.1954 268.237 18.6362 267.502 19.5179C266.776 20.3996 266.413 21.6183 266.413 23.1742C266.413 24.6955 266.776 25.8927 267.502 26.7657C268.237 27.6388 269.248 28.0753 270.536 28.0753ZM285.096 29.8646C283.506 29.8646 282.235 29.4929 281.284 28.7495C280.334 28.0148 279.794 26.9689 279.664 25.6118H281.622C281.734 26.4416 282.097 27.0769 282.711 27.5178C283.324 27.9586 284.137 28.179 285.148 28.179C286.047 28.179 286.751 28.0105 287.262 27.6733C287.772 27.3363 288.026 26.8522 288.026 26.2212C288.026 25.7804 287.88 25.3957 287.586 25.0672C287.3 24.7387 286.726 24.4621 285.861 24.2374L283.774 23.7058C282.589 23.4033 281.699 22.9322 281.103 22.2925C280.515 21.6615 280.221 20.9052 280.221 20.0235C280.221 18.8998 280.636 18.0138 281.466 17.3655C282.296 16.7086 283.424 16.3802 284.85 16.3802C286.25 16.3802 287.392 16.7216 288.273 17.4044C289.155 18.0787 289.656 19.0165 289.777 20.218H287.819C287.698 19.5265 287.379 18.9949 286.86 18.6232C286.333 18.2515 285.637 18.0657 284.772 18.0657C283.943 18.0657 283.298 18.2213 282.84 18.5325C282.382 18.8437 282.153 19.2888 282.153 19.8679C282.153 20.3088 282.318 20.6891 282.646 21.0089C282.974 21.3374 283.532 21.6097 284.319 21.8258L286.341 22.3833C287.551 22.7031 288.459 23.1958 289.064 23.8614C289.678 24.5183 289.984 25.3136 289.984 26.2471C289.984 27.3881 289.552 28.2741 288.688 28.9051C287.823 29.5448 286.626 29.8646 285.096 29.8646Z" fill="#031D2C"/>
+</svg>
+</a>
+  <nav><span class="tag">Proposal · demo data</span><a class="u" href="#" onclick="return false">Save<span class="long">&nbsp;and finish later</span></a><a href="#" onclick="return false">Need help?</a></nav>
+</header>
+
+<div class="app">
+  <aside class="side" aria-label="Your step">
+    <div class="cap-wrap" id="cap">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs><clipPath id="capClip"><rect id="clipRect" x="0" y="64" width="64" height="0"/></clipPath></defs>
+        <g clip-path="url(#capClip)">
+          <path class="cap-fill" d="M41.36 34.82L41.36 13.36A9.36 9.36 0 0 0 22.64 13.36L22.64 34.82Z"/>
+          <path class="cap-fill" d="M42.03 34.82L42.03 49.97A10.03 10.03 0 0 1 21.97 49.97L21.97 34.82Z"/>
+        </g>
+        <path class="cap-line shell" id="shell" d="M41.36 34.82L41.36 13.36A9.36 9.36 0 0 0 22.64 13.36L22.64 34.82M42.03 34.82L42.03 49.97A10.03 10.03 0 0 1 21.97 49.97L21.97 34.82Z"/>
+        <path class="cap-line glyph" id="glyph" d=""/>
+      </svg>
+    </div>
+    <div id="stepText">
+      <div class="step-eyebrow" id="eyebrow">Before you start</div>
+      <h2 class="step-name" id="stepName">Welcome</h2>
+      <p class="step-note" id="stepNote">A few questions, one at a time. You can stop and come back.</p>
+    </div>
+    <ol class="rail" id="rail"></ol>
+    <div class="private"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="#264653" stroke-width="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="#264653" stroke-width="1.5"/></svg>Only your provider and care team read your answers.</div>
+  </aside>
+
+  <main class="main">
+    <div class="prog" id="prog" hidden>
+      <svg viewBox="0 0 64 24.47" aria-hidden="true">
+        <defs><clipPath id="pc"><rect id="pcRect" x="0" y="0" width="6" height="24.47" style="transition:width 220ms var(--e-out)"/></clipPath></defs>
+        <path clip-path="url(#pc)" fill="#264653" d="M33.11 3.94L11.49 3.94A8.29 8.29 0 0 0 11.49 20.53L33.11 20.53ZM37.11 3.2L51.76 3.2A9.04 9.04 0 0 1 51.76 21.27L37.11 21.27Z"/>
+        <path fill="none" stroke="#264653" stroke-width="1.5" d="M35.11 1.94L11.49 1.94A10.29 10.29 0 0 0 11.49 22.53L35.11 22.53M35.11 1.2L51.76 1.2A11.04 11.04 0 0 1 51.76 23.27L35.11 23.27Z"/>
+      </svg>
+      <span class="lbl" id="progLbl"></span>
+    </div>
+    <div class="stage" id="stage" aria-live="polite"></div>
+    <div class="legal">Assessment only. Not a diagnosis. Is this an emergency? <a href="#" onclick="return false">Call 911</a>.</div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"><span class="ok"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="#264653" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span id="toastTxt"></span></div>
+
+<script>
+const STEPS=[
+ {name:"About you",note:"The basics your provider needs first.",glyph:"M30.75 25.41V20.91A1.25 1.25 0 0 1 33.25 20.91V23.91M28.25 24.41V20.91A3.75 3.75 0 0 1 35.75 20.91V25.41M26.13 18.77A6.25 6.25 0 0 1 37.87 18.77"},
+ {name:"Health history",note:"Your provider checks this to keep treatment safe for you.",glyph:"M26.8 15.91L28 17.11L30 14.91M32 15.91H37.3M26.8 19.91L28 21.11L30 18.91M32 19.91H37.3M27 23.91H29.75M32 23.91H37.3"},
+ {name:"Medications",note:"Some medicines don't mix. Tell us about all of them.",glyph:"M28 25.41V14.91H31.75A2.75 2.75 0 0 1 31.75 20.41H28M30.5 20.41L36.5 25.91M33.5 25.91L37 22.41"},
+ {name:"Your main concern",note:"In your own words. Only your provider reads it.",glyph:"M32 25.16L27.4 20.66C25.9 19.16 26 16.66 27.7 15.36C29.2 14.26 31.1 14.66 32 16.16C32.9 14.66 34.8 14.26 36.3 15.36C38 16.66 38.1 19.16 36.6 20.66Z"},
+ {name:"Preferences",note:"Your provider decides what fits. This tells them what you'd like.",glyph:"M33.71 15.21A5 5 0 1 1 28.46 16.37M28.46 16.37L27.79 18.89M28.46 16.37L25.95 17.05"},
+ {name:"Consent and account",note:"Read, then agree. Each document opens in a new window.",glyph:"M29 19.41H35A1.5 1.5 0 0 1 36.5 20.91V23.91A1.5 1.5 0 0 1 35 25.41H29A1.5 1.5 0 0 1 27.5 23.91V20.91A1.5 1.5 0 0 1 29 19.41ZM29.5 19.41V17.66A2.5 2.5 0 0 1 34.5 17.66V19.41M32 22.41L32.01 22.41"},
+ {name:"Plan and send",note:"A licensed provider reviews everything before anything ships.",glyph:"M26.25 19.91A5.75 5.75 0 1 1 37.75 19.91A5.75 5.75 0 1 1 26.25 19.91ZM29.5 20.21L31.3 22.01L34.7 18.31"}
+];
+const GLYPHS={"checklist": "M26.8 15.91L28 17.11L30 14.91M32 15.91H37.3M26.8 19.91L28 21.11L30 18.91M32 19.91H37.3M27 23.91H29.75M32 23.91H37.3", "mail": "M27.5 16.5H36.5A1.5 1.5 0 0 1 38 18V24A1.5 1.5 0 0 1 36.5 25.5H27.5A1.5 1.5 0 0 1 26 24V18A1.5 1.5 0 0 1 27.5 16.5ZM26.4 17.2L32 21.6L37.6 17.2", "pin": "M32 26.2C32 26.2 27.5 22.3 27.5 19.2A4.5 4.5 0 0 1 36.5 19.2C36.5 22.3 32 26.2 32 26.2ZM32 19.2L32.01 19.2", "calendar": "M27.5 16.5H36.5A1.5 1.5 0 0 1 38 18V24.5A1.5 1.5 0 0 1 36.5 26H27.5A1.5 1.5 0 0 1 26 24.5V18A1.5 1.5 0 0 1 27.5 16.5ZM26 19.8H38M29.2 14.8V17.8M34.8 14.8V17.8M29.5 22.8H30.5M33.5 22.8H34.5", "person": "M29.5 17.6A2.5 2.5 0 1 1 34.5 17.6A2.5 2.5 0 1 1 29.5 17.6ZM27.5 25.9A4.5 4.5 0 0 1 36.5 25.9", "pulse": "M26 21.2H28.8L30.3 17.6L32.8 24.6L34.3 21.2H38", "pill": "M28 25.41V14.91H31.75A2.75 2.75 0 0 1 31.75 20.41H28M30.5 20.41L36.5 25.91M33.5 25.91L37 22.41", "heart": "M32 25.16L27.4 20.66C25.9 19.16 26 16.66 27.7 15.36C29.2 14.26 31.1 14.66 32 16.16C32.9 14.66 34.8 14.26 36.3 15.36C38 16.66 38.1 19.16 36.6 20.66Z", "clock": "M26.5 20.4A5.5 5.5 0 1 1 37.5 20.4A5.5 5.5 0 1 1 26.5 20.4ZM32 17.3V20.6L34.1 21.9", "loop": "M33.71 15.21A5 5 0 1 1 28.46 16.37M28.46 16.37L27.79 18.89M28.46 16.37L25.95 17.05", "lock": "M29 19.41H35A1.5 1.5 0 0 1 36.5 20.91V23.91A1.5 1.5 0 0 1 35 25.41H29A1.5 1.5 0 0 1 27.5 23.91V20.91A1.5 1.5 0 0 1 29 19.41ZM29.5 19.41V17.66A2.5 2.5 0 0 1 34.5 17.66V19.41M32 22.41L32.01 22.41", "chat": "M28.5 14.91H35.5A2 2 0 0 1 37.5 16.91V20.91A2 2 0 0 1 35.5 22.91H31.5L28.5 25.41V22.91A2 2 0 0 1 26.5 20.91V16.91A2 2 0 0 1 28.5 14.91ZM29.5 17.91H34.5M29.5 20.16H32.5", "check": "M26.25 19.91A5.75 5.75 0 1 1 37.75 19.91A5.75 5.75 0 1 1 26.25 19.91ZM29.5 20.21L31.3 22.01L34.7 18.31"};
+const START_GLYPH="M26.8 15.91L28 17.11L30 14.91M32 15.91H37.3M26.8 19.91L28 21.11L30 18.91M32 19.91H37.3M27 23.91H29.75M32 23.91H37.3";
+const CHECK='<svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SCREENS=[
+ {id:"welcome",icon:"checklist",step:0,type:"intro"},
+ {id:"email",icon:"mail",step:0,type:"email"},
+ {id:"state",icon:"pin",step:1,type:"state"},
+ {id:"dob",icon:"calendar",step:1,type:"dob"},
+ {id:"sex",icon:"person",step:1,type:"single",q:"What was your sex assigned at birth?",help:"Some medicines work differently by sex. This stays between you and your provider.",two:true,opts:[["Male"],["Female"]]},
+ {id:"bp",icon:"pulse",step:2,type:"single",q:"Has a health professional told you that your blood pressure is high or low?",help:"Blood pressure matters for some treatments.",opts:[["No, it's normal"],["Yes, it's high"],["Yes, it's low"],["I don't know"]]},
+ {id:"nitrates",icon:"pill",step:3,type:"multi",q:"Do you take any of these?",help:"Choose every one that applies.",opts:[["Nitroglycerin","Tablets, spray or patches for chest pain"],["Isosorbide","Mononitrate or dinitrate"],["Riociguat"],["Poppers","Amyl or butyl nitrite"],["None of these",null,true]]},
+ {id:"concern",icon:"heart",step:4,type:"multi",q:"What would you like help with?",help:"Choose all that apply.",opts:[["Getting or keeping an erection"],["Lower interest in sex"],["Finishing sooner than I'd like"],["Something else"]]},
+ {id:"duration",icon:"clock",step:4,type:"single",q:"How long has this been going on?",opts:[["Less than 3 months"],["3 to 12 months"],["More than a year"]]},
+ {id:"pref",icon:"loop",step:5,type:"single",q:"How would you prefer to take it?",help:"Your provider decides what fits. This tells them what you'd like.",opts:[["Daily","A small dose once a day","green"],["As needed","A dose before sex","blue"],["No preference","My provider suggests"]]},
+ {id:"consent",icon:"lock",step:6,type:"consent"},
+ {id:"review",icon:"chat",step:7,type:"review"},
+ {id:"sent",icon:"check",step:8,type:"sent"}
+];
+const A={};
+let i=0, lastStep=0;
+const $=s=>document.querySelector(s);
+const stage=$("#stage");
+const LEN=180;
+function rail(cur){
+  $("#rail").innerHTML=STEPS.map((s,k)=>{const n=k+1;const st=cur>7||n<cur?"passed":n===cur?"active":"";return `<li class="${st}"><span class="n">${st==="passed"?CHECK.replace('currentColor','#264653'):n}</span>${s.name}</li>`}).join("");
+}
+function companion(step){
+  const share=step===0?0:Math.min(1,Math.max(.12,(step-.5)/7));
+  const full=step>7?1:share;
+  const top=13.36-9.36, bottom=59.97; const h=(bottom-top)*full;
+  const r=$("#clipRect"); r.setAttribute("y",bottom-h); r.setAttribute("height",h);
+  const tx=$("#stepText");tx.classList.remove("in");tx.classList.add("out");
+  setTimeout(()=>{tx.classList.remove("out");void tx.offsetWidth;tx.classList.add("in");
+  $("#eyebrow").textContent=step===0?"Before you start":step>7?"All done":`Step ${step} of 7`;
+  $("#stepName").textContent=step===0?"Welcome":step>7?"Sent to your provider":STEPS[step-1].name;
+  $("#stepNote").textContent=step===0?"A few questions, one at a time. You can stop and come back.":step>7?"Nothing else to do for now. We'll email you when your provider has reviewed it.":STEPS[step-1].note;
+  },220);
+  rail(step);
+  const p=$("#prog");
+  if(step===0||step>7){p.hidden=true}else{p.hidden=false;$("#pcRect").setAttribute("width",3.2+Math.max(.1,step/7)*57.6);$("#progLbl").innerHTML=`<b>Step ${step} of 7</b> · ${STEPS[step-1].name}`;}
+}
+function setGlyph(name){
+  const g=$("#glyph"), d=GLYPHS[name]||START_GLYPH; if(g.getAttribute("d")===d)return;
+  const swap=()=>{g.setAttribute("d",d);let L=60;try{L=Math.ceil(g.getTotalLength())}catch(e){}
+    g.style.setProperty("--glen",L);g.style.strokeDasharray=L;g.classList.remove("out");g.classList.remove("drawin");void g.getBoundingClientRect();g.classList.add("drawin")};
+  if(!g.getAttribute("d")){swap();return}
+  g.classList.add("out");setTimeout(swap,220);
+}
+function toast(t){const el=$("#toast");$("#toastTxt").textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),1600)}
+function actions(label,opts={}){return `<div class="actions">${i>0?'<button class="btn ghost" data-act="back" type="button">Back</button>':''}<button class="btn primary" data-act="next" type="button" ${opts.disabled?'disabled':''}>${label} <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>${opts.hint?`<span class="hint">${opts.hint}</span>`:''}</div>`}
+function render(){
+  const s=SCREENS[i]; let h="";
+  if(s.type==="intro"){h=`<h1>Let's start your assessment.</h1><p class="help">A few questions about your health, then a licensed provider reviews your answers and decides if a treatment is right for you.</p>
+   <ul class="list"><li>${tick()}Takes [about N minutes · O-12]. You can save and finish later.</li><li>${tick()}Only your provider and care team read your answers.</li><li>${tick()}[charge line · operations]</li></ul>
+   <div class="sos"><b>Is this an emergency?</b><br>If you have chest pain, trouble breathing or another emergency, call 911 now. Don't use this assessment.</div>${actions("Start",{hint:"or press <kbd>Enter</kbd>"})}`}
+  if(s.type==="email"){h=`<h1>Where can we save your answers?</h1><p class="help">We save each answer as you go. If you stop, we email you a link to come back. There's no password.</p>
+   <div class="fields"><label class="f">Email<input id="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" value="${A.email||''}"></label><span class="note">The email won't say what it's about.</span></div>${actions("Continue",{hint:"<kbd>Enter</kbd>"})}`}
+  if(s.type==="state"){h=`<h1>Which state are you in right now?</h1><p class="help">Providers can only treat you in a state where they hold a license.</p>
+   <div class="fields"><label class="f">State<select id="state"><option value="">Choose your state</option>${["Arizona","California","Florida","New York","Ohio","Texas","Alaska"].map(x=>`<option ${A.state===x?'selected':''}>${x}</option>`).join("")}</select></label><span class="note">Demo: choose Alaska to see a state we don't serve yet.</span><div id="stateMsg"></div></div>${actions("Continue")}`}
+  if(s.type==="dob"){const d=A.dob||{};h=`<h1>What is your date of birth?</h1><p class="help">Medicines and doses depend on age.</p>
+   <div class="fields"><div class="row"><label class="f">Month<input id="mm" inputmode="numeric" maxlength="2" placeholder="MM" value="${d.m||''}"></label><label class="f">Day<input id="dd" inputmode="numeric" maxlength="2" placeholder="DD" value="${d.d||''}"></label><label class="f">Year<input id="yy" inputmode="numeric" maxlength="4" placeholder="YYYY" value="${d.y||''}"></label></div><span class="note">Each box moves you to the next when it's full.</span></div>${actions("Continue",{hint:"<kbd>Enter</kbd>"})}`}
+  if(s.type==="single"||s.type==="multi"){const sel=A[s.id]||(s.type==="multi"?[]:null);
+   h=`<h1>${s.q}</h1>${s.help?`<p class="help">${s.help}</p>`:'<p class="help"></p>'}<div class="opts ${s.two?'two':''}" role="${s.type==="single"?'radiogroup':'group'}" aria-label="${s.q}">${s.opts.map((o,k)=>{const on=s.type==="single"?sel===k:sel.includes(k);
+     const dot=o[2]==="green"?'<span class="dot" style="background:#6A8670"></span>':o[2]==="blue"?'<span class="dot" style="background:#6E8B97"></span>':'';
+     return `<button type="button" style="--i:${k}" class="opt ${s.type}" role="${s.type==="single"?'radio':'checkbox'}" aria-checked="${on}" data-k="${k}"><span class="key">${String.fromCharCode(65+k)}</span>${dot}<span class="t"><b>${o[0]}</b>${o[1]?`<span>${o[1]}</span>`:''}</span><span class="mark">${CHECK}</span></button>`}).join("")}</div>
+     <div class="err-msg" id="err"><i>!</i>Choose an answer to go on.</div>${actions("Continue",{hint:s.type==="single"?"Press a letter, it moves on by itself":"Press letters to choose, <kbd>Enter</kbd> to go on"})}`}
+  if(s.type==="consent"){const c=A.consent||[];const L=[["I agree to the treatment consent.","[Treatment consent summary · legal and clinical team]"],["I agree to receive care through telehealth.","Telehealth consent"],["I've read the Privacy notice and agree to the Terms.",""],["Text me about my care (optional).","[SMS consent wording · legal]"]];
+   h=`<h1>Before your provider sees your answers.</h1><p class="help">Read and agree to these. Each one opens in a new window.</p><div class="opts" role="group" aria-label="Consents">${L.map((o,k)=>`<button type="button" style="--i:${k}" class="opt multi${k===3?' optional':''}" role="checkbox" aria-checked="${c.includes(k)}" data-k="${k}"><span class="key">${String.fromCharCode(65+k)}</span><span class="t"><b>${o[0]}</b>${o[1]?`<span>${o[1]}</span>`:''}</span><span class="mark">${CHECK}</span></button>`).join("")}</div>
+   <div class="err-msg" id="err"><i>!</i>Tick the first three to go on.</div>${actions("Continue")}`}
+  if(s.type==="review"){const st=A.state||"Ohio",d=A.dob?`${A.dob.m}/${A.dob.d}/${A.dob.y}`:"02/14/1978";const pick=(id)=>{const sc=SCREENS.find(x=>x.id===id);const v=A[id];if(v==null||(Array.isArray(v)&&!v.length))return"Not answered";return Array.isArray(v)?v.map(k=>sc.opts[k][0]).join(", "):sc.opts[v][0]};
+   const rows=[["About you","state",[["State",st],["Date of birth",d],["Sex assigned at birth",pick("sex")]]],["Health history","bp",[["Blood pressure",pick("bp")]]],["Medications","nitrates",[["These medicines",pick("nitrates")]]],["Your main concern","concern",[["Help with",pick("concern")],["How long",pick("duration")]]],["Preferences","pref",[["How to take it",pick("pref")]]]];
+   h=`<h1>Check your answers before you send them.</h1><p class="help">Your provider reads what you see here. Edit any step before you send.</p><div class="review">${rows.map(r=>`<div class="card"><div class="head"><b>${r[0]}</b><button type="button" data-edit="${r[1]}">Edit</button></div>${r[2].map(x=>`<div class="v">${x[0]} · ${x[1]}</div>`).join("")}</div>`).join("")}</div>${actions("Send to your provider")}`}
+  if(s.type==="sent"){h=`<div class="done-wrap"><h1>Sent. Your provider takes it from here.</h1><p class="help">We'll email you when your provider has reviewed your answers. The email won't say what it's about.</p>
+   <ol class="steps3"><li><span><b>Provider review</b><br><span class="note">[time · operations]</span></span></li><li><span><b>Pharmacy</b>, only if your provider prescribes<br><span class="note">[partner · operations]</span></span></li><li><span><b>A plain package</b>, nothing on the outside about what's inside<br><span class="note">[time · operations]</span></span></li></ol>
+   <div class="actions"><button class="btn primary" type="button" data-act="restart">Start the demo again</button></div></div>`}
+  const old=stage.firstElementChild;
+  const mount=()=>{stage.innerHTML=`<div class="q">${h}</div>`;wire(s);const f=stage.querySelector("input,select,.opt,.btn.primary");if(f&&s.type!=="intro")f.focus({preventScroll:true})};
+  setGlyph(s.icon);
+  if(old){old.classList.add("leaving");setTimeout(mount,220)}else mount();
+  if(s.step!==lastStep){const prev=lastStep;companion(s.step);if(s.step>prev&&prev>0&&prev<=7)toast(`Step ${prev} done · ${STEPS[prev-1].name}`);lastStep=s.step;
+    const cap=$("#cap");cap.classList.remove("breathe");void cap.offsetWidth;cap.classList.add("breathe");}
+}
+function tick(){return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#B6CDBB"/><path d="M4.8 8.2L7 10.4L11.2 5.8" stroke="#264653" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+function go(d){i=Math.max(0,Math.min(SCREENS.length-1,i+d));render()}
+function wire(s){
+  stage.querySelectorAll("[data-act=back]").forEach(b=>b.onclick=()=>go(-1));
+  stage.querySelectorAll("[data-act=restart]").forEach(b=>b.onclick=()=>{for(const k in A)delete A[k];i=0;lastStep=-1;render()});
+  stage.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{i=SCREENS.findIndex(x=>x.id===b.dataset.edit);render()});
+  const next=stage.querySelector("[data-act=next]");
+  const err=stage.querySelector("#err"), opts=stage.querySelector(".opts");
+  const clearErr=()=>{if(err){err.classList.remove("on");opts&&opts.classList.remove("err")}};
+  const showErr=()=>{err.classList.add("on");opts.classList.add("err")};
+  if(s.type==="single"||s.type==="multi"||s.type==="consent"){
+    stage.querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(s,+b.dataset.k));
+  }
+  if(s.type==="state"){const sel=stage.querySelector("#state");const upd=()=>{A.state=sel.value;const m=stage.querySelector("#stateMsg");const no=sel.value==="Alaska";
+    m.innerHTML=no?`<div class="info"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.25" stroke="#264653" stroke-width="1.5"/><path d="M10 9v5M10 6.2v.1" stroke="#264653" stroke-width="1.5" stroke-linecap="round"/></svg><div><b>We can't offer care in Alaska.</b>Providers need a license in your state, so the assessment can't go on from here. If you chose the wrong state, change it.<div style="margin-top:10px"><button class="btn ghost" type="button">Notify me when care opens</button></div></div></div>`:"";
+    next.disabled=no;};sel.onchange=upd;upd();}
+  if(s.type==="dob"){const ids=["mm","dd","yy"],lens=[2,2,4];ids.forEach((id,k)=>{const el=stage.querySelector("#"+id);el.oninput=()=>{el.value=el.value.replace(/\D/g,"");if(el.value.length>=lens[k]&&k<2)stage.querySelector("#"+ids[k+1]).focus()}})}
+  if(next)next.onclick=()=>{
+    if(s.type==="email"){A.email=stage.querySelector("#email").value}
+    if(s.type==="dob"){A.dob={m:stage.querySelector("#mm").value||"02",d:stage.querySelector("#dd").value||"14",y:stage.querySelector("#yy").value||"1978"}}
+    if(s.type==="single"&&A[s.id]==null){showErr();return}
+    if(s.type==="multi"&&!(A[s.id]||[]).length){showErr();return}
+    if(s.type==="consent"&&![0,1,2].every(k=>(A.consent||[]).includes(k))){showErr();return}
+    go(1)};
+  s._clear=clearErr;
+}
+function pick(s,k){
+  const id=s.type==="consent"?"consent":s.id;
+  if(s.type==="single"){A[id]=k;}
+  else{let v=A[id]||[];const excl=s.opts&&s.opts[k]&&s.opts[k][2]===true;
+    if(excl)v=v.includes(k)?[]:[k];else{v=v.filter(x=>!(s.opts&&s.opts[x]&&s.opts[x][2]===true));v=v.includes(k)?v.filter(x=>x!==k):[...v,k]}A[id]=v;}
+  stage.querySelectorAll(".opt").forEach(b=>{const kk=+b.dataset.k;b.setAttribute("aria-checked",s.type==="single"?kk===A[id]:(A[id]||[]).includes(kk))});
+  s._clear&&s._clear();
+  if(s.type==="single"){clearTimeout(pick.t);pick.t=setTimeout(()=>{if(SCREENS[i]===s)go(1)},320)}
+}
+document.addEventListener("keydown",e=>{
+  const s=SCREENS[i]; const tg=e.target; if(tg&&tg.matches&&tg.matches("input,select")&&e.key!=="Enter")return;
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==="Enter"){const n=stage.querySelector("[data-act=next]");if(n&&!n.disabled){e.preventDefault();n.click()}return}
+  const k=e.key.toUpperCase().charCodeAt(0)-65;
+  if(e.key.length===1&&(s.type==="single"||s.type==="multi"||s.type==="consent")){const n=stage.querySelectorAll(".opt").length;if(k>=0&&k<n){e.preventDefault();pick(s,k)}}
+});
+// the shell draw length
+(function(){const p=$("#shell");try{const L=p.getTotalLength();$("#cap").style.setProperty("--len",L)}catch(e){$("#cap").style.setProperty("--len",LEN)}})();
+lastStep=-1;render();
+</script>
