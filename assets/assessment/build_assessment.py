@@ -10,7 +10,8 @@ What it does
      the outline of both halves with the divider, plus the inner fill inset like the seal's
      filled half. The fill is clipped by CSS (--p) so the capsule fills as the member moves on.
      The fill never shows less than MIN_FILL, so the capsule reads on the first question (Q104).
-     Lengths: 120 on desktop, 96 on mobile, 72 in the rail. Stroke = stroke_for(length).
+     Lengths: 56 on desktop (about 22 high), 48 on mobile (about 18 high), 72 in the rail
+     (Avi, inbox q150, q151, 19.11.2026: a slim capsule beside a clear label). Stroke = stroke_for(length).
   2. Draws the flow map (desktop and mobile versions) as inline SVG with CSS classes only,
      so every colour comes from brand.css tokens on the page.
   3. Writes the generated markup into src/assessment.html between markers
@@ -314,20 +315,26 @@ def pct(x):
     return f"{x * 100:.1f}".rstrip("0").rstrip(".") + "%"
 
 
+def steplabel(label):
+    """'Step N of 7' in the strong weight, the step name beside it (q150)."""
+    m = re.match(r"(Step \d of 7)( · .*)", label)
+    return f"<b>{m.group(1)}</b>{m.group(2)}" if m else label
+
+
 def prog_block(s, size):
     sh = share(s)
     if sh is None:
         return ""
     st = s["step"]
     label = "Sent to your provider" if st == "done" else f"Step {st} of 7 · {RAIL[int(st) - 1]}"
-    inner = progress_inline(120 if size == "d" else 96)
+    inner = progress_inline(56 if size == "d" else 48)
     if size == "m" and st != "done":
         # Q102: on mobile the capsule and its label are one button that opens the step list
         return (f'<div class="as-top"><button class="as-topbtn" type="button" aria-haspopup="dialog">'
                 f'<span class="as-prog as-prog--{size}" style="--p: {pct(sh)}">{inner}</span>'
-                f'<span class="as-steplabel">{label}</span><span class="as-topchev">{ICONS["chev"]}</span></button></div>')
+                f'<span class="as-steplabel">{steplabel(label)}</span><span class="as-topchev">{ICONS["chev"]}</span></button></div>')
     return (f'<div class="as-top"><span class="as-prog as-prog--{size}" style="--p: {pct(sh)}">{inner}</span>'
-            f'<span class="as-steplabel">{label}</span></div>')
+            f'<span class="as-steplabel">{steplabel(label)}</span></div>')
 
 
 def rail(s):
@@ -492,8 +499,8 @@ def main():
     gen = {
         "flow-desktop": desk,
         "flow-mobile": mob,
-        "prog-d": progress_inline(120),
-        "prog-m": progress_inline(96),
+        "prog-d": progress_inline(56),
+        "prog-m": progress_inline(48),
         "prog-s": progress_inline(72),
         "screens": gallery(),
         "loader": loader_svg(),
@@ -505,7 +512,7 @@ def main():
     SRC.write_text(text)
     (HERE / "flow-map-desktop.svg").write_text(standalone(desk, dsize, colours))
     (HERE / "flow-map-mobile.svg").write_text(standalone(mob, msize, colours))
-    for length, tag in ((120, "desktop-120"), (96, "mobile-96")):
+    for length, tag in ((56, "desktop-56"), (48, "mobile-48")):
         for share, stag in ((0, "0"), (3 / 7, "3of7"), (1, "7of7")):
             (HERE / f"progress-capsule-{tag}-{stag}.svg").write_text(progress_file(length, share, colours))
     print("wrote standalone SVGs to", HERE.relative_to(EXT))
