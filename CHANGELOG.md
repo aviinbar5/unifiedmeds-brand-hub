@@ -2,6 +2,19 @@
 
 Newest first. Two kinds of change: **Rules and values** (brand-rules.md and tokens) and **Pages and assets** (the hub's pages, files and tools). `changelog.html` is generated from this file by `tools/build_changelog.py`.
 
+## Edition 04 · update 19.11.2026 (one version, assessment round 2)
+- One version, fixed names: our three Figma files sit in one Figma folder, "unifiedmeds", as unifiedmeds · Design System, unifiedmeds · Website and unifiedmeds · Assessment. No edition or "Copy" in a name; each file keeps a saved version "Edition 04 · 19.11.2026" in its history. How we work and Downloads link every file (U-33).
+- The repo is the only design-system repo. The two former-brand repos are renamed NOT-FOR-USE and archived.
+
+**Rules and values**
+- Assessment progress: a slim capsule, 56 long on desktop and 48 on mobile, with "Step N of 7" in Semi Bold beside it and the step name; the fill never shows under 10% (U-33, R-42).
+- The assessment top bar is 56 on mobile, logo seal 50; the rest of the site keeps 64 (R-29, U-33).
+- Decision logged: U-33, inbox q140 to q156.
+
+**Pages and assets**
+- Assessment: the progress row in every mock screen uses the new capsule and label; the handoff files are progress-capsule-desktop-56-* and progress-capsule-mobile-48-* (the 120 and 96 files moved to the archive).
+- Components: the header height row names the assessment top bar.
+
 ## Edition 04 · 18.11.2026 (one hub)
 - The core hub and the extended hub are one site at one address, with one menu in seven groups (Start, Brand, System, Website, Care journey, Marketing, Build), every link internal.
 - Search: pages, sections, rules, decisions, colours and files, with Hebrew words for every page (Cmd/Ctrl+K or "/").
